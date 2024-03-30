@@ -7,10 +7,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'package:json_store/json_store.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:async';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class PlatformUtils {
   static bool get isMobile {
@@ -32,8 +31,6 @@ class PlatformUtils {
 
 Future main() async{
   if(PlatformUtils.isDesktop){
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
     print("Using FFI");
   }
 // Initialize FFI
@@ -47,7 +44,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Taxi Native',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue[600]!,
@@ -83,7 +81,9 @@ class _LoginPageState extends State<LoginPage> {
   bool _beenSubmitted = false;
   bool _authError = false;
   bool _triedToken = false;
-  final JsonStore _sp = JsonStore();
+  bool _triedLogin = false;
+  late SharedPreferences _sp;
+  bool _spInit = false;
 
   void reset(callback) {
     _beenSubmitted = false;
@@ -134,19 +134,19 @@ class _LoginPageState extends State<LoginPage> {
         });
         return;
       }else{
-        await _sp.setItem("token", {"value": data["authtoken"]});
-        await _sp.setItem("username", {"value": _userController.text});
+        _triedLogin = true;
+        await _sp.setString("token", data["authtoken"]);
+        await _sp.setString("username", data["username"]);
         Navigator.of(context).pop(); // Close the dialog
-        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Flutter Demo Home Page')));
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Just Some Random Cards')));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Flutter Demo Home Page')));
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Just Some Random Cards')));
         reset(() {});
       }
     }
   }
 
   void loginToken() async {
-    var tokenMap = await _sp.getItem("token");
-    var token = tokenMap?["value"];
+    var token = _sp.getString("token");
     debugPrint(token.toString());
     if(_triedToken == true && token == null) {
       debugPrint("No token found");
@@ -172,32 +172,41 @@ class _LoginPageState extends State<LoginPage> {
         'Content-Type': 'application/json'
       }),
       body: jsonEncode(<String, String>{
-        'authtoken': token,
+        'authtoken': token!,
       })
     );
     if(response.statusCode == 200) {
       var data = jsonDecode(response.body);
       debugPrint(data.toString());
       if(data["authorized"] == false) {
-        await _sp.deleteItem("token");
+        Navigator.of(context).pop();
+        await _sp.setString("token", "");
         return;
       }else{
-        await _sp.setItem("username", {"value": data["username"]});
-        await _sp.setItem("token", {"value": data["authtoken"]});
+        _triedLogin = true;
+        await _sp.setString("token", data["authtoken"]);
+        await _sp.setString("username", data["username"]);
         Navigator.of(context).pop();
-        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Flutter Demo Home Page')));
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Just Some Random Cards')));
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Flutter Demo Home Page')));
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Just Some Random Cards')));
+        reset(() {});
       }
-      reset(() {});
     }
   }
 
   void tryLogin() async {
-    var token = await _sp.getItem("token");
-    if(token?["value"] != null && _triedToken == false) {
+    await getSP();
+    var token = _sp.getString("token");
+    if(token != "" && _triedToken == false && _triedLogin == false) {
       loginToken();
     }else{
       debugPrint("Normal login");
+    }
+  }
+
+  Future getSP() async {
+    if(_spInit == false){
+      _sp = await SharedPreferences.getInstance();
     }
   }
 

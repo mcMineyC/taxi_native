@@ -326,7 +326,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title, style: GoogleFonts.poppins()),
+        title: Text("Just Some Random Cards", style: GoogleFonts.poppins()),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),

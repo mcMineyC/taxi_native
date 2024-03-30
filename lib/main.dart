@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -7,13 +9,15 @@ import 'package:http/http.dart' as http;
 import 'package:json_store/json_store.dart';
 import 'dart:convert';
 import 'dart:async';
-
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-Future main() async{
 
+Future main() async{
+  if(Platform.isLinux || Platform.isMacOS || Platform.isWindows){
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
+    print("Using FFI");
+  }
 // Initialize FFI
-  sqfliteFfiInit();
-  databaseFactory = databaseFactoryFfi;
   runApp(MyApp());
 }
 

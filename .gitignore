@@ -29,15 +29,15 @@ migrate_working_dir/
 .flutter-plugins-dependencies
 .pub-cache/
 .pub/
-# /build/
-/build/.cmake
-/build/flutter
-/build/flutter_assets
-/build/linux
-/build/plugins
+/build/
+# /build/.cmake
+# /build/flutter
+# /build/flutter_assets
+# /build/linux
+# /build/plugins
 # /build/*
-/build/CMakeFiles
-/build/*.*
+# /build/CMakeFiles
+# /build/*.*
 
 # Symbolication related
 app.*.symbols

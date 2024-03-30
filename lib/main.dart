@@ -1,4 +1,5 @@
-import 'dart:io';
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +12,26 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
+class PlatformUtils {
+  static bool get isMobile {
+    if (kIsWeb) {
+      return false;
+    } else {
+      return Platform.isIOS || Platform.isAndroid;
+    }
+  }
+
+  static bool get isDesktop {
+    if (kIsWeb) {
+      return false;
+    } else {
+      return Platform.isLinux || Platform.isFuchsia || Platform.isWindows || Platform.isMacOS;
+    }
+  }
+}
+
 Future main() async{
-  if(Platform.isLinux || Platform.isMacOS || Platform.isWindows){
+  if(PlatformUtils.isDesktop){
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
     print("Using FFI");

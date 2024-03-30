@@ -122,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
   void loginToken() async {
     var token = await _sp.getItem("token");
     var response = await http.post(
-      Uri.parse("http://localhost:3000/authtoken"),
+      Uri.parse("https://forkleserver.mooo.com:3030/authtoken"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),

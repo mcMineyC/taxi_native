@@ -82,6 +82,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passController = TextEditingController();
   bool _beenSubmitted = false;
   bool _authError = false;
+  bool _triedToken = false;
   final JsonStore _sp = JsonStore();
 
   void reset(callback) {
@@ -98,8 +99,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void login() async {
     _beenSubmitted = true;
-    setState(() {
-    });
+    setState(() {});
     showDialog(context: context, builder: (context) {
       return const AlertDialog(
         content: Column(
@@ -134,39 +134,56 @@ class _LoginPageState extends State<LoginPage> {
         });
         return;
       }else{
-        Navigator.of(context).pop();
+        await _sp.setItem("token", {"value": data["authtoken"]});
+        await _sp.setItem("username", {"value": _userController.text});
+        Navigator.of(context).pop(); // Close the dialog
         // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Flutter Demo Home Page')));
         Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Just Some Random Cards')));
+        reset(() {});
       }
-      reset(() {});
     }
   }
 
   void loginToken() async {
-    var token = await _sp.getItem("token");
+    var tokenMap = await _sp.getItem("token");
+    var token = tokenMap?["value"];
+    debugPrint(token.toString());
+    if(_triedToken == true && token == null) {
+      debugPrint("No token found");
+      return;
+    }
+    _triedToken = true;
+    _beenSubmitted = true;
+    setState(() {
+      showDialog(context: context, builder: (context) {
+        return const AlertDialog(
+          content: Column(
+            children: [
+              Text("Logging in with authtoken..."),
+              CircularProgressIndicator()
+            ]
+          )
+        );
+      });
+    });
     var response = await http.post(
       Uri.parse("https://forkleserver.mooo.com:3030/authtoken"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
       body: jsonEncode(<String, String>{
-        'authtoken': token.toString(),
+        'authtoken': token,
       })
     );
     if(response.statusCode == 200) {
       var data = jsonDecode(response.body);
+      debugPrint(data.toString());
       if(data["authorized"] == false) {
-        reset(() {
-          _authError = true;
-          Navigator.of(context).pop();
-          showDialog(context: context, builder: (context) {
-            return AlertDialog(
-              content: Text("Invalid username or password"),
-            );
-          });
-        });
+        await _sp.deleteItem("token");
         return;
       }else{
+        await _sp.setItem("username", {"value": data["username"]});
+        await _sp.setItem("token", {"value": data["authtoken"]});
         Navigator.of(context).pop();
         // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Flutter Demo Home Page')));
         Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Just Some Random Cards')));
@@ -175,13 +192,18 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  void tryLogin() async {
+    var token = await _sp.getItem("token");
+    if(token?["value"] != null && _triedToken == false) {
+      loginToken();
+    }else{
+      debugPrint("Normal login");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    /*
-    if(_sp.getItem("token") ) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Flutter Demo Home Page')));
-    }*/
-    loginToken();
+    tryLogin();
     reset(() {});
     
     return Scaffold(

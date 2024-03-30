@@ -148,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
   void loginToken() async {
     var token = _sp.getString("token");
     debugPrint(token.toString());
-    if(_triedToken == true && token == null) {
+    if(_triedToken == true || token == null) {
       debugPrint("No token found");
       return;
     }
@@ -172,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
         'Content-Type': 'application/json'
       }),
       body: jsonEncode(<String, String>{
-        'authtoken': token!,
+        'authtoken': token,
       })
     );
     if(response.statusCode == 200) {

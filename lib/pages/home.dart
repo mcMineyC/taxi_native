@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -259,28 +260,78 @@ final cards = [
               )
             ),
             Container( // Bottom bar
-              constraints: BoxConstraints(
-                minHeight: 100,
-                maxHeight: 100
+              constraints: const BoxConstraints(
+                minHeight: 96,
+                maxHeight: 96
               ),
-              color: Colors.green,
               child: Column(
                 children: [
                   Expanded(
                     child: Container(
-                      constraints: BoxConstraints(
-                        minHeight: 50,
-                        minWidth: 50
-                      ),
-                      color: Colors.blue,
+                      margin:EdgeInsets.fromLTRB(12, 0, 12, 0),
+                      child: Row(
+                        children: [
+                          Text("Left", style: GoogleFonts.poppins()),
+                          const Spacer(),
+                          Container(  // Button group
+                            child: Row(
+                              children: [
+                                FilledButton(
+                                  child: Container(
+                                    constraints: const BoxConstraints(
+                                      minHeight: 48,
+                                      maxHeight: 48
+                                    ),
+                                    child: const Icon(Icons.skip_previous_rounded, size: 28),
+    
+                                  ),
+                                  onPressed: () {          
+                                }
+                                ),
+                                const SpacerWidget(width: 8),
+                                FilledButton(
+                                  child: Container(
+                                    constraints: const BoxConstraints(
+                                      minHeight: 48,
+                                      maxHeight: 48
+                                    ),
+                                    child: Icon(Icons.play_circle_outline_rounded, size: 28),
+    
+                                  ),
+                                  onPressed: () {
+                                    
+                                  }
+                                ),
+                                const SpacerWidget(width: 8),
+                                FilledButton(
+                                  child: Container(
+                                    constraints: const BoxConstraints(
+                                      minHeight: 48,
+                                      maxHeight: 48
+                                    ),
+                                    child: const Icon(Icons.skip_next_rounded, size: 28),
+    
+                                  ),
+                                  onPressed: () {
+                                    
+                                  }
+                                ),
+                              ]
+                            )
+                          ),
+                          const Spacer(),
+                          Text("Right", style: GoogleFonts.poppins()),
+                        ]
+                      )
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(12, 12, 12, 12),
+                    margin: EdgeInsets.fromLTRB(16, 0, 12, 16),
                     child: LinearProgressIndicator(
                       minHeight: 8,
                       borderRadius: BorderRadius.circular(9999),
                       value: 0.42,
+                      backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
                     )
                   ),
                 ]

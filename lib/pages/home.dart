@@ -1,3 +1,4 @@
+import 'package:beamer/beamer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -5,14 +6,36 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:taxi_native_test/locations.dart';
 
 import '../helper_widgets.dart';
 import 'cards.dart';
 import '../main.dart';
 
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
-class HomePage extends StatelessWidget {
-  HomePage({super.key});
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final _beamerKey = GlobalKey<BeamerState>();
+  String _pageText = "Home";
+  bool _beamerShown = true;
+
+  bool _isPlaying = false;
+  double position = 0;
+
+
+  void _update(callback) {
+    _beamerShown = false;
+    setState(() {
+      callback();
+    });
+    _beamerShown = true;
+  }
+
 
 final cards = [
   {
@@ -181,6 +204,7 @@ final cards = [
 
   @override
   Widget build(BuildContext context) {
+    _pageText = _beamerKey.currentState?.currentBeamLocation.state.toRouteInformation().location ?? 'null';
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     // debugPrint((MediaQuery.of(context).size.width / 220).truncate().toString());
@@ -188,6 +212,13 @@ final cards = [
     return Scaffold(
       // extendBodyBehindAppBar: true,
       appBar: AppBar(
+        leadingWidth: 96,
+        leading: Center(
+          child: IconButton (
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => _beamerKey.currentState?.widget.routerDelegate.beamBack(),
+          )
+        ),
         // TRY THIS: Try changing the color here to a specific color (to
         // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
         // change color while the other colors stay the same.
@@ -195,7 +226,7 @@ final cards = [
         scrolledUnderElevation: 0.0,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text("Just Some Random Cards", style: GoogleFonts.poppins()),
+        title: Text(_pageText, style: GoogleFonts.poppins()),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -252,7 +283,22 @@ final cards = [
                       ),
                       child: Container(
                         margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
-                        child: CardView(cardList: cards,),
+                        child: Offstage(
+                          offstage: _beamerShown ? false : true,
+                          child: Beamer(
+                          key: _beamerKey,
+                          routerDelegate: BeamerDelegate(
+                            locationBuilder: RoutesLocationBuilder(
+                              routes: {
+                                "/": (context, state, data) => InnerHomePage(),
+                                "/artists": (context, state, data) => ArtistsPage(),
+                              },
+                            ),
+                            updateParent: true,
+                            updateFromParent: true,
+                          ),
+                          ),
+                        ),
                       )
                     ),
                   ),
@@ -295,11 +341,13 @@ final cards = [
                                       minHeight: 48,
                                       maxHeight: 48
                                     ),
-                                    child: Icon(Icons.play_circle_outline_rounded, size: 28),
+                                    child: (_isPlaying == false) ? const Icon(Icons.play_circle_outline_rounded, size: 28) : const Icon(Icons.pause_circle_outline_rounded, size: 28),
     
                                   ),
                                   onPressed: () {
-                                    
+                                    _update((){
+                                      _isPlaying = _isPlaying ? false : true;
+                                    });
                                   }
                                 ),
                                 const SpacerWidget(width: 8),
@@ -339,6 +387,36 @@ final cards = [
             )
           ]
         )
+      ),
+    );
+  }
+}
+
+
+class InnerHomePage extends ConsumerStatefulWidget {
+  @override
+  createState() => _InnerHomePageState();
+}
+class _InnerHomePageState extends ConsumerState<InnerHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          TextButton(
+            child: Container(
+              constraints: const BoxConstraints(
+                minHeight: 48,
+                maxHeight: 48
+              ),
+              child: Text("Artists", style: GoogleFonts.poppins()),
+            ),
+            onPressed: () {
+              //
+              Beamer.of(context).beamToNamed("/artists");
+            }
+          )
+        ]
       ),
     );
   }

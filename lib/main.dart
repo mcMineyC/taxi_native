@@ -19,6 +19,14 @@ import 'helper_widgets.dart';
 import 'locations.dart';
 import 'login.dart';
 
+part "main.g.dart";
+
+
+@riverpod
+Future<SharedPreferences> sp(Ref ref) async {
+  return await SharedPreferences.getInstance();
+}
+
 class PlatformUtils {
   static bool get isMobile {
     if (kIsWeb) {
@@ -49,20 +57,19 @@ Future main() async{
   );
 }
 
-class App extends StatelessWidget {
+class App extends ConsumerWidget {
   final routerDelegate = BeamerDelegate(
     initialPath: '/login',
     locationBuilder: BeamerLocationBuilder(
       beamLocations: [
         LoginLocation(),
         HomeLocation(),
-        ArtistsLocation(),
       ],
     ),
   );
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Taxi Native',

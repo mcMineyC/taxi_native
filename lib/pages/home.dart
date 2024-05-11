@@ -5,210 +5,27 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:modal_side_sheet/modal_side_sheet.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:taxi_native_test/locations.dart';
 
 import '../helper_widgets.dart';
 import 'cards.dart';
 import '../main.dart';
+import '../providers/fetched_data_provider.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final _beamerKey = GlobalKey<BeamerState>();
-  String _pageText = "Home";
-  bool _beamerShown = true;
-
+class HomePage extends ConsumerWidget {
+  HomePage({super.key, required this.homeJunk});
+  final Widget homeJunk;
   bool _isPlaying = false;
   double position = 0;
 
 
   void _update(callback) {
-    _beamerShown = false;
-    setState(() {
-      callback();
-    });
-    _beamerShown = true;
   }
 
-
-final cards = [
-  {
-    "displayName": "Card 1",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 2",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Lorem Ipsum Dolor Sit Amet",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 1",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 2",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Lorem Ipsum Dolor Sit Amet",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 1",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 2",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Lorem Ipsum Dolor Sit Amet",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 1",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 2",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Lorem Ipsum Dolor Sit Amet",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 1",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 2",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Lorem Ipsum Dolor Sit Amet",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 1",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 2",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Lorem Ipsum Dolor Sit Amet",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 1",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 2",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Lorem Ipsum Dolor Sit Amet",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 1",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 2",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Lorem Ipsum Dolor Sit Amet",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 1",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Card 2",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-  {
-    "displayName": "Lorem Ipsum Dolor Sit Amet",
-    "image": "https://picsum.photos/200",
-    "id": "1",
-    "type": "card",
-  },
-];
-
   @override
-  Widget build(BuildContext context) {
-    _pageText = _beamerKey.currentState?.currentBeamLocation.state.toRouteInformation().location ?? 'null';
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    // debugPrint((MediaQuery.of(context).size.width / 220).truncate().toString());
-
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       // extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -216,17 +33,12 @@ final cards = [
         leading: Center(
           child: IconButton (
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => _beamerKey.currentState?.widget.routerDelegate.beamBack(),
+            onPressed: () => Beamer.of(context).beamBack(),
           )
         ),
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
+        title: Text(Beamer.of(context).currentPages.last.title ?? "Home"),
         backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
         scrolledUnderElevation: 0.0,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(_pageText, style: GoogleFonts.poppins()),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -241,14 +53,10 @@ final cards = [
           )
         ],
       ),
-      body: Container(
-        color: Theme.of(context).colorScheme.surfaceVariant,
-        child: Column(
-          children: [
-            Expanded(
-              child: Row(
-                children: [
-                  NavigationRail(
+      body: BodyWithSideSheet(
+        show: true,
+        sheetWidth: 96,
+        sheetBody: NavigationRail(
                     backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
                     indicatorColor: Theme.of(context).colorScheme.inversePrimary,
                     labelType: NavigationRailLabelType.selected,
@@ -256,6 +64,10 @@ final cards = [
                       NavigationRailDestination(
                         icon: Icon(Icons.home),
                         label: Text("Home"),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.person),
+                        label: Text("Artists"),
                       ),
                       NavigationRailDestination(
                         icon: Icon(Icons.queue_music),
@@ -270,51 +82,85 @@ final cards = [
                         label: Text("Downloader"),
                       ),
                     ],
-                    selectedIndex: 0,
+                    selectedIndex: () {
+                      switch (Beamer.of(context).currentPages.last.key) {
+                        case ValueKey(value: 'home'):
+                          return 0;
+                        case ValueKey(value: 'artists'):
+                          return 1;
+                        case ValueKey(value: 'queue'):
+                          return 2;
+                        case ValueKey(value: 'playlists'):
+                          return 3;
+                        case ValueKey(value: 'downloader'):
+                          return 4;
+                        default:
+                          return 0;
+                    }}(),
                     onDestinationSelected: (int index) {
-                      // TODO
+                      switch (index) {
+                        case 0:
+                          Beamer.of(context).beamToNamed('/home');
+                          break;
+                        case 1:
+                          Beamer.of(context).beamToNamed('/artists');
+                          break;
+                        case 4:
+                          Beamer.of(context).beamToNamed('/downloader');
+                          break;
+                        default:
+                          const snacky = SnackBar(
+                            content: Text("This feature isn't done yet"),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snacky);
+                          break;
+                      }
                     },
                   ),
-                  Expanded(
-                    child: Container(
+        body: Container(
+          color: Theme.of(context).colorScheme.surfaceVariant,
+          child: Column(
+            children: [
+              Expanded(child:Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.surface,
+                        // color: Colors.teal,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Container(
+                        // color: Colors.green,
                         margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
-                        child: Offstage(
-                          offstage: _beamerShown ? false : true,
-                          child: Beamer(
-                          key: _beamerKey,
-                          routerDelegate: BeamerDelegate(
-                            locationBuilder: RoutesLocationBuilder(
-                              routes: {
-                                "/": (context, state, data) => InnerHomePage(),
-                                "/artists": (context, state, data) => ArtistsPage(),
+                        child: Container(
+                          child: CardView(
+                            cardList: [
+                              {
+                                "text": "Card 1",
+                                "image": "https://via.placeholder.com/150",
+                                "id": "1",
+                                "type": "card"
                               },
-                            ),
-                            updateParent: true,
-                            updateFromParent: true,
-                          ),
-                          ),
-                        ),
-                      )
+                              {
+                                "text": "Card 2",
+                                "image": "https://via.placeholder.com/300",
+                                "id": "2",
+                                "type": "card"
+                              }
+                            ],
+                          )
+                        )
+                      ))
                     ),
-                  ),
-                ]
-              )
-            ),
-            Container( // Bottom bar
-              constraints: const BoxConstraints(
-                minHeight: 96,
-                maxHeight: 96
-              ),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Container(
-                      margin:EdgeInsets.fromLTRB(12, 0, 12, 0),
+              
+              //Controls
+              Container(
+                constraints: BoxConstraints(
+                  minHeight: 72,
+                  maxHeight: 72
+                ),
+                child: Column(  // Player controls
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(12, 12, 12, 12),
                       child: Row(
                         children: [
                           Text("Left", style: GoogleFonts.poppins()),
@@ -371,6 +217,7 @@ final cards = [
                           Text("Right", style: GoogleFonts.poppins()),
                         ]
                       )
+                  )]
                     ),
                   ),
                   Container(
@@ -383,41 +230,8 @@ final cards = [
                     )
                   ),
                 ]
-              )
+              ))
             )
-          ]
-        )
-      ),
-    );
-  }
-}
-
-
-class InnerHomePage extends ConsumerStatefulWidget {
-  @override
-  createState() => _InnerHomePageState();
-}
-class _InnerHomePageState extends ConsumerState<InnerHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          TextButton(
-            child: Container(
-              constraints: const BoxConstraints(
-                minHeight: 48,
-                maxHeight: 48
-              ),
-              child: Text("Artists", style: GoogleFonts.poppins()),
-            ),
-            onPressed: () {
-              //
-              Beamer.of(context).beamToNamed("/artists");
-            }
-          )
-        ]
-      ),
-    );
+      );
   }
 }

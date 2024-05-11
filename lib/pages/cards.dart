@@ -13,7 +13,7 @@ class CardView extends StatelessWidget {
         mainAxisSpacing: 10,
         crossAxisSpacing: 0,
         children: cardList.map(
-          (card) => MediaCard(text: card["displayName"], image: card["image"], thingId: card["id"], thingType: card["type"])
+          (card) => MediaCard(text: card["text"], image: card["image"], thingId: card["id"], thingType: card["type"])
         ).toList(),
     );
   }

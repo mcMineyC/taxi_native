@@ -1,4 +1,12 @@
+import 'package:beamer/beamer.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:taxi_native_test/locations.dart';
 
 class MediaCard extends StatelessWidget{
   final String text;
@@ -79,4 +87,3 @@ class SpacerWidget extends StatelessWidget{
     );
   }
 }
-

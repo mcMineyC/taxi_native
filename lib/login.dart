@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
         await _sp.setString("token", data["authtoken"]);
         await _sp.setString("username", data["username"]);
         Navigator.of(context).pop(); // Close the dialog
-        Beamer.of(context).beamTo(HomeLocation());
+        Beamer.of(context).beamToReplacementNamed("/home");
         // Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Just Some Random Cards')));
         reset(() {});
       }
@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
         await _sp.setString("token", data["authtoken"]);
         await _sp.setString("username", data["username"]);
         Navigator.of(context).pop();
-        Beamer.of(context).beamTo(HomeLocation());
+        Beamer.of(context).beamToReplacementNamed("/home");
         // Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Just Some Random Cards')));
         reset(() {});
       }

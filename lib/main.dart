@@ -1,4 +1,7 @@
+// ignore_for_file: implicit_call_tearoffs
+
 import 'dart:io' show Platform;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +16,15 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:taxi_native_test/pages/error.dart';
 
 
 import 'helper_widgets.dart';
 import 'locations.dart';
+import 'pages/home.dart';
+import 'pages/artists.dart';
+import 'pages/artist.dart';
+import 'pages/downloader.dart';
 import 'login.dart';
 
 part "main.g.dart";
@@ -45,7 +53,7 @@ class PlatformUtils {
   }
 }
 
-Future main() async{
+void main() async{
   if(PlatformUtils.isDesktop){
     print("Using FFI");
   }
@@ -60,12 +68,54 @@ Future main() async{
 class App extends ConsumerWidget {
   final routerDelegate = BeamerDelegate(
     initialPath: '/login',
-    locationBuilder: BeamerLocationBuilder(
-      beamLocations: [
-        LoginLocation(),
-        HomeLocation(),
-      ],
+    locationBuilder: RoutesLocationBuilder(
+      routes: {
+        '/':   (context, state, data) => BeamPage(
+          key: const ValueKey('slash'),
+          title: 'Slash (The Root)',
+          popToNamed: '/home',
+          child: ErrorPage(),
+        ),
+        '/how': (context, state, data) => BeamPage(
+          key: const ValueKey('how'),
+          title: 'How',
+          child: ErrorPage(),
+        ),
+        '/login': (context, state, data) => const LoginPage(),
+        '/home': (context, state, data) => BeamPage(
+          key: const ValueKey('home'),
+          title: 'Home',
+          child: HomePage(homeJunk: Text("This is /home")),
+        ),
+        '/artist/:artistId': (context, state, data) {
+          final artistId = state.pathParameters['artistId']!;
+          return BeamPage(
+            key: ValueKey("artist-view"),
+            title: '$artistId',
+            popToNamed: '/home',
+            child: ArtistPage(id: artistId),
+          );
+        },
+        '/artists': (context, state, data) => BeamPage(
+          key: const ValueKey('artists'),
+          title: 'Artists',
+          popToNamed: '/home',
+          child: HomePage(homeJunk: ArtistsPage()),
+        ),
+        '/downloader': (context, state, data) => BeamPage(
+          key: const ValueKey('downloader'),
+          title: 'Downloader',
+          popToNamed: '/home',
+          child: DownloaderPage(),
+        ),
+      }
     ),
+    buildListener: (p0, p1) {
+      print("BeamerDelegate buildListener");
+      p1.currentPages.forEach((element) {
+        print("Current page: ${element.title} ${element.key.toString()}");
+      });
+    },
   );
   // This widget is the root of your application.
   @override
@@ -80,6 +130,8 @@ class App extends ConsumerWidget {
         ),
         useMaterial3: true,
         fontFamily: GoogleFonts.poppins().fontFamily,
+        // dividerColor: Color.fromARGB(255, 67, 71, 78)
+        dividerColor: Colors.pink[600]
       ),
       routerDelegate: routerDelegate,
       routeInformationParser: BeamerParser(),

@@ -1,4 +1,5 @@
 import 'package:beamer/beamer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -43,12 +44,18 @@ class MediaCard extends StatelessWidget{
                     margin: EdgeInsets.fromLTRB(24, 20, 24, 0),
                     height: 175,
                     width: 200,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: DecorationImage(
-                        image: NetworkImage(image),
-                        fit: BoxFit.contain
-                      )
+                    child: CachedNetworkImage(
+                      imageUrl: image,
+                      imageBuilder: (context, imageProvider) => Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                      placeholder: (context, url) => Container(color:Colors.grey),
+                      errorWidget: (context, url, error) => Icon(Icons.error_outline_rounded,color:Colors.pink[700]),
                     ),
                   ),
                   Container(

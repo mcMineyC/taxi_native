@@ -49,7 +49,7 @@ Future<List<Artist>> fetchArtists(FetchArtistsref) async {
   desponse = desponse["artists"];
   var listThings = <Artist>[];
   desponse.forEach((element) {
-    print(element);
+    // print(element);
     var outStr = jsonEncode(element);
     var artist = Artist.fromJson(jsonDecode(outStr));
     listThings.add(artist);

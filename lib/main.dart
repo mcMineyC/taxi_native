@@ -17,6 +17,7 @@ import 'pages/home.dart';
 import 'pages/artists.dart';
 import 'pages/artist.dart';
 import 'pages/downloader.dart';
+import 'pages/landing.dart';
 import 'login.dart';
 
 
@@ -70,7 +71,7 @@ class App extends ConsumerWidget {
         '/home': (context, state, data) => BeamPage(
           key: const ValueKey('home'),
           title: 'Home',
-          child: HomePage(homeJunk: Text("This is /home")),
+          child: HomePage(homeJunk: LandingPage()),
         ),
         '/artist/:artistId': (context, state, data) {
           final artistId = state.pathParameters['artistId']!;

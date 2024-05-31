@@ -20,7 +20,7 @@ final fetchDataProvider = AutoDisposeFutureProvider<List<Song>>.internal(
 );
 
 typedef FetchDataRef = AutoDisposeFutureProviderRef<List<Song>>;
-String _$fetchArtistsHash() => r'45864dedc0aa0e5730b94e702d19d68932f15bcc';
+String _$fetchArtistsHash() => r'07cb001ab7b55c9582870bc5e52076a5bca70d45';
 
 /// See also [fetchArtists].
 @ProviderFor(fetchArtists)

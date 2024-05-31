@@ -5,7 +5,7 @@ import 'cards.dart';
 import '../providers/fetched_data_provider.dart'; 
 import '../types/artists.dart';
 
-class ArtistsPage extends ConsumerWidget {
+class LandingPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<List<Artist>> artists = ref.watch(fetchArtistsProvider);

@@ -10,9 +10,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:taxi_native_test/locations.dart';
 
 import '../helper_widgets.dart';
-import 'cards.dart';
-import '../main.dart';
-import '../providers/fetched_data_provider.dart';
 
 class HomePage extends ConsumerWidget {
   HomePage({super.key, required this.homeJunk});
@@ -120,6 +117,7 @@ class HomePage extends ConsumerWidget {
         body: Container(
           color: Theme.of(context).colorScheme.surfaceVariant,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(child:Container(
                       decoration: BoxDecoration(
@@ -130,24 +128,7 @@ class HomePage extends ConsumerWidget {
                       child: Container(
                         // color: Colors.green,
                         margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
-                        child: Container(
-                          child: CardView(
-                            cardList: [
-                              {
-                                "text": "Card 1",
-                                "image": "https://via.placeholder.com/150",
-                                "id": "1",
-                                "type": "card"
-                              },
-                              {
-                                "text": "Card 2",
-                                "image": "https://via.placeholder.com/300",
-                                "id": "2",
-                                "type": "card"
-                              }
-                            ],
-                          )
-                        )
+                        child: Expanded(child:homeJunk),
                       ))
                     ),
               

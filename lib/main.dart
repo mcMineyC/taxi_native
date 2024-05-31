@@ -1,16 +1,10 @@
 // ignore_for_file: implicit_call_tearoffs
 
 import 'dart:io' show Platform;
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 import 'dart:async';
 import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,21 +13,12 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:taxi_native_test/pages/error.dart';
 
 
-import 'helper_widgets.dart';
-import 'locations.dart';
 import 'pages/home.dart';
 import 'pages/artists.dart';
 import 'pages/artist.dart';
 import 'pages/downloader.dart';
 import 'login.dart';
 
-part "main.g.dart";
-
-
-@riverpod
-Future<SharedPreferences> sp(Ref ref) async {
-  return await SharedPreferences.getInstance();
-}
 
 class PlatformUtils {
   static bool get isMobile {
@@ -91,7 +76,7 @@ class App extends ConsumerWidget {
           final artistId = state.pathParameters['artistId']!;
           return BeamPage(
             key: ValueKey("artist-view"),
-            title: '$artistId',
+            title: artistId,
             popToNamed: '/home',
             child: ArtistPage(id: artistId),
           );

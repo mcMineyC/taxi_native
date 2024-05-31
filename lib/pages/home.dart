@@ -128,7 +128,7 @@ class HomePage extends ConsumerWidget {
                       child: Container(
                         // color: Colors.green,
                         margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
-                        child: Expanded(child:homeJunk),
+                        child: homeJunk,
                       ))
                     ),
               

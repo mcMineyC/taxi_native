@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../types/song.dart';
 import '../types/artists.dart';
@@ -10,14 +11,15 @@ import '../types/artists.dart';
 part 'fetched_data_provider.g.dart';
 
 @riverpod
-Future<List<Song>> fetchData(FetchDataRef ref) async {
+Future<List<Song>> fetchSongs(FetchSongsRef ref) async {
+  final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse("https://forkleserver.mooo.com:3030/info/songs"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
       body: jsonEncode(<String, String>{
-        'authtoken': '1234567890'
+        'authtoken': _sp.getString("token") ?? ""
       })
   );
   var desponse = jsonDecode(response.body);
@@ -35,13 +37,14 @@ Future<List<Song>> fetchData(FetchDataRef ref) async {
 
 @riverpod
 Future<List<Artist>> fetchArtists(FetchArtistsref) async {
+  final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse("https://forkleserver.mooo.com:3030/info/artists"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
       body: jsonEncode(<String, String>{
-        'authtoken': '1234567890'
+        'authtoken': _sp.getString("token") ?? "" 
       })
   );
   var desponse = jsonDecode(response.body);

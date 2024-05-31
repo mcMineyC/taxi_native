@@ -6,21 +6,21 @@ part of 'fetched_data_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchDataHash() => r'a7770a496229c1b77e03cf104d17ff0b79b1d8c3';
+String _$fetchSongsHash() => r'dad481b92f4010a2859305739fdd3da3a69d7c4d';
 
-/// See also [fetchData].
-@ProviderFor(fetchData)
-final fetchDataProvider = AutoDisposeFutureProvider<List<Song>>.internal(
-  fetchData,
-  name: r'fetchDataProvider',
+/// See also [fetchSongs].
+@ProviderFor(fetchSongs)
+final fetchSongsProvider = AutoDisposeFutureProvider<List<Song>>.internal(
+  fetchSongs,
+  name: r'fetchSongsProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$fetchDataHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$fetchSongsHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef FetchDataRef = AutoDisposeFutureProviderRef<List<Song>>;
-String _$fetchArtistsHash() => r'07cb001ab7b55c9582870bc5e52076a5bca70d45';
+typedef FetchSongsRef = AutoDisposeFutureProviderRef<List<Song>>;
+String _$fetchArtistsHash() => r'c473d6537006e7ef98e0b113e302da0d261d183c';
 
 /// See also [fetchArtists].
 @ProviderFor(fetchArtists)

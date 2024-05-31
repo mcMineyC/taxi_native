@@ -8,7 +8,7 @@ import '../types/song.dart';
 class DownloaderPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<Song>> str = ref.watch(fetchDataProvider);
+    final AsyncValue<List<Song>> str = ref.watch(fetchSongsProvider);
 
     return Scaffold(
       body: Container(child: str.when(

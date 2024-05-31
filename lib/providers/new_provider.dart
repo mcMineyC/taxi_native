@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../types/song.dart';
 
@@ -10,13 +11,14 @@ part 'new_provider.g.dart';
 
 @riverpod
 Future<List<Song>> fetchNewSongs(FetchNewSongsRef ref) async {
+  var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse("https://forkleserver.mooo.com:3030/info/songs"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
       body: jsonEncode(<String, String>{
-        'authtoken': '1234567890'
+        'authtoken': (_sp.getString("token") ?? "")
       })
   );
   var desponse = jsonDecode(response.body);

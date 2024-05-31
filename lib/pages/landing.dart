@@ -23,11 +23,6 @@ class LandingPage extends ConsumerWidget {
             children: [
               Text("Favorites", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
               Container(
-                // constraints: BoxConstraints(
-                //   minHeight: 400,
-                //   minWidth: 400,
-                //   maxHeight: 400,
-                // ),
                 color: Colors.pink[700],
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,

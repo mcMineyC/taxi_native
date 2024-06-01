@@ -24,7 +24,7 @@ Future<List<Song>> fetchRecentlyPlayed(FetchRecentlyPlayedRef ref) async {
   desponse = desponse["played"];
   var songs = <Song>[];
   if(desponse is List) {
-      for(var x = desponse.length - 1; x > 0; x--) {
+      for(var x = desponse.length - 1; x >= 0; x--) {
           var repsonse = await http.post(
               Uri.parse("https://forkleserver.mooo.com:3030/info/songs/${desponse[x]}"),
               headers: Map<String, String>.from({

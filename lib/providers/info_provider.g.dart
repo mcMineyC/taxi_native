@@ -7,7 +7,7 @@ part of 'info_provider.dart';
 // **************************************************************************
 
 String _$fetchRecentlyPlayedHash() =>
-    r'dfa445531c134ee6b323e059f230a22c4afe13a2';
+    r'b4f2ad2b8bf0c23d6f64e40cc02fa4720725c324';
 
 /// See also [fetchRecentlyPlayed].
 @ProviderFor(fetchRecentlyPlayed)

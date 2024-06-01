@@ -4,11 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helper_widgets.dart';
 import '../types/song.dart';
 import '../providers/new_provider.dart';
+import '../providers/info_provider.dart';
 
 class LandingPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<List<Song>> newSongs = ref.watch(fetchNewSongsProvider);
+    final AsyncValue<List<Song>> recentlyPlayed = ref.watch(fetchRecentlyPlayedProvider);
 
     return Container(
       margin: EdgeInsets.fromLTRB(12, 0, 12, 0),
@@ -48,14 +50,23 @@ class LandingPage extends ConsumerWidget {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: [
-                      MediaCard(
-                        text: "Sevcon",
-                        thingId: "idklol",
-                        thingType: "song",
-                        image: "https://eatthecow.mooo.com:3030/info/songs/94c2eddf97b4e8e1d2d2142030ddd50a73ce6bbd9e639498fa9780e04897e331_b8205db61d821c68c7371dc8aae446d48d3801b3ed1eef863fe838a001b30a50_ac74ddee7ade1c36f46baaea6f3a7890375a81629a426ed253eee1ab80e5a33d/image",
-                      ),
-                    ],
+                    children: 
+                      recentlyPlayed.when(
+                        data: (data) => data.map((song) => MediaCard(
+                          text: song.displayName,
+                          image: "https://eatthecow.mooo.com:3030/info/songs/${song.id}/image",
+                          thingId: song.id,
+                          thingType: "song",
+                        )).toList(),
+                        loading: () => [Center(child: CircularProgressIndicator())],
+                        error: (err, stack) => [Text("Error fetching data: $err")],
+                      )
+                      // MediaCard(
+                      //   text: "Sevcon",
+                      //   thingId: "idklol",
+                      //   thingType: "song",
+                      //   image: "https://eatthecow.mooo.com:3030/info/songs/94c2eddf97b4e8e1d2d2142030ddd50a73ce6bbd9e639498fa9780e04897e331_b8205db61d821c68c7371dc8aae446d48d3801b3ed1eef863fe838a001b30a50_ac74ddee7ade1c36f46baaea6f3a7890375a81629a426ed253eee1ab80e5a33d/image",
+                      // ),
                   ),
                 )
               )
@@ -69,7 +80,7 @@ class LandingPage extends ConsumerWidget {
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    children: [
+                    children: [ 
                       MediaCard(
                         text: "Megalovania",
                         thingId: "idklol",

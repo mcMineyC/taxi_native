@@ -67,6 +67,14 @@ class HomePage extends ConsumerWidget {
                         label: Text("Artists"),
                       ),
                       NavigationRailDestination(
+                        icon: Icon(Icons.library_music_rounded),
+                        label: Text("Albums"),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.music_note_rounded),
+                        label: Text("Songs"),
+                      ),
+                      NavigationRailDestination(
                         icon: Icon(Icons.queue_music),
                         label: Text("Queue"),
                       ),
@@ -85,12 +93,16 @@ class HomePage extends ConsumerWidget {
                           return 0;
                         case ValueKey(value: 'artists'):
                           return 1;
-                        case ValueKey(value: 'queue'):
-                          return 2;
-                        case ValueKey(value: 'playlists'):
-                          return 3;
                         case ValueKey(value: 'downloader'):
+                          return 2;
+                        case ValueKey(value: 'downloader'):
+                          return 3;
+                        case ValueKey(value: 'queue'):
                           return 4;
+                        case ValueKey(value: 'playlists'):
+                          return 5;
+                        case ValueKey(value: 'downloader'):
+                          return 6;
                         default:
                           return 0;
                     }}(),
@@ -102,7 +114,13 @@ class HomePage extends ConsumerWidget {
                         case 1:
                           Beamer.of(context).beamToNamed('/artists');
                           break;
-                        case 4:
+                        case 2:
+                          Beamer.of(context).beamToNamed('/albums');
+                          break;
+                        case 3:
+                          Beamer.of(context).beamToNamed('/songs');
+                          break;
+                        case 6:
                           Beamer.of(context).beamToNamed('/downloader');
                           break;
                         default:

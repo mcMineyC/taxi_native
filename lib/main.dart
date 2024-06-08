@@ -56,6 +56,12 @@ class App extends ConsumerWidget {
     initialPath: '/login',
     locationBuilder: RoutesLocationBuilder(
       routes: {
+        '/*':  (context, state, data) => BeamPage(
+          key: ValueKey('how'),
+          title: 'Error',
+          popToNamed: '/home',
+          child: ErrorPage(),
+        ),
         '/':   (context, state, data) => BeamPage(
           key: const ValueKey('slash'),
           title: 'Slash (The Root)',

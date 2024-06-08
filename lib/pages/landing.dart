@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helper_widgets.dart';
 import '../types/song.dart';
 import '../providers/new_provider.dart';
 import '../providers/info_provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class LandingPage extends ConsumerWidget {
   @override
@@ -49,27 +49,28 @@ class LandingPage extends ConsumerWidget {
               Container(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: 
-                      recentlyPlayed.when(
-                        data: (data) => data.map((song) => MediaCard(
+                  child: recentlyPlayed.when(
+                    data: (data) {
+                      return Row(
+                        children: data.map((song) => MediaCard(
                           text: song.displayName,
                           image: "https://eatthecow.mooo.com:3030/info/songs/${song.id}/image",
                           thingId: song.id,
                           thingType: "song",
                         )).toList(),
-                        loading: () => [Center(child: CircularProgressIndicator())],
-                        error: (err, stack) => [Text("Error fetching data: $err")],
+                      );
+                    },
+                    loading: () => SingleChildScrollView(
+                      child: Skeletonizer(
+                        enabled: true,
+                        child: Row(
+                          children: [for (int i = 0; i < 10; i++) MediaCard(text: "meh who cares", thingId: "idklol", thingType: "song", image: "https://placehold.co/512x512.png")]
+                        )
                       )
-                      // MediaCard(
-                      //   text: "Sevcon",
-                      //   thingId: "idklol",
-                      //   thingType: "song",
-                      //   image: "https://eatthecow.mooo.com:3030/info/songs/94c2eddf97b4e8e1d2d2142030ddd50a73ce6bbd9e639498fa9780e04897e331_b8205db61d821c68c7371dc8aae446d48d3801b3ed1eef863fe838a001b30a50_ac74ddee7ade1c36f46baaea6f3a7890375a81629a426ed253eee1ab80e5a33d/image",
-                      // ),
-                  ),
+                    ),
+                    error: (err, stack) => Text("Error fetching data: $err"),
                 )
-              )
+              ))
             ]
           ),
           Column(
@@ -132,7 +133,14 @@ class LandingPage extends ConsumerWidget {
                         )).toList(),
                       );
                     },
-                    loading: () => Center(child: CircularProgressIndicator()),
+                    loading: () => SingleChildScrollView(
+                      child: Skeletonizer(
+                        enabled: true,
+                        child: Row(
+                          children: [for (int i = 0; i < 10; i++) MediaCard(text: "meh who cares", thingId: "idklol", thingType: "song", image: "https://placehold.co/512x512.png")]
+                        )
+                      )
+                    ),
                     error: (err, stack) => Text("Error fetching data: $err"),
                 )
               ))

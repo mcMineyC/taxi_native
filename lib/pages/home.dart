@@ -10,6 +10,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:taxi_native_test/locations.dart';
 
 import '../helper_widgets.dart';
+import '../providers/playing_provider.dart';
 
 class HomePage extends ConsumerWidget {
   HomePage({super.key, required this.homeJunk});
@@ -23,6 +24,7 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final player = ref.watch(playerProvider);
     return Scaffold(
       // extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -186,13 +188,12 @@ class HomePage extends ConsumerWidget {
                                       minHeight: 48,
                                       maxHeight: 48
                                     ),
-                                    child: (_isPlaying == false) ? const Icon(Icons.play_circle_outline_rounded, size: 28) : const Icon(Icons.pause_circle_outline_rounded, size: 28),
+                                    //*PLAY_BUTTON
+                                    child: (player.isPlaying == false) ? const Icon(Icons.play_circle_outline_rounded, size: 28) : const Icon(Icons.pause_circle_outline_rounded, size: 28),
     
                                   ),
                                   onPressed: () {
-                                    _update((){
-                                      _isPlaying = _isPlaying ? false : true;
-                                    });
+                                    ref.read(playerProvider.notifier).toggle(); 
                                   }
                                 ),
                                 const SpacerWidget(width: 8),

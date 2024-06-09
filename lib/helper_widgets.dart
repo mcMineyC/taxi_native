@@ -8,8 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:taxi_native_test/locations.dart';
+import 'providers/playing_provider.dart';
 
-class MediaCard extends StatelessWidget{
+class MediaCard extends ConsumerWidget{
   final String text;
   final String thingId;
   final String thingType;
@@ -23,13 +24,17 @@ class MediaCard extends StatelessWidget{
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return FittedBox(
           child: Card(
             clipBehavior: Clip.hardEdge,
             child: InkWell(
               onTap: () {
                 debugPrint("Pressed card with id: $thingId and type: $thingType");
+                if(thingType == "song"){
+                  print("Setting song");
+                  ref.read(playerProvider.notifier).setSong(thingId);
+                }
               },
             child: ConstrainedBox(
               constraints: const BoxConstraints(

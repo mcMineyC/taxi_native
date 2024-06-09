@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../types/song.dart';
+import 'fetched_data_provider.dart';
 
 part 'info_provider.g.dart';
 
@@ -42,4 +43,10 @@ Future<List<Song>> fetchRecentlyPlayed(FetchRecentlyPlayedRef ref) async {
   }else{
       return [];
   }
+}
+
+@riverpod
+Future<Song> findSong(FindSongRef ref, String id) async {
+  final songs = await ref.read(fetchSongsProvider.future);
+  return songs.firstWhere((song) => song.id == id); 
 }

@@ -48,7 +48,6 @@ class Player extends _$Player {
     );
   }
 
-  // Let's allow the UI to add todos.
   void play() async {
     player.resume();
     state = PlayerInfo(
@@ -109,6 +108,7 @@ class Player extends _$Player {
   }
 
   void setSong(id) async {
+    await player.stop();
     await player.play(UrlSource('https://eatthecow.mooo.com:3030/info/songs/'+id+'/audio'));
     final songObject = await ref.read(findSongProvider(id).future);
     state = PlayerInfo(

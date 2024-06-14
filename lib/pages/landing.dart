@@ -4,6 +4,7 @@ import '../helper_widgets.dart';
 import '../types/song.dart';
 import '../providers/new_provider.dart';
 import '../providers/info_provider.dart';
+import '../providers/user_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class LandingPage extends ConsumerWidget {
@@ -11,13 +12,18 @@ class LandingPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<List<Song>> newSongs = ref.watch(fetchNewSongsProvider);
     final AsyncValue<List<Song>> recentlyPlayed = ref.watch(fetchRecentlyPlayedProvider);
+    final AsyncValue<String> user = ref.watch(userNameProvider);
 
     return Container(
       margin: EdgeInsets.fromLTRB(12, 0, 12, 0),
       child: ListView(
         children: [
           Text(
-            "Hello, User!",
+            user.when(
+              data: (data) => "Hello, $data!",
+              loading: () => "Hello, User!",
+              error: (err, stack) => "Hello!"
+            ),
             style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
             textAlign: TextAlign.left,
           ),

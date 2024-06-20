@@ -23,7 +23,7 @@ final fetchRecentlyPlayedProvider =
 );
 
 typedef FetchRecentlyPlayedRef = AutoDisposeFutureProviderRef<List<Song>>;
-String _$fetchFavoritesHash() => r'f9746e64e37cd0ef07f492de42f89a8284bda961';
+String _$fetchFavoritesHash() => r'1a2f06aa9bfedaacea00513198166b64574e7246';
 
 /// See also [fetchFavorites].
 @ProviderFor(fetchFavorites)

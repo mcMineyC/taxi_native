@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 class ErrorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return Center(
         child: Container(
           constraints: BoxConstraints(maxWidth: 512,maxHeight: 128),
           child: Column(
@@ -21,7 +20,6 @@ class ErrorPage extends StatelessWidget {
             ],
           )
         ),
-      ),
-    );
+      );
   }
 }

@@ -20,7 +20,21 @@ final fetchSongsProvider = AutoDisposeFutureProvider<List<Song>>.internal(
 );
 
 typedef FetchSongsRef = AutoDisposeFutureProviderRef<List<Song>>;
-String _$fetchArtistsHash() => r'c473d6537006e7ef98e0b113e302da0d261d183c';
+String _$fetchAlbumsHash() => r'1a938296c1dfb0615fd9e09c24bf7c39bec57cf6';
+
+/// See also [fetchAlbums].
+@ProviderFor(fetchAlbums)
+final fetchAlbumsProvider = AutoDisposeFutureProvider<List<Album>>.internal(
+  fetchAlbums,
+  name: r'fetchAlbumsProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$fetchAlbumsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef FetchAlbumsRef = AutoDisposeFutureProviderRef<List<Album>>;
+String _$fetchArtistsHash() => r'502db22804dab2584688f0381d4b7b72c519bd61';
 
 /// See also [fetchArtists].
 @ProviderFor(fetchArtists)

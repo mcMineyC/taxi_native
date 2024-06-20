@@ -22,7 +22,7 @@ class LandingPage extends ConsumerWidget {
             user.when(
               data: (data) => "Hello, $data!",
               loading: () => "Hello, User!",
-              error: (err, stack) => "Hello!"
+              error: (err, stack) => "Greetings and salutations!"
             ),
             style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
             textAlign: TextAlign.left,

@@ -4,11 +4,8 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:async';
 import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:taxi_native_test/pages/error.dart';
 
@@ -16,6 +13,8 @@ import 'package:taxi_native_test/pages/error.dart';
 import 'pages/home.dart';
 import 'pages/artists.dart';
 import 'pages/artist.dart';
+import 'pages/albums.dart';
+import 'pages/songs.dart';
 import 'pages/downloader.dart';
 import 'pages/landing.dart';
 import 'login.dart';
@@ -60,20 +59,24 @@ class App extends ConsumerWidget {
           key: ValueKey('how'),
           title: 'Error',
           popToNamed: '/home',
-          child: ErrorPage(),
+          child: HomePage(homeJunk: ErrorPage()), //ErrorPage(),
         ),
         '/':   (context, state, data) => BeamPage(
           key: const ValueKey('slash'),
           title: 'Slash (The Root)',
           popToNamed: '/home',
-          child: ErrorPage(),
+          child: HomePage(homeJunk: ErrorPage()),
         ),
         '/how': (context, state, data) => BeamPage(
           key: const ValueKey('how'),
-          title: 'How',
-          child: ErrorPage(),
+          title: 'How. Just How?',
+          child: HomePage(homeJunk: ErrorPage()),
         ),
-        '/login': (context, state, data) => const LoginPage(),
+        '/login': (context, state, data) => BeamPage(
+          key: const ValueKey('login'),
+          title: 'Login',
+          child: LoginPage(),
+        ),
         '/home': (context, state, data) => BeamPage(
           key: const ValueKey('home'),
           title: 'Home',
@@ -94,11 +97,23 @@ class App extends ConsumerWidget {
           popToNamed: '/home',
           child: HomePage(homeJunk: ArtistsPage()),
         ),
+        '/albums': (context, state, data) => BeamPage(
+          key: const ValueKey('albums'),
+          title: 'Albums',
+          popToNamed: '/home',
+          child: HomePage(homeJunk: AlbumsPage()),
+        ),
+        '/songs': (context, state, data) => BeamPage(
+          key: const ValueKey('songs'),
+          title: 'Songs',
+          popToNamed: '/home',
+          child: HomePage(homeJunk: SongsPage()),
+        ),
         '/downloader': (context, state, data) => BeamPage(
           key: const ValueKey('downloader'),
           title: 'Downloader',
           popToNamed: '/home',
-          child: DownloaderPage(),
+          child: HomePage(homeJunk: DownloaderPage()),
         ),
       }
     ),
@@ -114,7 +129,7 @@ class App extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Taxi Native',
+      title: 'Taxi - Native',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue[600]!,

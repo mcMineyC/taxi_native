@@ -31,9 +31,15 @@ class MediaCard extends ConsumerWidget{
             child: InkWell(
               onTap: () {
                 debugPrint("Pressed card with id: $thingId and type: $thingType");
-                if(thingType == "song"){
-                  print("Setting song");
-                  ref.read(playerProvider.notifier).setSong(thingId);
+                switch (thingType) {
+                  case "song":
+                    print("Setting song");
+                    ref.read(playerProvider.notifier).setSong(thingId);
+                    break;
+                  case "placeholder":
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Oooo!!! nice job! But the real question is why do you just go around randomly clicking loading things? ><")));
+                  default:
+                    debugPrint("No implementation for $thingType");
                 }
               },
             child: ConstrainedBox(
@@ -53,13 +59,14 @@ class MediaCard extends ConsumerWidget{
                       imageUrl: image,
                       imageBuilder: (context, imageProvider) => Container(
                         decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
                           image: DecorationImage(
                             image: imageProvider,
                             fit: BoxFit.contain,
                           ),
                         ),
                       ),
-                      placeholder: (context, url) => Container(color:Colors.grey),
+                      placeholder: (context, url) => Container(decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12))),
                       errorWidget: (context, url, error) => Icon(Icons.error_outline_rounded,color:Colors.pink[700]),
                     ),
                   ),

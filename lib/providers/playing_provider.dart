@@ -19,7 +19,7 @@ class PlayerInfo with _$PlayerInfo {
     required String albumDisplayName,
     required double duration,
     required double position,
-    required int    percent,
+    required double percent,
     required bool isPlaying,
   }) = _PlayerInfo;
 }
@@ -38,7 +38,10 @@ class Player extends _$Player {
   bool _isInit = false;
   Player(){
     player.onPositionChanged.listen((Duration p) {
-      state = state.copyWith(position: p.inMilliseconds.toDouble()*1000);
+      state = state.copyWith(
+        position: p.inMilliseconds.toDouble()/1000,
+        percent: (p.inMilliseconds.toDouble()/1000) / state.duration
+      );
     });
     player.onPlayerComplete.listen((event) {
       state = state.copyWith(isPlaying: false);
@@ -47,6 +50,7 @@ class Player extends _$Player {
 
   @override
   PlayerInfo build() {
+    print("Playerinfo: New playerinfo");
     return PlayerInfo(
       id: '1d822fde641a597beb59ba197388b85e40eafb39d007be53f1c1da9b36d6a8df_00879b25b7e52685100c540611c16c5974b224ef79c692a9f58e43764532064d_afb9215a04c112dd39bcdd9b67b9f45073eb8aa9dbbdb73f6adceaa6e7840e57',
       artistId: '1d822fde641a597beb59ba197388b85e40eafb39d007be53f1c1da9b36d6a8df',
@@ -66,8 +70,6 @@ class Player extends _$Player {
     state = state.copyWith(isPlaying: true);
 
     print("playing");
-    // No need to call "notifyListeners" or anything similar. Calling "state ="
-    // will automatically rebuild the UI when necessary.
   }
 
   void pause() async {

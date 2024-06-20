@@ -89,9 +89,9 @@ class HomePage extends ConsumerWidget {
                           return 0;
                         case ValueKey(value: 'artists'):
                           return 1;
-                        case ValueKey(value: 'downloader'):
+                        case ValueKey(value: 'albums'):
                           return 2;
-                        case ValueKey(value: 'downloader'):
+                        case ValueKey(value: 'songs'):
                           return 3;
                         case ValueKey(value: 'queue'):
                           return 4;
@@ -116,12 +116,9 @@ class HomePage extends ConsumerWidget {
                         case 3:
                           Beamer.of(context).beamToNamed('/songs');
                           break;
-                        case 6:
-                          Beamer.of(context).beamToNamed('/downloader');
-                          break;
                         default:
                           const snacky = SnackBar(
-                            content: Text("This feature isn't done yet"),
+                            content: Text("This feature isn't done yet :("),
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snacky);
                           break;
@@ -231,7 +228,7 @@ class HomePage extends ConsumerWidget {
                     child: LinearProgressIndicator(
                       minHeight: 8,
                       borderRadius: BorderRadius.circular(9999),
-                      value: 0.42,
+                      value: player.percent,
                       backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
                     )
                   ),

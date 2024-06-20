@@ -6,6 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../types/song.dart';
+import '../types/album.dart';
 import '../types/artists.dart';
 
 part 'fetched_data_provider.g.dart';
@@ -36,7 +37,32 @@ Future<List<Song>> fetchSongs(FetchSongsRef ref) async {
 }
 
 @riverpod
-Future<List<Artist>> fetchArtists(FetchArtistsref) async {
+Future<List<Album>> fetchAlbums(FetchAlbumsRef ref) async {
+  final _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+      Uri.parse("https://forkleserver.mooo.com:3030/info/albums"),
+      headers: Map<String, String>.from({
+        'Content-Type': 'application/json'
+      }),
+      body: jsonEncode(<String, String>{
+        'authtoken': _sp.getString("token") ?? ""
+      })
+  );
+  var desponse = jsonDecode(response.body);
+  // print(desponse);
+  desponse = desponse["albums"];
+  var listThings = <Album>[];
+  desponse.forEach((element) {
+    var outStr = jsonEncode(element);
+    var song = Album.fromJson(jsonDecode(outStr));
+    listThings.add(song);
+  });
+  return listThings;
+}
+
+
+@riverpod
+Future<List<Artist>> fetchArtists(FetchArtistsRef ref) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse("https://forkleserver.mooo.com:3030/info/artists"),

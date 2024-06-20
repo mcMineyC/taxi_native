@@ -24,7 +24,7 @@ mixin _$PlayerInfo {
   String get albumDisplayName => throw _privateConstructorUsedError;
   double get duration => throw _privateConstructorUsedError;
   double get position => throw _privateConstructorUsedError;
-  int get percent => throw _privateConstructorUsedError;
+  double get percent => throw _privateConstructorUsedError;
   bool get isPlaying => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -47,7 +47,7 @@ abstract class $PlayerInfoCopyWith<$Res> {
       String albumDisplayName,
       double duration,
       double position,
-      int percent,
+      double percent,
       bool isPlaying});
 }
 
@@ -111,7 +111,7 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
       percent: null == percent
           ? _value.percent
           : percent // ignore: cast_nullable_to_non_nullable
-              as int,
+              as double,
       isPlaying: null == isPlaying
           ? _value.isPlaying
           : isPlaying // ignore: cast_nullable_to_non_nullable
@@ -137,7 +137,7 @@ abstract class _$$PlayerInfoImplCopyWith<$Res>
       String albumDisplayName,
       double duration,
       double position,
-      int percent,
+      double percent,
       bool isPlaying});
 }
 
@@ -199,7 +199,7 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
       percent: null == percent
           ? _value.percent
           : percent // ignore: cast_nullable_to_non_nullable
-              as int,
+              as double,
       isPlaying: null == isPlaying
           ? _value.isPlaying
           : isPlaying // ignore: cast_nullable_to_non_nullable
@@ -240,7 +240,7 @@ class _$PlayerInfoImpl implements _PlayerInfo {
   @override
   final double position;
   @override
-  final int percent;
+  final double percent;
   @override
   final bool isPlaying;
 
@@ -304,7 +304,7 @@ abstract class _PlayerInfo implements PlayerInfo {
       required final String albumDisplayName,
       required final double duration,
       required final double position,
-      required final int percent,
+      required final double percent,
       required final bool isPlaying}) = _$PlayerInfoImpl;
 
   @override
@@ -324,7 +324,7 @@ abstract class _PlayerInfo implements PlayerInfo {
   @override
   double get position;
   @override
-  int get percent;
+  double get percent;
   @override
   bool get isPlaying;
   @override

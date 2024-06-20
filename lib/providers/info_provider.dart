@@ -13,7 +13,7 @@ part 'info_provider.g.dart';
 Future<List<Song>> fetchRecentlyPlayed(FetchRecentlyPlayedRef ref) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("https://forkleserver.mooo.com:3030/recently-played/"+(_sp.getString("username") ?? "")),
+      Uri.parse("https://eatthecow.mooo.com:3030/recently-played/"+(_sp.getString("username") ?? "")),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
@@ -22,27 +22,29 @@ Future<List<Song>> fetchRecentlyPlayed(FetchRecentlyPlayedRef ref) async {
       })
   );
   var desponse = jsonDecode(response.body);
-  desponse = desponse["played"];
+  List<String> responsible = List<String>.from(desponse["played"]);
   var songs = <Song>[];
-  if(desponse is List) {
-      for(var x = desponse.length - 1; x >= 0; x--) {
-          var repsonse = await http.post(
-              Uri.parse("https://forkleserver.mooo.com:3030/info/songs/${desponse[x]}"),
-              headers: Map<String, String>.from({
-                'Content-Type': 'application/json'
-              }),
-              body: jsonEncode(<String, String>{
-                'authtoken': (_sp.getString("token") ?? "")
-             })
-          );
-          var ds = jsonDecode(repsonse.body);
-          var songy = Song.fromJson(ds);
-          songs.add(songy);
-      };
-      return songs;
-  }else{
-      return [];
-  }
+  songs = await ref.read(findBatchSongsProvider(responsible).future);
+  return songs;
+}
+
+@riverpod
+Future<List<Song>> fetchFavorites(FetchFavoritesRef ref) async {
+  var _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+      Uri.parse("https://eatthecow.mooo.com:3030/favorites/"+(_sp.getString("username") ?? "")),
+      headers: Map<String, String>.from({
+        'Content-Type': 'application/json'
+      }),
+      body: jsonEncode(<String, String>{
+        'authtoken': (_sp.getString("token") ?? "")
+      })
+  );
+  var desponse = jsonDecode(response.body);
+  List<String> responsible = List<String>.from(desponse["songs"]);
+  var songs = <Song>[];
+  songs = await ref.read(findBatchSongsProvider(responsible).future);
+  return songs;
 }
 
 @riverpod

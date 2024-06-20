@@ -23,7 +23,7 @@ Future<List<Song>> fetchSongs(FetchSongsRef ref) async {
       })
   );
   var desponse = jsonDecode(response.body);
-  print(desponse);
+  // print(desponse);
   desponse = desponse["songs"];
   var listThings = <Song>[];
   desponse.forEach((element) {
@@ -48,7 +48,6 @@ Future<List<Artist>> fetchArtists(FetchArtistsref) async {
       })
   );
   var desponse = jsonDecode(response.body);
-  // print(desponse);
   desponse = desponse["artists"];
   var listThings = <Artist>[];
   desponse.forEach((element) {
@@ -58,4 +57,30 @@ Future<List<Artist>> fetchArtists(FetchArtistsref) async {
     listThings.add(artist);
   });
   return listThings;
+}
+
+@riverpod
+Future<List<Song>> findBatchSongs(FindBatchSongsRef ref, List<String> ids) async {
+  final _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+      Uri.parse("https://forkleserver.mooo.com:3030/info/songs/batch"),
+      headers: Map<String, String>.from({
+        'Content-Type': 'application/json'
+      }),
+      body: jsonEncode({
+        'authtoken': (_sp.getString("token") ?? ""),
+        'ids': ids
+      })
+  );
+  var desponse = jsonDecode(response.body);
+  desponse = desponse["results"];
+  List<Song> returning = [];
+  for(var i = ids.length - 1; i >= 0; i--) {
+    if(desponse.containsKey(ids[i])) {
+      returning.add(Song.fromJson(desponse[ids[i]]));
+    }else{
+      returning.add(EmptySong());
+    }
+  }
+  return returning;
 }

@@ -15,12 +15,6 @@ import '../providers/playing_provider.dart';
 class HomePage extends ConsumerWidget {
   HomePage({super.key, required this.homeJunk});
   final Widget homeJunk;
-  bool _isPlaying = false;
-  double position = 0;
-
-
-  void _update(callback) {
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -151,7 +145,6 @@ class HomePage extends ConsumerWidget {
                         child: homeJunk,
                       ))
                     ),
-              
               //Controls
               Container(
                 constraints: BoxConstraints(
@@ -164,8 +157,14 @@ class HomePage extends ConsumerWidget {
                       margin: EdgeInsets.fromLTRB(12, 12, 12, 12),
                       child: Row(
                         children: [
-                          Text("Left", style: GoogleFonts.poppins()),
-                          const Spacer(),
+                          Expanded(
+                            child: Text(
+                              player.displayName,
+                              style: GoogleFonts.poppins()
+                            )
+                          ),
+                          
+
                           Container(  // Button group
                             child: Row(
                               children: [
@@ -176,10 +175,10 @@ class HomePage extends ConsumerWidget {
                                       maxHeight: 48
                                     ),
                                     child: const Icon(Icons.skip_previous_rounded, size: 28),
-    
                                   ),
-                                  onPressed: () {          
-                                }
+                                  onPressed: () {
+
+                                  }
                                 ),
                                 const SpacerWidget(width: 8),
                                 FilledButton(
@@ -213,8 +212,15 @@ class HomePage extends ConsumerWidget {
                               ]
                             )
                           ),
-                          const Spacer(),
-                          Text("Right", style: GoogleFonts.poppins()),
+
+
+                          Expanded(
+                            child: Text(
+                              "Right",
+                              style: GoogleFonts.poppins(),
+                              textAlign: TextAlign.end
+                            )
+                          ),
                         ]
                       )
                   )]

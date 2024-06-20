@@ -21,9 +21,12 @@ Song _$SongFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Song {
   String get id => throw _privateConstructorUsedError;
-  String get displayName => throw _privateConstructorUsedError;
   String get albumId => throw _privateConstructorUsedError;
   String get artistId => throw _privateConstructorUsedError;
+  String get displayName => throw _privateConstructorUsedError;
+  String get albumDisplayName => throw _privateConstructorUsedError;
+  String get artistDisplayName => throw _privateConstructorUsedError;
+  int get added => throw _privateConstructorUsedError;
   double get duration => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -38,9 +41,12 @@ abstract class $SongCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String displayName,
       String albumId,
       String artistId,
+      String displayName,
+      String albumDisplayName,
+      String artistDisplayName,
+      int added,
       double duration});
 }
 
@@ -58,19 +64,18 @@ class _$SongCopyWithImpl<$Res, $Val extends Song>
   @override
   $Res call({
     Object? id = null,
-    Object? displayName = null,
     Object? albumId = null,
     Object? artistId = null,
+    Object? displayName = null,
+    Object? albumDisplayName = null,
+    Object? artistDisplayName = null,
+    Object? added = null,
     Object? duration = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      displayName: null == displayName
-          ? _value.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
       albumId: null == albumId
           ? _value.albumId
@@ -80,6 +85,22 @@ class _$SongCopyWithImpl<$Res, $Val extends Song>
           ? _value.artistId
           : artistId // ignore: cast_nullable_to_non_nullable
               as String,
+      displayName: null == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      albumDisplayName: null == albumDisplayName
+          ? _value.albumDisplayName
+          : albumDisplayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      artistDisplayName: null == artistDisplayName
+          ? _value.artistDisplayName
+          : artistDisplayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      added: null == added
+          ? _value.added
+          : added // ignore: cast_nullable_to_non_nullable
+              as int,
       duration: null == duration
           ? _value.duration
           : duration // ignore: cast_nullable_to_non_nullable
@@ -97,9 +118,12 @@ abstract class _$$SongImplCopyWith<$Res> implements $SongCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      String displayName,
       String albumId,
       String artistId,
+      String displayName,
+      String albumDisplayName,
+      String artistDisplayName,
+      int added,
       double duration});
 }
 
@@ -114,19 +138,18 @@ class __$$SongImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? displayName = null,
     Object? albumId = null,
     Object? artistId = null,
+    Object? displayName = null,
+    Object? albumDisplayName = null,
+    Object? artistDisplayName = null,
+    Object? added = null,
     Object? duration = null,
   }) {
     return _then(_$SongImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      displayName: null == displayName
-          ? _value.displayName
-          : displayName // ignore: cast_nullable_to_non_nullable
               as String,
       albumId: null == albumId
           ? _value.albumId
@@ -136,6 +159,22 @@ class __$$SongImplCopyWithImpl<$Res>
           ? _value.artistId
           : artistId // ignore: cast_nullable_to_non_nullable
               as String,
+      displayName: null == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      albumDisplayName: null == albumDisplayName
+          ? _value.albumDisplayName
+          : albumDisplayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      artistDisplayName: null == artistDisplayName
+          ? _value.artistDisplayName
+          : artistDisplayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      added: null == added
+          ? _value.added
+          : added // ignore: cast_nullable_to_non_nullable
+              as int,
       duration: null == duration
           ? _value.duration
           : duration // ignore: cast_nullable_to_non_nullable
@@ -149,9 +188,12 @@ class __$$SongImplCopyWithImpl<$Res>
 class _$SongImpl implements _Song {
   _$SongImpl(
       {required this.id,
-      required this.displayName,
       required this.albumId,
       required this.artistId,
+      required this.displayName,
+      required this.albumDisplayName,
+      required this.artistDisplayName,
+      required this.added,
       required this.duration});
 
   factory _$SongImpl.fromJson(Map<String, dynamic> json) =>
@@ -160,17 +202,23 @@ class _$SongImpl implements _Song {
   @override
   final String id;
   @override
-  final String displayName;
-  @override
   final String albumId;
   @override
   final String artistId;
+  @override
+  final String displayName;
+  @override
+  final String albumDisplayName;
+  @override
+  final String artistDisplayName;
+  @override
+  final int added;
   @override
   final double duration;
 
   @override
   String toString() {
-    return 'Song(id: $id, displayName: $displayName, albumId: $albumId, artistId: $artistId, duration: $duration)';
+    return 'Song(id: $id, albumId: $albumId, artistId: $artistId, displayName: $displayName, albumDisplayName: $albumDisplayName, artistDisplayName: $artistDisplayName, added: $added, duration: $duration)';
   }
 
   @override
@@ -179,19 +227,24 @@ class _$SongImpl implements _Song {
         (other.runtimeType == runtimeType &&
             other is _$SongImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.displayName, displayName) ||
-                other.displayName == displayName) &&
             (identical(other.albumId, albumId) || other.albumId == albumId) &&
             (identical(other.artistId, artistId) ||
                 other.artistId == artistId) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
+            (identical(other.albumDisplayName, albumDisplayName) ||
+                other.albumDisplayName == albumDisplayName) &&
+            (identical(other.artistDisplayName, artistDisplayName) ||
+                other.artistDisplayName == artistDisplayName) &&
+            (identical(other.added, added) || other.added == added) &&
             (identical(other.duration, duration) ||
                 other.duration == duration));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, displayName, albumId, artistId, duration);
+  int get hashCode => Object.hash(runtimeType, id, albumId, artistId,
+      displayName, albumDisplayName, artistDisplayName, added, duration);
 
   @JsonKey(ignore: true)
   @override
@@ -210,9 +263,12 @@ class _$SongImpl implements _Song {
 abstract class _Song implements Song {
   factory _Song(
       {required final String id,
-      required final String displayName,
       required final String albumId,
       required final String artistId,
+      required final String displayName,
+      required final String albumDisplayName,
+      required final String artistDisplayName,
+      required final int added,
       required final double duration}) = _$SongImpl;
 
   factory _Song.fromJson(Map<String, dynamic> json) = _$SongImpl.fromJson;
@@ -220,11 +276,17 @@ abstract class _Song implements Song {
   @override
   String get id;
   @override
-  String get displayName;
-  @override
   String get albumId;
   @override
   String get artistId;
+  @override
+  String get displayName;
+  @override
+  String get albumDisplayName;
+  @override
+  String get artistDisplayName;
+  @override
+  int get added;
   @override
   double get duration;
   @override

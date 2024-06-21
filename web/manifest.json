@@ -1,11 +1,11 @@
 {
-    "name": "taxi_native_test",
-    "short_name": "taxi_native_test",
+    "name": "Taxi - Native",
+    "short_name": "Taxi",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "A music app written in Flutter",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

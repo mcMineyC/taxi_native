@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helper_widgets.dart';
 import '../types/song.dart';
+import '../providers/error_watcher.dart';
 import '../providers/new_provider.dart';
 import '../providers/info_provider.dart';
 import '../providers/user_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:beamer/beamer.dart';
 
 class LandingPage extends ConsumerWidget {
   @override
@@ -13,7 +15,12 @@ class LandingPage extends ConsumerWidget {
     final AsyncValue<List<Song>> newSongs = ref.watch(fetchNewSongsProvider);
     final AsyncValue<List<Song>> recentlyPlayed = ref.watch(fetchRecentlyPlayedProvider);
     final AsyncValue<String> user = ref.watch(userNameProvider);
-
+    // Handle unauth errors
+    BeamerDelegate bd = Beamer.of(context);
+    handleError(ref, fetchNewSongsProvider, bd);
+    handleError(ref, fetchRecentlyPlayedProvider, bd);
+    handleError(ref, userNameProvider, bd);
+   
     return Container(
       margin: EdgeInsets.fromLTRB(12, 0, 12, 0),
       child: ListView(
@@ -39,7 +46,7 @@ class LandingPage extends ConsumerWidget {
                       MediaCard(
                         text: "A great song",
                         thingId: "thisisgreat",
-                        thingType: "song",
+                        thingType: "placeholder",
                         image: "https://placehold.co/512x512.png",
                       ),
                     ],
@@ -74,9 +81,15 @@ class LandingPage extends ConsumerWidget {
                         )
                       )
                     ),
-                    error: (err, stack) => Text("Error fetching data: $err"),
+                    error: (err, stack) => Skeletonizer(
+                      enabled: true,
+                      child: Row(
+                        children: [for (int i = 0; i < 10; i++) MediaCard(text: "meh who cares", thingId: "idklol", thingType: "song", image: "https://placehold.co/512x512.png")]
+                      )
+                    ),
+                  )
                 )
-              ))
+              )
             ]
           ),
           Column(
@@ -147,9 +160,15 @@ class LandingPage extends ConsumerWidget {
                         )
                       )
                     ),
-                    error: (err, stack) => Text("Error fetching data: $err"),
+                    error: (err, stack) => Skeletonizer(
+                      enabled: true,
+                      child: Row(
+                        children: [for (int i = 0; i < 10; i++) MediaCard(text: "meh who cares", thingId: "idklol", thingType: "song", image: "https://placehold.co/512x512.png")]
+                      )
+                    ),
+                  )
                 )
-              ))
+              )
             ]
           ),
         ]

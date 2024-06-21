@@ -7,12 +7,11 @@ part of 'info_provider.dart';
 // **************************************************************************
 
 String _$fetchRecentlyPlayedHash() =>
-    r'47ce3ff0f4eafc7028b8b7aa8d6525ee3570973f';
+    r'396f84a283ef3773df3a8273aa983c39fb67fca0';
 
 /// See also [fetchRecentlyPlayed].
 @ProviderFor(fetchRecentlyPlayed)
-final fetchRecentlyPlayedProvider =
-    AutoDisposeFutureProvider<List<Song>>.internal(
+final fetchRecentlyPlayedProvider = FutureProvider<List<Song>>.internal(
   fetchRecentlyPlayed,
   name: r'fetchRecentlyPlayedProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,12 +21,12 @@ final fetchRecentlyPlayedProvider =
   allTransitiveDependencies: null,
 );
 
-typedef FetchRecentlyPlayedRef = AutoDisposeFutureProviderRef<List<Song>>;
-String _$fetchFavoritesHash() => r'1a2f06aa9bfedaacea00513198166b64574e7246';
+typedef FetchRecentlyPlayedRef = FutureProviderRef<List<Song>>;
+String _$fetchFavoritesHash() => r'00c4f2fcdcb9327f3b4d362c52d8c6520228599c';
 
 /// See also [fetchFavorites].
 @ProviderFor(fetchFavorites)
-final fetchFavoritesProvider = AutoDisposeFutureProvider<List<Song>>.internal(
+final fetchFavoritesProvider = FutureProvider<List<Song>>.internal(
   fetchFavorites,
   name: r'fetchFavoritesProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -37,7 +36,7 @@ final fetchFavoritesProvider = AutoDisposeFutureProvider<List<Song>>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef FetchFavoritesRef = AutoDisposeFutureProviderRef<List<Song>>;
+typedef FetchFavoritesRef = FutureProviderRef<List<Song>>;
 String _$findSongHash() => r'5183504d54ffba4e871834bf5a9d013873bb1af3';
 
 /// Copied from Dart SDK

@@ -117,12 +117,12 @@ class App extends ConsumerWidget {
         ),
       }
     ),
-    buildListener: (p0, p1) {
-      print("BeamerDelegate buildListener");
-      p1.currentPages.forEach((element) {
-        print("Current page: ${element.title} ${element.key.toString()}");
-      });
-    },
+    // buildListener: (p0, p1) {
+    //   print("BeamerDelegate buildListener");
+    //   p1.currentPages.forEach((element) {
+    //     print("Current page: ${element.title} ${element.key.toString()}");
+    //   });
+    // },
   );
   // This widget is the root of your application.
   @override

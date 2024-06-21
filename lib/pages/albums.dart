@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:skeletonizer/skeletonizer.dart';
+import 'package:beamer/beamer.dart';
+
 import 'cards.dart';
 import '../providers/fetched_data_provider.dart'; 
+import '../providers/error_watcher.dart';
 import '../types/album.dart';
 
 class AlbumsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<List<Album>> albums = ref.watch(fetchAlbumsProvider);
+    handleError(ref, fetchAlbumsProvider, Beamer.of(context));
 
     return albums.when(
         data: (data) {
@@ -21,11 +24,8 @@ class AlbumsPage extends ConsumerWidget {
           }).toList();
           return CardView(cardList: cardList);
         },
-        loading: () => Skeletonizer(
-          enabled: true,
-          child: CardView(cardList: [for (int i = 0; i < 32; i++) {"text": "meh who cares", "id": "idklol", "type": "placeholder", "image": "https://placehold.co/512x512.png"}]),
-        ),
-        error: (error, stack) => Text('Error: $error'),
+        loading: () => LoadingCardView(),
+        error: (error, stack) => LoadingCardView(),
       );
   }
 }

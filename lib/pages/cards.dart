@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:taxi_native_test/helper_widgets.dart';
 
 class CardView extends StatelessWidget {
@@ -17,4 +18,11 @@ class CardView extends StatelessWidget {
         ).toList(),
     );
   }
+}
+
+Skeletonizer LoadingCardView(){
+  return Skeletonizer(
+          enabled: true,
+          child: CardView(cardList: [for (int i = 0; i < 32; i++) {"text": "meh who cares", "id": "idklol", "type": "placeholder", "image": "https://placehold.co/512x512.png"}]),
+        );
 }

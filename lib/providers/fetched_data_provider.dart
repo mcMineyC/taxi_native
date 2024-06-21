@@ -11,7 +11,7 @@ import '../types/artists.dart';
 
 part 'fetched_data_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<List<Song>> fetchSongs(FetchSongsRef ref) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
@@ -24,6 +24,9 @@ Future<List<Song>> fetchSongs(FetchSongsRef ref) async {
       })
   );
   var desponse = jsonDecode(response.body);
+  if(desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
   // print(desponse);
   desponse = desponse["songs"];
   var listThings = <Song>[];
@@ -36,7 +39,7 @@ Future<List<Song>> fetchSongs(FetchSongsRef ref) async {
   return listThings;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<List<Album>> fetchAlbums(FetchAlbumsRef ref) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
@@ -49,7 +52,9 @@ Future<List<Album>> fetchAlbums(FetchAlbumsRef ref) async {
       })
   );
   var desponse = jsonDecode(response.body);
-  // print(desponse);
+  if(desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
   desponse = desponse["albums"];
   var listThings = <Album>[];
   desponse.forEach((element) {
@@ -61,7 +66,7 @@ Future<List<Album>> fetchAlbums(FetchAlbumsRef ref) async {
 }
 
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<List<Artist>> fetchArtists(FetchArtistsRef ref) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
@@ -74,6 +79,9 @@ Future<List<Artist>> fetchArtists(FetchArtistsRef ref) async {
       })
   );
   var desponse = jsonDecode(response.body);
+  if(desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
   desponse = desponse["artists"];
   var listThings = <Artist>[];
   desponse.forEach((element) {
@@ -85,7 +93,7 @@ Future<List<Artist>> fetchArtists(FetchArtistsRef ref) async {
   return listThings;
 }
 
-@riverpod
+@Riverpod(keepAlive: false)
 Future<List<Song>> findBatchSongs(FindBatchSongsRef ref, List<String> ids) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
@@ -99,6 +107,9 @@ Future<List<Song>> findBatchSongs(FindBatchSongsRef ref, List<String> ids) async
       })
   );
   var desponse = jsonDecode(response.body);
+  if(desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
   desponse = desponse["results"];
   List<Song> returning = [];
   for(var i = ids.length - 1; i >= 0; i--) {

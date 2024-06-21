@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'info_provider.dart';
 
+import '../types/song.dart';
+
 part 'playing_provider.g.dart';
 part 'playing_provider.freezed.dart';
 
@@ -93,6 +95,8 @@ class Player extends _$Player {
   }
 
   void setSong(id) async {
+    if(state.id == id) return; //Debounce duplicate calls :shrug: maybe this will fix the duplicates in recentlyplayed
+    print("Song setter: $id");
     if(!_isInit) _sp = await SharedPreferences.getInstance(); _isInit = true;
     ref.read(findSongProvider(id).future).then((songObject) {
       state = state.copyWith(
@@ -104,6 +108,7 @@ class Player extends _$Player {
       );
     });
     await player.stop();
-    await player.play(UrlSource('https://eatthecow.mooo.com:3030/info/songs/$id/audio?uname=${(await _sp.getString('username'))}'));
+    await player.play(UrlSource('https://eatthecow.mooo.com:3030/info/songs/$id/audio?uname=${_sp.getString('username')}'));
+    ref.refresh(fetchRecentlyPlayedProvider.future);
   }
 }

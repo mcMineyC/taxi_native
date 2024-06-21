@@ -6,11 +6,11 @@ part of 'fetched_data_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchSongsHash() => r'c24b06570d9d693dd9cb984f49fa4d2f5aa416fa';
+String _$fetchSongsHash() => r'24eb71a12098f6b1892b211d7688afdbe690f3a5';
 
 /// See also [fetchSongs].
 @ProviderFor(fetchSongs)
-final fetchSongsProvider = AutoDisposeFutureProvider<List<Song>>.internal(
+final fetchSongsProvider = FutureProvider<List<Song>>.internal(
   fetchSongs,
   name: r'fetchSongsProvider',
   debugGetCreateSourceHash:
@@ -19,12 +19,12 @@ final fetchSongsProvider = AutoDisposeFutureProvider<List<Song>>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef FetchSongsRef = AutoDisposeFutureProviderRef<List<Song>>;
-String _$fetchAlbumsHash() => r'1a938296c1dfb0615fd9e09c24bf7c39bec57cf6';
+typedef FetchSongsRef = FutureProviderRef<List<Song>>;
+String _$fetchAlbumsHash() => r'f9f8699d4314a619443dad023e8d28adcbd79267';
 
 /// See also [fetchAlbums].
 @ProviderFor(fetchAlbums)
-final fetchAlbumsProvider = AutoDisposeFutureProvider<List<Album>>.internal(
+final fetchAlbumsProvider = FutureProvider<List<Album>>.internal(
   fetchAlbums,
   name: r'fetchAlbumsProvider',
   debugGetCreateSourceHash:
@@ -33,12 +33,12 @@ final fetchAlbumsProvider = AutoDisposeFutureProvider<List<Album>>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef FetchAlbumsRef = AutoDisposeFutureProviderRef<List<Album>>;
-String _$fetchArtistsHash() => r'502db22804dab2584688f0381d4b7b72c519bd61';
+typedef FetchAlbumsRef = FutureProviderRef<List<Album>>;
+String _$fetchArtistsHash() => r'f83169235e5b94827bea8ffc4d4fb3aff775f4dd';
 
 /// See also [fetchArtists].
 @ProviderFor(fetchArtists)
-final fetchArtistsProvider = AutoDisposeFutureProvider<List<Artist>>.internal(
+final fetchArtistsProvider = FutureProvider<List<Artist>>.internal(
   fetchArtists,
   name: r'fetchArtistsProvider',
   debugGetCreateSourceHash:
@@ -47,8 +47,8 @@ final fetchArtistsProvider = AutoDisposeFutureProvider<List<Artist>>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef FetchArtistsRef = AutoDisposeFutureProviderRef<List<Artist>>;
-String _$findBatchSongsHash() => r'1cb581ed6d13b1674b36ddb87f61b88087d24ff0';
+typedef FetchArtistsRef = FutureProviderRef<List<Artist>>;
+String _$findBatchSongsHash() => r'8f7d4c6d61084b52e075a08b2f3c4f478f7a9b51';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -9,7 +9,7 @@ import 'fetched_data_provider.dart';
 
 part 'info_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<List<Song>> fetchRecentlyPlayed(FetchRecentlyPlayedRef ref) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
@@ -22,13 +22,16 @@ Future<List<Song>> fetchRecentlyPlayed(FetchRecentlyPlayedRef ref) async {
       })
   );
   var desponse = jsonDecode(response.body);
+  if(desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
   List<String> responsible = List<String>.from(desponse["played"]);
   var songs = <Song>[];
   songs = await ref.read(findBatchSongsProvider(responsible).future);
   return songs;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 Future<List<Song>> fetchFavorites(FetchFavoritesRef ref) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
@@ -41,6 +44,9 @@ Future<List<Song>> fetchFavorites(FetchFavoritesRef ref) async {
       })
   );
   var desponse = jsonDecode(response.body);
+  if(desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
   List<String> responsible = List<String>.from(desponse["songs"]);
   var songs = <Song>[];
   songs = await ref.read(findBatchSongsProvider(responsible).future);

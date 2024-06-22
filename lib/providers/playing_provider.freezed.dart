@@ -26,6 +26,7 @@ mixin _$PlayerInfo {
   double get position => throw _privateConstructorUsedError;
   double get percent => throw _privateConstructorUsedError;
   bool get isPlaying => throw _privateConstructorUsedError;
+  List<Song> get queue => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PlayerInfoCopyWith<PlayerInfo> get copyWith =>
@@ -48,7 +49,8 @@ abstract class $PlayerInfoCopyWith<$Res> {
       double duration,
       double position,
       double percent,
-      bool isPlaying});
+      bool isPlaying,
+      List<Song> queue});
 }
 
 /// @nodoc
@@ -74,6 +76,7 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
     Object? position = null,
     Object? percent = null,
     Object? isPlaying = null,
+    Object? queue = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -116,6 +119,10 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
           ? _value.isPlaying
           : isPlaying // ignore: cast_nullable_to_non_nullable
               as bool,
+      queue: null == queue
+          ? _value.queue
+          : queue // ignore: cast_nullable_to_non_nullable
+              as List<Song>,
     ) as $Val);
   }
 }
@@ -138,7 +145,8 @@ abstract class _$$PlayerInfoImplCopyWith<$Res>
       double duration,
       double position,
       double percent,
-      bool isPlaying});
+      bool isPlaying,
+      List<Song> queue});
 }
 
 /// @nodoc
@@ -162,6 +170,7 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
     Object? position = null,
     Object? percent = null,
     Object? isPlaying = null,
+    Object? queue = null,
   }) {
     return _then(_$PlayerInfoImpl(
       id: null == id
@@ -204,6 +213,10 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
           ? _value.isPlaying
           : isPlaying // ignore: cast_nullable_to_non_nullable
               as bool,
+      queue: null == queue
+          ? _value._queue
+          : queue // ignore: cast_nullable_to_non_nullable
+              as List<Song>,
     ));
   }
 }
@@ -221,7 +234,9 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       required this.duration,
       required this.position,
       required this.percent,
-      required this.isPlaying});
+      required this.isPlaying,
+      required final List<Song> queue})
+      : _queue = queue;
 
   @override
   final String id;
@@ -243,10 +258,17 @@ class _$PlayerInfoImpl implements _PlayerInfo {
   final double percent;
   @override
   final bool isPlaying;
+  final List<Song> _queue;
+  @override
+  List<Song> get queue {
+    if (_queue is EqualUnmodifiableListView) return _queue;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_queue);
+  }
 
   @override
   String toString() {
-    return 'PlayerInfo(id: $id, artistId: $artistId, albumId: $albumId, displayName: $displayName, artistDisplayName: $artistDisplayName, albumDisplayName: $albumDisplayName, duration: $duration, position: $position, percent: $percent, isPlaying: $isPlaying)';
+    return 'PlayerInfo(id: $id, artistId: $artistId, albumId: $albumId, displayName: $displayName, artistDisplayName: $artistDisplayName, albumDisplayName: $albumDisplayName, duration: $duration, position: $position, percent: $percent, isPlaying: $isPlaying, queue: $queue)';
   }
 
   @override
@@ -270,7 +292,8 @@ class _$PlayerInfoImpl implements _PlayerInfo {
                 other.position == position) &&
             (identical(other.percent, percent) || other.percent == percent) &&
             (identical(other.isPlaying, isPlaying) ||
-                other.isPlaying == isPlaying));
+                other.isPlaying == isPlaying) &&
+            const DeepCollectionEquality().equals(other._queue, _queue));
   }
 
   @override
@@ -285,7 +308,8 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       duration,
       position,
       percent,
-      isPlaying);
+      isPlaying,
+      const DeepCollectionEquality().hash(_queue));
 
   @JsonKey(ignore: true)
   @override
@@ -305,7 +329,8 @@ abstract class _PlayerInfo implements PlayerInfo {
       required final double duration,
       required final double position,
       required final double percent,
-      required final bool isPlaying}) = _$PlayerInfoImpl;
+      required final bool isPlaying,
+      required final List<Song> queue}) = _$PlayerInfoImpl;
 
   @override
   String get id;
@@ -327,6 +352,8 @@ abstract class _PlayerInfo implements PlayerInfo {
   double get percent;
   @override
   bool get isPlaying;
+  @override
+  List<Song> get queue;
   @override
   @JsonKey(ignore: true)
   _$$PlayerInfoImplCopyWith<_$PlayerInfoImpl> get copyWith =>

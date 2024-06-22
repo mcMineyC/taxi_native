@@ -7,7 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:taxi_native_test/pages/error.dart';
+import 'package:context_menus/context_menus.dart';
+import 'pages/error.dart';
 
 
 import 'pages/home.dart';
@@ -45,7 +46,9 @@ void main() async{
 // Initialize FFI
   runApp(
     ProviderScope(
-      child: App(),
+      child: ContextMenuOverlay(
+        child: App(),
+      ),
     )
   );
 }

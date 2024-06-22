@@ -18,6 +18,7 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.read(playerProvider.notifier).init();
     final player = ref.watch(playerProvider);
     return Scaffold(
       // extendBodyBehindAppBar: true,

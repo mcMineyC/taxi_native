@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:taxi_native_test/helper_widgets.dart';
+import 'package:context_menus/context_menus.dart';
+import '../helper_widgets.dart';
 
 class CardView extends StatelessWidget {
   final List cardList;
@@ -8,7 +9,7 @@ class CardView extends StatelessWidget {
   const CardView({super.key, required this.cardList});
   @override
   Widget build(BuildContext context) {
-    return  GridView.count(
+    return GridView.count(
         crossAxisCount: (MediaQuery.of(context).size.width / 220).truncate(),
         scrollDirection: Axis.vertical,
         mainAxisSpacing: 10,

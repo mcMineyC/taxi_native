@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:audio_service/audio_service.dart';
 
 import 'info_provider.dart';
 
@@ -23,6 +24,7 @@ class PlayerInfo with _$PlayerInfo {
     required double position,
     required double percent,
     required bool isPlaying,
+    required List<Song> queue,
   }) = _PlayerInfo;
 }
 
@@ -35,20 +37,10 @@ class PlayerInfo with _$PlayerInfo {
 // interact with our Todos class.
 @riverpod
 class Player extends _$Player {
-  final player = AudioPlayer();
+  late AudioHandler audioHandler;
+  bool _hIsInit = false;
   late final _sp;
   bool _isInit = false;
-  Player(){
-    player.onPositionChanged.listen((Duration p) {
-      state = state.copyWith(
-        position: p.inMilliseconds.toDouble()/1000,
-        percent: (p.inMilliseconds.toDouble()/1000) / state.duration
-      );
-    });
-    player.onPlayerComplete.listen((event) {
-      state = state.copyWith(isPlaying: false);
-    });
-  }
 
   @override
   PlayerInfo build() {
@@ -64,27 +56,51 @@ class Player extends _$Player {
       position: 0,
       percent: 0,
       isPlaying: false,
+      queue: [],
     );
   }
 
+  void init() async {
+    if(_hIsInit) return;
+    print("Playerinfo: init");
+    _hIsInit = true;
+    AudioServiceHandler handy = AudioServiceHandler();
+    audioHandler = await AudioService.init(
+      builder: () => handy,
+      config: const AudioServiceConfig(
+        androidNotificationChannelId: 'com.forkleserver.taxi.native.channel.music',
+        androidNotificationChannelName: 'Music',
+        androidNotificationOngoing: true,
+      ),
+    );
+    handy.init((Duration p) {
+      state = state.copyWith(
+        position: p.inMilliseconds.toDouble()/1000,
+        percent: (p.inMilliseconds.toDouble()/1000) / state.duration
+      );
+    },
+    () {
+      state = state.copyWith(isPlaying: false);
+    });
+  }
+
   void play() async {
-    player.resume();
+    audioHandler.play();
     state = state.copyWith(isPlaying: true);
 
-    print("playing");
   }
 
   void pause() async {
-    player.pause();
+    audioHandler.pause();
     state = state.copyWith(isPlaying: false);
     print("paused");
   }
 
   void toggle() async {
     if(state.isPlaying) {
-      player.pause();
+      audioHandler.pause();
     }else{
-      player.resume();
+      audioHandler.play();
     }
     setPlaying(!state.isPlaying);
   }
@@ -94,7 +110,7 @@ class Player extends _$Player {
     print(state.isPlaying ? "playing" : "paused");
   }
 
-  void setSong(id) async {
+  void setSong(String id) async {
     if(state.id == id) return; //Debounce duplicate calls :shrug: maybe this will fix the duplicates in recentlyplayed
     print("Song setter: $id");
     if(!_isInit) _sp = await SharedPreferences.getInstance(); _isInit = true;
@@ -104,11 +120,133 @@ class Player extends _$Player {
         artistId: songObject.artistId,
         albumId: songObject.albumId,
         displayName: songObject.displayName,
+        albumDisplayName: songObject.albumDisplayName,
+        artistDisplayName: songObject.artistDisplayName,
         isPlaying: true,
       );
     });
-    await player.stop();
-    await player.play(UrlSource('https://eatthecow.mooo.com:3030/info/songs/$id/audio?uname=${_sp.getString('username')}'));
-    ref.refresh(fetchRecentlyPlayedProvider.future);
+    audioHandler.stop().then((value) async {
+      final item = MediaItem(
+        id: 'https://eatthecow.mooo.com:3030/info/songs/$id/audio',
+        title: state.displayName,
+        album: state.albumDisplayName,
+        artist: state.artistDisplayName,
+        duration: Duration(seconds: state.duration.toInt()),
+        artUri: Uri.parse('https://eatthecow.mooo.com:3030/info/songs/$id/image'),
+      );
+      await audioHandler.playMediaItem(item);
+    });
+    ref.read(addRecentlyPlayedProvider(id).future).then((value) {
+      if(value == true) ref.refresh(fetchRecentlyPlayedProvider.future);
+    });
   }
+
+  void setQueue(List<Song> queue) async {
+    state = state.copyWith(queue: queue);
+  }
+
+  void addToQueue(Song song) async {
+    audioHandler.addQueueItem(song.toMediaItem());
+    state = state.copyWith(queue: [...state.queue, song]);
+  }
+
+  void addIdToQueue(String id) async {
+    Song song = await ref.read(findSongProvider(id).future);
+    audioHandler.addQueueItem(song.toMediaItem());
+    state = state.copyWith(queue: [...state.queue, song]);
+  }
+
+  void clearQueue() async {
+    state = state.copyWith(queue: []);
+  }
+}
+
+class AudioServiceHandler extends BaseAudioHandler 
+    with QueueHandler {
+    
+    final player = AudioPlayer();
+    List<MediaItem> queued = [];
+    int playingIndex = 0;
+
+    void init(positionChangedCallback, playbackFinishedCallback) {
+      player.onPositionChanged.listen(positionChangedCallback);
+    }
+
+    @override
+    Future<void> addQueueItem(MediaItem mediaItem) async {
+      queued.add(mediaItem);
+    }
+    
+    @override
+    Future<void> addQueueItems(List<MediaItem> mediaItems) async {
+      queued.addAll(mediaItems);
+    }
+    
+    @override
+    Future<void> removeQueueItem(MediaItem mediaItem) async {
+      queued.remove(mediaItem);
+    }
+    
+    @override
+    Future<void> removeQueueItemAt(int index) async {
+      queued.removeAt(index);
+    }
+    
+    @override
+    Future<void> playMediaItem(MediaItem mediaitem) async {
+      mediaItem.drain().then((value) {mediaItem.add(mediaitem);});
+      queued = [mediaitem];
+      player.play(UrlSource(mediaitem.id));
+    }
+
+    @override
+    Future<void> playFromUri(Uri uri, [Map<String, dynamic>? extras]) async {
+      await player.play(UrlSource(uri.toString()));
+    }
+    
+    @override
+    Future<void> play() async {
+      return player.resume();
+    }
+    
+    @override
+    Future<void> pause() async {
+      return player.pause();
+    }
+    
+    @override
+    Future<void> stop() async {
+      return player.stop();
+    }
+
+    @override
+    Future<void> seek(Duration position) async {
+      player.seek(position);
+    }
+
+    @override
+    Future<void> skipToQueueItem(int index) async {
+      playMediaItem(queued[index]);
+    }
+    
+    @override
+    Future<void> skipToNext() async {
+      if(playingIndex+1 > queued.length-1) {
+        playingIndex = 0;
+      }else{
+        playingIndex++;
+      }
+      playMediaItem(queued[playingIndex]);
+    }
+    
+    @override
+    Future<void> skipToPrevious() async {
+      if(playingIndex-1 < queued.length) {
+        playingIndex = queued.length - 1;
+      }else{
+        playingIndex--;
+      }
+      playMediaItem(queued[playingIndex]);
+
+    }
 }

@@ -1,8 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:audioplayers/audioplayers.dart';
+import '../service_locator.dart';
 
 import 'info_provider.dart';
 
@@ -21,8 +22,8 @@ class PlayerInfo with _$PlayerInfo {
     required String artistDisplayName,
     required String albumDisplayName,
     required double duration,
-    required double position,
-    required double percent,
+    required int    position,
+    // required double percent,
     required bool isPlaying,
     required List<Song> queue,
   }) = _PlayerInfo;
@@ -37,7 +38,7 @@ class PlayerInfo with _$PlayerInfo {
 // interact with our Todos class.
 @riverpod
 class Player extends _$Player {
-  late AudioHandler audioHandler;
+  final AudioHandler audioHandler = ServiceLocator().get<AudioHandler>();
   bool _hIsInit = false;
   late final _sp;
   bool _isInit = false;
@@ -54,7 +55,6 @@ class Player extends _$Player {
       albumDisplayName: '',
       duration: 213.6,
       position: 0,
-      percent: 0,
       isPlaying: false,
       queue: [],
     );
@@ -62,25 +62,24 @@ class Player extends _$Player {
 
   void init() async {
     if(_hIsInit) return;
-    print("Playerinfo: init");
     _hIsInit = true;
-    AudioServiceHandler handy = AudioServiceHandler();
-    audioHandler = await AudioService.init(
-      builder: () => handy,
-      config: const AudioServiceConfig(
-        androidNotificationChannelId: 'com.forkleserver.taxi.native.channel.music',
-        androidNotificationChannelName: 'Music',
-        androidNotificationOngoing: true,
-      ),
-    );
-    handy.init((Duration p) {
+    print("Playerinfo: init");
+    audioHandler.mediaItem.distinct().listen((MediaItem? i) {
       state = state.copyWith(
-        position: p.inMilliseconds.toDouble()/1000,
-        percent: (p.inMilliseconds.toDouble()/1000) / state.duration
+        displayName: i?.title ?? "",
+        albumDisplayName: i?.album ?? "",
+        artistDisplayName: i?.artist ?? "",
+        duration: i?.duration?.inMilliseconds.toDouble() ?? 0,
       );
-    },
-    () {
-      state = state.copyWith(isPlaying: false);
+    });
+    audioHandler.playbackState.map((state) => state.position).distinct().listen((Duration? d) {
+      state = state.copyWith(position: d?.inMilliseconds ?? 0);
+    });
+    audioHandler.mediaItem.map((state) => state?.duration ?? Duration.zero).distinct().listen((Duration? d) {
+      state = state.copyWith(duration: (d?.inMilliseconds.toDouble() ?? 0));
+    });
+    audioHandler.playbackState.map((s) => s.playing).distinct().listen((bool b) {
+      state = state.copyWith(isPlaying: b);
     });
   }
 
@@ -114,7 +113,7 @@ class Player extends _$Player {
     if(state.id == id) return; //Debounce duplicate calls :shrug: maybe this will fix the duplicates in recentlyplayed
     print("Song setter: $id");
     if(!_isInit) _sp = await SharedPreferences.getInstance(); _isInit = true;
-    ref.read(findSongProvider(id).future).then((songObject) {
+    ref.read(findSongProvider(id).future).then((songObject) async {
       state = state.copyWith(
         id: songObject.id,
         artistId: songObject.artistId,
@@ -124,8 +123,6 @@ class Player extends _$Player {
         artistDisplayName: songObject.artistDisplayName,
         isPlaying: true,
       );
-    });
-    audioHandler.stop().then((value) async {
       final item = MediaItem(
         id: 'https://eatthecow.mooo.com:3030/info/songs/$id/audio',
         title: state.displayName,
@@ -168,8 +165,21 @@ class AudioServiceHandler extends BaseAudioHandler
     List<MediaItem> queued = [];
     int playingIndex = 0;
 
-    void init(positionChangedCallback, playbackFinishedCallback) {
-      player.onPositionChanged.listen(positionChangedCallback);
+    // void init(positionChangedCallback, playbackFinishedCallback) {
+    //   player.onPositionChanged.listen(positionChangedCallback);
+    // }
+
+    void init() {
+      player.onPositionChanged.listen((Duration d) {
+        playbackState.add(playbackState.value.copyWith(updatePosition: d));
+      });
+      player.onDurationChanged.listen((Duration d) {
+        mediaItem.add(mediaItem.value?.copyWith(duration: d));
+      });
+      player.onPlayerComplete.listen((_) {
+        playbackState.add(playbackState.value.copyWith(playing: false));
+        mediaItem.drain();
+      });
     }
 
     @override
@@ -194,28 +204,33 @@ class AudioServiceHandler extends BaseAudioHandler
     
     @override
     Future<void> playMediaItem(MediaItem mediaitem) async {
-      mediaItem.drain().then((value) {mediaItem.add(mediaitem);});
+      playbackState.add(playbackState.value.copyWith(playing: true));
+      mediaItem.add(mediaitem);
       queued = [mediaitem];
       player.play(UrlSource(mediaitem.id));
     }
 
     @override
     Future<void> playFromUri(Uri uri, [Map<String, dynamic>? extras]) async {
+      playbackState.add(playbackState.value.copyWith(playing: true));
       await player.play(UrlSource(uri.toString()));
     }
     
     @override
     Future<void> play() async {
+      playbackState.add(playbackState.value.copyWith(playing: true));
       return player.resume();
     }
     
     @override
     Future<void> pause() async {
+      playbackState.add(playbackState.value.copyWith(playing: false));
       return player.pause();
     }
     
     @override
     Future<void> stop() async {
+      playbackState.add(playbackState.value.copyWith(playing: false));
       return player.stop();
     }
 

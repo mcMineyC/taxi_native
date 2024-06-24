@@ -8,9 +8,12 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:context_menus/context_menus.dart';
+import 'package:audio_service/audio_service.dart';
+import 'service_locator.dart';
+import 'providers/playing_provider.dart';
+
+
 import 'pages/error.dart';
-
-
 import 'pages/home.dart';
 import 'pages/artists.dart';
 import 'pages/artist.dart';
@@ -20,6 +23,7 @@ import 'pages/downloader.dart';
 import 'pages/landing.dart';
 import 'login.dart';
 
+late AudioHandler audioHandler;
 
 class PlatformUtils {
   static bool get isMobile {
@@ -43,7 +47,22 @@ void main() async{
   if(PlatformUtils.isDesktop){
     print("Using FFI");
   }
-// Initialize FFI
+
+  // Initialize FFI
+  WidgetsFlutterBinding.ensureInitialized();
+  var handy = AudioServiceHandler();
+  handy.init();
+  audioHandler = await AudioService.init(
+    builder: () => handy,
+    config: const AudioServiceConfig(
+      androidNotificationChannelId: 'com.forkleserver.taxi-native',
+      androidNotificationChannelName: 'Media Player',
+      androidNotificationOngoing: true,
+    )
+  );
+  // await audioHandler.playMediaItem(MediaItem(id: 'https://download.samplelib.com/mp3/sample-3s.mp3', title: 'Music', album: 'Album', artist: 'Artist', duration: const Duration(milliseconds: 20000)));
+  ServiceLocator().register<AudioHandler>(audioHandler);
+
   runApp(
     ProviderScope(
       child: ContextMenuOverlay(

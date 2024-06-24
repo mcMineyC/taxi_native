@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_side_sheet/modal_side_sheet.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:taxi_native_test/locations.dart';
 
 import '../helper_widgets.dart';
 import '../providers/playing_provider.dart';
@@ -229,7 +228,7 @@ class HomePage extends ConsumerWidget {
                     child: LinearProgressIndicator(
                       minHeight: 8,
                       borderRadius: BorderRadius.circular(9999),
-                      value: player.percent,
+                      value: player.duration == 0 ? 0 : player.position / player.duration,
                       backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
                     )
                   ),

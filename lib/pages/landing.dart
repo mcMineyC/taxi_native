@@ -104,7 +104,7 @@ class LandingPage extends ConsumerWidget {
                       MediaCard(
                         text: "Megalovania",
                         thingId: "idklol",
-                        thingType: "song",
+                        thingType: "placeholder",
                         image: "https://eatthecow.mooo.com:3030/info/songs/de96dae7e8737bc6285b26c6a6ba7978d05d3d6c7739017ba5b930deb018f3ef_3f4bf9ee2fbc96a53a3d70934e11db632d4408ce27effd950d151480884e7b87_3f4bf9ee2fbc96a53a3d70934e11db632d4408ce27effd950d151480884e7b87/image",
                       ),
                     ],

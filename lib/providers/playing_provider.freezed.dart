@@ -23,8 +23,8 @@ mixin _$PlayerInfo {
   String get artistDisplayName => throw _privateConstructorUsedError;
   String get albumDisplayName => throw _privateConstructorUsedError;
   double get duration => throw _privateConstructorUsedError;
-  double get position => throw _privateConstructorUsedError;
-  double get percent => throw _privateConstructorUsedError;
+  int get position =>
+      throw _privateConstructorUsedError; // required double percent,
   bool get isPlaying => throw _privateConstructorUsedError;
   List<Song> get queue => throw _privateConstructorUsedError;
 
@@ -47,8 +47,7 @@ abstract class $PlayerInfoCopyWith<$Res> {
       String artistDisplayName,
       String albumDisplayName,
       double duration,
-      double position,
-      double percent,
+      int position,
       bool isPlaying,
       List<Song> queue});
 }
@@ -74,7 +73,6 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
     Object? albumDisplayName = null,
     Object? duration = null,
     Object? position = null,
-    Object? percent = null,
     Object? isPlaying = null,
     Object? queue = null,
   }) {
@@ -110,11 +108,7 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
-              as double,
-      percent: null == percent
-          ? _value.percent
-          : percent // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       isPlaying: null == isPlaying
           ? _value.isPlaying
           : isPlaying // ignore: cast_nullable_to_non_nullable
@@ -143,8 +137,7 @@ abstract class _$$PlayerInfoImplCopyWith<$Res>
       String artistDisplayName,
       String albumDisplayName,
       double duration,
-      double position,
-      double percent,
+      int position,
       bool isPlaying,
       List<Song> queue});
 }
@@ -168,7 +161,6 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
     Object? albumDisplayName = null,
     Object? duration = null,
     Object? position = null,
-    Object? percent = null,
     Object? isPlaying = null,
     Object? queue = null,
   }) {
@@ -204,11 +196,7 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
-              as double,
-      percent: null == percent
-          ? _value.percent
-          : percent // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       isPlaying: null == isPlaying
           ? _value.isPlaying
           : isPlaying // ignore: cast_nullable_to_non_nullable
@@ -233,7 +221,6 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       required this.albumDisplayName,
       required this.duration,
       required this.position,
-      required this.percent,
       required this.isPlaying,
       required final List<Song> queue})
       : _queue = queue;
@@ -253,9 +240,8 @@ class _$PlayerInfoImpl implements _PlayerInfo {
   @override
   final double duration;
   @override
-  final double position;
-  @override
-  final double percent;
+  final int position;
+// required double percent,
   @override
   final bool isPlaying;
   final List<Song> _queue;
@@ -268,7 +254,7 @@ class _$PlayerInfoImpl implements _PlayerInfo {
 
   @override
   String toString() {
-    return 'PlayerInfo(id: $id, artistId: $artistId, albumId: $albumId, displayName: $displayName, artistDisplayName: $artistDisplayName, albumDisplayName: $albumDisplayName, duration: $duration, position: $position, percent: $percent, isPlaying: $isPlaying, queue: $queue)';
+    return 'PlayerInfo(id: $id, artistId: $artistId, albumId: $albumId, displayName: $displayName, artistDisplayName: $artistDisplayName, albumDisplayName: $albumDisplayName, duration: $duration, position: $position, isPlaying: $isPlaying, queue: $queue)';
   }
 
   @override
@@ -290,7 +276,6 @@ class _$PlayerInfoImpl implements _PlayerInfo {
                 other.duration == duration) &&
             (identical(other.position, position) ||
                 other.position == position) &&
-            (identical(other.percent, percent) || other.percent == percent) &&
             (identical(other.isPlaying, isPlaying) ||
                 other.isPlaying == isPlaying) &&
             const DeepCollectionEquality().equals(other._queue, _queue));
@@ -307,7 +292,6 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       albumDisplayName,
       duration,
       position,
-      percent,
       isPlaying,
       const DeepCollectionEquality().hash(_queue));
 
@@ -327,8 +311,7 @@ abstract class _PlayerInfo implements PlayerInfo {
       required final String artistDisplayName,
       required final String albumDisplayName,
       required final double duration,
-      required final double position,
-      required final double percent,
+      required final int position,
       required final bool isPlaying,
       required final List<Song> queue}) = _$PlayerInfoImpl;
 
@@ -347,10 +330,8 @@ abstract class _PlayerInfo implements PlayerInfo {
   @override
   double get duration;
   @override
-  double get position;
-  @override
-  double get percent;
-  @override
+  int get position;
+  @override // required double percent,
   bool get isPlaying;
   @override
   List<Song> get queue;

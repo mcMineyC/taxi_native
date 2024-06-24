@@ -1,6 +1,7 @@
 #include "my_application.h"
 
 #include <flutter_linux/flutter_linux.h>
+#include <locale>
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #endif
@@ -40,11 +41,11 @@ static void my_application_activate(GApplication* application) {
   if (use_header_bar) {
     GtkHeaderBar* header_bar = GTK_HEADER_BAR(gtk_header_bar_new());
     gtk_widget_show(GTK_WIDGET(header_bar));
-    gtk_header_bar_set_title(header_bar, "taxi_native_test");
+    gtk_header_bar_set_title(header_bar, "Taxi - Native");
     gtk_header_bar_set_show_close_button(header_bar, TRUE);
     gtk_window_set_titlebar(window, GTK_WIDGET(header_bar));
   } else {
-    gtk_window_set_title(window, "taxi_native_test");
+    gtk_window_set_title(window, "Taxi - Native");
   }
 
   gtk_window_set_default_size(window, 1280, 720);
@@ -83,6 +84,7 @@ static gboolean my_application_local_command_line(GApplication* application, gch
 
 // Implements GApplication::startup.
 static void my_application_startup(GApplication* application) {
+  std::setlocale(LC_NUMERIC, "C");
   //MyApplication* self = MY_APPLICATION(object);
 
   // Perform any actions required at application startup.
@@ -117,6 +119,7 @@ static void my_application_class_init(MyApplicationClass* klass) {
 static void my_application_init(MyApplication* self) {}
 
 MyApplication* my_application_new() {
+  std::setlocale(LC_NUMERIC, "C");
   return MY_APPLICATION(g_object_new(my_application_get_type(),
                                      "application-id", APPLICATION_ID,
                                      "flags", G_APPLICATION_NON_UNIQUE,

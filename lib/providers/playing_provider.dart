@@ -82,7 +82,7 @@ class Player extends _$Player {
       state = state.copyWith(isPlaying: b);
     });
     audioHandler.queue.listen((List<MediaItem> l) {
-      print("New queue thing");
+      print("New queue thing: ${l.map((i) => i.title)}");
     });
   }
 
@@ -105,6 +105,14 @@ class Player extends _$Player {
       audioHandler.play();
     }
     setPlaying(!state.isPlaying);
+  }
+
+  void next() async {
+    audioHandler.skipToNext();
+  }
+
+  void previous() async {
+    audioHandler.skipToPrevious();
   }
 
   void setPlaying(bool playing) async {
@@ -166,6 +174,7 @@ class AudioServiceHandler extends BaseAudioHandler
     
     final player = AudioPlayer();
     int playingIndex = 0;
+    bool shuffle = false;
 
     // void init(positionChangedCallback, playbackFinishedCallback) {
     //   player.onPositionChanged.listen(positionChangedCallback);
@@ -207,10 +216,8 @@ class AudioServiceHandler extends BaseAudioHandler
     
     @override
     Future<void> playMediaItem(MediaItem mediaitem) async {
-      playbackState.add(playbackState.value.copyWith(playing: true));
-      mediaItem.add(mediaitem);
+      await prepMediaItem(mediaitem);
       queue.value = [mediaitem];
-      player.play(UrlSource(mediaitem.id));
     }
 
     @override
@@ -254,7 +261,7 @@ class AudioServiceHandler extends BaseAudioHandler
       }else{
         playingIndex++;
       }
-      playMediaItem(queue.value[playingIndex]);
+      prepMediaItem(queue.value[playingIndex]);
     }
     
     @override
@@ -264,7 +271,12 @@ class AudioServiceHandler extends BaseAudioHandler
       }else{
         playingIndex--;
       }
-      playMediaItem(queue.value[playingIndex]);
+        playMediaItem(queue.value[playingIndex]);
+    }
 
+    Future<void> prepMediaItem(MediaItem mediaitem) async {
+      playbackState.add(playbackState.value.copyWith(playing: true));
+      mediaItem.add(mediaitem);
+      player.play(UrlSource(mediaitem.id));
     }
 }

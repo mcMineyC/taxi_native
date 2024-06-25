@@ -174,7 +174,7 @@ class HomePage extends ConsumerWidget {
                                     child: const Icon(Icons.skip_previous_rounded, size: 28),
                                   ),
                                   onPressed: () {
-
+                                    ref.read(playerProvider.notifier).previous();
                                   }
                                 ),
                                 const SpacerWidget(width: 8),
@@ -203,7 +203,7 @@ class HomePage extends ConsumerWidget {
     
                                   ),
                                   onPressed: () {
-                                    
+                                    ref.read(playerProvider.notifier).next();
                                   }
                                 ),
                               ]

@@ -81,6 +81,9 @@ class Player extends _$Player {
     audioHandler.playbackState.map((s) => s.playing).distinct().listen((bool b) {
       state = state.copyWith(isPlaying: b);
     });
+    audioHandler.queue.listen((List<MediaItem> l) {
+      print("New queue thing");
+    });
   }
 
   void play() async {
@@ -162,7 +165,6 @@ class AudioServiceHandler extends BaseAudioHandler
     with QueueHandler {
     
     final player = AudioPlayer();
-    List<MediaItem> queued = [];
     int playingIndex = 0;
 
     // void init(positionChangedCallback, playbackFinishedCallback) {
@@ -184,29 +186,30 @@ class AudioServiceHandler extends BaseAudioHandler
 
     @override
     Future<void> addQueueItem(MediaItem mediaItem) async {
-      queued.add(mediaItem);
+      queue.value.add(mediaItem);
+      queue.add(queue.value);
     }
     
     @override
     Future<void> addQueueItems(List<MediaItem> mediaItems) async {
-      queued.addAll(mediaItems);
+      queue.value.addAll(mediaItems);
     }
     
     @override
     Future<void> removeQueueItem(MediaItem mediaItem) async {
-      queued.remove(mediaItem);
+      queue.value.remove(mediaItem);
     }
     
     @override
     Future<void> removeQueueItemAt(int index) async {
-      queued.removeAt(index);
+      queue.value.removeAt(index);
     }
     
     @override
     Future<void> playMediaItem(MediaItem mediaitem) async {
       playbackState.add(playbackState.value.copyWith(playing: true));
       mediaItem.add(mediaitem);
-      queued = [mediaitem];
+      queue.value = [mediaitem];
       player.play(UrlSource(mediaitem.id));
     }
 
@@ -241,27 +244,27 @@ class AudioServiceHandler extends BaseAudioHandler
 
     @override
     Future<void> skipToQueueItem(int index) async {
-      playMediaItem(queued[index]);
+      playMediaItem(queue.value[index]);
     }
     
     @override
     Future<void> skipToNext() async {
-      if(playingIndex+1 > queued.length-1) {
+      if(playingIndex+1 > queue.value.length-1) {
         playingIndex = 0;
       }else{
         playingIndex++;
       }
-      playMediaItem(queued[playingIndex]);
+      playMediaItem(queue.value[playingIndex]);
     }
     
     @override
     Future<void> skipToPrevious() async {
-      if(playingIndex-1 < queued.length) {
-        playingIndex = queued.length - 1;
+      if(playingIndex-1 < queue.value.length) {
+        playingIndex = queue.value.length - 1;
       }else{
         playingIndex--;
       }
-      playMediaItem(queued[playingIndex]);
+      playMediaItem(queue.value[playingIndex]);
 
     }
 }

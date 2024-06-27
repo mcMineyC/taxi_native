@@ -6,7 +6,7 @@ part of 'fetched_data_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchSongsHash() => r'24eb71a12098f6b1892b211d7688afdbe690f3a5';
+String _$fetchSongsHash() => r'f5d0987a75bc9e41361b66af9eb828eba70747f0';
 
 /// See also [fetchSongs].
 @ProviderFor(fetchSongs)
@@ -20,7 +20,7 @@ final fetchSongsProvider = FutureProvider<List<Song>>.internal(
 );
 
 typedef FetchSongsRef = FutureProviderRef<List<Song>>;
-String _$fetchAlbumsHash() => r'f9f8699d4314a619443dad023e8d28adcbd79267';
+String _$fetchAlbumsHash() => r'd22223e5fe54004fc7419a88af635e73c61f8095';
 
 /// See also [fetchAlbums].
 @ProviderFor(fetchAlbums)
@@ -34,7 +34,7 @@ final fetchAlbumsProvider = FutureProvider<List<Album>>.internal(
 );
 
 typedef FetchAlbumsRef = FutureProviderRef<List<Album>>;
-String _$fetchArtistsHash() => r'f83169235e5b94827bea8ffc4d4fb3aff775f4dd';
+String _$fetchArtistsHash() => r'4a774bbc0771055ab9ffe56a7636a454b21a6d38';
 
 /// See also [fetchArtists].
 @ProviderFor(fetchArtists)
@@ -48,7 +48,7 @@ final fetchArtistsProvider = FutureProvider<List<Artist>>.internal(
 );
 
 typedef FetchArtistsRef = FutureProviderRef<List<Artist>>;
-String _$findBatchSongsHash() => r'8f7d4c6d61084b52e075a08b2f3c4f478f7a9b51';
+String _$findBatchSongsHash() => r'10ee4bf144e4276a708077ee9dff0b517fcb0d6a';
 
 /// Copied from Dart SDK
 class _SystemHash {

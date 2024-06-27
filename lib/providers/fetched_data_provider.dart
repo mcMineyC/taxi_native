@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'preferences_provider.dart';
 import '../types/song.dart';
 import '../types/album.dart';
 import '../types/artists.dart';
@@ -15,7 +16,7 @@ part 'fetched_data_provider.g.dart';
 Future<List<Song>> fetchSongs(FetchSongsRef ref) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("https://forkleserver.mooo.com:3030/info/songs"),
+      Uri.parse("${await ref.read(backendUrlProvider.future)}/info/songs"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
@@ -43,7 +44,7 @@ Future<List<Song>> fetchSongs(FetchSongsRef ref) async {
 Future<List<Album>> fetchAlbums(FetchAlbumsRef ref) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("https://forkleserver.mooo.com:3030/info/albums"),
+      Uri.parse("${await ref.read(backendUrlProvider.future)}/info/albums"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
@@ -70,7 +71,7 @@ Future<List<Album>> fetchAlbums(FetchAlbumsRef ref) async {
 Future<List<Artist>> fetchArtists(FetchArtistsRef ref) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("https://forkleserver.mooo.com:3030/info/artists"),
+      Uri.parse("${await ref.read(backendUrlProvider.future)}/info/artists"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
@@ -97,7 +98,7 @@ Future<List<Artist>> fetchArtists(FetchArtistsRef ref) async {
 Future<List<Song>> findBatchSongs(FindBatchSongsRef ref, List<String> ids) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("https://forkleserver.mooo.com:3030/info/songs/batch"),
+      Uri.parse("${await ref.read(backendUrlProvider.future)}/info/songs/batch"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),

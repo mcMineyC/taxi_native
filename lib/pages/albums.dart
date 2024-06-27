@@ -6,19 +6,21 @@ import 'package:beamer/beamer.dart';
 import 'cards.dart';
 import '../providers/fetched_data_provider.dart'; 
 import '../providers/error_watcher.dart';
+import '../providers/preferences_provider.dart';
 import '../types/album.dart';
 
 class AlbumsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<List<Album>> albums = ref.watch(fetchAlbumsProvider);
+    final AsyncValue<String> backendUrl = ref.watch(backendUrlProvider);
     handleError(ref, fetchAlbumsProvider, Beamer.of(context));
-
-    return albums.when(
+    return backendUrl.when(
+      data: (url) => albums.when(
         data: (data) {
           var cardList = data.map((e) => {
             "text": e.displayName,
-            "image": "https://forkleserver.mooo.com:3030/info/albums/${e.id}/image",
+            "image": "$url/info/albums/${e.id}/image",
             "id": e.id,
             "type": "album"
           }).toList();
@@ -26,6 +28,9 @@ class AlbumsPage extends ConsumerWidget {
         },
         loading: () => LoadingCardView(),
         error: (error, stack) => LoadingCardView(),
-      );
+      ),
+      loading: () => LoadingCardView(),
+      error: (error, stack) => LoadingCardView(),
+    );
   }
 }

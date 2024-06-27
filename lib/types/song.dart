@@ -22,14 +22,14 @@ class Song with _$Song {
 
   factory Song.empty() => EmptySong();
   
-  MediaItem toMediaItem() {
+  MediaItem toMediaItem(String backendUrl) {
     return MediaItem(
-      id: "https://eatthecow.mooo.com:3030/info/songs/$id/audio",
+      id: "$backendUrl/info/songs/$id/audio",
       title: displayName,
       album: albumDisplayName,
       artist: artistDisplayName,
       duration: Duration(seconds: duration.toInt()),
-      artUri: Uri.parse("https://eatthecow.mooo.com:3030/info/songs/${id}/image"),
+      artUri: Uri.parse("$backendUrl/info/songs/$id/image"),
     );
   }
 }

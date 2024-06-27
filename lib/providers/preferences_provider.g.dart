@@ -1,24 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'playing_provider.dart';
+part of 'preferences_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$playerHash() => r'83c0794ab0bbb7f9af03eda9cfbee4dba50ada89';
+String _$backendUrlHash() => r'7e1fd70ca3641e4979ee903e82358cab824ddcf6';
 
-/// See also [Player].
-@ProviderFor(Player)
-final playerProvider = AutoDisposeNotifierProvider<Player, PlayerInfo>.internal(
-  Player.new,
-  name: r'playerProvider',
+/// See also [backendUrl].
+@ProviderFor(backendUrl)
+final backendUrlProvider = AutoDisposeFutureProvider<String>.internal(
+  backendUrl,
+  name: r'backendUrlProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$playerHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$backendUrlHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$Player = AutoDisposeNotifier<PlayerInfo>;
+typedef BackendUrlRef = AutoDisposeFutureProviderRef<String>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

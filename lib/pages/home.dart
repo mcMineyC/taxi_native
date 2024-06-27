@@ -116,6 +116,9 @@ class HomePage extends ConsumerWidget {
                         case 3:
                           Beamer.of(context).beamToNamed('/songs');
                           break;
+                        case 4:
+                          Beamer.of(context).beamToNamed('/queue');
+                          break;
                         default:
                           const snacky = SnackBar(
                             content: Text("This feature isn't done yet :("),
@@ -130,18 +133,20 @@ class HomePage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Expanded(child:Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        // color: Colors.teal,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Container(
-                        // color: Colors.green,
-                        margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
-                        child: homeJunk,
-                      ))
-                    ),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    // color: Colors.teal,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Container(
+                    // color: Colors.green,
+                    margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
+                    child: homeJunk,
+                  )
+                )
+              ),
               //Controls
               Container(
                 constraints: BoxConstraints(

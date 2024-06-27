@@ -3,17 +3,19 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:beamer/beamer.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/user_provider.dart';
 import 'locations.dart';
 import 'helper_widgets.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController _userController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   bool _beenSubmitted = false;
@@ -35,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  void login() async {
+  void login(username, password) async {
     _beenSubmitted = true;
     setState(() {});
     showDialog(context: context, builder: (context) {
@@ -48,39 +50,34 @@ class _LoginPageState extends State<LoginPage> {
         )
       );
     });
-    var response = await http.post(
-      Uri.parse("https://forkleserver.mooo.com:3030/auth"),
-      headers: Map<String, String>.from({
-        'Content-Type': 'application/json'
-      }),
-      body: jsonEncode(<String, String>{
-        'username': _userController.text,
-        'password': _passController.text,
-      })
-    );
-    if(response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      if(data["authorized"] == false) {
-        reset(() {
-          _authError = true;
-          Navigator.of(context).pop();
-          showDialog(context: context, builder: (context) {
-            return AlertDialog(
-              content: Text("Invalid username or password"),
-            );
-          });
-        });
-        return;
-      }else{
-        _triedLogin = true;
-        await _sp.setString("token", data["authtoken"]);
-        await _sp.setString("username", data["username"]);
+    int success = await ref.read(loginPasswordProvider(username, password).future);
+    _triedLogin = true;
+    if(success == 1) {
         Navigator.of(context).pop(); // Close the dialog
         Beamer.of(context).beamToReplacementNamed("/home");
         // Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Just Some Random Cards')));
         reset(() {});
-      }
-    }
+    }else if(success == 0){
+      reset(() {
+        _authError = true;
+        Navigator.of(context).pop();
+        showDialog(context: context, builder: (context) {
+          return AlertDialog(
+            content: Text("Invalid username or password"),
+          );
+        });
+      });
+    }else if(success == -1) {
+      setState(() {
+        _authError = true;
+        Navigator.of(context).pop();
+        showDialog(context: context, builder: (context) {
+          return AlertDialog(
+            content: Text("Server error (it's probably down)"),
+          );
+        });
+      });
+    }  
   }
 
   void loginToken() async {
@@ -104,31 +101,24 @@ class _LoginPageState extends State<LoginPage> {
         );
       });
     });
-    var response = await http.post(
-      Uri.parse("https://forkleserver.mooo.com:3030/authtoken"),
-      headers: Map<String, String>.from({
-        'Content-Type': 'application/json'
-      }),
-      body: jsonEncode(<String, String>{
-        'authtoken': token,
-      })
-    );
-    if(response.statusCode == 200) {
-      var data = jsonDecode(response.body);
-      debugPrint(data.toString());
-      if(data["authorized"] == false) {
-        Navigator.of(context).pop();
-        await _sp.setString("token", "");
-        return;
-      }else{
-        _triedLogin = true;
-        await _sp.setString("token", data["authtoken"]);
-        await _sp.setString("username", data["username"]);
+    int code = await ref.read(loginTokenProvider(token).future);
+    switch(code){
+      case 1:
         Navigator.of(context).pop();
         Beamer.of(context).beamToReplacementNamed("/home");
-        // Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Just Some Random Cards')));
-        reset(() {});
-      }
+        break;
+      case 0:
+        Navigator.of(context).pop();
+        await _sp.setString("token", "");
+        break;
+      case -1:
+        Navigator.of(context).pop();
+        showDialog(context: context, builder: (context) {
+          return AlertDialog(
+            content: Text("Server error (it's probably down)"),
+          );
+        });
+        break;
     }
   }
 
@@ -197,7 +187,7 @@ class _LoginPageState extends State<LoginPage> {
                         border: const OutlineInputBorder(),
                       ),
                       onSubmitted: (value) => {
-                        login()
+                        login(_userController.text, _passController.text)
                       },
                       controller: _passController,
                       enabled: !_beenSubmitted,
@@ -219,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       onPressed: () {
                         debugPrint("Pressed login button");
-                        login();
+                        login(_userController.text, _passController.text);
                       }
 
                     )

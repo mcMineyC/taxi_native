@@ -20,6 +20,7 @@ import 'pages/artist.dart';
 import 'pages/albums.dart';
 import 'pages/songs.dart';
 import 'pages/downloader.dart';
+import 'pages/queue.dart';
 import 'pages/landing.dart';
 import 'login.dart';
 
@@ -130,6 +131,12 @@ class App extends ConsumerWidget {
           title: 'Songs',
           popToNamed: '/home',
           child: HomePage(homeJunk: SongsPage()),
+        ),
+        '/queue': (context, state, data) => BeamPage(
+          key: const ValueKey('queue'),
+          title: 'Queue',
+          popToNamed: '/home',
+          child: HomePage(homeJunk: QueuePage()),
         ),
         '/downloader': (context, state, data) => BeamPage(
           key: const ValueKey('downloader'),

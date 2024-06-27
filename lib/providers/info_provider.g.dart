@@ -6,7 +6,7 @@ part of 'info_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$addRecentlyPlayedHash() => r'b8de6f2fb5be55c31d6203e7620fdd5b4245aa14';
+String _$addRecentlyPlayedHash() => r'2b4ed9e146af008674ecc52c4ef2174febdd8b0a';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -156,7 +156,7 @@ class _AddRecentlyPlayedProviderElement
 }
 
 String _$fetchRecentlyPlayedHash() =>
-    r'396f84a283ef3773df3a8273aa983c39fb67fca0';
+    r'39e11fa2a2eb760acecd30c0e80d5e3829b118f4';
 
 /// See also [fetchRecentlyPlayed].
 @ProviderFor(fetchRecentlyPlayed)
@@ -171,7 +171,7 @@ final fetchRecentlyPlayedProvider = FutureProvider<List<Song>>.internal(
 );
 
 typedef FetchRecentlyPlayedRef = FutureProviderRef<List<Song>>;
-String _$fetchFavoritesHash() => r'00c4f2fcdcb9327f3b4d362c52d8c6520228599c';
+String _$fetchFavoritesHash() => r'ce9e6eb270bfe464ccb748759c4b5ca9be11bf64';
 
 /// See also [fetchFavorites].
 @ProviderFor(fetchFavorites)
@@ -186,7 +186,7 @@ final fetchFavoritesProvider = FutureProvider<List<Song>>.internal(
 );
 
 typedef FetchFavoritesRef = FutureProviderRef<List<Song>>;
-String _$findSongHash() => r'3f128791877ed8a20403c80aecc0f6104aaea827';
+String _$findSongHash() => r'222e36ca6c34033ebb337291e87c920af809dc3d';
 
 /// See also [findSong].
 @ProviderFor(findSong)
@@ -311,6 +311,135 @@ class _FindSongProviderElement extends AutoDisposeFutureProviderElement<Song>
 
   @override
   String get id => (origin as FindSongProvider).id;
+}
+
+String _$findSongsByAlbumHash() => r'c31a1318dd37fca7905fc0cc45813fe4b204d761';
+
+/// See also [findSongsByAlbum].
+@ProviderFor(findSongsByAlbum)
+const findSongsByAlbumProvider = FindSongsByAlbumFamily();
+
+/// See also [findSongsByAlbum].
+class FindSongsByAlbumFamily extends Family<AsyncValue<List<Song>>> {
+  /// See also [findSongsByAlbum].
+  const FindSongsByAlbumFamily();
+
+  /// See also [findSongsByAlbum].
+  FindSongsByAlbumProvider call(
+    String id,
+  ) {
+    return FindSongsByAlbumProvider(
+      id,
+    );
+  }
+
+  @override
+  FindSongsByAlbumProvider getProviderOverride(
+    covariant FindSongsByAlbumProvider provider,
+  ) {
+    return call(
+      provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'findSongsByAlbumProvider';
+}
+
+/// See also [findSongsByAlbum].
+class FindSongsByAlbumProvider extends AutoDisposeFutureProvider<List<Song>> {
+  /// See also [findSongsByAlbum].
+  FindSongsByAlbumProvider(
+    String id,
+  ) : this._internal(
+          (ref) => findSongsByAlbum(
+            ref as FindSongsByAlbumRef,
+            id,
+          ),
+          from: findSongsByAlbumProvider,
+          name: r'findSongsByAlbumProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$findSongsByAlbumHash,
+          dependencies: FindSongsByAlbumFamily._dependencies,
+          allTransitiveDependencies:
+              FindSongsByAlbumFamily._allTransitiveDependencies,
+          id: id,
+        );
+
+  FindSongsByAlbumProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
+  final String id;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<Song>> Function(FindSongsByAlbumRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FindSongsByAlbumProvider._internal(
+        (ref) => create(ref as FindSongsByAlbumRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<Song>> createElement() {
+    return _FindSongsByAlbumProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FindSongsByAlbumProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin FindSongsByAlbumRef on AutoDisposeFutureProviderRef<List<Song>> {
+  /// The parameter `id` of this provider.
+  String get id;
+}
+
+class _FindSongsByAlbumProviderElement
+    extends AutoDisposeFutureProviderElement<List<Song>>
+    with FindSongsByAlbumRef {
+  _FindSongsByAlbumProviderElement(super.provider);
+
+  @override
+  String get id => (origin as FindSongsByAlbumProvider).id;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

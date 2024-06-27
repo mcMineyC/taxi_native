@@ -6,6 +6,7 @@ import 'package:audioplayers/audioplayers.dart';
 import '../service_locator.dart';
 
 import 'info_provider.dart';
+import 'preferences_provider.dart';
 
 import '../types/song.dart';
 
@@ -84,6 +85,13 @@ class Player extends _$Player {
     audioHandler.queue.listen((List<MediaItem> l) {
       print("New queue thing: ${l.map((i) => i.title)}");
     });
+    audioHandler.mediaItem.map((i) => i?.id.split("/")[i.id.split("/").length - 2]).distinct().listen((String? id) {
+      if(id == null) return;
+      print("New id: $id");
+      ref.read(addRecentlyPlayedProvider(id).future).then((value) {
+        if(value == true) ref.refresh(fetchRecentlyPlayedProvider.future);
+      });
+    });
   }
 
   void play() async {
@@ -122,8 +130,8 @@ class Player extends _$Player {
 
   void setSong(String id) async {
     if(state.id == id) return; //Debounce duplicate calls :shrug: maybe this will fix the duplicates in recentlyplayed
+    String backendUrl = await ref.read(backendUrlProvider.future);
     print("Song setter: $id");
-    if(!_isInit) _sp = await SharedPreferences.getInstance(); _isInit = true;
     ref.read(findSongProvider(id).future).then((songObject) async {
       state = state.copyWith(
         id: songObject.id,
@@ -132,40 +140,92 @@ class Player extends _$Player {
         displayName: songObject.displayName,
         albumDisplayName: songObject.albumDisplayName,
         artistDisplayName: songObject.artistDisplayName,
+        queue: [songObject],
         isPlaying: true,
       );
       final item = MediaItem(
-        id: 'https://eatthecow.mooo.com:3030/info/songs/$id/audio',
+        id: '$backendUrl/info/songs/$id/audio',
         title: state.displayName,
         album: state.albumDisplayName,
         artist: state.artistDisplayName,
         duration: Duration(seconds: state.duration.toInt()),
-        artUri: Uri.parse('https://eatthecow.mooo.com:3030/info/songs/$id/image'),
+        artUri: Uri.parse('$backendUrl/info/songs/$id/image'),
       );
       await audioHandler.playMediaItem(item);
     });
-    ref.read(addRecentlyPlayedProvider(id).future).then((value) {
-      if(value == true) ref.refresh(fetchRecentlyPlayedProvider.future);
-    });
+  }
+  void setItem(Song i) async {
+    String backendUrl = await ref.read(backendUrlProvider.future);
+    state = state.copyWith(
+      id: i.id,
+      artistId: i.artistId,
+      albumId: i.albumId,
+      displayName: i.displayName,
+      albumDisplayName: i.albumDisplayName,
+      artistDisplayName: i.artistDisplayName,
+      queue: [i],
+      isPlaying: true,
+    );
+    final item = MediaItem(
+      id: '$backendUrl/info/songs/${i.id}/audio',
+      title: state.displayName,
+      album: state.albumDisplayName,
+      artist: state.artistDisplayName,
+      duration: Duration(seconds: state.duration.toInt()),
+      artUri: Uri.parse('$backendUrl/info/songs/${i.id}/image'),
+    );
+    await audioHandler.playMediaItem(item);
+  }
+
+  void setAlbum(String id) async {
+    String backendUrl = await ref.read(backendUrlProvider.future);
+    List<Song> songs = await ref.read(findSongsByAlbumProvider(id).future);
+    state = state.copyWith(queue: songs);
+    audioHandler.updateQueue(songs.map((s) => s.toMediaItem(backendUrl)).toList());
+    audioHandler.skipToQueueItem(0);
+  }
+
+  void addAlbumToQueue(String id) async {
+    String backendUrl = await ref.read(backendUrlProvider.future);
+    List<Song> songs = await ref.read(findSongsByAlbumProvider(id).future);
+    state = state.copyWith(queue: [...state.queue, ...songs]);
+    audioHandler.addQueueItems(songs.map((s) => s.toMediaItem(backendUrl)).toList());
   }
 
   void setQueue(List<Song> queue) async {
+    String backendUrl = await ref.read(backendUrlProvider.future);
+    audioHandler.updateQueue(
+      queue.map((s) => s.toMediaItem(backendUrl)).toList()
+    );
     state = state.copyWith(queue: queue);
   }
 
   void addToQueue(Song song) async {
-    audioHandler.addQueueItem(song.toMediaItem());
+    audioHandler.addQueueItem(song.toMediaItem((await ref.read(backendUrlProvider.future))));
     state = state.copyWith(queue: [...state.queue, song]);
   }
 
   void addIdToQueue(String id) async {
+    String backendUrl = await ref.read(backendUrlProvider.future);
     Song song = await ref.read(findSongProvider(id).future);
-    audioHandler.addQueueItem(song.toMediaItem());
+    audioHandler.addQueueItem(song.toMediaItem(backendUrl));
     state = state.copyWith(queue: [...state.queue, song]);
   }
 
   void clearQueue() async {
+    audioHandler.updateQueue([]);
     state = state.copyWith(queue: []);
+    audioHandler.stop();
+  }
+
+  void moveQueueItem(int oldIndex, int newIndex) async {
+    print("Moving queue item $oldIndex to $newIndex");
+    String backendUrl = await ref.read(backendUrlProvider.future);
+    List<Song> queue = [...state.queue];
+    Song s = queue.removeAt(oldIndex);
+    queue.insert(newIndex, s);
+    state = state.copyWith(queue: queue);
+    audioHandler.updateQueue(queue.map((s) => s.toMediaItem(backendUrl)).toList());
   }
 }
 
@@ -190,6 +250,7 @@ class AudioServiceHandler extends BaseAudioHandler
       player.onPlayerComplete.listen((_) {
         playbackState.add(playbackState.value.copyWith(playing: false));
         mediaItem.drain();
+        skipToNext();
       });
     }
 
@@ -202,22 +263,26 @@ class AudioServiceHandler extends BaseAudioHandler
     @override
     Future<void> addQueueItems(List<MediaItem> mediaItems) async {
       queue.value.addAll(mediaItems);
+      queue.add(queue.value);
     }
     
     @override
     Future<void> removeQueueItem(MediaItem mediaItem) async {
       queue.value.remove(mediaItem);
+      queue.add(queue.value);
     }
     
     @override
     Future<void> removeQueueItemAt(int index) async {
       queue.value.removeAt(index);
+      queue.add(queue.value);
     }
     
     @override
     Future<void> playMediaItem(MediaItem mediaitem) async {
       await prepMediaItem(mediaitem);
       queue.value = [mediaitem];
+      queue.add(queue.value);
     }
 
     @override
@@ -251,7 +316,7 @@ class AudioServiceHandler extends BaseAudioHandler
 
     @override
     Future<void> skipToQueueItem(int index) async {
-      playMediaItem(queue.value[index]);
+      prepMediaItem(queue.value[index]);
     }
     
     @override
@@ -271,7 +336,7 @@ class AudioServiceHandler extends BaseAudioHandler
       }else{
         playingIndex--;
       }
-        playMediaItem(queue.value[playingIndex]);
+      prepMediaItem(queue.value[playingIndex]);
     }
 
     Future<void> prepMediaItem(MediaItem mediaitem) async {

@@ -42,6 +42,22 @@ class MediaCard extends ConsumerWidget{
           }
         ));
         break;
+      case "album":
+        buttons.add(ContextMenuButtonConfig(
+          "Play",
+          icon: const Icon(Icons.play_arrow_rounded),
+          onPressed: () async {
+            ref.read(playerProvider.notifier).setAlbum(thingId);
+          }
+        ));
+        buttons.add(ContextMenuButtonConfig(
+          "Add to queue",
+          icon: const Icon(Icons.queue),
+          onPressed: () {
+            ref.read(playerProvider.notifier).addAlbumToQueue(thingId);
+          }
+        ));
+        break;
       default:
         buttons.add(ContextMenuButtonConfig("Placeholder", icon: const Icon(Icons.abc), onPressed: (){}));
         break;
@@ -66,6 +82,9 @@ class MediaCard extends ConsumerWidget{
                     print("Setting song");
                     ref.read(playerProvider.notifier).setSong(thingId);
                     break;
+                  case "album":
+                    print("Setting album");
+                    ref.read(playerProvider.notifier).setAlbum(thingId);
                   case "placeholder":
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Hmm, nothing here. The real question is why do you just go around randomly clicking loading things? ><")));
                   default:
@@ -143,3 +162,16 @@ class SpacerWidget extends StatelessWidget{
     );
   }
 }
+
+Widget EmptyCardRow(){
+  return Row(
+    children: [
+      for (int i = 0; i < 10; i++) MediaCard(
+        text: "meh who cares",
+        thingId: "idklol",
+        thingType: "placeholder",
+        image: "https://placehold.co/512x512.png")
+    ]
+  );
+}
+

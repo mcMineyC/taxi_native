@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'preferences_provider.dart';
 import '../types/song.dart';
 
 part 'new_provider.g.dart';
@@ -13,7 +14,7 @@ part 'new_provider.g.dart';
 Future<List<Song>> fetchNewSongs(FetchNewSongsRef ref) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("https://forkleserver.mooo.com:3030/info/songs"),
+      Uri.parse("${await ref.read(backendUrlProvider.future)}/info/songs"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),

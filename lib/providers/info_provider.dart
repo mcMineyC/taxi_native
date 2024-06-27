@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../types/song.dart';
 import 'fetched_data_provider.dart';
+import 'preferences_provider.dart';
 
 part 'info_provider.g.dart';
 
@@ -15,7 +15,7 @@ Future<bool> addRecentlyPlayed(AddRecentlyPlayedRef ref, String id) async {
   print("Adding recently played: $id");
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("https://eatthecow.mooo.com:3030/recently-played/${(_sp.getString("username") ?? "")}/add"),
+      Uri.parse("${await ref.read(backendUrlProvider.future)}/recently-played/${(_sp.getString("username") ?? "")}/add"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
@@ -37,7 +37,7 @@ Future<bool> addRecentlyPlayed(AddRecentlyPlayedRef ref, String id) async {
 Future<List<Song>> fetchRecentlyPlayed(FetchRecentlyPlayedRef ref) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("https://eatthecow.mooo.com:3030/recently-played/"+(_sp.getString("username") ?? "")),
+      Uri.parse("${await ref.read(backendUrlProvider.future)}/recently-played/"+(_sp.getString("username") ?? "")),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
@@ -59,7 +59,7 @@ Future<List<Song>> fetchRecentlyPlayed(FetchRecentlyPlayedRef ref) async {
 Future<List<Song>> fetchFavorites(FetchFavoritesRef ref) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("https://eatthecow.mooo.com:3030/favorites/"+(_sp.getString("username") ?? "")),
+      Uri.parse("${await ref.read(backendUrlProvider.future)}/favorites/"+(_sp.getString("username") ?? "")),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
@@ -81,7 +81,7 @@ Future<List<Song>> fetchFavorites(FetchFavoritesRef ref) async {
 Future<Song> findSong(FindSongRef ref, String id) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-    Uri.parse("https://eatthecow.mooo.com:3030/info/songs/$id"),
+    Uri.parse("${await ref.read(backendUrlProvider.future)}/info/songs/$id"),
     headers: Map<String, String>.from({
       'Content-Type': 'application/json'
     }),
@@ -94,4 +94,24 @@ Future<Song> findSong(FindSongRef ref, String id) async {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   return Song.fromJson(desponse["song"]);
+}
+
+@riverpod
+Future<List<Song>> findSongsByAlbum(FindSongsByAlbumRef ref, String id) async {
+  var _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+    Uri.parse("${await ref.read(backendUrlProvider.future)}/info/songs/by/album/$id"),
+    headers: Map<String, String>.from({
+      'Content-Type': 'application/json'
+    }),
+    body: jsonEncode(<String, String>{
+      'authtoken': (_sp.getString("token") ?? "")
+    })
+  );
+  var desponse = jsonDecode(response.body);
+  if(desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
+  List<Song> songs = desponse["songs"].map<Song>((e) => Song.fromJson(e)).toList();
+  return songs;
 }

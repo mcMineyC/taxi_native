@@ -14,9 +14,6 @@ class QueuePage extends ConsumerWidget {
 
     final queue = ref.watch(playerProvider.select((value) => value.queue));
     final id = ref.watch(playerProvider.select((value) => value.id));
-    for (int index = 0; index < queue.length; index += 1){
-      print("${queue[index].id == id} ${((((index+1)%2)>0) ? "odd" : "even")}");
-    }
     return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

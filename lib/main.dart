@@ -19,7 +19,7 @@ import 'pages/artists.dart';
 import 'pages/artist.dart';
 import 'pages/albums.dart';
 import 'pages/songs.dart';
-import 'pages/downloader.dart';
+import 'pages/adder.dart';
 import 'pages/queue.dart';
 import 'pages/landing.dart';
 import 'login.dart';
@@ -108,7 +108,7 @@ class App extends ConsumerWidget {
         '/artist/:artistId': (context, state, data) {
           final artistId = state.pathParameters['artistId']!;
           return BeamPage(
-            key: ValueKey("artist-view"),
+            key: ValueKey("artist-view-$artistId"),
             title: artistId,
             popToNamed: '/home',
             child: ArtistPage(id: artistId),
@@ -138,11 +138,11 @@ class App extends ConsumerWidget {
           popToNamed: '/home',
           child: HomePage(homeJunk: QueuePage()),
         ),
-        '/downloader': (context, state, data) => BeamPage(
-          key: const ValueKey('downloader'),
-          title: 'Downloader',
+        '/adder': (context, state, data) => BeamPage(
+          key: const ValueKey('adder'),
+          title: 'Adder',
           popToNamed: '/home',
-          child: HomePage(homeJunk: DownloaderPage()),
+          child: HomePage(homeJunk: AdderPage()),
         ),
       }
     ),

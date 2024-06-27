@@ -58,6 +58,22 @@ class MediaCard extends ConsumerWidget{
           }
         ));
         break;
+      case "artist":
+        buttons.add(ContextMenuButtonConfig(
+          "Play",
+          icon: const Icon(Icons.play_arrow_rounded),
+          onPressed: () async {
+            ref.read(playerProvider.notifier).setArtist(thingId);
+          }
+        ));
+        buttons.add(ContextMenuButtonConfig(
+          "Add to queue",
+          icon: const Icon(Icons.queue),
+          onPressed: () {
+            ref.read(playerProvider.notifier).addArtistToQueue(thingId);
+          }
+        ));
+        break;
       default:
         buttons.add(ContextMenuButtonConfig("Placeholder", icon: const Icon(Icons.abc), onPressed: (){}));
         break;
@@ -85,6 +101,11 @@ class MediaCard extends ConsumerWidget{
                   case "album":
                     print("Setting album");
                     ref.read(playerProvider.notifier).setAlbum(thingId);
+                    break;
+                  case "artist":
+                    print("Setting artist");
+                    ref.read(playerProvider.notifier).setArtist(thingId);
+                    break;
                   case "placeholder":
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Hmm, nothing here. The real question is why do you just go around randomly clicking loading things? ><")));
                   default:

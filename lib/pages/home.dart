@@ -80,7 +80,7 @@ class HomePage extends ConsumerWidget {
                       ),
                       NavigationRailDestination(
                         icon: Icon(Icons.download_rounded),
-                        label: Text("Downloader"),
+                        label: Text("Adder"),
                       ),
                     ],
                     selectedIndex: () {
@@ -97,7 +97,7 @@ class HomePage extends ConsumerWidget {
                           return 4;
                         case ValueKey(value: 'playlists'):
                           return 5;
-                        case ValueKey(value: 'downloader'):
+                        case ValueKey(value: 'adder'):
                           return 6;
                         default:
                           return 0;
@@ -120,7 +120,7 @@ class HomePage extends ConsumerWidget {
                           Beamer.of(context).beamToNamed('/queue');
                           break;
                         case 6:
-                          Beamer.of(context).beamToNamed('/downloader');
+                          Beamer.of(context).beamToNamed('/adder');
                           break;
                         default:
                           const snacky = SnackBar(

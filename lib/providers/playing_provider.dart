@@ -197,6 +197,21 @@ class Player extends _$Player {
     audioHandler.addQueueItems(songs.map((s) => s.toMediaItem(backendUrl)).toList());
   }
 
+  void setArtist(String id) async {
+    String backendUrl = await ref.read(backendUrlProvider.future);
+    List<Song> songs = await ref.read(findSongsByArtistProvider(id).future);
+    state = state.copyWith(queue: songs);
+    audioHandler.updateQueue(songs.map((s) => s.toMediaItem(backendUrl)).toList());
+    audioHandler.skipToQueueItem(0);
+  }
+
+  void addArtistToQueue(String id) async {
+    String backendUrl = await ref.read(backendUrlProvider.future);
+    List<Song> songs = await ref.read(findSongsByArtistProvider(id).future);
+    state = state.copyWith(queue: [...state.queue, ...songs]);
+    audioHandler.addQueueItems(songs.map((s) => s.toMediaItem(backendUrl)).toList());
+  }
+
   void setQueue(List<Song> queue) async {
     String backendUrl = await ref.read(backendUrlProvider.future);
     audioHandler.updateQueue(

@@ -122,3 +122,62 @@ Future<List<Song>> findBatchSongs(FindBatchSongsRef ref, List<String> ids) async
   }
   return returning;
 }
+@riverpod
+
+Future<Song> findSong(FindSongRef ref, String id) async {
+  var _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+    Uri.parse("${await ref.read(backendUrlProvider.future)}/info/songs/$id"),
+    headers: Map<String, String>.from({
+      'Content-Type': 'application/json'
+    }),
+    body: jsonEncode(<String, String>{
+      'authtoken': (_sp.getString("token") ?? "")
+    })
+  );
+  var desponse = jsonDecode(response.body);
+  if(desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
+  return Song.fromJson(desponse["song"]);
+}
+
+@riverpod
+Future<List<Song>> findSongsByAlbum(FindSongsByAlbumRef ref, String id) async {
+  var _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+    Uri.parse("${await ref.read(backendUrlProvider.future)}/info/songs/by/album/$id"),
+    headers: Map<String, String>.from({
+      'Content-Type': 'application/json'
+    }),
+    body: jsonEncode(<String, String>{
+      'authtoken': (_sp.getString("token") ?? "")
+    })
+  );
+  var desponse = jsonDecode(response.body);
+  if(desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
+  List<Song> songs = desponse["songs"].map<Song>((e) => Song.fromJson(e)).toList();
+  return songs;
+}
+
+@riverpod
+Future<List<Song>> findSongsByArtist(FindSongsByArtistRef ref, String id) async {
+  var _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+    Uri.parse("${await ref.read(backendUrlProvider.future)}/info/songs/by/artist/$id"),
+    headers: Map<String, String>.from({
+      'Content-Type': 'application/json'
+    }),
+    body: jsonEncode(<String, String>{
+      'authtoken': (_sp.getString("token") ?? "")
+    })
+  );
+  var desponse = jsonDecode(response.body);
+  if(desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
+  List<Song> songs = desponse["songs"].map<Song>((e) => Song.fromJson(e)).toList();
+  return songs;
+}

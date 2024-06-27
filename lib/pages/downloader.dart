@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'cards.dart';
 
 import '../providers/fetched_data_provider.dart';
+import '../providers/playing_provider.dart';
 import '../types/song.dart';
 
 class DownloaderPage extends ConsumerWidget {
@@ -10,7 +11,17 @@ class DownloaderPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       child: Center(
-        child: Text('This will be the downloader page,\nin time.', style: TextStyle(fontSize: 20)),
+        child: Column(
+          children: [
+            Text('This will be the downloader page,\nIn time.', style: TextStyle(fontSize: 20)),
+            OutlinedButton(
+              child: Text('Play Video'),
+              onPressed: () async {
+                ref.read(playerProvider.notifier).playYoutubeId("aH5duyhfSHE");
+              }
+            ),
+          ]
+        ),
       )
     );
   }

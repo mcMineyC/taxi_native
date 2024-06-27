@@ -119,6 +119,9 @@ class HomePage extends ConsumerWidget {
                         case 4:
                           Beamer.of(context).beamToNamed('/queue');
                           break;
+                        case 6:
+                          Beamer.of(context).beamToNamed('/downloader');
+                          break;
                         default:
                           const snacky = SnackBar(
                             content: Text("This feature isn't done yet :("),

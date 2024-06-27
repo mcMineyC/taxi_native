@@ -3,8 +3,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import '../service_locator.dart';
 
+import 'fetched_data_provider.dart';
 import 'info_provider.dart';
 import 'preferences_provider.dart';
 
@@ -40,6 +42,7 @@ class PlayerInfo with _$PlayerInfo {
 @riverpod
 class Player extends _$Player {
   final AudioHandler audioHandler = ServiceLocator().get<AudioHandler>();
+  final YoutubeExplode yt = YoutubeExplode();
   bool _hIsInit = false;
   late final _sp;
   bool _isInit = false;
@@ -63,6 +66,7 @@ class Player extends _$Player {
 
   void init() async {
     if(_hIsInit) return;
+    String backendUrl = await ref.read(backendUrlProvider.future);
     _hIsInit = true;
     print("Playerinfo: init");
     audioHandler.mediaItem.distinct().listen((MediaItem? i) {
@@ -87,6 +91,7 @@ class Player extends _$Player {
     });
     audioHandler.mediaItem.map((i) => i?.id.split("/")[i.id.split("/").length - 2]).distinct().listen((String? id) {
       if(id == null) return;
+      if(!id.contains(backendUrl)) return;
       print("New id: $id");
       ref.read(addRecentlyPlayedProvider(id).future).then((value) {
         if(value == true) ref.refresh(fetchRecentlyPlayedProvider.future);
@@ -226,6 +231,25 @@ class Player extends _$Player {
     queue.insert(newIndex, s);
     state = state.copyWith(queue: queue);
     audioHandler.updateQueue(queue.map((s) => s.toMediaItem(backendUrl)).toList());
+  }
+
+  void playYoutubeId(String id) async {
+    var video = await yt.videos.get(id);
+    var manifest = await yt.videos.streamsClient.getManifest(id);
+    var streamInfo = manifest.audioOnly.withHighestBitrate();
+    if(streamInfo != null) {
+      print("Playing youtube video $id, ${video.title} - ${video.author}");
+      final item = MediaItem(
+        id: streamInfo.url.toString(),
+        title: video.title,
+        album: "NOTHING",
+        artist: video.author,
+        duration: video.duration,
+        artUri: Uri.parse(video.thumbnails.highResUrl),
+      );
+      await audioHandler.playMediaItem(item);
+      audioHandler.updateQueue([item]);
+    }
   }
 }
 

@@ -34,7 +34,6 @@ dependencies:
   beamer: ^1.6.1
   youtube_explode_dart: ^2.2.1
   socket_io_client: ^2.0.3+1
-  material_color_utilities: ^0.8.0
 
 
   # The "flutter_lints" package below contains a set of recommended lints to

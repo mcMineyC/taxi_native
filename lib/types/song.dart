@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:audio_service/audio_service.dart';
+import '../service_locator.dart';
 
 part 'song.freezed.dart';
 part 'song.g.dart';
@@ -14,6 +15,8 @@ class Song with _$Song {
     required String displayName,
     required String albumDisplayName,
     required String artistDisplayName,
+    required String imageUrl,
+    required String youtubeId,
     required int    added,
     required double duration,
   }) = _Song;
@@ -22,18 +25,18 @@ class Song with _$Song {
 
   factory Song.empty() => EmptySong();
   
-  MediaItem toMediaItem(String backendUrl) {
+  MediaItem toMediaItem() {
     return MediaItem(
-      id: "$backendUrl/info/songs/$id/audio",
+      id: id,
       title: displayName,
       album: albumDisplayName,
       artist: artistDisplayName,
       duration: Duration(seconds: duration.toInt()),
-      artUri: Uri.parse("$backendUrl/info/songs/$id/image"),
+      artUri: Uri.parse(imageUrl),
     );
   }
 }
 
  Song EmptySong(){
-  return Song(id: '6cc37f587e73515ef1b0bbc62d51da5aadd11c7833bf9176a8b461e663a34533_12735632cdddfc5ee1adefb9acc5c31b17815eb12a44c5d8980549de7de9fb6e_b000432cae7c8cf56caf78631dd1516fb053baed193c02a4d44f5af9c4629136', albumId: '6cc37f587e73515ef1b0bbc62d51da5aadd11c7833bf9176a8b461e663a34533_12735632cdddfc5ee1adefb9acc5c31b17815eb12a44c5d8980549de7de9fb6e', artistId: '6cc37f587e73515ef1b0bbc62d51da5aadd11c7833bf9176a8b461e663a34533', displayName: 'Unknown', albumDisplayName: 'Unknown', artistDisplayName: 'Unknown', added: 0, duration: 0.1);
+  return Song(id: 'empty', albumId: 'empty', artistId: 'empty', displayName: 'Unknown', albumDisplayName: 'Unknown', artistDisplayName: 'Unknown', added: 0, duration: 0.1, imageUrl: '', youtubeId: '000000');
 }

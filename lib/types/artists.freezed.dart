@@ -22,6 +22,10 @@ Artist _$ArtistFromJson(Map<String, dynamic> json) {
 mixin _$Artist {
   String get id => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
+  int get albumCount => throw _privateConstructorUsedError;
+  int get songCount => throw _privateConstructorUsedError;
+  String get imageUrl => throw _privateConstructorUsedError;
+  int get added => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -33,7 +37,13 @@ abstract class $ArtistCopyWith<$Res> {
   factory $ArtistCopyWith(Artist value, $Res Function(Artist) then) =
       _$ArtistCopyWithImpl<$Res, Artist>;
   @useResult
-  $Res call({String id, String displayName});
+  $Res call(
+      {String id,
+      String displayName,
+      int albumCount,
+      int songCount,
+      String imageUrl,
+      int added});
 }
 
 /// @nodoc
@@ -51,6 +61,10 @@ class _$ArtistCopyWithImpl<$Res, $Val extends Artist>
   $Res call({
     Object? id = null,
     Object? displayName = null,
+    Object? albumCount = null,
+    Object? songCount = null,
+    Object? imageUrl = null,
+    Object? added = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -61,6 +75,22 @@ class _$ArtistCopyWithImpl<$Res, $Val extends Artist>
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String,
+      albumCount: null == albumCount
+          ? _value.albumCount
+          : albumCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      songCount: null == songCount
+          ? _value.songCount
+          : songCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      added: null == added
+          ? _value.added
+          : added // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -72,7 +102,13 @@ abstract class _$$ArtistImplCopyWith<$Res> implements $ArtistCopyWith<$Res> {
       __$$ArtistImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, String displayName});
+  $Res call(
+      {String id,
+      String displayName,
+      int albumCount,
+      int songCount,
+      String imageUrl,
+      int added});
 }
 
 /// @nodoc
@@ -88,6 +124,10 @@ class __$$ArtistImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? displayName = null,
+    Object? albumCount = null,
+    Object? songCount = null,
+    Object? imageUrl = null,
+    Object? added = null,
   }) {
     return _then(_$ArtistImpl(
       id: null == id
@@ -98,6 +138,22 @@ class __$$ArtistImplCopyWithImpl<$Res>
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
               as String,
+      albumCount: null == albumCount
+          ? _value.albumCount
+          : albumCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      songCount: null == songCount
+          ? _value.songCount
+          : songCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      added: null == added
+          ? _value.added
+          : added // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -105,7 +161,13 @@ class __$$ArtistImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ArtistImpl implements _Artist {
-  _$ArtistImpl({required this.id, required this.displayName});
+  _$ArtistImpl(
+      {required this.id,
+      required this.displayName,
+      required this.albumCount,
+      required this.songCount,
+      required this.imageUrl,
+      required this.added});
 
   factory _$ArtistImpl.fromJson(Map<String, dynamic> json) =>
       _$$ArtistImplFromJson(json);
@@ -114,10 +176,18 @@ class _$ArtistImpl implements _Artist {
   final String id;
   @override
   final String displayName;
+  @override
+  final int albumCount;
+  @override
+  final int songCount;
+  @override
+  final String imageUrl;
+  @override
+  final int added;
 
   @override
   String toString() {
-    return 'Artist(id: $id, displayName: $displayName)';
+    return 'Artist(id: $id, displayName: $displayName, albumCount: $albumCount, songCount: $songCount, imageUrl: $imageUrl, added: $added)';
   }
 
   @override
@@ -127,12 +197,20 @@ class _$ArtistImpl implements _Artist {
             other is _$ArtistImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.displayName, displayName) ||
-                other.displayName == displayName));
+                other.displayName == displayName) &&
+            (identical(other.albumCount, albumCount) ||
+                other.albumCount == albumCount) &&
+            (identical(other.songCount, songCount) ||
+                other.songCount == songCount) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.added, added) || other.added == added));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, displayName);
+  int get hashCode => Object.hash(
+      runtimeType, id, displayName, albumCount, songCount, imageUrl, added);
 
   @JsonKey(ignore: true)
   @override
@@ -151,7 +229,11 @@ class _$ArtistImpl implements _Artist {
 abstract class _Artist implements Artist {
   factory _Artist(
       {required final String id,
-      required final String displayName}) = _$ArtistImpl;
+      required final String displayName,
+      required final int albumCount,
+      required final int songCount,
+      required final String imageUrl,
+      required final int added}) = _$ArtistImpl;
 
   factory _Artist.fromJson(Map<String, dynamic> json) = _$ArtistImpl.fromJson;
 
@@ -159,6 +241,14 @@ abstract class _Artist implements Artist {
   String get id;
   @override
   String get displayName;
+  @override
+  int get albumCount;
+  @override
+  int get songCount;
+  @override
+  String get imageUrl;
+  @override
+  int get added;
   @override
   @JsonKey(ignore: true)
   _$$ArtistImplCopyWith<_$ArtistImpl> get copyWith =>

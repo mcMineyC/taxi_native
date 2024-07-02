@@ -11,8 +11,9 @@ _$AlbumImpl _$$AlbumImplFromJson(Map<String, dynamic> json) => _$AlbumImpl(
       artistId: json['artistId'] as String,
       displayName: json['displayName'] as String,
       artistDisplayName: json['artistDisplayName'] as String,
-      added: (json['added'] as num).toInt(),
       songCount: (json['songCount'] as num).toInt(),
+      imageUrl: json['imageUrl'] as String,
+      added: (json['added'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$AlbumImplToJson(_$AlbumImpl instance) =>
@@ -21,6 +22,7 @@ Map<String, dynamic> _$$AlbumImplToJson(_$AlbumImpl instance) =>
       'artistId': instance.artistId,
       'displayName': instance.displayName,
       'artistDisplayName': instance.artistDisplayName,
-      'added': instance.added,
       'songCount': instance.songCount,
+      'imageUrl': instance.imageUrl,
+      'added': instance.added,
     };

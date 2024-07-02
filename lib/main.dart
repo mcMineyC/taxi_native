@@ -10,7 +10,6 @@ import 'package:audio_service/audio_service.dart';
 import 'service_locator.dart';
 import 'providers/playing_provider.dart';
 import 'platform_utils.dart';
-import 'tone_extension.dart';
 
 
 import 'pages/error.dart';

@@ -27,6 +27,7 @@ mixin _$PlayerInfo {
       throw _privateConstructorUsedError; // required double percent,
   bool get isPlaying => throw _privateConstructorUsedError;
   List<Song> get queue => throw _privateConstructorUsedError;
+  Song get currentSong => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PlayerInfoCopyWith<PlayerInfo> get copyWith =>
@@ -49,7 +50,10 @@ abstract class $PlayerInfoCopyWith<$Res> {
       double duration,
       int position,
       bool isPlaying,
-      List<Song> queue});
+      List<Song> queue,
+      Song currentSong});
+
+  $SongCopyWith<$Res> get currentSong;
 }
 
 /// @nodoc
@@ -75,6 +79,7 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
     Object? position = null,
     Object? isPlaying = null,
     Object? queue = null,
+    Object? currentSong = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -117,7 +122,19 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
           ? _value.queue
           : queue // ignore: cast_nullable_to_non_nullable
               as List<Song>,
+      currentSong: null == currentSong
+          ? _value.currentSong
+          : currentSong // ignore: cast_nullable_to_non_nullable
+              as Song,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $SongCopyWith<$Res> get currentSong {
+    return $SongCopyWith<$Res>(_value.currentSong, (value) {
+      return _then(_value.copyWith(currentSong: value) as $Val);
+    });
   }
 }
 
@@ -139,7 +156,11 @@ abstract class _$$PlayerInfoImplCopyWith<$Res>
       double duration,
       int position,
       bool isPlaying,
-      List<Song> queue});
+      List<Song> queue,
+      Song currentSong});
+
+  @override
+  $SongCopyWith<$Res> get currentSong;
 }
 
 /// @nodoc
@@ -163,6 +184,7 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
     Object? position = null,
     Object? isPlaying = null,
     Object? queue = null,
+    Object? currentSong = null,
   }) {
     return _then(_$PlayerInfoImpl(
       id: null == id
@@ -205,6 +227,10 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
           ? _value._queue
           : queue // ignore: cast_nullable_to_non_nullable
               as List<Song>,
+      currentSong: null == currentSong
+          ? _value.currentSong
+          : currentSong // ignore: cast_nullable_to_non_nullable
+              as Song,
     ));
   }
 }
@@ -222,7 +248,8 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       required this.duration,
       required this.position,
       required this.isPlaying,
-      required final List<Song> queue})
+      required final List<Song> queue,
+      required this.currentSong})
       : _queue = queue;
 
   @override
@@ -253,8 +280,11 @@ class _$PlayerInfoImpl implements _PlayerInfo {
   }
 
   @override
+  final Song currentSong;
+
+  @override
   String toString() {
-    return 'PlayerInfo(id: $id, artistId: $artistId, albumId: $albumId, displayName: $displayName, artistDisplayName: $artistDisplayName, albumDisplayName: $albumDisplayName, duration: $duration, position: $position, isPlaying: $isPlaying, queue: $queue)';
+    return 'PlayerInfo(id: $id, artistId: $artistId, albumId: $albumId, displayName: $displayName, artistDisplayName: $artistDisplayName, albumDisplayName: $albumDisplayName, duration: $duration, position: $position, isPlaying: $isPlaying, queue: $queue, currentSong: $currentSong)';
   }
 
   @override
@@ -278,7 +308,9 @@ class _$PlayerInfoImpl implements _PlayerInfo {
                 other.position == position) &&
             (identical(other.isPlaying, isPlaying) ||
                 other.isPlaying == isPlaying) &&
-            const DeepCollectionEquality().equals(other._queue, _queue));
+            const DeepCollectionEquality().equals(other._queue, _queue) &&
+            (identical(other.currentSong, currentSong) ||
+                other.currentSong == currentSong));
   }
 
   @override
@@ -293,7 +325,8 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       duration,
       position,
       isPlaying,
-      const DeepCollectionEquality().hash(_queue));
+      const DeepCollectionEquality().hash(_queue),
+      currentSong);
 
   @JsonKey(ignore: true)
   @override
@@ -313,7 +346,8 @@ abstract class _PlayerInfo implements PlayerInfo {
       required final double duration,
       required final int position,
       required final bool isPlaying,
-      required final List<Song> queue}) = _$PlayerInfoImpl;
+      required final List<Song> queue,
+      required final Song currentSong}) = _$PlayerInfoImpl;
 
   @override
   String get id;
@@ -335,6 +369,8 @@ abstract class _PlayerInfo implements PlayerInfo {
   bool get isPlaying;
   @override
   List<Song> get queue;
+  @override
+  Song get currentSong;
   @override
   @JsonKey(ignore: true)
   _$$PlayerInfoImplCopyWith<_$PlayerInfoImpl> get copyWith =>

@@ -10,8 +10,9 @@ class Album with _$Album {
     required String artistId,
     required String displayName,
     required String artistDisplayName,
-    required int    added,
     required int    songCount,
+    required String imageUrl,
+    required int    added,
   }) = _Album;
 
   factory Album.fromJson(Map<String, dynamic> json) => _$AlbumFromJson(json);

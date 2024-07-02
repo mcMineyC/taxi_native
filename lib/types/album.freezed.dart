@@ -24,8 +24,9 @@ mixin _$Album {
   String get artistId => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
   String get artistDisplayName => throw _privateConstructorUsedError;
-  int get added => throw _privateConstructorUsedError;
   int get songCount => throw _privateConstructorUsedError;
+  String get imageUrl => throw _privateConstructorUsedError;
+  int get added => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,8 +43,9 @@ abstract class $AlbumCopyWith<$Res> {
       String artistId,
       String displayName,
       String artistDisplayName,
-      int added,
-      int songCount});
+      int songCount,
+      String imageUrl,
+      int added});
 }
 
 /// @nodoc
@@ -63,8 +65,9 @@ class _$AlbumCopyWithImpl<$Res, $Val extends Album>
     Object? artistId = null,
     Object? displayName = null,
     Object? artistDisplayName = null,
-    Object? added = null,
     Object? songCount = null,
+    Object? imageUrl = null,
+    Object? added = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -83,13 +86,17 @@ class _$AlbumCopyWithImpl<$Res, $Val extends Album>
           ? _value.artistDisplayName
           : artistDisplayName // ignore: cast_nullable_to_non_nullable
               as String,
-      added: null == added
-          ? _value.added
-          : added // ignore: cast_nullable_to_non_nullable
-              as int,
       songCount: null == songCount
           ? _value.songCount
           : songCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      added: null == added
+          ? _value.added
+          : added // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
   }
@@ -107,8 +114,9 @@ abstract class _$$AlbumImplCopyWith<$Res> implements $AlbumCopyWith<$Res> {
       String artistId,
       String displayName,
       String artistDisplayName,
-      int added,
-      int songCount});
+      int songCount,
+      String imageUrl,
+      int added});
 }
 
 /// @nodoc
@@ -126,8 +134,9 @@ class __$$AlbumImplCopyWithImpl<$Res>
     Object? artistId = null,
     Object? displayName = null,
     Object? artistDisplayName = null,
-    Object? added = null,
     Object? songCount = null,
+    Object? imageUrl = null,
+    Object? added = null,
   }) {
     return _then(_$AlbumImpl(
       id: null == id
@@ -146,13 +155,17 @@ class __$$AlbumImplCopyWithImpl<$Res>
           ? _value.artistDisplayName
           : artistDisplayName // ignore: cast_nullable_to_non_nullable
               as String,
-      added: null == added
-          ? _value.added
-          : added // ignore: cast_nullable_to_non_nullable
-              as int,
       songCount: null == songCount
           ? _value.songCount
           : songCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      added: null == added
+          ? _value.added
+          : added // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -166,8 +179,9 @@ class _$AlbumImpl implements _Album {
       required this.artistId,
       required this.displayName,
       required this.artistDisplayName,
-      required this.added,
-      required this.songCount});
+      required this.songCount,
+      required this.imageUrl,
+      required this.added});
 
   factory _$AlbumImpl.fromJson(Map<String, dynamic> json) =>
       _$$AlbumImplFromJson(json);
@@ -181,13 +195,15 @@ class _$AlbumImpl implements _Album {
   @override
   final String artistDisplayName;
   @override
-  final int added;
-  @override
   final int songCount;
+  @override
+  final String imageUrl;
+  @override
+  final int added;
 
   @override
   String toString() {
-    return 'Album(id: $id, artistId: $artistId, displayName: $displayName, artistDisplayName: $artistDisplayName, added: $added, songCount: $songCount)';
+    return 'Album(id: $id, artistId: $artistId, displayName: $displayName, artistDisplayName: $artistDisplayName, songCount: $songCount, imageUrl: $imageUrl, added: $added)';
   }
 
   @override
@@ -202,15 +218,17 @@ class _$AlbumImpl implements _Album {
                 other.displayName == displayName) &&
             (identical(other.artistDisplayName, artistDisplayName) ||
                 other.artistDisplayName == artistDisplayName) &&
-            (identical(other.added, added) || other.added == added) &&
             (identical(other.songCount, songCount) ||
-                other.songCount == songCount));
+                other.songCount == songCount) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.added, added) || other.added == added));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, artistId, displayName,
-      artistDisplayName, added, songCount);
+      artistDisplayName, songCount, imageUrl, added);
 
   @JsonKey(ignore: true)
   @override
@@ -232,8 +250,9 @@ abstract class _Album implements Album {
       required final String artistId,
       required final String displayName,
       required final String artistDisplayName,
-      required final int added,
-      required final int songCount}) = _$AlbumImpl;
+      required final int songCount,
+      required final String imageUrl,
+      required final int added}) = _$AlbumImpl;
 
   factory _Album.fromJson(Map<String, dynamic> json) = _$AlbumImpl.fromJson;
 
@@ -246,9 +265,11 @@ abstract class _Album implements Album {
   @override
   String get artistDisplayName;
   @override
-  int get added;
-  @override
   int get songCount;
+  @override
+  String get imageUrl;
+  @override
+  int get added;
   @override
   @JsonKey(ignore: true)
   _$$AlbumImplCopyWith<_$AlbumImpl> get copyWith =>

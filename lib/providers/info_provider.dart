@@ -46,6 +46,7 @@ Future<List<Song>> fetchRecentlyPlayed(FetchRecentlyPlayedRef ref) async {
       })
   );
   var desponse = jsonDecode(response.body);
+  // print("Response: $desponse");
   if(desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }

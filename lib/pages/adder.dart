@@ -39,6 +39,8 @@ class _AdderPageState extends ConsumerState {
       page = 1;
     }else if(state.state == "foundresults" && page == 3) {
       stateKeys = List.generate(state.findResults.length, (index) => GlobalKey<InfoEditorCardState>());
+    }else if(state.state == "addresult") {
+      print("Adder: Done!");
     }
     return Container(
       margin: EdgeInsets.fromLTRB(14, 10, 14, 10),
@@ -72,7 +74,7 @@ class _AdderPageState extends ConsumerState {
                     ]
                   )
                 ),
-              "addresults" =>
+              "addresult" =>
                 fourthStep(state.addResult),
               _ =>
                 Text("Unknown state: ${state.state}")

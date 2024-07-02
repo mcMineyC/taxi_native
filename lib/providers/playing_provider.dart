@@ -30,6 +30,7 @@ class PlayerInfo with _$PlayerInfo {
     // required double percent,
     required bool isPlaying,
     required List<Song> queue,
+    required Song currentSong,
   }) = _PlayerInfo;
 }
 
@@ -52,22 +53,22 @@ class Player extends _$Player {
   PlayerInfo build() {
     print("Playerinfo: New playerinfo");
     return PlayerInfo(
-      id: '1d822fde641a597beb59ba197388b85e40eafb39d007be53f1c1da9b36d6a8df_00879b25b7e52685100c540611c16c5974b224ef79c692a9f58e43764532064d_afb9215a04c112dd39bcdd9b67b9f45073eb8aa9dbbdb73f6adceaa6e7840e57',
-      artistId: '1d822fde641a597beb59ba197388b85e40eafb39d007be53f1c1da9b36d6a8df',
-      albumId: '1d822fde641a597beb59ba197388b85e40eafb39d007be53f1c1da9b36d6a8df_00879b25b7e52685100c540611c16c5974b224ef79c692a9f58e43764532064d',
+      id: 'empty',
+      artistId: 'empty',
+      albumId: 'empty',
       displayName: '',
       artistDisplayName: '',
       albumDisplayName: '',
       duration: 213.6,
       position: 0,
       isPlaying: false,
+      currentSong: Song.empty(),
       queue: [],
     );
   }
 
   void init() async {
     if(_hIsInit) return;
-    String backendUrl = await ref.read(backendUrlProvider.future);
     _hIsInit = true;
     print("Playerinfo: init");
     audioHandler.mediaItem.distinct().listen((MediaItem? i) {
@@ -76,6 +77,7 @@ class Player extends _$Player {
         albumDisplayName: i?.album ?? "",
         artistDisplayName: i?.artist ?? "",
         duration: i?.duration?.inMilliseconds.toDouble() ?? 0,
+        currentSong: (i?.extras?["song"] ?? Song.empty()) as Song,
       );
     });
     audioHandler.playbackState.map((state) => state.position).distinct().listen((Duration? d) {
@@ -90,9 +92,9 @@ class Player extends _$Player {
     audioHandler.queue.listen((List<MediaItem> l) {
       print("New queue thing: ${l.map((i) => i.title)}");
     });
-    audioHandler.mediaItem.map((i) => i?.id.split("/")[i.id.split("/").length - 2]).distinct().listen((String? id) {
-      if(id == null) return;
-      if(!id.contains(backendUrl)) return;
+    audioHandler.mediaItem.map((i) => (i?.extras?["song"] ?? Song.empty()) as Song).distinct().listen((Song s) {
+      var id = s.id;
+      if(id == "empty") return;
       print("New id: $id");
       ref.read(addRecentlyPlayedProvider(id).future).then((value) {
         if(value == true) ref.refresh(fetchRecentlyPlayedProvider.future);
@@ -136,7 +138,6 @@ class Player extends _$Player {
 
   void setSong(String id) async {
     if(state.id == id) return; //Debounce duplicate calls :shrug: maybe this will fix the duplicates in recentlyplayed
-    String backendUrl = await ref.read(backendUrlProvider.future);
     print("Song setter: $id");
     ref.read(findSongProvider(id).future).then((songObject) async {
       state = state.copyWith(
@@ -149,19 +150,28 @@ class Player extends _$Player {
         queue: [songObject],
         isPlaying: true,
       );
-      final item = MediaItem(
-        id: '$backendUrl/info/songs/$id/audio',
-        title: state.displayName,
-        album: state.albumDisplayName,
-        artist: state.artistDisplayName,
-        duration: Duration(seconds: state.duration.toInt()),
-        artUri: Uri.parse('$backendUrl/info/songs/$id/image'),
-      );
-      await audioHandler.playMediaItem(item);
+      var video = await yt.videos.get(songObject.youtubeId);
+      var manifest = await yt.videos.streamsClient.getManifest(songObject.youtubeId);
+      var streamInfo = manifest.audioOnly.withHighestBitrate();
+      if(streamInfo != null) {
+        print("Playing youtube video ${songObject.youtubeId}, ${video.title} - ${video.author}");
+        final item = MediaItem(
+          id: streamInfo.url.toString(),
+          title: songObject.displayName,
+          album: songObject.albumDisplayName,
+          artist: songObject.artistDisplayName,
+          duration: video.duration,
+          artUri: Uri.parse(songObject.imageUrl),
+          extras: {
+            "song": songObject
+          }
+        );
+        await audioHandler.playMediaItem(item);
+        audioHandler.updateQueue([item]);
+      }
     });
   }
   void setItem(Song i) async {
-    String backendUrl = await ref.read(backendUrlProvider.future);
     state = state.copyWith(
       id: i.id,
       artistId: i.artistId,
@@ -172,64 +182,68 @@ class Player extends _$Player {
       queue: [i],
       isPlaying: true,
     );
-    final item = MediaItem(
-      id: '$backendUrl/info/songs/${i.id}/audio',
-      title: state.displayName,
-      album: state.albumDisplayName,
-      artist: state.artistDisplayName,
-      duration: Duration(seconds: state.duration.toInt()),
-      artUri: Uri.parse('$backendUrl/info/songs/${i.id}/image'),
-    );
-    await audioHandler.playMediaItem(item);
+    var video = await yt.videos.get(i.youtubeId);
+    var manifest = await yt.videos.streamsClient.getManifest(i.youtubeId);
+    var streamInfo = manifest.audioOnly.withHighestBitrate();
+    if(streamInfo != null) {
+      print("Playing youtube video ${i.youtubeId}, ${video.title} - ${video.author}");
+      final item = MediaItem(
+        id: streamInfo.url.toString(),
+        title: i.displayName,
+        album: i.albumDisplayName,
+        artist: i.artistDisplayName,
+        duration: video.duration,
+        artUri: Uri.parse(i.imageUrl),
+        extras: {
+          "song": i
+        }
+      );
+      await audioHandler.playMediaItem(item);
+      audioHandler.updateQueue([item]);
+    }
   }
 
   void setAlbum(String id) async {
-    String backendUrl = await ref.read(backendUrlProvider.future);
     List<Song> songs = await ref.read(findSongsByAlbumProvider(id).future);
     state = state.copyWith(queue: songs);
-    audioHandler.updateQueue(songs.map((s) => s.toMediaItem(backendUrl)).toList());
+    audioHandler.updateQueue(songs.map((s) => s.toMediaItem()).toList());
     audioHandler.skipToQueueItem(0);
   }
 
   void addAlbumToQueue(String id) async {
-    String backendUrl = await ref.read(backendUrlProvider.future);
     List<Song> songs = await ref.read(findSongsByAlbumProvider(id).future);
     state = state.copyWith(queue: [...state.queue, ...songs]);
-    audioHandler.addQueueItems(songs.map((s) => s.toMediaItem(backendUrl)).toList());
+    audioHandler.addQueueItems(songs.map((s) => s.toMediaItem()).toList());
   }
 
   void setArtist(String id) async {
-    String backendUrl = await ref.read(backendUrlProvider.future);
     List<Song> songs = await ref.read(findSongsByArtistProvider(id).future);
     state = state.copyWith(queue: songs);
-    audioHandler.updateQueue(songs.map((s) => s.toMediaItem(backendUrl)).toList());
+    audioHandler.updateQueue(songs.map((s) => s.toMediaItem()).toList());
     audioHandler.skipToQueueItem(0);
   }
 
   void addArtistToQueue(String id) async {
-    String backendUrl = await ref.read(backendUrlProvider.future);
     List<Song> songs = await ref.read(findSongsByArtistProvider(id).future);
     state = state.copyWith(queue: [...state.queue, ...songs]);
-    audioHandler.addQueueItems(songs.map((s) => s.toMediaItem(backendUrl)).toList());
+    audioHandler.addQueueItems(songs.map((s) => s.toMediaItem()).toList());
   }
 
   void setQueue(List<Song> queue) async {
-    String backendUrl = await ref.read(backendUrlProvider.future);
     audioHandler.updateQueue(
-      queue.map((s) => s.toMediaItem(backendUrl)).toList()
+      queue.map((s) => s.toMediaItem()).toList()
     );
     state = state.copyWith(queue: queue);
   }
 
   void addToQueue(Song song) async {
-    audioHandler.addQueueItem(song.toMediaItem((await ref.read(backendUrlProvider.future))));
+    audioHandler.addQueueItem(song.toMediaItem());
     state = state.copyWith(queue: [...state.queue, song]);
   }
 
   void addIdToQueue(String id) async {
-    String backendUrl = await ref.read(backendUrlProvider.future);
     Song song = await ref.read(findSongProvider(id).future);
-    audioHandler.addQueueItem(song.toMediaItem(backendUrl));
+    audioHandler.addQueueItem(song.toMediaItem());
     state = state.copyWith(queue: [...state.queue, song]);
   }
 
@@ -241,32 +255,31 @@ class Player extends _$Player {
 
   void moveQueueItem(int oldIndex, int newIndex) async {
     print("Moving queue item $oldIndex to $newIndex");
-    String backendUrl = await ref.read(backendUrlProvider.future);
     List<Song> queue = [...state.queue];
     Song s = queue.removeAt(oldIndex);
     queue.insert(newIndex, s);
     state = state.copyWith(queue: queue);
-    audioHandler.updateQueue(queue.map((s) => s.toMediaItem(backendUrl)).toList());
+    audioHandler.updateQueue(queue.map((s) => s.toMediaItem()).toList());
   }
 
-  void playYoutubeId(String id, String? album) async {
-    var video = await yt.videos.get(id);
-    var manifest = await yt.videos.streamsClient.getManifest(id);
-    var streamInfo = manifest.audioOnly.withHighestBitrate();
-    if(streamInfo != null) {
-      print("Playing youtube video $id, ${video.title} - ${video.author}");
-      final item = MediaItem(
-        id: streamInfo.url.toString(),
-        title: video.title,
-        album: album ?? "NOTHING",
-        artist: video.author,
-        duration: video.duration,
-        artUri: Uri.parse(video.thumbnails.highResUrl),
-      );
-      await audioHandler.playMediaItem(item);
-      audioHandler.updateQueue([item]);
-    }
-  }
+  // void playYoutubeId(String id, String? album) async {
+  //   var video = await yt.videos.get(id);
+  //   var manifest = await yt.videos.streamsClient.getManifest(id);
+  //   var streamInfo = manifest.audioOnly.withHighestBitrate();
+  //   if(streamInfo != null) {
+  //     print("Playing youtube video $id, ${video.title} - ${video.author}");
+  //     final item = MediaItem(
+  //       id: streamInfo.url.toString(),
+  //       title: video.title,
+  //       album: album ?? "NOTHING",
+  //       artist: video.author,
+  //       duration: video.duration,
+  //       artUri: Uri.parse(video.thumbnails.highResUrl),
+  //     );
+  //     await audioHandler.playMediaItem(item);
+  //     audioHandler.updateQueue([item]);
+  //   }
+  // }
 
   void playFindResult(FindResult result) async {
     var video = await yt.videos.get(result.songs[0].id);

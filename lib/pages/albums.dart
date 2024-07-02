@@ -20,7 +20,7 @@ class AlbumsPage extends ConsumerWidget {
         data: (data) {
           var cardList = data.map((e) => {
             "text": e.displayName,
-            "image": "$url/info/albums/${e.id}/image",
+            "image": e.imageUrl,
             "id": e.id,
             "type": "album"
           }).toList();

@@ -108,6 +108,7 @@ Future<List<Song>> findBatchSongs(FindBatchSongsRef ref, List<String> ids) async
       })
   );
   var desponse = jsonDecode(response.body);
+  // print("Response: $desponse");
   if(desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }

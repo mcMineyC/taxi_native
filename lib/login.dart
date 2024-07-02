@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/user_provider.dart';
-import 'locations.dart';
 import 'helper_widgets.dart';
 
 class LoginPage extends ConsumerStatefulWidget {

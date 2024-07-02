@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:context_menus/context_menus.dart';
 import 'providers/playing_provider.dart';
+import 'tone_extension.dart';
 
 class MediaCard extends ConsumerWidget{
   final String text;
@@ -196,3 +197,34 @@ Widget EmptyCardRow(){
   );
 }
 
+class CheckBox extends StatefulWidget {
+  final Function(bool) callback;
+  final bool initialValue;
+
+  const CheckBox({Key? key, required this.callback, required this.initialValue}) : super(key: key);
+
+  @override
+  _CheckBoxState createState() => _CheckBoxState(initalValue: initialValue);
+}
+
+class _CheckBoxState extends State<CheckBox> {
+  bool _checkbox = false;
+  bool clicked = false;
+  bool initalValue;
+
+  _CheckBoxState({required this.initalValue});
+
+  @override
+  Widget build(BuildContext context) {
+    return Checkbox(
+      value: (clicked ? _checkbox : initalValue),
+      onChanged: (value) {
+        setState(() {
+          clicked = true;
+          _checkbox = value!;
+          widget.callback(value);
+        });
+      }
+    );
+  }
+}

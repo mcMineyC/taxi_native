@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:audioplayers/audioplayers.dart';
 
 import 'info_provider.dart';
 
@@ -16,7 +15,7 @@ class Prefs with _$Prefs {
   }) = _Prefs;
 }
 
-var prefs = Prefs(backendUrl: 'http://192.168.30.36:3000', authToken: '', username: 'jedi');
+var prefs = Prefs(backendUrl: 'http://localhost:3000', authToken: '', username: 'jedi');
 
 @riverpod
 Future<String> backendUrl(BackendUrlRef ref) async {

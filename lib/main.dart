@@ -1,6 +1,4 @@
 // ignore_for_file: implicit_call_tearoffs
-
-import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,6 +9,8 @@ import 'package:context_menus/context_menus.dart';
 import 'package:audio_service/audio_service.dart';
 import 'service_locator.dart';
 import 'providers/playing_provider.dart';
+import 'platform_utils.dart';
+import 'tone_extension.dart';
 
 
 import 'pages/error.dart';
@@ -25,24 +25,6 @@ import 'pages/landing.dart';
 import 'login.dart';
 
 late AudioHandler audioHandler;
-
-class PlatformUtils {
-  static bool get isMobile {
-    if (kIsWeb) {
-      return false;
-    } else {
-      return Platform.isIOS || Platform.isAndroid;
-    }
-  }
-
-  static bool get isDesktop {
-    if (kIsWeb) {
-      return false;
-    } else {
-      return Platform.isLinux || Platform.isFuchsia || Platform.isWindows || Platform.isMacOS;
-    }
-  }
-}
 
 void main() async{
   if(PlatformUtils.isDesktop){

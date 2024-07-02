@@ -313,5 +313,20 @@ class _LoginTokenProviderElement extends AutoDisposeFutureProviderElement<int>
   @override
   String get token => (origin as LoginTokenProvider).token;
 }
+
+String _$authtokenHash() => r'58bed1944a30e243f1df807d499670d726c2e65d';
+
+/// See also [authtoken].
+@ProviderFor(authtoken)
+final authtokenProvider = AutoDisposeFutureProvider<String>.internal(
+  authtoken,
+  name: r'authtokenProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$authtokenHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AuthtokenRef = AutoDisposeFutureProviderRef<String>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

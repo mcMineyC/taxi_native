@@ -74,3 +74,9 @@ Future<int> loginToken(LoginTokenRef ref, String token) async {
     return -1;
   }
 }
+
+@riverpod
+Future<String> authtoken(AuthtokenRef ref) async {
+  SharedPreferences _sp = await SharedPreferences.getInstance();
+  return _sp.getString("token") ?? "";
+}

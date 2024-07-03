@@ -12,6 +12,7 @@ import 'preferences_provider.dart';
 
 import '../types/song.dart';
 import '../types/searchresult.dart';
+import '../types/queueitem.dart';
 
 part 'playing_provider.g.dart';
 part 'playing_provider.freezed.dart';
@@ -29,8 +30,8 @@ class PlayerInfo with _$PlayerInfo {
     required int    position,
     // required double percent,
     required bool isPlaying,
-    required List<Song> queue,
-    required Song currentSong,
+    required List<QueueItem> queue,
+    required int currentIndex,
   }) = _PlayerInfo;
 }
 
@@ -62,8 +63,8 @@ class Player extends _$Player {
       duration: 213.6,
       position: 0,
       isPlaying: false,
-      currentSong: Song.empty(),
       queue: [],
+      currentIndex: -1,
     );
   }
 
@@ -77,7 +78,7 @@ class Player extends _$Player {
         albumDisplayName: i?.album ?? "",
         artistDisplayName: i?.artist ?? "",
         duration: i?.duration?.inMilliseconds.toDouble() ?? 0,
-        currentSong: (i?.extras?["song"] ?? Song.empty()) as Song,
+        currentIndex: (i?.extras?["index"] ?? -1) as int,
       );
     });
     audioHandler.playbackState.map((state) => state.position).distinct().listen((Duration? d) {
@@ -89,13 +90,9 @@ class Player extends _$Player {
     audioHandler.playbackState.map((s) => s.playing).distinct().listen((bool b) {
       state = state.copyWith(isPlaying: b);
     });
-    audioHandler.queue.listen((List<MediaItem> l) {
-      print("New queue thing: ${l.map((i) => i.title)}");
-    });
     audioHandler.mediaItem.map((i) => (i?.extras?["song"] ?? Song.empty()) as Song).distinct().listen((Song s) {
       var id = s.id;
       if(id == "empty") return;
-      print("New id: $id");
       ref.read(addRecentlyPlayedProvider(id).future).then((value) {
         if(value == true) ref.refresh(fetchRecentlyPlayedProvider.future);
       });
@@ -105,7 +102,6 @@ class Player extends _$Player {
   void play() async {
     audioHandler.play();
     state = state.copyWith(isPlaying: true);
-
   }
 
   void pause() async {
@@ -147,104 +143,77 @@ class Player extends _$Player {
         displayName: songObject.displayName,
         albumDisplayName: songObject.albumDisplayName,
         artistDisplayName: songObject.artistDisplayName,
-        queue: [songObject],
+        queue: [songObject.toQueueItem()],
         isPlaying: true,
       );
-      var video = await yt.videos.get(songObject.youtubeId);
-      var manifest = await yt.videos.streamsClient.getManifest(songObject.youtubeId);
-      var streamInfo = manifest.audioOnly.withHighestBitrate();
-      if(streamInfo != null) {
-        print("Playing youtube video ${songObject.youtubeId}, ${video.title} - ${video.author}");
-        final item = MediaItem(
-          id: streamInfo.url.toString(),
-          title: songObject.displayName,
-          album: songObject.albumDisplayName,
-          artist: songObject.artistDisplayName,
-          duration: video.duration,
-          artUri: Uri.parse(songObject.imageUrl),
-          extras: {
-            "song": songObject
-          }
-        );
-        await audioHandler.playMediaItem(item);
-        audioHandler.updateQueue([item]);
-      }
+      await audioHandler.playMediaItem(songObject.toMediaItem());
+      audioHandler.updateQueue([songObject.toMediaItem()]);
     });
   }
-  void setItem(Song i) async {
+  void setItem(QueueItem i) async {
     state = state.copyWith(
       id: i.id,
       artistId: i.artistId,
       albumId: i.albumId,
       displayName: i.displayName,
-      albumDisplayName: i.albumDisplayName,
-      artistDisplayName: i.artistDisplayName,
+      albumDisplayName: i.albumName,
+      artistDisplayName: i.artistName,
       queue: [i],
       isPlaying: true,
     );
-    var video = await yt.videos.get(i.youtubeId);
-    var manifest = await yt.videos.streamsClient.getManifest(i.youtubeId);
-    var streamInfo = manifest.audioOnly.withHighestBitrate();
-    if(streamInfo != null) {
-      print("Playing youtube video ${i.youtubeId}, ${video.title} - ${video.author}");
-      final item = MediaItem(
-        id: streamInfo.url.toString(),
-        title: i.displayName,
-        album: i.albumDisplayName,
-        artist: i.artistDisplayName,
-        duration: video.duration,
-        artUri: Uri.parse(i.imageUrl),
-        extras: {
-          "song": i
-        }
-      );
-      await audioHandler.playMediaItem(item);
-      audioHandler.updateQueue([item]);
-    }
+    await audioHandler.playMediaItem(i.toMediaItem());
+    audioHandler.updateQueue([i.toMediaItem()]);
   }
 
   void setAlbum(String id) async {
-    List<Song> songs = await ref.read(findSongsByAlbumProvider(id).future);
-    state = state.copyWith(queue: songs);
-    audioHandler.updateQueue(songs.map((s) => s.toMediaItem()).toList());
-    audioHandler.skipToQueueItem(0);
+    ref.read(findSongsByAlbumProvider(id).future).then((songs) async {
+      state = state.copyWith(queue: songs.map((s) => s.toQueueItem()).toList());
+      audioHandler.updateQueue(songs.map((s) => s.toMediaItem()).toList());
+      audioHandler.skipToQueueItem(0);
+      await audioHandler.play();
+    });
   }
 
   void addAlbumToQueue(String id) async {
-    List<Song> songs = await ref.read(findSongsByAlbumProvider(id).future);
-    state = state.copyWith(queue: [...state.queue, ...songs]);
-    audioHandler.addQueueItems(songs.map((s) => s.toMediaItem()).toList());
+    ref.read(findSongsByAlbumProvider(id).future).then((songs) async {
+      audioHandler.updateQueue([...audioHandler.queue.value, ...songs.map((s) => s.toMediaItem()).toList()]);
+      state = state.copyWith(queue: songs.map((s) => s.toQueueItem()).toList());
+    });
   }
 
   void setArtist(String id) async {
-    List<Song> songs = await ref.read(findSongsByArtistProvider(id).future);
-    state = state.copyWith(queue: songs);
-    audioHandler.updateQueue(songs.map((s) => s.toMediaItem()).toList());
-    audioHandler.skipToQueueItem(0);
+    ref.read(findSongsByArtistProvider(id).future).then((songs) async {
+      audioHandler.updateQueue([...audioHandler.queue.value, ...songs.map((s) => s.toMediaItem()).toList()]);
+      state = state.copyWith(queue: songs.map((s) => s.toQueueItem()).toList());
+    });
   }
 
   void addArtistToQueue(String id) async {
-    List<Song> songs = await ref.read(findSongsByArtistProvider(id).future);
-    state = state.copyWith(queue: [...state.queue, ...songs]);
-    audioHandler.addQueueItems(songs.map((s) => s.toMediaItem()).toList());
+    ref.read(findSongsByArtistProvider(id).future).then((songs) async {
+      audioHandler.updateQueue([...audioHandler.queue.value, ...songs.map((s) => s.toMediaItem()).toList()]);
+      state = state.copyWith(queue: songs.map((s) => s.toQueueItem()).toList());
+    });
   }
 
   void setQueue(List<Song> queue) async {
-    audioHandler.updateQueue(
-      queue.map((s) => s.toMediaItem()).toList()
-    );
-    state = state.copyWith(queue: queue);
+    audioHandler.updateQueue(queue.map((s) => s.toMediaItem()).toList());
+    state = state.copyWith(queue: queue.map((s) => s.toQueueItem()).toList());
   }
 
   void addToQueue(Song song) async {
-    audioHandler.addQueueItem(song.toMediaItem());
-    state = state.copyWith(queue: [...state.queue, song]);
+    state = state.copyWith(
+      queue: [...state.queue, song.toQueueItem()],
+    );
+    audioHandler.updateQueue([...audioHandler.queue.value, song.toMediaItem()]);
   }
 
   void addIdToQueue(String id) async {
-    Song song = await ref.read(findSongProvider(id).future);
-    audioHandler.addQueueItem(song.toMediaItem());
-    state = state.copyWith(queue: [...state.queue, song]);
+    ref.read(findSongProvider(id).future).then((songObject) async {
+      state = state.copyWith(
+        queue: [...state.queue, songObject.toQueueItem()],
+      );
+      audioHandler.updateQueue([...audioHandler.queue.value, songObject.toMediaItem()]);
+    });
   }
 
   void clearQueue() async {
@@ -255,49 +224,39 @@ class Player extends _$Player {
 
   void moveQueueItem(int oldIndex, int newIndex) async {
     print("Moving queue item $oldIndex to $newIndex");
-    List<Song> queue = [...state.queue];
-    Song s = queue.removeAt(oldIndex);
-    queue.insert(newIndex, s);
+    List<QueueItem> queue = [...state.queue];
+    QueueItem s = queue.removeAt(oldIndex);
+    queue.insert(newIndex - 1, s);
     state = state.copyWith(queue: queue);
     audioHandler.updateQueue(queue.map((s) => s.toMediaItem()).toList());
   }
 
-  // void playYoutubeId(String id, String? album) async {
-  //   var video = await yt.videos.get(id);
-  //   var manifest = await yt.videos.streamsClient.getManifest(id);
-  //   var streamInfo = manifest.audioOnly.withHighestBitrate();
-  //   if(streamInfo != null) {
-  //     print("Playing youtube video $id, ${video.title} - ${video.author}");
-  //     final item = MediaItem(
-  //       id: streamInfo.url.toString(),
-  //       title: video.title,
-  //       album: album ?? "NOTHING",
-  //       artist: video.author,
-  //       duration: video.duration,
-  //       artUri: Uri.parse(video.thumbnails.highResUrl),
-  //     );
-  //     await audioHandler.playMediaItem(item);
-  //     audioHandler.updateQueue([item]);
-  //   }
-  // }
+  void playYoutubeId(String id) async {
+    var video = await yt.videos.get(id);
+    print("Playing youtube video $id, ${video.title} - ${video.author}");
+    final item = MediaItem(
+      id: id,
+      title: video.title,
+      album: "NOTHING",
+      artist: video.author,
+      duration: video.duration,
+      artUri: Uri.parse(video.thumbnails.highResUrl),
+    );
+    await audioHandler.playMediaItem(item);
+    audioHandler.updateQueue([item]);
+  }
 
   void playFindResult(FindResult result) async {
-    var video = await yt.videos.get(result.songs[0].id);
-    var manifest = await yt.videos.streamsClient.getManifest(result.songs[0].id);
-    var streamInfo = manifest.audioOnly.withHighestBitrate();
-    if(streamInfo != null) {
-      print("Playing youtube video ${result.songs[0].id}, ${video.title} - ${video.author}");
-      final item = MediaItem(
-        id: streamInfo.url.toString(),
-        title: video.title,
-        album: result.album ?? "NOTHING",
-        artist: video.author,
-        duration: video.duration,
-        artUri: Uri.parse(video.thumbnails.highResUrl),
-      );
-      await audioHandler.playMediaItem(item);
-      audioHandler.updateQueue([item]);
-    }
+    final item = MediaItem(
+      id: result.songs[0].id,
+      title: result.songs[0].title,
+      album: result.album ?? "NOTHING",
+      artist: result.artist ?? "NOTHING",
+      duration: Duration(milliseconds: 1000),
+      artUri: Uri.parse("https://determine.com"),
+    );
+    await audioHandler.playMediaItem(item);
+    audioHandler.updateQueue([item]);
   }
 }
 
@@ -305,24 +264,52 @@ class AudioServiceHandler extends BaseAudioHandler
     with QueueHandler {
     
     final player = AudioPlayer();
+    final secondaryPlayer = AudioPlayer();
+    final YoutubeExplode yt = YoutubeExplode();
     int playingIndex = 0;
     bool shuffle = false;
-
-    // void init(positionChangedCallback, playbackFinishedCallback) {
-    //   player.onPositionChanged.listen(positionChangedCallback);
-    // }
+    bool nextPrepped = false;
+    bool mainInUse = false;
+    String nextUrl = "";
+    int duration = 0;
 
     void init() {
       player.onPositionChanged.listen((Duration d) {
+        if(!mainInUse) return; 
+        // print("AudioServiceHandler: player position changed");
         playbackState.add(playbackState.value.copyWith(updatePosition: d));
       });
       player.onDurationChanged.listen((Duration d) {
-        mediaItem.add(mediaItem.value?.copyWith(duration: d));
+        if(!mainInUse) return; 
+        if(mainInUse) mediaItem.add(mediaItem.value?.copyWith(duration: d));
+        duration = d.inMilliseconds;
       });
       player.onPlayerComplete.listen((_) {
+        if(!mainInUse) return; 
         playbackState.add(playbackState.value.copyWith(playing: false));
         mediaItem.drain();
         skipToNext();
+      });
+      secondaryPlayer.onPositionChanged.listen((Duration d) {
+        if(mainInUse) return; 
+        // print("AudioServiceHandler: player secondary position changed");
+        playbackState.add(playbackState.value.copyWith(updatePosition: d));
+      });
+      secondaryPlayer.onDurationChanged.listen((Duration d) {
+        if(mainInUse) return; 
+        mediaItem.add(mediaItem.value?.copyWith(duration: d));
+        duration = d.inMilliseconds;
+      });
+      secondaryPlayer.onPlayerComplete.listen((_) {
+        if(mainInUse) return; 
+        playbackState.add(playbackState.value.copyWith(playing: false));
+        mediaItem.drain();
+        skipToNext();
+      });
+      queue.listen((q) {
+        if(q.isNotEmpty && q.length-1 > playingIndex && !nextPrepped) {
+          prepNextItem();
+        }
       });
     }
 
@@ -355,39 +342,47 @@ class AudioServiceHandler extends BaseAudioHandler
       await prepMediaItem(mediaitem);
       queue.value = [mediaitem];
       queue.add(queue.value);
+      playingIndex = 0;
     }
 
     @override
     Future<void> playFromUri(Uri uri, [Map<String, dynamic>? extras]) async {
+      print("AudioServiceHandler: playing using ${mainInUse ? "secondary" : "primary"} player");
       playbackState.add(playbackState.value.copyWith(playing: true));
-      await player.play(UrlSource(uri.toString()));
+      await (mainInUse ? secondaryPlayer : player).play(UrlSource(uri.toString()));
+      mainInUse = !mainInUse;
     }
     
     @override
     Future<void> play() async {
+      print("AudioServiceHandler: playing using ${!mainInUse ? "secondary" : "primary"} player");
       playbackState.add(playbackState.value.copyWith(playing: true));
-      return player.resume();
+      return (!mainInUse ? secondaryPlayer : player).resume();
     }
     
     @override
     Future<void> pause() async {
+      print("AudioServiceHandler: playing using ${!mainInUse ? "secondary" : "primary"} player");
       playbackState.add(playbackState.value.copyWith(playing: false));
-      return player.pause();
+      return (!mainInUse ? secondaryPlayer : player).pause();
     }
     
     @override
     Future<void> stop() async {
       playbackState.add(playbackState.value.copyWith(playing: false));
-      return player.stop();
+      mainInUse = !mainInUse;
+      nextPrepped = false;
+      return (mainInUse ? secondaryPlayer : player).stop();
     }
 
     @override
     Future<void> seek(Duration position) async {
-      player.seek(position);
+      (!mainInUse ? secondaryPlayer : player).seek(position);
     }
 
     @override
     Future<void> skipToQueueItem(int index) async {
+      playingIndex = index;
       prepMediaItem(queue.value[index]);
     }
     
@@ -403,7 +398,7 @@ class AudioServiceHandler extends BaseAudioHandler
     
     @override
     Future<void> skipToPrevious() async {
-      if(playingIndex-1 < queue.value.length) {
+      if(playingIndex-1 < 0) {
         playingIndex = queue.value.length - 1;
       }else{
         playingIndex--;
@@ -411,9 +406,46 @@ class AudioServiceHandler extends BaseAudioHandler
       prepMediaItem(queue.value[playingIndex]);
     }
 
-    Future<void> prepMediaItem(MediaItem mediaitem) async {
-      playbackState.add(playbackState.value.copyWith(playing: true));
-      mediaItem.add(mediaitem);
-      player.play(UrlSource(mediaitem.id));
+    Future<void> prepMediaItem(MediaItem mediaITem) async {
+      print("AudioServiceHandler: extras: ${mediaITem.extras}");
+      if(queue.value.isEmpty) nextPrepped = false;
+      if(!nextPrepped) {
+        MediaItem mediaitem = mediaITem;
+        var video = await fetchYTVideo(mediaitem.id);
+        (mainInUse ? secondaryPlayer : player).play(UrlSource(video[0]));
+        mainInUse = !mainInUse;
+        if(mediaitem.artUri.toString() == "https://determine.com") mediaitem = mediaitem.copyWith(artUri: Uri.parse(video[1]));
+        playbackState.add(playbackState.value.copyWith(playing: true));
+        mediaItem.add(mediaitem.copyWith(extras: {"song": mediaITem.extras?["song"], "index": playingIndex}));
+        prepNextItem();
+      }else{
+        (mainInUse ? secondaryPlayer : player).play(UrlSource(nextUrl));
+        mainInUse = !mainInUse;
+        nextPrepped = false;
+        playbackState.add(playbackState.value.copyWith(playing: true));
+        mediaItem.add(mediaITem.copyWith(extras: {"song": mediaITem.extras?["song"], "index": playingIndex}));
+        prepNextItem();
+      }
+    }
+
+    Future<List<String>> fetchYTVideo(String id) async {
+      var video = await yt.videos.get(id);
+      var manifest = await yt.videos.streamsClient.getManifest(id);
+      var streamInfo = manifest.audioOnly.withHighestBitrate();
+      return [streamInfo.url.toString(), video.thumbnails.highResUrl];
+    }
+    
+    prepNextItem() async {
+      // return
+      if(queue.value.length <= 1) return;
+      var nextIndex = (playingIndex + 1 > queue.value.length-1) ? 0 : playingIndex + 1;
+      print("AudioServiceHandler: preparing next item ($nextIndex) using ${mainInUse ? "secondary" : "primary"} player");
+      var mediaitem = queue.value[nextIndex];
+      var video = await fetchYTVideo(queue.value[nextIndex].id);
+      (mainInUse ? secondaryPlayer : player).setSourceUrl(video[0]);
+      // mainInUse = !mainInUse;
+      nextPrepped = true;
+      nextUrl = video[0];
+      print("AudioServiceHandler: prepared next item");
     }
 }

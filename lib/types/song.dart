@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:audio_service/audio_service.dart';
-import '../service_locator.dart';
+import 'queueitem.dart';
 
 part 'song.freezed.dart';
 part 'song.g.dart';
@@ -27,14 +27,30 @@ class Song with _$Song {
   
   MediaItem toMediaItem() {
     return MediaItem(
-      id: id,
+      id: youtubeId,
       title: displayName,
       album: albumDisplayName,
       artist: artistDisplayName,
       duration: Duration(seconds: duration.toInt()),
       artUri: Uri.parse(imageUrl),
+      extras: {
+        "song": this
+      },
     );
   }
+
+  QueueItem toQueueItem() => QueueItem(
+    type: "song",
+    id: id,
+    albumId: albumId,
+    artistId: artistId,
+    displayName: displayName,
+    albumName: albumDisplayName,
+    artistName: artistDisplayName,
+    imageUrl: imageUrl,
+    youtubeId: youtubeId,
+    duration: duration
+  );
 }
 
  Song EmptySong(){

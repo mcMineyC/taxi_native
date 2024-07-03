@@ -26,8 +26,8 @@ mixin _$PlayerInfo {
   int get position =>
       throw _privateConstructorUsedError; // required double percent,
   bool get isPlaying => throw _privateConstructorUsedError;
-  List<Song> get queue => throw _privateConstructorUsedError;
-  Song get currentSong => throw _privateConstructorUsedError;
+  List<QueueItem> get queue => throw _privateConstructorUsedError;
+  int get currentIndex => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PlayerInfoCopyWith<PlayerInfo> get copyWith =>
@@ -50,10 +50,8 @@ abstract class $PlayerInfoCopyWith<$Res> {
       double duration,
       int position,
       bool isPlaying,
-      List<Song> queue,
-      Song currentSong});
-
-  $SongCopyWith<$Res> get currentSong;
+      List<QueueItem> queue,
+      int currentIndex});
 }
 
 /// @nodoc
@@ -79,7 +77,7 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
     Object? position = null,
     Object? isPlaying = null,
     Object? queue = null,
-    Object? currentSong = null,
+    Object? currentIndex = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -121,20 +119,12 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
       queue: null == queue
           ? _value.queue
           : queue // ignore: cast_nullable_to_non_nullable
-              as List<Song>,
-      currentSong: null == currentSong
-          ? _value.currentSong
-          : currentSong // ignore: cast_nullable_to_non_nullable
-              as Song,
+              as List<QueueItem>,
+      currentIndex: null == currentIndex
+          ? _value.currentIndex
+          : currentIndex // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $SongCopyWith<$Res> get currentSong {
-    return $SongCopyWith<$Res>(_value.currentSong, (value) {
-      return _then(_value.copyWith(currentSong: value) as $Val);
-    });
   }
 }
 
@@ -156,11 +146,8 @@ abstract class _$$PlayerInfoImplCopyWith<$Res>
       double duration,
       int position,
       bool isPlaying,
-      List<Song> queue,
-      Song currentSong});
-
-  @override
-  $SongCopyWith<$Res> get currentSong;
+      List<QueueItem> queue,
+      int currentIndex});
 }
 
 /// @nodoc
@@ -184,7 +171,7 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
     Object? position = null,
     Object? isPlaying = null,
     Object? queue = null,
-    Object? currentSong = null,
+    Object? currentIndex = null,
   }) {
     return _then(_$PlayerInfoImpl(
       id: null == id
@@ -226,11 +213,11 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
       queue: null == queue
           ? _value._queue
           : queue // ignore: cast_nullable_to_non_nullable
-              as List<Song>,
-      currentSong: null == currentSong
-          ? _value.currentSong
-          : currentSong // ignore: cast_nullable_to_non_nullable
-              as Song,
+              as List<QueueItem>,
+      currentIndex: null == currentIndex
+          ? _value.currentIndex
+          : currentIndex // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -248,8 +235,8 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       required this.duration,
       required this.position,
       required this.isPlaying,
-      required final List<Song> queue,
-      required this.currentSong})
+      required final List<QueueItem> queue,
+      required this.currentIndex})
       : _queue = queue;
 
   @override
@@ -271,20 +258,20 @@ class _$PlayerInfoImpl implements _PlayerInfo {
 // required double percent,
   @override
   final bool isPlaying;
-  final List<Song> _queue;
+  final List<QueueItem> _queue;
   @override
-  List<Song> get queue {
+  List<QueueItem> get queue {
     if (_queue is EqualUnmodifiableListView) return _queue;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_queue);
   }
 
   @override
-  final Song currentSong;
+  final int currentIndex;
 
   @override
   String toString() {
-    return 'PlayerInfo(id: $id, artistId: $artistId, albumId: $albumId, displayName: $displayName, artistDisplayName: $artistDisplayName, albumDisplayName: $albumDisplayName, duration: $duration, position: $position, isPlaying: $isPlaying, queue: $queue, currentSong: $currentSong)';
+    return 'PlayerInfo(id: $id, artistId: $artistId, albumId: $albumId, displayName: $displayName, artistDisplayName: $artistDisplayName, albumDisplayName: $albumDisplayName, duration: $duration, position: $position, isPlaying: $isPlaying, queue: $queue, currentIndex: $currentIndex)';
   }
 
   @override
@@ -309,8 +296,8 @@ class _$PlayerInfoImpl implements _PlayerInfo {
             (identical(other.isPlaying, isPlaying) ||
                 other.isPlaying == isPlaying) &&
             const DeepCollectionEquality().equals(other._queue, _queue) &&
-            (identical(other.currentSong, currentSong) ||
-                other.currentSong == currentSong));
+            (identical(other.currentIndex, currentIndex) ||
+                other.currentIndex == currentIndex));
   }
 
   @override
@@ -326,7 +313,7 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       position,
       isPlaying,
       const DeepCollectionEquality().hash(_queue),
-      currentSong);
+      currentIndex);
 
   @JsonKey(ignore: true)
   @override
@@ -346,8 +333,8 @@ abstract class _PlayerInfo implements PlayerInfo {
       required final double duration,
       required final int position,
       required final bool isPlaying,
-      required final List<Song> queue,
-      required final Song currentSong}) = _$PlayerInfoImpl;
+      required final List<QueueItem> queue,
+      required final int currentIndex}) = _$PlayerInfoImpl;
 
   @override
   String get id;
@@ -368,9 +355,9 @@ abstract class _PlayerInfo implements PlayerInfo {
   @override // required double percent,
   bool get isPlaying;
   @override
-  List<Song> get queue;
+  List<QueueItem> get queue;
   @override
-  Song get currentSong;
+  int get currentIndex;
   @override
   @JsonKey(ignore: true)
   _$$PlayerInfoImplCopyWith<_$PlayerInfoImpl> get copyWith =>

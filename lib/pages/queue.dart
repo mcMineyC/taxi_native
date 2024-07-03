@@ -14,6 +14,7 @@ class QueuePage extends ConsumerWidget {
 
     final queue = ref.watch(playerProvider.select((value) => value.queue));
     final id = ref.watch(playerProvider.select((value) => value.id));
+    final int playingIndex = ref.watch(playerProvider.select((value) => value.currentIndex));
     return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -37,7 +38,7 @@ class QueuePage extends ConsumerWidget {
                     for (int index = 0; index < queue.length; index += 1)
                       ListTile(
                         key: Key('$index'),
-                        tileColor: queue[index].id == id ? colorScheme.primary : ((((index+1)%2)>0) ? oddItemColor : evenItemColor),
+                        tileColor: index == playingIndex ? colorScheme.primary : ((((index+1)%2)>0) ? oddItemColor : evenItemColor),
                         title: Text(queue[index].displayName),
                       ),
                   ],

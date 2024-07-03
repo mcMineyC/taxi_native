@@ -26,7 +26,10 @@ mixin _$QueueItem {
   String get artistId => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
   String get albumName => throw _privateConstructorUsedError;
+  String get artistName => throw _privateConstructorUsedError;
+  String get imageUrl => throw _privateConstructorUsedError;
   String get youtubeId => throw _privateConstructorUsedError;
+  double get duration => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -46,7 +49,10 @@ abstract class $QueueItemCopyWith<$Res> {
       String artistId,
       String displayName,
       String albumName,
-      String youtubeId});
+      String artistName,
+      String imageUrl,
+      String youtubeId,
+      double duration});
 }
 
 /// @nodoc
@@ -68,7 +74,10 @@ class _$QueueItemCopyWithImpl<$Res, $Val extends QueueItem>
     Object? artistId = null,
     Object? displayName = null,
     Object? albumName = null,
+    Object? artistName = null,
+    Object? imageUrl = null,
     Object? youtubeId = null,
+    Object? duration = null,
   }) {
     return _then(_value.copyWith(
       type: null == type
@@ -95,10 +104,22 @@ class _$QueueItemCopyWithImpl<$Res, $Val extends QueueItem>
           ? _value.albumName
           : albumName // ignore: cast_nullable_to_non_nullable
               as String,
+      artistName: null == artistName
+          ? _value.artistName
+          : artistName // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
       youtubeId: null == youtubeId
           ? _value.youtubeId
           : youtubeId // ignore: cast_nullable_to_non_nullable
               as String,
+      duration: null == duration
+          ? _value.duration
+          : duration // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -118,7 +139,10 @@ abstract class _$$QueueItemImplCopyWith<$Res>
       String artistId,
       String displayName,
       String albumName,
-      String youtubeId});
+      String artistName,
+      String imageUrl,
+      String youtubeId,
+      double duration});
 }
 
 /// @nodoc
@@ -138,7 +162,10 @@ class __$$QueueItemImplCopyWithImpl<$Res>
     Object? artistId = null,
     Object? displayName = null,
     Object? albumName = null,
+    Object? artistName = null,
+    Object? imageUrl = null,
     Object? youtubeId = null,
+    Object? duration = null,
   }) {
     return _then(_$QueueItemImpl(
       type: null == type
@@ -165,10 +192,22 @@ class __$$QueueItemImplCopyWithImpl<$Res>
           ? _value.albumName
           : albumName // ignore: cast_nullable_to_non_nullable
               as String,
+      artistName: null == artistName
+          ? _value.artistName
+          : artistName // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
       youtubeId: null == youtubeId
           ? _value.youtubeId
           : youtubeId // ignore: cast_nullable_to_non_nullable
               as String,
+      duration: null == duration
+          ? _value.duration
+          : duration // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -183,7 +222,10 @@ class _$QueueItemImpl extends _QueueItem {
       required this.artistId,
       required this.displayName,
       required this.albumName,
-      required this.youtubeId})
+      required this.artistName,
+      required this.imageUrl,
+      required this.youtubeId,
+      required this.duration})
       : super._();
 
   factory _$QueueItemImpl.fromJson(Map<String, dynamic> json) =>
@@ -202,11 +244,17 @@ class _$QueueItemImpl extends _QueueItem {
   @override
   final String albumName;
   @override
+  final String artistName;
+  @override
+  final String imageUrl;
+  @override
   final String youtubeId;
+  @override
+  final double duration;
 
   @override
   String toString() {
-    return 'QueueItem(type: $type, id: $id, albumId: $albumId, artistId: $artistId, displayName: $displayName, albumName: $albumName, youtubeId: $youtubeId)';
+    return 'QueueItem(type: $type, id: $id, albumId: $albumId, artistId: $artistId, displayName: $displayName, albumName: $albumName, artistName: $artistName, imageUrl: $imageUrl, youtubeId: $youtubeId, duration: $duration)';
   }
 
   @override
@@ -223,14 +271,20 @@ class _$QueueItemImpl extends _QueueItem {
                 other.displayName == displayName) &&
             (identical(other.albumName, albumName) ||
                 other.albumName == albumName) &&
+            (identical(other.artistName, artistName) ||
+                other.artistName == artistName) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
             (identical(other.youtubeId, youtubeId) ||
-                other.youtubeId == youtubeId));
+                other.youtubeId == youtubeId) &&
+            (identical(other.duration, duration) ||
+                other.duration == duration));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, type, id, albumId, artistId,
-      displayName, albumName, youtubeId);
+      displayName, albumName, artistName, imageUrl, youtubeId, duration);
 
   @JsonKey(ignore: true)
   @override
@@ -254,7 +308,10 @@ abstract class _QueueItem extends QueueItem {
       required final String artistId,
       required final String displayName,
       required final String albumName,
-      required final String youtubeId}) = _$QueueItemImpl;
+      required final String artistName,
+      required final String imageUrl,
+      required final String youtubeId,
+      required final double duration}) = _$QueueItemImpl;
   _QueueItem._() : super._();
 
   factory _QueueItem.fromJson(Map<String, dynamic> json) =
@@ -273,7 +330,13 @@ abstract class _QueueItem extends QueueItem {
   @override
   String get albumName;
   @override
+  String get artistName;
+  @override
+  String get imageUrl;
+  @override
   String get youtubeId;
+  @override
+  double get duration;
   @override
   @JsonKey(ignore: true)
   _$$QueueItemImplCopyWith<_$QueueItemImpl> get copyWith =>

@@ -410,9 +410,9 @@ class AudioServiceHandler extends BaseAudioHandler
       if(!nextPrepped) {
         MediaItem mediaitem = mediaITem;
         var video = await fetchYTVideo(mediaitem.id);
-        (mainInUse ? secondaryPlayer : player).play(UrlSource(video[0]));
+        (mainInUse ? secondaryPlayer : player).play(UrlSource(video));
         mainInUse = !mainInUse;
-        if(mediaitem.artUri.toString() == "https://determine.com") mediaitem = mediaitem.copyWith(artUri: Uri.parse(video[1]));
+        // if(mediaitem.artUri.toString() == "https://determine.com") mediaitem = mediaitem.copyWith(artUri: Uri.parse(video[1]));
         playbackState.add(playbackState.value.copyWith(playing: true));
         mediaItem.add(mediaitem.copyWith(extras: {"song": mediaITem.extras?["song"], "index": playingIndex}));
         prepNextItem();
@@ -427,7 +427,9 @@ class AudioServiceHandler extends BaseAudioHandler
     }
 
     Future<String> fetchYTVideo(String id) async {
-      return (await http.get(Uri.parse("https://eatthecow.mooo.com:3030/video/url/$id"))).body.toString();
+      var url = await http.get(Uri.parse("https://eatthecow.mooo.com:3030/video/url/$id"));
+      print("I have url: ${url.body}");
+      return url.body;
     }
     
     prepNextItem() async {
@@ -437,6 +439,7 @@ class AudioServiceHandler extends BaseAudioHandler
       print("AudioServiceHandler: preparing next item ($nextIndex) using ${mainInUse ? "secondary" : "primary"} player");
       var mediaitem = queue.value[nextIndex];
       var video = await fetchYTVideo(queue.value[nextIndex].id);
+      print("Prefetching $video");
       (mainInUse ? secondaryPlayer : player).setSourceUrl(video);
       // mainInUse = !mainInUse;
       nextPrepped = true;

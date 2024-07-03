@@ -3,7 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:youtube_explode_dart/youtube_explode_dart.dart';
+import 'package:http/http.dart' as http;
 import '../service_locator.dart';
 
 import 'fetched_data_provider.dart';
@@ -45,7 +45,6 @@ class PlayerInfo with _$PlayerInfo {
 @riverpod
 class Player extends _$Player {
   final AudioHandler audioHandler = ServiceLocator().get<AudioHandler>();
-  final YoutubeExplode yt = YoutubeExplode();
   bool _hIsInit = false;
   late final _sp;
   bool _isInit = false;
@@ -232,15 +231,15 @@ class Player extends _$Player {
   }
 
   void playYoutubeId(String id) async {
-    var video = await yt.videos.get(id);
-    print("Playing youtube video $id, ${video.title} - ${video.author}");
+    // var video = await yt.videos.get(id);
+    // print("Playing youtube video $id");
     final item = MediaItem(
       id: id,
-      title: video.title,
+      title: "Youtube Video",
       album: "NOTHING",
-      artist: video.author,
-      duration: video.duration,
-      artUri: Uri.parse(video.thumbnails.highResUrl),
+      artist: "Some channel",
+      duration: Duration(milliseconds: 1000),
+      artUri: Uri.parse("https://upload.wikimedia.org/wikipedia/commons/5/5f/Apple_Music_icon.svg"),
     );
     await audioHandler.playMediaItem(item);
     audioHandler.updateQueue([item]);
@@ -265,7 +264,6 @@ class AudioServiceHandler extends BaseAudioHandler
     
     final player = AudioPlayer();
     final secondaryPlayer = AudioPlayer();
-    final YoutubeExplode yt = YoutubeExplode();
     int playingIndex = 0;
     bool shuffle = false;
     bool nextPrepped = false;
@@ -428,11 +426,8 @@ class AudioServiceHandler extends BaseAudioHandler
       }
     }
 
-    Future<List<String>> fetchYTVideo(String id) async {
-      var video = await yt.videos.get(id);
-      var manifest = await yt.videos.streamsClient.getManifest(id);
-      var streamInfo = manifest.audioOnly.withHighestBitrate();
-      return [streamInfo.url.toString(), video.thumbnails.highResUrl];
+    Future<String> fetchYTVideo(String id) async {
+      return (await http.get(Uri.parse("https://eatthecow.mooo.com:3030/video/url/$id"))).body.toString();
     }
     
     prepNextItem() async {
@@ -442,10 +437,10 @@ class AudioServiceHandler extends BaseAudioHandler
       print("AudioServiceHandler: preparing next item ($nextIndex) using ${mainInUse ? "secondary" : "primary"} player");
       var mediaitem = queue.value[nextIndex];
       var video = await fetchYTVideo(queue.value[nextIndex].id);
-      (mainInUse ? secondaryPlayer : player).setSourceUrl(video[0]);
+      (mainInUse ? secondaryPlayer : player).setSourceUrl(video);
       // mainInUse = !mainInUse;
       nextPrepped = true;
-      nextUrl = video[0];
+      nextUrl = video;
       print("AudioServiceHandler: prepared next item");
     }
 }

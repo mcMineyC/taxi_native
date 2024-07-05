@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:http/http.dart' as http;
+import '../platform_utils.dart';
 import '../service_locator.dart';
 
 import 'fetched_data_provider.dart';
@@ -264,6 +265,8 @@ class AudioServiceHandler extends BaseAudioHandler
     
     final player = AudioPlayer();
     final secondaryPlayer = AudioPlayer();
+    final bool isWeb = PlatformUtils.isWeb;
+    String backendUrl = "";
     int playingIndex = 0;
     bool shuffle = false;
     bool nextPrepped = false;
@@ -271,7 +274,8 @@ class AudioServiceHandler extends BaseAudioHandler
     String nextUrl = "";
     int duration = 0;
 
-    void init() {
+    void init() async {
+      if(backendUrl == "") backendUrl = (await SharedPreferences.getInstance()).getString("backendUrl") ?? "https://eatthecow.mooo.com:3030";
       player.onPositionChanged.listen((Duration d) {
         if(!mainInUse) return; 
         // print("AudioServiceHandler: player position changed");
@@ -410,7 +414,8 @@ class AudioServiceHandler extends BaseAudioHandler
       if(!nextPrepped) {
         MediaItem mediaitem = mediaITem;
         var video = await fetchYTVideo(mediaitem.id);
-        (mainInUse ? secondaryPlayer : player).play(UrlSource(video));
+        var url = (PlatformUtils.isWeb) ? "$backendUrl/proxy/$video" : video;
+        (mainInUse ? secondaryPlayer : player).play(UrlSource(url));
         mainInUse = !mainInUse;
         // if(mediaitem.artUri.toString() == "https://determine.com") mediaitem = mediaitem.copyWith(artUri: Uri.parse(video[1]));
         playbackState.add(playbackState.value.copyWith(playing: true));
@@ -428,7 +433,6 @@ class AudioServiceHandler extends BaseAudioHandler
 
     Future<String> fetchYTVideo(String id) async {
       var url = await http.get(Uri.parse("https://eatthecow.mooo.com:3030/video/url/$id"));
-      print("I have url: ${url.body}");
       return url.body;
     }
     
@@ -439,11 +443,11 @@ class AudioServiceHandler extends BaseAudioHandler
       print("AudioServiceHandler: preparing next item ($nextIndex) using ${mainInUse ? "secondary" : "primary"} player");
       var mediaitem = queue.value[nextIndex];
       var video = await fetchYTVideo(queue.value[nextIndex].id);
-      print("Prefetching $video");
-      (mainInUse ? secondaryPlayer : player).setSourceUrl(video);
+      nextUrl = (PlatformUtils.isWeb) ? "$backendUrl/proxy/$video" : video;
+      print("Prefetching ${queue.value[nextIndex].id} on ${PlatformUtils.isWeb ? "web" : "desktop"}");
+      (mainInUse ? secondaryPlayer : player).setSourceUrl(nextUrl);
       // mainInUse = !mainInUse;
       nextPrepped = true;
-      nextUrl = video;
       print("AudioServiceHandler: prepared next item");
     }
 }

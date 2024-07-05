@@ -6,7 +6,7 @@ part of 'preferences_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$backendUrlHash() => r'7e1fd70ca3641e4979ee903e82358cab824ddcf6';
+String _$backendUrlHash() => r'4effdde9c1867c236834c61e53664b201243c41d';
 
 /// See also [backendUrl].
 @ProviderFor(backendUrl)

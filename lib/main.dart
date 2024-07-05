@@ -1,5 +1,4 @@
 // ignore_for_file: implicit_call_tearoffs
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:beamer/beamer.dart';
@@ -9,6 +8,7 @@ import 'package:context_menus/context_menus.dart';
 import 'package:audio_service/audio_service.dart';
 import 'service_locator.dart';
 import 'providers/playing_provider.dart';
+import 'providers/preferences_provider.dart';
 import 'platform_utils.dart';
 
 
@@ -44,7 +44,9 @@ void main() async{
   );
   // await audioHandler.playMediaItem(MediaItem(id: 'https://download.samplelib.com/mp3/sample-3s.mp3', title: 'Music', album: 'Album', artist: 'Artist', duration: const Duration(milliseconds: 20000)));
   ServiceLocator().register<AudioHandler>(audioHandler);
-
+  var p = Prefs(backendUrl: "https://eatthecow.mooo.com:3030", authToken: "", username: "");
+  await p.load();
+  ServiceLocator().register<Prefs>(p);
   runApp(
     ProviderScope(
       child: ContextMenuOverlay(

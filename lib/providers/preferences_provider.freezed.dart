@@ -110,11 +110,12 @@ class __$$PrefsImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$PrefsImpl implements _Prefs {
+class _$PrefsImpl extends _Prefs {
   _$PrefsImpl(
       {required this.backendUrl,
       required this.authToken,
-      required this.username});
+      required this.username})
+      : super._();
 
   @override
   final String backendUrl;
@@ -151,11 +152,12 @@ class _$PrefsImpl implements _Prefs {
       __$$PrefsImplCopyWithImpl<_$PrefsImpl>(this, _$identity);
 }
 
-abstract class _Prefs implements Prefs {
+abstract class _Prefs extends Prefs {
   factory _Prefs(
       {required final String backendUrl,
       required final String authToken,
       required final String username}) = _$PrefsImpl;
+  _Prefs._() : super._();
 
   @override
   String get backendUrl;

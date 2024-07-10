@@ -133,7 +133,7 @@ class Player extends _$Player {
   }
 
   void setSong(String id) async {
-    if(state.id == id) return; //Debounce duplicate calls :shrug: maybe this will fix the duplicates in recentlyplayed
+    // if(state.id == id) return; //Debounce duplicate calls :shrug: maybe this will fix the duplicates in recentlyplayed
     print("Song setter: $id");
     ref.read(findSongProvider(id).future).then((songObject) async {
       state = state.copyWith(
@@ -147,7 +147,6 @@ class Player extends _$Player {
         isPlaying: true,
       );
       await audioHandler.playMediaItem(songObject.toMediaItem());
-      audioHandler.updateQueue([songObject.toMediaItem()]);
     });
   }
   void setItem(QueueItem i) async {
@@ -161,8 +160,8 @@ class Player extends _$Player {
       queue: [i],
       isPlaying: true,
     );
-    await audioHandler.playMediaItem(i.toMediaItem());
     audioHandler.updateQueue([i.toMediaItem()]);
+    await audioHandler.playMediaItem(i.toMediaItem());
   }
 
   void setAlbum(String id) async {
@@ -183,7 +182,8 @@ class Player extends _$Player {
 
   void setArtist(String id) async {
     ref.read(findSongsByArtistProvider(id).future).then((songs) async {
-      audioHandler.updateQueue([...audioHandler.queue.value, ...songs.map((s) => s.toMediaItem()).toList()]);
+      await audioHandler.updateQueue([...songs.map((s) => s.toMediaItem()).toList()]);
+      audioHandler.skipToQueueItem(0);
       state = state.copyWith(queue: songs.map((s) => s.toQueueItem()).toList());
     });
   }
@@ -341,10 +341,12 @@ class AudioServiceHandler extends BaseAudioHandler
     
     @override
     Future<void> playMediaItem(MediaItem mediaitem) async {
-      await prepMediaItem(mediaitem);
+      playingIndex = 0;
+      player.stop();
+      secondaryPlayer.stop();
       queue.value = [mediaitem];
       queue.add(queue.value);
-      playingIndex = 0;
+      await prepMediaItem(mediaitem);
     }
 
     @override
@@ -366,7 +368,8 @@ class AudioServiceHandler extends BaseAudioHandler
     Future<void> pause() async {
       print("AudioServiceHandler: playing using ${!mainInUse ? "secondary" : "primary"} player");
       playbackState.add(playbackState.value.copyWith(playing: false));
-      return (!mainInUse ? secondaryPlayer : player).pause();
+      secondaryPlayer.pause();
+      return player.pause();
     }
     
     @override
@@ -374,7 +377,8 @@ class AudioServiceHandler extends BaseAudioHandler
       playbackState.add(playbackState.value.copyWith(playing: false));
       mainInUse = !mainInUse;
       nextPrepped = false;
-      return (mainInUse ? secondaryPlayer : player).stop();
+      secondaryPlayer.stop();
+      return player.stop();
     }
 
     @override
@@ -385,6 +389,7 @@ class AudioServiceHandler extends BaseAudioHandler
     @override
     Future<void> skipToQueueItem(int index) async {
       playingIndex = index;
+      nextPrepped = false;
       prepMediaItem(queue.value[index]);
     }
     
@@ -409,9 +414,12 @@ class AudioServiceHandler extends BaseAudioHandler
     }
 
     Future<void> prepMediaItem(MediaItem mediaITem) async {
-      print("AudioServiceHandler: extras: ${mediaITem.extras}");
       if(queue.value.isEmpty) nextPrepped = false;
+      print("AudioServiceHandler: extras: ${mediaITem.extras}");
       if(!nextPrepped) {
+        player.stop();
+        secondaryPlayer.stop();
+        print("AudioServiceHandler: playing item");
         MediaItem mediaitem = mediaITem;
         var video = await fetchYTVideo(mediaitem.id);
         var url = (PlatformUtils.isWeb) ? "$backendUrl/proxy/$video" : video;
@@ -422,6 +430,7 @@ class AudioServiceHandler extends BaseAudioHandler
         mediaItem.add(mediaitem.copyWith(extras: {"song": mediaITem.extras?["song"], "index": playingIndex}));
         prepNextItem();
       }else{
+        print("AudioServiceHandler: playing prepped item");
         (mainInUse ? secondaryPlayer : player).play(UrlSource(nextUrl));
         mainInUse = !mainInUse;
         nextPrepped = false;
@@ -437,7 +446,6 @@ class AudioServiceHandler extends BaseAudioHandler
     }
     
     prepNextItem() async {
-      // return
       if(queue.value.length <= 1) return;
       var nextIndex = (playingIndex + 1 > queue.value.length-1) ? 0 : playingIndex + 1;
       print("AudioServiceHandler: preparing next item ($nextIndex) using ${mainInUse ? "secondary" : "primary"} player");

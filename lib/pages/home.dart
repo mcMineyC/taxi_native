@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_side_sheet/modal_side_sheet.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../helper_widgets.dart';
 import '../providers/playing_provider.dart';
@@ -30,7 +29,7 @@ class HomePage extends ConsumerWidget {
           )
         ),
         title: Text(Beamer.of(context).currentPages.last.title ?? "Home"),
-        backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
         scrolledUnderElevation: 0.0,
         actions: [
           IconButton(
@@ -50,8 +49,8 @@ class HomePage extends ConsumerWidget {
         show: true,
         sheetWidth: 96,
         sheetBody: NavigationRail(
-                    backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-                    indicatorColor: Theme.of(context).colorScheme.inversePrimary,
+                    backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+                    // indicatorColor: Theme.of(context).colorScheme.inversePrimary,
                     labelType: NavigationRailLabelType.selected,
                     destinations: const [
                       NavigationRailDestination(
@@ -82,6 +81,14 @@ class HomePage extends ConsumerWidget {
                         icon: Icon(Icons.download_rounded),
                         label: Text("Adder"),
                       ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.checklist_rounded),
+                        label: Text("Roadmap"),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.bug_report_rounded),
+                        label: Text("Report an issue"),
+                      ),
                     ],
                     selectedIndex: () {
                       switch (Beamer.of(context).currentPages.last.key) {
@@ -99,6 +106,10 @@ class HomePage extends ConsumerWidget {
                           return 5;
                         case ValueKey(value: 'adder'):
                           return 6;
+                        case ValueKey(value: 'roadmap'):
+                          return 7;
+                        case ValueKey(value: 'issues'):
+                          return 8;
                         default:
                           return 0;
                     }}(),
@@ -132,7 +143,7 @@ class HomePage extends ConsumerWidget {
                     },
                   ),
         body: Container(
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: Theme.of(context).colorScheme.surfaceContainer,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -173,7 +184,7 @@ class HomePage extends ConsumerWidget {
                           Container(  // Button group
                             child: Row(
                               children: [
-                                FilledButton(
+                                FilledButton.tonal(
                                   child: Container(
                                     constraints: const BoxConstraints(
                                       minHeight: 48,
@@ -186,7 +197,7 @@ class HomePage extends ConsumerWidget {
                                   }
                                 ),
                                 const SpacerWidget(width: 8),
-                                FilledButton(
+                                FilledButton.tonal(
                                   child: Container(
                                     constraints: const BoxConstraints(
                                       minHeight: 48,
@@ -201,7 +212,7 @@ class HomePage extends ConsumerWidget {
                                   }
                                 ),
                                 const SpacerWidget(width: 8),
-                                FilledButton(
+                                FilledButton.tonal(
                                   child: Container(
                                     constraints: const BoxConstraints(
                                       minHeight: 48,
@@ -217,8 +228,6 @@ class HomePage extends ConsumerWidget {
                               ]
                             )
                           ),
-
-
                           Expanded(
                             child: Text(
                               "Right",
@@ -237,7 +246,7 @@ class HomePage extends ConsumerWidget {
                       minHeight: 8,
                       borderRadius: BorderRadius.circular(9999),
                       value: player.duration == 0 ? 0 : player.position / player.duration,
-                      backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+                      // backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
                     )
                   ),
                 ]

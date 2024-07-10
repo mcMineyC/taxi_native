@@ -7,6 +7,7 @@ import '../providers/new_provider.dart';
 import '../providers/info_provider.dart';
 import '../providers/user_provider.dart';
 import '../providers/preferences_provider.dart';
+import '../providers/playing_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:beamer/beamer.dart';
 
@@ -22,6 +23,8 @@ class LandingPage extends ConsumerWidget {
     handleError(ref, fetchNewSongsProvider, bd);
     handleError(ref, fetchRecentlyPlayedProvider, bd);
     handleError(ref, userNameProvider, bd);
+
+    ref.read(playerProvider.notifier).setArtist("d37ebd110ec1813f206f2f339c3c077e77ddbac3ae981174df651ebc1fd56f9b");
 
     return Container(
       margin: EdgeInsets.fromLTRB(12, 0, 12, 0),

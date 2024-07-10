@@ -16,11 +16,13 @@ class QueuePage extends ConsumerWidget {
     final id = ref.watch(playerProvider.select((value) => value.id));
     final int playingIndex = ref.watch(playerProvider.select((value) => value.currentIndex));
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(    // Action chips
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
+          margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+          child: Row(    // Action chips
             children: [
-              OutlinedButton(
+              FilledButton(
                 child: Text('Clear Queue'),
                 onPressed: () {
                   ref.read(playerProvider.notifier).clearQueue();
@@ -28,6 +30,7 @@ class QueuePage extends ConsumerWidget {
               ),
             ]
           ),
+        ),
           Expanded(
             child: SingleChildScrollView(
               child: Material(

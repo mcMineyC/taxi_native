@@ -24,7 +24,7 @@ class LandingPage extends ConsumerWidget {
     handleError(ref, fetchRecentlyPlayedProvider, bd);
     handleError(ref, userNameProvider, bd);
 
-    ref.read(playerProvider.notifier).setArtist("d37ebd110ec1813f206f2f339c3c077e77ddbac3ae981174df651ebc1fd56f9b");
+    // ref.read(playerProvider.notifier).setArtist("d37ebd110ec1813f206f2f339c3c077e77ddbac3ae981174df651ebc1fd56f9b");
 
     return Container(
       margin: EdgeInsets.fromLTRB(12, 0, 12, 0),

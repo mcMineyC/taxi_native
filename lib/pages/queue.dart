@@ -19,7 +19,7 @@ class QueuePage extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
-          margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+          margin: EdgeInsets.fromLTRB(24, 12, 24, 12),
           child: Row(    // Action chips
             children: [
               FilledButton(
@@ -27,6 +27,11 @@ class QueuePage extends ConsumerWidget {
                 onPressed: () {
                   ref.read(playerProvider.notifier).clearQueue();
                 },
+              ),
+              Expanded(child: Container()),
+              OutlinedButton(
+                child: Text("Add to playlist"),
+                onPressed: () {},
               ),
             ]
           ),

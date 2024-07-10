@@ -166,32 +166,36 @@ class Player extends _$Player {
 
   void setAlbum(String id) async {
     ref.read(findSongsByAlbumProvider(id).future).then((songs) async {
-      state = state.copyWith(queue: songs.map((s) => s.toQueueItem()).toList());
       audioHandler.updateQueue(songs.map((s) => s.toMediaItem()).toList());
       audioHandler.skipToQueueItem(0);
-      await audioHandler.play();
+      state = state.copyWith(queue: songs.map((s) => s.toQueueItem()).toList());
+      print("Set album, new length: ${state.queue.length} & ${audioHandler.queue.value.length}");
     });
   }
 
   void addAlbumToQueue(String id) async {
     ref.read(findSongsByAlbumProvider(id).future).then((songs) async {
-      audioHandler.updateQueue([...audioHandler.queue.value, ...songs.map((s) => s.toMediaItem()).toList()]);
-      state = state.copyWith(queue: songs.map((s) => s.toQueueItem()).toList());
+      print("Adding ${songs.length} songs to queue");
+      audioHandler.updateQueue([...audioHandler.queue.value, ...songs.map((s) => s.toMediaItem())]);
+      state = state.copyWith(queue: [...audioHandler.queue.value.map((s) => s.toQueueItem()), ...songs.map((s) => s.toQueueItem())]);
+      print("Added album to queue, new length: ${state.queue.length} & ${audioHandler.queue.value.length}");
     });
   }
 
   void setArtist(String id) async {
     ref.read(findSongsByArtistProvider(id).future).then((songs) async {
-      await audioHandler.updateQueue([...songs.map((s) => s.toMediaItem()).toList()]);
+      audioHandler.updateQueue(songs.map((s) => s.toMediaItem()).toList());
       audioHandler.skipToQueueItem(0);
       state = state.copyWith(queue: songs.map((s) => s.toQueueItem()).toList());
+      print("Set artist, new length: ${state.queue.length} & ${audioHandler.queue.value.length}");
     });
   }
 
   void addArtistToQueue(String id) async {
     ref.read(findSongsByArtistProvider(id).future).then((songs) async {
       audioHandler.updateQueue([...audioHandler.queue.value, ...songs.map((s) => s.toMediaItem()).toList()]);
-      state = state.copyWith(queue: songs.map((s) => s.toQueueItem()).toList());
+      state = state.copyWith(queue: [...audioHandler.queue.value.map((s) => s.toQueueItem()), ...songs.map((s) => s.toQueueItem())]);
+      print("Added artist to queue, new length: ${state.queue.length} & ${audioHandler.queue.value.length}");
     });
   }
 
@@ -375,10 +379,12 @@ class AudioServiceHandler extends BaseAudioHandler
     @override
     Future<void> stop() async {
       playbackState.add(playbackState.value.copyWith(playing: false));
-      mainInUse = !mainInUse;
+      // mainInUse = !mainInUse;
       nextPrepped = false;
       secondaryPlayer.stop();
-      return player.stop();
+      player.stop();
+      player.setSourceUrl("");
+      secondaryPlayer.setSourceUrl("");
     }
 
     @override

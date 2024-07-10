@@ -53,6 +53,21 @@ class Song with _$Song {
   );
 }
 
+extension ConvertToQueueItem on MediaItem {
+  QueueItem toQueueItem() => QueueItem(
+    type: "song",
+    id: extras!["song"]?.id ?? "",
+    albumId: extras!["song"]?.albumId ?? "",
+    artistId: extras!["song"]?.artistId ?? "",
+    displayName: extras!["song"]?.displayName ?? "",
+    albumName: extras!["song"]?.albumDisplayName ?? "",
+    artistName: extras!["song"]?.artistDisplayName ?? "",
+    imageUrl: extras!["song"]?.imageUrl ?? "",
+    youtubeId: extras!["song"]?.youtubeId ?? "",
+    duration: extras!["song"]?.duration ?? 0,
+  );
+}    
+
  Song EmptySong(){
   return Song(id: 'empty', albumId: 'empty', artistId: 'empty', displayName: 'Unknown', albumDisplayName: 'Unknown', artistDisplayName: 'Unknown', added: 0, duration: 0.1, imageUrl: '', youtubeId: '000000');
 }

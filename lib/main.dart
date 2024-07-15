@@ -17,6 +17,7 @@ import 'pages/home.dart';
 import 'pages/artists.dart';
 import 'pages/artist.dart';
 import 'pages/albums.dart';
+import 'pages/album.dart';
 import 'pages/songs.dart';
 import 'pages/adder.dart';
 import 'pages/queue.dart';
@@ -89,12 +90,21 @@ class App extends ConsumerWidget {
           child: HomePage(homeJunk: LandingPage()),
         ),
         '/artist/:artistId': (context, state, data) {
-          final artistId = state.pathParameters['artistId']!;
+          final artistId = state.uri.toString().split("/artist/").last.split("/").first.split("?").first;
           return BeamPage(
             key: ValueKey("artist-view-$artistId"),
-            title: artistId,
+            title: "Artist",
             popToNamed: '/home',
-            child: ArtistPage(id: artistId),
+            child: HomePage(homeJunk: ArtistPage(id: artistId)),
+          );
+        },
+        '/album/:albumId': (context, state, data) {
+          final albumId = state.uri.toString().split("/album/").last.split("/").first.split("?").first;
+          return BeamPage(
+            key: ValueKey("album-view-$albumId"),
+            title: "Album",
+            popToNamed: '/home',
+            child: HomePage(homeJunk: AlbumPage(id: albumId)),
           );
         },
         '/artists': (context, state, data) => BeamPage(

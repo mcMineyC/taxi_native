@@ -176,7 +176,8 @@ class HomePage extends ConsumerWidget {
                           Expanded(
                             child: Text(
                               player.displayName,
-                              style: GoogleFonts.poppins()
+                              style: GoogleFonts.poppins(),
+                              overflow: TextOverflow.ellipsis
                             )
                           ),
                           
@@ -230,9 +231,10 @@ class HomePage extends ConsumerWidget {
                           ),
                           Expanded(
                             child: Text(
-                              "Right",
+                              "",
                               style: GoogleFonts.poppins(),
-                              textAlign: TextAlign.end
+                              textAlign: TextAlign.end,
+                              overflow: TextOverflow.ellipsis
                             )
                           ),
                         ]

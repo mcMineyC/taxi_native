@@ -182,3 +182,68 @@ Future<List<Song>> findSongsByArtist(FindSongsByArtistRef ref, String id) async 
   List<Song> songs = desponse["songs"].map<Song>((e) => Song.fromJson(e)).toList();
   return songs;
 }
+
+@riverpod
+Future<List<Album>> findAlbumsByArtist(FetchAlbumsRef ref, String id) async {
+  final _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+      Uri.parse("${await ref.read(backendUrlProvider.future)}/info/albums/by/$id"),
+      headers: Map<String, String>.from({
+        'Content-Type': 'application/json'
+      }),
+      body: jsonEncode(<String, String>{
+        'authtoken': _sp.getString("token") ?? ""
+      })
+  );
+  var desponse = jsonDecode(response.body);
+  if(desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
+  desponse = desponse["albums"];
+  var listThings = <Album>[];
+  desponse.forEach((element) {
+    var outStr = jsonEncode(element);
+    var song = Album.fromJson(jsonDecode(outStr));
+    listThings.add(song);
+  });
+  return listThings;
+}
+
+@riverpod
+Future<Album> findAlbum(FindAlbumRef ref, String id) async {
+  final _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+    Uri.parse("${await ref.read(backendUrlProvider.future)}/info/album/$id"),
+    headers: Map<String, String>.from({
+      'Content-Type': 'application/json'
+    }),
+    body: jsonEncode(<String, String>{
+      'authtoken': _sp.getString("token") ?? ""
+    })
+  );
+  var desponse = jsonDecode(response.body);
+  if(desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
+  print(desponse["album"]);
+  return Album.fromJson(desponse["album"]);
+}
+
+@riverpod
+Future<Artist> findArtist(FindArtistRef ref, String id) async {
+  final _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+    Uri.parse("${await ref.read(backendUrlProvider.future)}/info/artist/$id"),
+    headers: Map<String, String>.from({
+      'Content-Type': 'application/json'
+    }),
+    body: jsonEncode(<String, String>{
+      'authtoken': _sp.getString("token") ?? ""
+    })
+  );
+  var desponse = jsonDecode(response.body);
+  if(desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
+  return Artist.fromJson(desponse["artist"]);
+}

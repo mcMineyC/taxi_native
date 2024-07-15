@@ -101,11 +101,14 @@ class MediaCard extends ConsumerWidget{
                     break;
                   case "album":
                     print("Setting album");
-                    ref.read(playerProvider.notifier).setAlbum(thingId);
+                    // ref.read(playerProvider.notifier).setAlbum(thingId);
+                    Beamer.of(context).beamToNamed("/album/$thingId");
                     break;
                   case "artist":
                     print("Setting artist");
-                    ref.read(playerProvider.notifier).setArtist(thingId);
+                    // ref.read(playerProvider.notifier).setArtist(thingId);
+                    Beamer.of(context).beamToNamed("/artist/$thingId");
+                    // Beamer.of(context).update(: BeamState.fromUriString('/artist/$thingId'));
                     break;
                   case "placeholder":
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Hmm, nothing here. The real question is why do you just go around randomly clicking loading things? ><")));
@@ -225,6 +228,36 @@ class _CheckBoxState extends State<CheckBox> {
           widget.callback(value);
         });
       }
+    );
+  }
+}
+
+class FancyImage extends StatelessWidget {
+  final String url;
+  final int width;
+  final int height;
+  final double radius;
+  const FancyImage({Key? key, required this.url, required this.width, required this.height, this.radius = 12}) : super(key: key);
+
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(24, 20, 24, 0),
+      height: height.toDouble(),
+      width:  width.toDouble(),
+      child: CachedNetworkImage(
+        imageUrl: url,
+        imageBuilder: (context, imageProvider) => Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(radius),
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+        placeholder: (context, url) => Container(decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12))),
+        errorWidget: (context, url, error) => Icon(Icons.error_outline_rounded,color:Colors.pink[700]),
+      ),
     );
   }
 }

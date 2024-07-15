@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:cached_network_image/cached_network_image.dart';
 
 import '../providers/error_watcher.dart';
 import '../providers/fetched_data_provider.dart';
@@ -128,8 +128,8 @@ class AlbumPage extends ConsumerWidget {
             },
           ),
         ),
-        loading: () => CircularProgressIndicator(),
-        error: (_, __) => CircularProgressIndicator(),
+        loading: () => Center(child: CircularProgressIndicator()),
+        error: (_, __) => Center(child: CircularProgressIndicator()),
       ),
     ]);
   }

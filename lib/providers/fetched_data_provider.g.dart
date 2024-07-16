@@ -584,7 +584,7 @@ class _FindSongsByArtistProviderElement
 }
 
 String _$findAlbumsByArtistHash() =>
-    r'216daf4d62f30032c2ced391a059f135b7c88fdc';
+    r'8a51736745cfa5b42f2e208b84df56225239cf3e';
 
 /// See also [findAlbumsByArtist].
 @ProviderFor(findAlbumsByArtist)
@@ -712,6 +712,268 @@ class _FindAlbumsByArtistProviderElement
 
   @override
   String get id => (origin as FindAlbumsByArtistProvider).id;
+}
+
+String _$findNoSinglesByArtistHash() =>
+    r'f576a659a5d8a0a573c213e4a2233ac0507bb7e9';
+
+/// See also [findNoSinglesByArtist].
+@ProviderFor(findNoSinglesByArtist)
+const findNoSinglesByArtistProvider = FindNoSinglesByArtistFamily();
+
+/// See also [findNoSinglesByArtist].
+class FindNoSinglesByArtistFamily extends Family<AsyncValue<List<Album>>> {
+  /// See also [findNoSinglesByArtist].
+  const FindNoSinglesByArtistFamily();
+
+  /// See also [findNoSinglesByArtist].
+  FindNoSinglesByArtistProvider call(
+    String id,
+  ) {
+    return FindNoSinglesByArtistProvider(
+      id,
+    );
+  }
+
+  @override
+  FindNoSinglesByArtistProvider getProviderOverride(
+    covariant FindNoSinglesByArtistProvider provider,
+  ) {
+    return call(
+      provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'findNoSinglesByArtistProvider';
+}
+
+/// See also [findNoSinglesByArtist].
+class FindNoSinglesByArtistProvider
+    extends AutoDisposeFutureProvider<List<Album>> {
+  /// See also [findNoSinglesByArtist].
+  FindNoSinglesByArtistProvider(
+    String id,
+  ) : this._internal(
+          (ref) => findNoSinglesByArtist(
+            ref as FindNoSinglesByArtistRef,
+            id,
+          ),
+          from: findNoSinglesByArtistProvider,
+          name: r'findNoSinglesByArtistProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$findNoSinglesByArtistHash,
+          dependencies: FindNoSinglesByArtistFamily._dependencies,
+          allTransitiveDependencies:
+              FindNoSinglesByArtistFamily._allTransitiveDependencies,
+          id: id,
+        );
+
+  FindNoSinglesByArtistProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
+  final String id;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<Album>> Function(FindNoSinglesByArtistRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FindNoSinglesByArtistProvider._internal(
+        (ref) => create(ref as FindNoSinglesByArtistRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<Album>> createElement() {
+    return _FindNoSinglesByArtistProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FindNoSinglesByArtistProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin FindNoSinglesByArtistRef on AutoDisposeFutureProviderRef<List<Album>> {
+  /// The parameter `id` of this provider.
+  String get id;
+}
+
+class _FindNoSinglesByArtistProviderElement
+    extends AutoDisposeFutureProviderElement<List<Album>>
+    with FindNoSinglesByArtistRef {
+  _FindNoSinglesByArtistProviderElement(super.provider);
+
+  @override
+  String get id => (origin as FindNoSinglesByArtistProvider).id;
+}
+
+String _$findSinglesByArtistHash() =>
+    r'f90c769726bb6b723ad68d8a0818f2c8580bf396';
+
+/// See also [findSinglesByArtist].
+@ProviderFor(findSinglesByArtist)
+const findSinglesByArtistProvider = FindSinglesByArtistFamily();
+
+/// See also [findSinglesByArtist].
+class FindSinglesByArtistFamily extends Family<AsyncValue<List<Song>>> {
+  /// See also [findSinglesByArtist].
+  const FindSinglesByArtistFamily();
+
+  /// See also [findSinglesByArtist].
+  FindSinglesByArtistProvider call(
+    String id,
+  ) {
+    return FindSinglesByArtistProvider(
+      id,
+    );
+  }
+
+  @override
+  FindSinglesByArtistProvider getProviderOverride(
+    covariant FindSinglesByArtistProvider provider,
+  ) {
+    return call(
+      provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'findSinglesByArtistProvider';
+}
+
+/// See also [findSinglesByArtist].
+class FindSinglesByArtistProvider
+    extends AutoDisposeFutureProvider<List<Song>> {
+  /// See also [findSinglesByArtist].
+  FindSinglesByArtistProvider(
+    String id,
+  ) : this._internal(
+          (ref) => findSinglesByArtist(
+            ref as FindSinglesByArtistRef,
+            id,
+          ),
+          from: findSinglesByArtistProvider,
+          name: r'findSinglesByArtistProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$findSinglesByArtistHash,
+          dependencies: FindSinglesByArtistFamily._dependencies,
+          allTransitiveDependencies:
+              FindSinglesByArtistFamily._allTransitiveDependencies,
+          id: id,
+        );
+
+  FindSinglesByArtistProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
+  final String id;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<Song>> Function(FindSinglesByArtistRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FindSinglesByArtistProvider._internal(
+        (ref) => create(ref as FindSinglesByArtistRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<Song>> createElement() {
+    return _FindSinglesByArtistProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FindSinglesByArtistProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin FindSinglesByArtistRef on AutoDisposeFutureProviderRef<List<Song>> {
+  /// The parameter `id` of this provider.
+  String get id;
+}
+
+class _FindSinglesByArtistProviderElement
+    extends AutoDisposeFutureProviderElement<List<Song>>
+    with FindSinglesByArtistRef {
+  _FindSinglesByArtistProviderElement(super.provider);
+
+  @override
+  String get id => (origin as FindSinglesByArtistProvider).id;
 }
 
 String _$findAlbumHash() => r'6ff745283a9f706628605132a4124570fa94c697';

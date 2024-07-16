@@ -176,8 +176,8 @@ class Player extends _$Player {
   void addAlbumToQueue(String id) async {
     ref.read(findSongsByAlbumProvider(id).future).then((songs) async {
       print("Adding ${songs.length} songs to queue");
-      audioHandler.updateQueue([...audioHandler.queue.value, ...songs.map((s) => s.toMediaItem())]);
       state = state.copyWith(queue: [...audioHandler.queue.value.map((s) => s.toQueueItem()), ...songs.map((s) => s.toQueueItem())]);
+      audioHandler.updateQueue([...audioHandler.queue.value, ...songs.map((s) => s.toMediaItem())]);
       print("Added album to queue, new length: ${state.queue.length} & ${audioHandler.queue.value.length}");
     });
   }
@@ -193,9 +193,9 @@ class Player extends _$Player {
 
   void addArtistToQueue(String id) async {
     ref.read(findSongsByArtistProvider(id).future).then((songs) async {
-      audioHandler.updateQueue([...audioHandler.queue.value, ...songs.map((s) => s.toMediaItem()).toList()]);
       state = state.copyWith(queue: [...audioHandler.queue.value.map((s) => s.toQueueItem()), ...songs.map((s) => s.toQueueItem())]);
-      print("Added artist to queue, new length: ${state.queue.length} & ${audioHandler.queue.value.length}");
+      audioHandler.updateQueue([...audioHandler.queue.value, ...songs.map((s) => s.toMediaItem()).toList()]);
+      print("Added artist to queue, new length: ${songs.length} : ${state.queue.length}sq & ${audioHandler.queue.value.length}ahq");
     });
   }
 
@@ -416,6 +416,7 @@ class AudioServiceHandler extends BaseAudioHandler
       }else{
         playingIndex--;
       }
+      nextPrepped = false;
       prepMediaItem(queue.value[playingIndex]);
     }
 
@@ -447,7 +448,7 @@ class AudioServiceHandler extends BaseAudioHandler
     }
 
     Future<String> fetchYTVideo(String id) async {
-      var url = await http.get(Uri.parse("https://eatthecow.mooo.com:3030/video/url/$id"));
+      var url = await http.get(Uri.parse("https://eatthecow.mooo.com:3030/video/url${PlatformUtils.isIOS || PlatformUtils.isMacOS || PlatformUtils.isWeb ? "/ios" : ""}/$id"));
       return url.body;
     }
     

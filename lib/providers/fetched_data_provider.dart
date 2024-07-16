@@ -187,7 +187,7 @@ Future<List<Song>> findSongsByArtist(FindSongsByArtistRef ref, String id) async 
 Future<List<Album>> findAlbumsByArtist(FetchAlbumsRef ref, String id) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("${await ref.read(backendUrlProvider.future)}/info/albums/by/$id"),
+      Uri.parse("${await ref.read(backendUrlProvider.future)}/info/albums/by/artist/$id"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
@@ -208,6 +208,59 @@ Future<List<Album>> findAlbumsByArtist(FetchAlbumsRef ref, String id) async {
   });
   return listThings;
 }
+
+@riverpod
+Future<List<Album>> findNoSinglesByArtist(FindNoSinglesByArtistRef ref, String id) async {
+  final _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+      Uri.parse("${await ref.read(backendUrlProvider.future)}/info/albums/by/artist/$id?excludeSingles=true"),
+      headers: Map<String, String>.from({
+        'Content-Type': 'application/json'
+      }),
+      body: jsonEncode(<String, String>{
+        'authtoken': _sp.getString("token") ?? ""
+      })
+  );
+  var desponse = jsonDecode(response.body);
+  if(desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
+  desponse = desponse["albums"];
+  var listThings = <Album>[];
+  desponse.forEach((element) {
+    var outStr = jsonEncode(element);
+    var song = Album.fromJson(jsonDecode(outStr));
+    listThings.add(song);
+  });
+  return listThings;
+}
+
+@riverpod
+Future<List<Song>> findSinglesByArtist(FindSinglesByArtistRef ref, String id) async {
+  final _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+      Uri.parse("${await ref.read(backendUrlProvider.future)}/info/singles/by/artist/$id"),
+      headers: Map<String, String>.from({
+        'Content-Type': 'application/json'
+      }),
+      body: jsonEncode(<String, String>{
+        'authtoken': _sp.getString("token") ?? ""
+      })
+  );
+  var desponse = jsonDecode(response.body);
+  if(desponse["songs"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
+  desponse = desponse["songs"];
+  var listThings = <Song>[];
+  desponse.forEach((element) {
+    var outStr = jsonEncode(element);
+    var song = Song.fromJson(jsonDecode(outStr));
+    listThings.add(song);
+  });
+  return listThings;
+}
+
 
 @riverpod
 Future<Album> findAlbum(FindAlbumRef ref, String id) async {

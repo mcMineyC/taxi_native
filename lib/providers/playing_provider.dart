@@ -448,7 +448,7 @@ class AudioServiceHandler extends BaseAudioHandler
     }
 
     Future<String> fetchYTVideo(String id) async {
-      var url = await http.get(Uri.parse("https://eatthecow.mooo.com:3030/video/url${PlatformUtils.isIOS || PlatformUtils.isMacOS || PlatformUtils.isWeb ? "/ios" : ""}/$id"));
+      var url = await http.get(Uri.parse("https://eatthecow.mooo.com:3030/video/url${PlatformUtils.isWeb || PlatformUtils.isIOS || PlatformUtils.isMacOS ? "/ios" : ""}/$id"));
       return url.body;
     }
     

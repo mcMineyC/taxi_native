@@ -22,6 +22,7 @@ import 'pages/songs.dart';
 import 'pages/adder.dart';
 import 'pages/queue.dart';
 import 'pages/landing.dart';
+import 'pages/search.dart';
 import 'login.dart';
 
 late AudioHandler audioHandler;
@@ -136,6 +137,12 @@ class App extends ConsumerWidget {
           title: 'Adder',
           popToNamed: '/home',
           child: HomePage(homeJunk: AdderPage()),
+        ),
+        '/search': (context, state, data) => BeamPage(
+          key: const ValueKey('search'),
+          title: 'Search',
+          popToNamed: '/home',
+          child: HomePage(homeJunk: SearchPage()),
         ),
       }
     ),

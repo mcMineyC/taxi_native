@@ -9,41 +9,60 @@ import 'package:modal_side_sheet/modal_side_sheet.dart';
 
 import '../helper_widgets.dart';
 import '../providers/playing_provider.dart';
+import '../providers/search_provider.dart';
 
 class HomePage extends ConsumerWidget {
   HomePage({super.key, required this.homeJunk});
   final Widget homeJunk;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(playerProvider.notifier).init();
     final player = ref.watch(playerProvider);
+    // _searchController.text = ref.read(searchProvider.notifier).text;
     return Scaffold(
       // extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        leadingWidth: 96,
-        leading: Center(
-          child: IconButton (
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Beamer.of(context).beamBack(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Beamer.of(context).beamToNamed('/search'),
+        tooltip: "Search",
+        child: const Icon(Icons.search_rounded),
+      ),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(58),
+        child: Container(
+          color: Theme.of(context).colorScheme.surfaceContainer,
+          height: 58,
+          child: Row(
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () => Beamer.of(context).beamBack(),
+                ),
+              ),
+              Text(
+                "Home",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              Expanded(
+                // child: Container(color: Colors.blue)
+                child: Container(),
+              ),
+              Container(
+                width: 96,
+                child: Center(
+                  child: IconButton(
+                    icon: const Icon(Icons.settings),
+                    // onPressed: () => Beamer.of(context).beamToNamed('/settings'),
+                    onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Settings not done yet :("))),
+                    ),
+                  ),
+                ),
+            ]
           )
         ),
-        title: Text(Beamer.of(context).currentPages.last.title ?? "Home"),
-        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-        scrolledUnderElevation: 0.0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              const snacky = SnackBar(
-                // width: 10,
-                content: Text("Settings isn't done yet"),
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snacky);
-            },
-            tooltip: "Settings",
-          )
-        ],
       ),
       body: BodyWithSideSheet(
         show: true,

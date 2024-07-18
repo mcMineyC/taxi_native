@@ -91,13 +91,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     setState(() {
       showDialog(context: context, builder: (context) {
         return const AlertDialog(
-          content: Column(
-            children: [
-              Text("Logging in with authtoken..."),
-              CircularProgressIndicator()
-            ]
-          )
-        );
+          content: Wrap(
+              children: [
+                Text("Logging in with authtoken..."),
+                CircularProgressIndicator()
+              ]
+            )
+          );
       });
     });
     int code = await ref.read(loginTokenProvider(token).future);

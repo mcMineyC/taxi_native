@@ -24,11 +24,13 @@ class HomePage extends ConsumerWidget {
     // _searchController.text = ref.read(searchProvider.notifier).text;
     // ref.watch(searchProvider);
     var qText = ref.watch(searchProvider.notifier).text;
-    if(Beamer.of(context).currentPages.last.key == ValueKey("search") && qText.isNotEmpty && _searchController.text != qText) {
+    if(Beamer.of(context).currentPages.last.key == ValueKey("search") && qText.isNotEmpty && _searchController.text == "") {
       print("Restoring text: $qText");
       _searchController.text = qText;
+    }else if(Beamer.of(context).currentPages.last.key == ValueKey("search") && qText == "") {
+      _searchController.clear();
     }
-    if (Beamer.of(context).currentPages.last.key == ValueKey("search")) {
+    if(Beamer.of(context).currentPages.last.key == ValueKey("search")) {
       ref.watch(searchProvider.select((value) => value.query));
     }
     return Scaffold(

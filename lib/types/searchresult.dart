@@ -4,6 +4,35 @@ part 'searchresult.freezed.dart';
 part 'searchresult.g.dart';
 
 @freezed
+class SearchResponse with _$SearchResponse {
+  const SearchResponse._();
+  const factory SearchResponse({
+    required List<LocalSearchResult> songs,
+    required List<LocalSearchResult> albums,
+    required List<LocalSearchResult> artists,
+    required List<LocalSearchResult> singles,
+    required List<String> relevancy,
+  }) = _SearchResponse;
+
+  factory SearchResponse.fromJson(Map<String, dynamic> json) =>
+      _$SearchResponseFromJson(json);
+}
+
+@freezed
+class LocalSearchResult with _$LocalSearchResult {
+  const LocalSearchResult._();
+  const factory LocalSearchResult({
+    required String id,
+    required String displayName,
+    required String imageUrl,
+    required String type,
+  }) = _LocalSearchResult;
+
+  factory LocalSearchResult.fromJson(Map<String, dynamic> json) =>
+      _$LocalSearchResultFromJson(json);
+}
+
+@freezed
 class SearchResult with _$SearchResult {
   const SearchResult._();
   const factory SearchResult({

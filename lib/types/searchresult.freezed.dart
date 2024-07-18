@@ -14,6 +14,467 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
+SearchResponse _$SearchResponseFromJson(Map<String, dynamic> json) {
+  return _SearchResponse.fromJson(json);
+}
+
+/// @nodoc
+mixin _$SearchResponse {
+  List<LocalSearchResult> get songs => throw _privateConstructorUsedError;
+  List<LocalSearchResult> get albums => throw _privateConstructorUsedError;
+  List<LocalSearchResult> get artists => throw _privateConstructorUsedError;
+  List<LocalSearchResult> get singles => throw _privateConstructorUsedError;
+  List<String> get relevancy => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $SearchResponseCopyWith<SearchResponse> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $SearchResponseCopyWith<$Res> {
+  factory $SearchResponseCopyWith(
+          SearchResponse value, $Res Function(SearchResponse) then) =
+      _$SearchResponseCopyWithImpl<$Res, SearchResponse>;
+  @useResult
+  $Res call(
+      {List<LocalSearchResult> songs,
+      List<LocalSearchResult> albums,
+      List<LocalSearchResult> artists,
+      List<LocalSearchResult> singles,
+      List<String> relevancy});
+}
+
+/// @nodoc
+class _$SearchResponseCopyWithImpl<$Res, $Val extends SearchResponse>
+    implements $SearchResponseCopyWith<$Res> {
+  _$SearchResponseCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? songs = null,
+    Object? albums = null,
+    Object? artists = null,
+    Object? singles = null,
+    Object? relevancy = null,
+  }) {
+    return _then(_value.copyWith(
+      songs: null == songs
+          ? _value.songs
+          : songs // ignore: cast_nullable_to_non_nullable
+              as List<LocalSearchResult>,
+      albums: null == albums
+          ? _value.albums
+          : albums // ignore: cast_nullable_to_non_nullable
+              as List<LocalSearchResult>,
+      artists: null == artists
+          ? _value.artists
+          : artists // ignore: cast_nullable_to_non_nullable
+              as List<LocalSearchResult>,
+      singles: null == singles
+          ? _value.singles
+          : singles // ignore: cast_nullable_to_non_nullable
+              as List<LocalSearchResult>,
+      relevancy: null == relevancy
+          ? _value.relevancy
+          : relevancy // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$SearchResponseImplCopyWith<$Res>
+    implements $SearchResponseCopyWith<$Res> {
+  factory _$$SearchResponseImplCopyWith(_$SearchResponseImpl value,
+          $Res Function(_$SearchResponseImpl) then) =
+      __$$SearchResponseImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {List<LocalSearchResult> songs,
+      List<LocalSearchResult> albums,
+      List<LocalSearchResult> artists,
+      List<LocalSearchResult> singles,
+      List<String> relevancy});
+}
+
+/// @nodoc
+class __$$SearchResponseImplCopyWithImpl<$Res>
+    extends _$SearchResponseCopyWithImpl<$Res, _$SearchResponseImpl>
+    implements _$$SearchResponseImplCopyWith<$Res> {
+  __$$SearchResponseImplCopyWithImpl(
+      _$SearchResponseImpl _value, $Res Function(_$SearchResponseImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? songs = null,
+    Object? albums = null,
+    Object? artists = null,
+    Object? singles = null,
+    Object? relevancy = null,
+  }) {
+    return _then(_$SearchResponseImpl(
+      songs: null == songs
+          ? _value._songs
+          : songs // ignore: cast_nullable_to_non_nullable
+              as List<LocalSearchResult>,
+      albums: null == albums
+          ? _value._albums
+          : albums // ignore: cast_nullable_to_non_nullable
+              as List<LocalSearchResult>,
+      artists: null == artists
+          ? _value._artists
+          : artists // ignore: cast_nullable_to_non_nullable
+              as List<LocalSearchResult>,
+      singles: null == singles
+          ? _value._singles
+          : singles // ignore: cast_nullable_to_non_nullable
+              as List<LocalSearchResult>,
+      relevancy: null == relevancy
+          ? _value._relevancy
+          : relevancy // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$SearchResponseImpl extends _SearchResponse {
+  const _$SearchResponseImpl(
+      {required final List<LocalSearchResult> songs,
+      required final List<LocalSearchResult> albums,
+      required final List<LocalSearchResult> artists,
+      required final List<LocalSearchResult> singles,
+      required final List<String> relevancy})
+      : _songs = songs,
+        _albums = albums,
+        _artists = artists,
+        _singles = singles,
+        _relevancy = relevancy,
+        super._();
+
+  factory _$SearchResponseImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SearchResponseImplFromJson(json);
+
+  final List<LocalSearchResult> _songs;
+  @override
+  List<LocalSearchResult> get songs {
+    if (_songs is EqualUnmodifiableListView) return _songs;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_songs);
+  }
+
+  final List<LocalSearchResult> _albums;
+  @override
+  List<LocalSearchResult> get albums {
+    if (_albums is EqualUnmodifiableListView) return _albums;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_albums);
+  }
+
+  final List<LocalSearchResult> _artists;
+  @override
+  List<LocalSearchResult> get artists {
+    if (_artists is EqualUnmodifiableListView) return _artists;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_artists);
+  }
+
+  final List<LocalSearchResult> _singles;
+  @override
+  List<LocalSearchResult> get singles {
+    if (_singles is EqualUnmodifiableListView) return _singles;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_singles);
+  }
+
+  final List<String> _relevancy;
+  @override
+  List<String> get relevancy {
+    if (_relevancy is EqualUnmodifiableListView) return _relevancy;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_relevancy);
+  }
+
+  @override
+  String toString() {
+    return 'SearchResponse(songs: $songs, albums: $albums, artists: $artists, singles: $singles, relevancy: $relevancy)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SearchResponseImpl &&
+            const DeepCollectionEquality().equals(other._songs, _songs) &&
+            const DeepCollectionEquality().equals(other._albums, _albums) &&
+            const DeepCollectionEquality().equals(other._artists, _artists) &&
+            const DeepCollectionEquality().equals(other._singles, _singles) &&
+            const DeepCollectionEquality()
+                .equals(other._relevancy, _relevancy));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_songs),
+      const DeepCollectionEquality().hash(_albums),
+      const DeepCollectionEquality().hash(_artists),
+      const DeepCollectionEquality().hash(_singles),
+      const DeepCollectionEquality().hash(_relevancy));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SearchResponseImplCopyWith<_$SearchResponseImpl> get copyWith =>
+      __$$SearchResponseImplCopyWithImpl<_$SearchResponseImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SearchResponseImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _SearchResponse extends SearchResponse {
+  const factory _SearchResponse(
+      {required final List<LocalSearchResult> songs,
+      required final List<LocalSearchResult> albums,
+      required final List<LocalSearchResult> artists,
+      required final List<LocalSearchResult> singles,
+      required final List<String> relevancy}) = _$SearchResponseImpl;
+  const _SearchResponse._() : super._();
+
+  factory _SearchResponse.fromJson(Map<String, dynamic> json) =
+      _$SearchResponseImpl.fromJson;
+
+  @override
+  List<LocalSearchResult> get songs;
+  @override
+  List<LocalSearchResult> get albums;
+  @override
+  List<LocalSearchResult> get artists;
+  @override
+  List<LocalSearchResult> get singles;
+  @override
+  List<String> get relevancy;
+  @override
+  @JsonKey(ignore: true)
+  _$$SearchResponseImplCopyWith<_$SearchResponseImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+LocalSearchResult _$LocalSearchResultFromJson(Map<String, dynamic> json) {
+  return _LocalSearchResult.fromJson(json);
+}
+
+/// @nodoc
+mixin _$LocalSearchResult {
+  String get id => throw _privateConstructorUsedError;
+  String get displayName => throw _privateConstructorUsedError;
+  String get imageUrl => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $LocalSearchResultCopyWith<LocalSearchResult> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $LocalSearchResultCopyWith<$Res> {
+  factory $LocalSearchResultCopyWith(
+          LocalSearchResult value, $Res Function(LocalSearchResult) then) =
+      _$LocalSearchResultCopyWithImpl<$Res, LocalSearchResult>;
+  @useResult
+  $Res call({String id, String displayName, String imageUrl, String type});
+}
+
+/// @nodoc
+class _$LocalSearchResultCopyWithImpl<$Res, $Val extends LocalSearchResult>
+    implements $LocalSearchResultCopyWith<$Res> {
+  _$LocalSearchResultCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? displayName = null,
+    Object? imageUrl = null,
+    Object? type = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      displayName: null == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$LocalSearchResultImplCopyWith<$Res>
+    implements $LocalSearchResultCopyWith<$Res> {
+  factory _$$LocalSearchResultImplCopyWith(_$LocalSearchResultImpl value,
+          $Res Function(_$LocalSearchResultImpl) then) =
+      __$$LocalSearchResultImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String id, String displayName, String imageUrl, String type});
+}
+
+/// @nodoc
+class __$$LocalSearchResultImplCopyWithImpl<$Res>
+    extends _$LocalSearchResultCopyWithImpl<$Res, _$LocalSearchResultImpl>
+    implements _$$LocalSearchResultImplCopyWith<$Res> {
+  __$$LocalSearchResultImplCopyWithImpl(_$LocalSearchResultImpl _value,
+      $Res Function(_$LocalSearchResultImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? displayName = null,
+    Object? imageUrl = null,
+    Object? type = null,
+  }) {
+    return _then(_$LocalSearchResultImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      displayName: null == displayName
+          ? _value.displayName
+          : displayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$LocalSearchResultImpl extends _LocalSearchResult {
+  const _$LocalSearchResultImpl(
+      {required this.id,
+      required this.displayName,
+      required this.imageUrl,
+      required this.type})
+      : super._();
+
+  factory _$LocalSearchResultImpl.fromJson(Map<String, dynamic> json) =>
+      _$$LocalSearchResultImplFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String displayName;
+  @override
+  final String imageUrl;
+  @override
+  final String type;
+
+  @override
+  String toString() {
+    return 'LocalSearchResult(id: $id, displayName: $displayName, imageUrl: $imageUrl, type: $type)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LocalSearchResultImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.displayName, displayName) ||
+                other.displayName == displayName) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.type, type) || other.type == type));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, displayName, imageUrl, type);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LocalSearchResultImplCopyWith<_$LocalSearchResultImpl> get copyWith =>
+      __$$LocalSearchResultImplCopyWithImpl<_$LocalSearchResultImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$LocalSearchResultImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _LocalSearchResult extends LocalSearchResult {
+  const factory _LocalSearchResult(
+      {required final String id,
+      required final String displayName,
+      required final String imageUrl,
+      required final String type}) = _$LocalSearchResultImpl;
+  const _LocalSearchResult._() : super._();
+
+  factory _LocalSearchResult.fromJson(Map<String, dynamic> json) =
+      _$LocalSearchResultImpl.fromJson;
+
+  @override
+  String get id;
+  @override
+  String get displayName;
+  @override
+  String get imageUrl;
+  @override
+  String get type;
+  @override
+  @JsonKey(ignore: true)
+  _$$LocalSearchResultImplCopyWith<_$LocalSearchResultImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 SearchResult _$SearchResultFromJson(Map<String, dynamic> json) {
   return _SearchResult.fromJson(json);
 }

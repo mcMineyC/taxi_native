@@ -11,6 +11,7 @@ import 'preferences_provider.dart';
 import '../types/song.dart';
 import '../types/album.dart';
 import '../types/artists.dart';
+import '../types/searchresult.dart';
 
 part 'search_provider.g.dart';
 part 'search_provider.freezed.dart';
@@ -22,53 +23,77 @@ class SearchInfo with _$SearchInfo {
     required bool hasText,
     required bool isLoading,
     required bool hasResults,
-    required List<Album> albums,
-    required List<Artist> artists,
-    required List<Song> songs
+    required List<LocalSearchResult> albums,
+    required List<LocalSearchResult> artists,
+    required List<LocalSearchResult> songs,
+    required List<String> order,
   }) = _SearchInfo;
 }
 
 @Riverpod(keepAlive: true)
 class Search extends _$Search {
-  String query = "";
-
   get text => state.query;
 
   @override
   SearchInfo build() {
     print("SearchProvider build");
-    EasyDebounce.debounce(
-      'dbounce',                 // <-- An ID for this particular debouncer
-      Duration(milliseconds: 500),    // <-- The debounce duration
-      () => searchAction()              // <-- The target method
-    );
+    bouncedSearch(); 
     return SearchInfo(
       query: "",
       albums: [],
       artists: [],
       songs: [],
+      order: [],
       hasText: false,
       isLoading: false,
       hasResults: false
     );
   }
 
+  void bouncedSearch(){
+    EasyDebounce.debounce(
+      'dbounce',                 // <-- An ID for this particular debouncer
+      Duration(milliseconds: 200),    // <-- The debounce duration
+      () => searchAction()              // <-- The target method
+    );
+  }
+
   void search(String q){
-    print("Search: $q");
-    state = state.copyWith(query: query, hasText: q.isNotEmpty, isLoading: false);
-    query = q;
-    EasyDebounce.fire('dbounce');
+    state = state.copyWith(query: q, hasText: q.isNotEmpty, isLoading: state.isLoading || q.isNotEmpty);
+    bouncedSearch();
   }
 
   void searchAction() async {
     print("SearchAction");
+    var query = state.query;
     if(query.isNotEmpty) {
       state = state.copyWith(isLoading: true);
-      List<Album> albums = await searchAlbums(query);
-      List<Artist> artists = await searchArtists(query);
-      List<Song> songs = await searchSongs(query);
-      state = state.copyWith(albums: albums, artists: artists, songs: songs, hasResults: true, isLoading: false);
+      SearchResponse sr = await searchAll(query);
+      state = state.copyWith(query: query, albums: sr.albums, artists: sr.artists, songs: sr.songs, order: sr.relevancy, hasResults: true, isLoading: false);
+    }else{
+      state = state.copyWith(hasResults: false, isLoading: false);
     }
+  }
+
+  Future<SearchResponse> searchAll(String query) async {
+    final _sp = await SharedPreferences.getInstance();
+    var response = await http.post(
+        Uri.parse("${await ref.read(backendUrlProvider.future)}/searchAll"),
+        headers: Map<String, String>.from({
+          'Content-Type': 'application/json'
+        }),
+        body: jsonEncode(<String, String>{
+          'authtoken': _sp.getString("token") ?? "",
+          'type': "song",
+          'query': query
+        })
+    );
+    var desponse = jsonDecode(response.body);
+    if(desponse["authed"] == false) {
+      return Future.error({"code": 401, "error": "Not authenticated"});
+    }
+    SearchResponse sr = SearchResponse.fromJson(desponse);
+    return sr;
   }
 
   Future<List<Song>> searchSongs(String query) async {

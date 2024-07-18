@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_side_sheet/modal_side_sheet.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helper_widgets.dart';
 import '../providers/playing_provider.dart';
@@ -21,6 +22,15 @@ class HomePage extends ConsumerWidget {
     ref.read(playerProvider.notifier).init();
     final player = ref.watch(playerProvider);
     // _searchController.text = ref.read(searchProvider.notifier).text;
+    // ref.watch(searchProvider);
+    var qText = ref.watch(searchProvider.notifier).text;
+    if(Beamer.of(context).currentPages.last.key == ValueKey("search") && qText.isNotEmpty && _searchController.text != qText) {
+      print("Restoring text: $qText");
+      _searchController.text = qText;
+    }
+    if (Beamer.of(context).currentPages.last.key == ValueKey("search")) {
+      ref.watch(searchProvider.select((value) => value.query));
+    }
     return Scaffold(
       // extendBodyBehindAppBar: true,
       floatingActionButton: FloatingActionButton(
@@ -43,13 +53,49 @@ class HomePage extends ConsumerWidget {
                 ),
               ),
               Text(
-                "Home",
+                Beamer.of(context).currentPages.last.title ?? "Home",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               Expanded(
-                // child: Container(color: Colors.blue)
                 child: Container(),
               ),
+              Beamer.of(context).currentPages.last.key == ValueKey("search") ? 
+                Container(
+                  constraints: BoxConstraints(maxWidth: 512),
+                  child: TextField(
+                    controller: _searchController,
+                    autofocus: true,
+                    onChanged: (value) async {
+                      ref.read(searchProvider.notifier).search(value);
+                    },
+                    decoration: ref.read(searchProvider.notifier).text.isNotEmpty ? InputDecoration(
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(9999)),
+                      ),
+                      hintText: "Search",
+                      prefixIcon: const Icon(Icons.search_rounded),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.clear), 
+                        onPressed: () {
+                          _searchController.clear();
+                          ref.read(searchProvider.notifier).search("");
+                        },
+                      )
+                    ) :
+                    InputDecoration(
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(9999)),
+                      ),
+                      hintText: "Search",
+                      prefixIcon: const Icon(Icons.search_rounded),
+                    )
+                  ),
+                ) :
+                Container(),
               Container(
                 width: 96,
                 child: Center(
@@ -68,99 +114,99 @@ class HomePage extends ConsumerWidget {
         show: true,
         sheetWidth: 96,
         sheetBody: NavigationRail(
-                    backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-                    // indicatorColor: Theme.of(context).colorScheme.inversePrimary,
-                    labelType: NavigationRailLabelType.selected,
-                    destinations: const [
-                      NavigationRailDestination(
-                        icon: Icon(Icons.home),
-                        label: Text("Home"),
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.person),
-                        label: Text("Artists"),
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.library_music_rounded),
-                        label: Text("Albums"),
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.music_note_rounded),
-                        label: Text("Songs"),
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.queue_music),
-                        label: Text("Queue"),
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.playlist_add),
-                        label: Text("Playlists"),
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.download_rounded),
-                        label: Text("Adder"),
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.checklist_rounded),
-                        label: Text("Roadmap"),
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.bug_report_rounded),
-                        label: Text("Report an issue"),
-                      ),
-                    ],
-                    selectedIndex: () {
-                      switch (Beamer.of(context).currentPages.last.key) {
-                        case ValueKey(value: 'home'):
-                          return 0;
-                        case ValueKey(value: 'artists'):
-                          return 1;
-                        case ValueKey(value: 'albums'):
-                          return 2;
-                        case ValueKey(value: 'songs'):
-                          return 3;
-                        case ValueKey(value: 'queue'):
-                          return 4;
-                        case ValueKey(value: 'playlists'):
-                          return 5;
-                        case ValueKey(value: 'adder'):
-                          return 6;
-                        case ValueKey(value: 'roadmap'):
-                          return 7;
-                        case ValueKey(value: 'issues'):
-                          return 8;
-                        default:
-                          return 0;
-                    }}(),
-                    onDestinationSelected: (int index) {
-                      switch (index) {
-                        case 0:
-                          Beamer.of(context).beamToNamed('/home');
-                          break;
-                        case 1:
-                          Beamer.of(context).beamToNamed('/artists');
-                          break;
-                        case 2:
-                          Beamer.of(context).beamToNamed('/albums');
-                          break;
-                        case 3:
-                          Beamer.of(context).beamToNamed('/songs');
-                          break;
-                        case 4:
-                          Beamer.of(context).beamToNamed('/queue');
-                          break;
-                        case 6:
-                          Beamer.of(context).beamToNamed('/adder');
-                          break;
-                        default:
-                          const snacky = SnackBar(
-                            content: Text("This feature isn't done yet :("),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snacky);
-                          break;
-                      }
-                    },
-                  ),
+          backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+          // indicatorColor: Theme.of(context).colorScheme.inversePrimary,
+          labelType: NavigationRailLabelType.selected,
+          destinations: const [
+            NavigationRailDestination(
+              icon: Icon(Icons.home),
+              label: Text("Home"),
+            ),
+            NavigationRailDestination(
+              icon: Icon(Icons.person),
+              label: Text("Artists"),
+            ),
+            NavigationRailDestination(
+              icon: Icon(Icons.library_music_rounded),
+              label: Text("Albums"),
+            ),
+            NavigationRailDestination(
+              icon: Icon(Icons.music_note_rounded),
+              label: Text("Songs"),
+            ),
+            NavigationRailDestination(
+              icon: Icon(Icons.queue_music),
+              label: Text("Queue"),
+            ),
+            NavigationRailDestination(
+              icon: Icon(Icons.playlist_add),
+              label: Text("Playlists"),
+            ),
+            NavigationRailDestination(
+              icon: Icon(Icons.download_rounded),
+              label: Text("Adder"),
+            ),
+            NavigationRailDestination(
+              icon: Icon(Icons.checklist_rounded),
+              label: Text("Roadmap"),
+            ),
+            NavigationRailDestination(
+              icon: Icon(Icons.bug_report_rounded),
+              label: Text("Report an issue"),
+            ),
+          ],
+          selectedIndex: () {
+            switch (Beamer.of(context).currentPages.last.key) {
+              case ValueKey(value: 'home'):
+                return 0;
+              case ValueKey(value: 'artists'):
+                return 1;
+              case ValueKey(value: 'albums'):
+                return 2;
+              case ValueKey(value: 'songs'):
+                return 3;
+              case ValueKey(value: 'queue'):
+                return 4;
+              case ValueKey(value: 'playlists'):
+                return 5;
+              case ValueKey(value: 'adder'):
+                return 6;
+              case ValueKey(value: 'roadmap'):
+                return 7;
+              case ValueKey(value: 'issues'):
+                return 8;
+              default:
+                return null;
+          }}(),
+          onDestinationSelected: (int index) {
+            switch (index) {
+              case 0:
+                Beamer.of(context).beamToNamed('/home');
+                break;
+              case 1:
+                Beamer.of(context).beamToNamed('/artists');
+                break;
+              case 2:
+                Beamer.of(context).beamToNamed('/albums');
+                break;
+             case 3:
+                Beamer.of(context).beamToNamed('/songs');
+                break;
+              case 4:
+                Beamer.of(context).beamToNamed('/queue');
+                break;
+              case 6:
+                Beamer.of(context).beamToNamed('/adder');
+                break;
+              default:
+                const snacky = SnackBar(
+                  content: Text("This feature isn't done yet :("),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snacky);
+                break;
+            }
+          },
+        ),
         body: Container(
           color: Theme.of(context).colorScheme.surfaceContainer,
           child: Column(

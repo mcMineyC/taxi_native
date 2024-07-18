@@ -20,9 +20,10 @@ mixin _$SearchInfo {
   bool get hasText => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
   bool get hasResults => throw _privateConstructorUsedError;
-  List<Album> get albums => throw _privateConstructorUsedError;
-  List<Artist> get artists => throw _privateConstructorUsedError;
-  List<Song> get songs => throw _privateConstructorUsedError;
+  List<LocalSearchResult> get albums => throw _privateConstructorUsedError;
+  List<LocalSearchResult> get artists => throw _privateConstructorUsedError;
+  List<LocalSearchResult> get songs => throw _privateConstructorUsedError;
+  List<String> get order => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SearchInfoCopyWith<SearchInfo> get copyWith =>
@@ -40,9 +41,10 @@ abstract class $SearchInfoCopyWith<$Res> {
       bool hasText,
       bool isLoading,
       bool hasResults,
-      List<Album> albums,
-      List<Artist> artists,
-      List<Song> songs});
+      List<LocalSearchResult> albums,
+      List<LocalSearchResult> artists,
+      List<LocalSearchResult> songs,
+      List<String> order});
 }
 
 /// @nodoc
@@ -65,6 +67,7 @@ class _$SearchInfoCopyWithImpl<$Res, $Val extends SearchInfo>
     Object? albums = null,
     Object? artists = null,
     Object? songs = null,
+    Object? order = null,
   }) {
     return _then(_value.copyWith(
       query: null == query
@@ -86,15 +89,19 @@ class _$SearchInfoCopyWithImpl<$Res, $Val extends SearchInfo>
       albums: null == albums
           ? _value.albums
           : albums // ignore: cast_nullable_to_non_nullable
-              as List<Album>,
+              as List<LocalSearchResult>,
       artists: null == artists
           ? _value.artists
           : artists // ignore: cast_nullable_to_non_nullable
-              as List<Artist>,
+              as List<LocalSearchResult>,
       songs: null == songs
           ? _value.songs
           : songs // ignore: cast_nullable_to_non_nullable
-              as List<Song>,
+              as List<LocalSearchResult>,
+      order: null == order
+          ? _value.order
+          : order // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 }
@@ -112,9 +119,10 @@ abstract class _$$SearchInfoImplCopyWith<$Res>
       bool hasText,
       bool isLoading,
       bool hasResults,
-      List<Album> albums,
-      List<Artist> artists,
-      List<Song> songs});
+      List<LocalSearchResult> albums,
+      List<LocalSearchResult> artists,
+      List<LocalSearchResult> songs,
+      List<String> order});
 }
 
 /// @nodoc
@@ -135,6 +143,7 @@ class __$$SearchInfoImplCopyWithImpl<$Res>
     Object? albums = null,
     Object? artists = null,
     Object? songs = null,
+    Object? order = null,
   }) {
     return _then(_$SearchInfoImpl(
       query: null == query
@@ -156,15 +165,19 @@ class __$$SearchInfoImplCopyWithImpl<$Res>
       albums: null == albums
           ? _value._albums
           : albums // ignore: cast_nullable_to_non_nullable
-              as List<Album>,
+              as List<LocalSearchResult>,
       artists: null == artists
           ? _value._artists
           : artists // ignore: cast_nullable_to_non_nullable
-              as List<Artist>,
+              as List<LocalSearchResult>,
       songs: null == songs
           ? _value._songs
           : songs // ignore: cast_nullable_to_non_nullable
-              as List<Song>,
+              as List<LocalSearchResult>,
+      order: null == order
+          ? _value._order
+          : order // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -177,12 +190,14 @@ class _$SearchInfoImpl implements _SearchInfo {
       required this.hasText,
       required this.isLoading,
       required this.hasResults,
-      required final List<Album> albums,
-      required final List<Artist> artists,
-      required final List<Song> songs})
+      required final List<LocalSearchResult> albums,
+      required final List<LocalSearchResult> artists,
+      required final List<LocalSearchResult> songs,
+      required final List<String> order})
       : _albums = albums,
         _artists = artists,
-        _songs = songs;
+        _songs = songs,
+        _order = order;
 
   @override
   final String query;
@@ -192,33 +207,41 @@ class _$SearchInfoImpl implements _SearchInfo {
   final bool isLoading;
   @override
   final bool hasResults;
-  final List<Album> _albums;
+  final List<LocalSearchResult> _albums;
   @override
-  List<Album> get albums {
+  List<LocalSearchResult> get albums {
     if (_albums is EqualUnmodifiableListView) return _albums;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_albums);
   }
 
-  final List<Artist> _artists;
+  final List<LocalSearchResult> _artists;
   @override
-  List<Artist> get artists {
+  List<LocalSearchResult> get artists {
     if (_artists is EqualUnmodifiableListView) return _artists;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_artists);
   }
 
-  final List<Song> _songs;
+  final List<LocalSearchResult> _songs;
   @override
-  List<Song> get songs {
+  List<LocalSearchResult> get songs {
     if (_songs is EqualUnmodifiableListView) return _songs;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_songs);
   }
 
+  final List<String> _order;
+  @override
+  List<String> get order {
+    if (_order is EqualUnmodifiableListView) return _order;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_order);
+  }
+
   @override
   String toString() {
-    return 'SearchInfo(query: $query, hasText: $hasText, isLoading: $isLoading, hasResults: $hasResults, albums: $albums, artists: $artists, songs: $songs)';
+    return 'SearchInfo(query: $query, hasText: $hasText, isLoading: $isLoading, hasResults: $hasResults, albums: $albums, artists: $artists, songs: $songs, order: $order)';
   }
 
   @override
@@ -234,7 +257,8 @@ class _$SearchInfoImpl implements _SearchInfo {
                 other.hasResults == hasResults) &&
             const DeepCollectionEquality().equals(other._albums, _albums) &&
             const DeepCollectionEquality().equals(other._artists, _artists) &&
-            const DeepCollectionEquality().equals(other._songs, _songs));
+            const DeepCollectionEquality().equals(other._songs, _songs) &&
+            const DeepCollectionEquality().equals(other._order, _order));
   }
 
   @override
@@ -246,7 +270,8 @@ class _$SearchInfoImpl implements _SearchInfo {
       hasResults,
       const DeepCollectionEquality().hash(_albums),
       const DeepCollectionEquality().hash(_artists),
-      const DeepCollectionEquality().hash(_songs));
+      const DeepCollectionEquality().hash(_songs),
+      const DeepCollectionEquality().hash(_order));
 
   @JsonKey(ignore: true)
   @override
@@ -261,9 +286,10 @@ abstract class _SearchInfo implements SearchInfo {
       required final bool hasText,
       required final bool isLoading,
       required final bool hasResults,
-      required final List<Album> albums,
-      required final List<Artist> artists,
-      required final List<Song> songs}) = _$SearchInfoImpl;
+      required final List<LocalSearchResult> albums,
+      required final List<LocalSearchResult> artists,
+      required final List<LocalSearchResult> songs,
+      required final List<String> order}) = _$SearchInfoImpl;
 
   @override
   String get query;
@@ -274,11 +300,13 @@ abstract class _SearchInfo implements SearchInfo {
   @override
   bool get hasResults;
   @override
-  List<Album> get albums;
+  List<LocalSearchResult> get albums;
   @override
-  List<Artist> get artists;
+  List<LocalSearchResult> get artists;
   @override
-  List<Song> get songs;
+  List<LocalSearchResult> get songs;
+  @override
+  List<String> get order;
   @override
   @JsonKey(ignore: true)
   _$$SearchInfoImplCopyWith<_$SearchInfoImpl> get copyWith =>

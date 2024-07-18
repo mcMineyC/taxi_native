@@ -6,6 +6,52 @@ part of 'searchresult.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+_$SearchResponseImpl _$$SearchResponseImplFromJson(Map<String, dynamic> json) =>
+    _$SearchResponseImpl(
+      songs: (json['songs'] as List<dynamic>)
+          .map((e) => LocalSearchResult.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      albums: (json['albums'] as List<dynamic>)
+          .map((e) => LocalSearchResult.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      artists: (json['artists'] as List<dynamic>)
+          .map((e) => LocalSearchResult.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      singles: (json['singles'] as List<dynamic>)
+          .map((e) => LocalSearchResult.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      relevancy:
+          (json['relevancy'] as List<dynamic>).map((e) => e as String).toList(),
+    );
+
+Map<String, dynamic> _$$SearchResponseImplToJson(
+        _$SearchResponseImpl instance) =>
+    <String, dynamic>{
+      'songs': instance.songs,
+      'albums': instance.albums,
+      'artists': instance.artists,
+      'singles': instance.singles,
+      'relevancy': instance.relevancy,
+    };
+
+_$LocalSearchResultImpl _$$LocalSearchResultImplFromJson(
+        Map<String, dynamic> json) =>
+    _$LocalSearchResultImpl(
+      id: json['id'] as String,
+      displayName: json['displayName'] as String,
+      imageUrl: json['imageUrl'] as String,
+      type: json['type'] as String,
+    );
+
+Map<String, dynamic> _$$LocalSearchResultImplToJson(
+        _$LocalSearchResultImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'displayName': instance.displayName,
+      'imageUrl': instance.imageUrl,
+      'type': instance.type,
+    };
+
 _$SearchResultImpl _$$SearchResultImplFromJson(Map<String, dynamic> json) =>
     _$SearchResultImpl(
       id: json['id'] as String,

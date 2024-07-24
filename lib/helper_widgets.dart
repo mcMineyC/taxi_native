@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:context_menus/context_menus.dart';
 import 'providers/playing_provider.dart';
-import 'tone_extension.dart';
+import 'providers/playlist_provider.dart';
+import 'providers/fetched_data_provider.dart';
+import 'types/playlist.dart';
+import 'types/song.dart';
 
 class MediaCard extends ConsumerWidget{
   final String text;
@@ -21,10 +22,10 @@ class MediaCard extends ConsumerWidget{
     required this.text, 
     required this.thingId, 
     required this.thingType, 
-    required this.image
+    required this.image,
   });
   
-  List<ContextMenuButtonConfig> buildMenuButtons(WidgetRef ref){
+  List<ContextMenuButtonConfig> buildMenuButtons(BuildContext context, WidgetRef ref){
     List<ContextMenuButtonConfig> buttons = [];
     switch (thingType) {
       case "song":
@@ -42,6 +43,11 @@ class MediaCard extends ConsumerWidget{
             ref.read(playerProvider.notifier).addIdToQueue(thingId);
           }
         ));
+        buttons.add(ContextMenuButtonConfig(
+          "Add to playlist",
+          icon: const Icon(Icons.playlist_add),
+          onPressed: () async => await playlistLogic(ref, context, thingId, thingType),
+        ));
         break;
       case "album":
         buttons.add(ContextMenuButtonConfig(
@@ -57,6 +63,11 @@ class MediaCard extends ConsumerWidget{
           onPressed: () {
             ref.read(playerProvider.notifier).addAlbumToQueue(thingId);
           }
+        ));
+        buttons.add(ContextMenuButtonConfig(
+          "Add to playlist",
+          icon: const Icon(Icons.playlist_add),
+          onPressed: () async => await playlistLogic(ref, context, thingId, thingType),
         ));
         break;
       case "artist":
@@ -74,6 +85,11 @@ class MediaCard extends ConsumerWidget{
             ref.read(playerProvider.notifier).addArtistToQueue(thingId);
           }
         ));
+        buttons.add(ContextMenuButtonConfig(
+          "Add to playlist",
+          icon: const Icon(Icons.playlist_add),
+          onPressed: () async => await playlistLogic(ref, context, thingId, thingType),
+        ));
         break;
       default:
         buttons.add(ContextMenuButtonConfig("Placeholder", icon: const Icon(Icons.abc), onPressed: (){}));
@@ -86,7 +102,7 @@ class MediaCard extends ConsumerWidget{
   Widget build(BuildContext context, WidgetRef ref) {
     return ContextMenuRegion(
       contextMenu: GenericContextMenu(
-        buttonConfigs: buildMenuButtons(ref),
+        buttonConfigs: buildMenuButtons(context, ref),
       ),
         child: FittedBox(
           child: Card(
@@ -259,5 +275,257 @@ class FancyImage extends StatelessWidget {
         errorWidget: (context, url, error) => Icon(Icons.error_outline_rounded,color:Colors.pink[700]),
       ),
     );
+  }
+}
+
+
+class AddPlaylistDialog extends StatefulWidget {
+  @override
+  _AddPlaylistDialogState createState() => _AddPlaylistDialogState();
+
+  List<Playlist> playlists = [];
+  AddPlaylistDialog({required this.playlists});
+}
+
+class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
+  Playlist selected = Playlist(id: "create", displayName: "Common", songs: [], public: true, added: 0, owner: "testguy");
+  @override
+  void initState() {
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Add to playlist"),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              child: Text("Choose a playlist"),
+            ),
+            FilledButton.tonal(
+              child: Text("Create new playlist"),
+              onPressed: () {
+                setState(() {
+                  selected = Playlist(id: "create", displayName: "Common", songs: [], public: true, added: 0, owner: "testguy");
+                  Navigator.of(context).pop({"selected": true, "value": selected});
+                });
+              },
+            ),
+            ...(List<Widget>.generate(
+              widget.playlists.length,
+              (index) => GestureDetector(
+                onTap: () {
+                  setState(() {
+                    selected = widget.playlists[index];
+                    Navigator.of(context).pop({"selected": true, "value": selected});
+                  });
+                },
+                child: ListTile(
+                  title: Text(widget.playlists[index].displayName),
+                ),
+              ),
+            )),
+          ]
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: const Text('Cancel'),
+          onPressed: () {
+            Navigator.of(context).pop({"selected": false, "value": selected});
+          }
+        ),
+        // TextButton(
+        //   child: const Text('Add'),
+        //   onPressed: () {
+        //     Navigator.of(context).pop({"selected": true, "value": selected});
+        //   },
+        // ),
+      ],
+    );
+  }
+}
+class CreatePlaylistDialog extends StatefulWidget {
+  @override
+  _CreatePlaylistDialogState createState() => _CreatePlaylistDialogState();
+
+  FilledPlaylist starter;
+  CreatePlaylistDialog({required this.starter});
+}
+
+class _CreatePlaylistDialogState extends State<CreatePlaylistDialog> {
+  FilledPlaylist current = FilledPlaylist(id: "create", displayName: "Common", songs: [], public: true, added: 0, owner: "testguy");
+  late ThemeData theme;
+  List<Song> songs = [];
+  TextEditingController nameController = TextEditingController();
+  TextEditingController imageController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    current = widget.starter;
+    songs = [...current.songs];
+  }
+  @override
+  Widget build(BuildContext context) {
+    theme = Theme.of(context);
+    return Dialog.fullscreen(
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(56),
+          child: Container(
+            child: Row(
+              children: [
+                MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(context).pop({"created": false, "value": current}),
+                      child: SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: Center(child: Icon(Icons.close)),
+                      ),
+                    ),
+                  ),
+                ),
+                Text("Create a new playlist", style: theme.textTheme.titleMedium),
+                Expanded(child: Container()),
+                Container(
+                  margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                  child: TextButton(
+                    child: const Text('Create'),
+                    onPressed: () => Navigator.of(context).pop({"created": true, "value": current})
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        body: Container(
+          margin: EdgeInsets.fromLTRB(24, 20, 24, 20),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextField(
+                  onChanged: (value) => setState(() => current = current.copyWith(displayName: value)),
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Playlist name',
+                  ),
+                ),
+                SpacerWidget(height: 10, width: 0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: imageController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Image URL',
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                      child: FilledButton(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.auto_fix_high),
+                            Container(width: 6),
+                            Text("Autogenerate"),
+                          ]
+                        ),
+                        onPressed: () {},
+                      ),
+                    ),
+                  ],
+                ),
+                SpacerWidget(height: 8, width: 0),
+                Row(
+                  children: [
+                    Text("Public"),
+                    Expanded(child: Container()),
+                    Switch(value: current.public, onChanged: (value) {setState(() {current = current.copyWith(public: value);});}),
+                  ],
+                ),
+                Text("${current.songs.length} songs", style: theme.textTheme.bodyLarge),
+                Container(height: 16),
+                Divider(),
+                ...(current.songs.map((s) => 
+                  ListTile(
+                    title: Text(s.displayName),
+                    subtitle: Text("${s.artistDisplayName} - ${s.albumDisplayName}"),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red),
+                      onPressed: () => setState(() {
+                        songs.remove(s);
+                        current = current.copyWith(songs: songs);
+                      }),
+                    ),
+                  ),
+                )),
+              ]
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Future playlistLogic(WidgetRef ref, BuildContext context, String thingId, String thingType) async {
+  var dialog = AddPlaylistDialog(playlists: await ref.read(fetchPlaylistsProvider.future));
+  var result = await showDialog<Map<String, dynamic>>(context: context, builder: (context) => dialog);
+  // print("Dialog result: $result");
+  if(result != null && result["selected"] && (result["value"] as Playlist).id != "create") {
+    // print("Adding song to playlist");
+    // print("SID $thingId, PID ${result["value"].id}");
+    await ref.read(addIdToPlaylistProvider(result["value"].id, thingId).future);
+  }else if(result != null && result["selected"] && (result["value"] as Playlist).id == "create"){
+    List<String> oldSongs = [];
+    switch(thingType){
+      case "song":
+        oldSongs = [thingId];
+        break;
+      case "album":
+        oldSongs = (await ref.read(findSongsByAlbumProvider(thingId).future)).map((s) => s.id).toList();
+        break;
+      case "artist":
+        oldSongs = (await ref.read(findSongsByArtistProvider(thingId).future)).map((s) => s.id).toList();
+        break;
+    }
+    var p = result["value"] as Playlist;
+    List<Song> newSongs = [];
+    newSongs = await ref.read(findBatchSongsProvider(oldSongs).future);
+    var fp = FilledPlaylist(
+      id: p.id,
+      displayName: p.displayName,
+      public: p.public,
+      songs: newSongs,
+      added: p.added,
+      owner: p.owner
+    );
+    var createDialog = CreatePlaylistDialog(starter: (fp as FilledPlaylist));
+    var result2 = await showDialog<Map<String, dynamic>>(
+      context: context,
+      builder: (_) => createDialog
+    );
+    if(result2 != null && result2["created"]){
+      Playlist p = (result2["value"] as FilledPlaylist).toPlaylist();
+      // print("Creating playlist with name ${p.displayName}");
+      await ref.read(addPlaylistProvider(p).future);
+      print("Playlist created");
+    }else if(result2 != null && !result2["created"]){
+      print("User cancelled");
+    }
+  }else if(result != null && !result["selected"]){
+    print("User cancelled");
   }
 }

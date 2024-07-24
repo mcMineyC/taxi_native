@@ -24,8 +24,8 @@ class Prefs with _$Prefs {
   }
 }
 
-var prefs = Prefs(backendUrl: 'https://eatthecow.mooo.com:3030', authToken: '', username: 'jedi');
-// var prefs = Prefs(backendUrl: 'http://localhost:3000', authToken: '', username: 'jedi');
+// var prefs = Prefs(backendUrl: 'https://eatthecow.mooo.com:3030', authToken: '', username: 'jedi');
+var prefs = Prefs(backendUrl: 'http://localhost:3000', authToken: '', username: 'jedi');
 
 @riverpod
 Future<String> backendUrl(BackendUrlRef ref) async {

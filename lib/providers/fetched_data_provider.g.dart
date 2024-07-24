@@ -48,7 +48,7 @@ final fetchArtistsProvider = FutureProvider<List<Artist>>.internal(
 );
 
 typedef FetchArtistsRef = FutureProviderRef<List<Artist>>;
-String _$findBatchSongsHash() => r'10ee4bf144e4276a708077ee9dff0b517fcb0d6a';
+String _$findBatchSongsHash() => r'6a05a4ef25eb70a20a5efb0744b31a466a96c4b1';
 
 /// Copied from Dart SDK
 class _SystemHash {

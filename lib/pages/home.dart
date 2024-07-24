@@ -197,6 +197,9 @@ class HomePage extends ConsumerWidget {
               case 4:
                 Beamer.of(context).beamToNamed('/queue');
                 break;
+              case 5:
+                Beamer.of(context).beamToNamed('/playlists');
+                break;
               case 6:
                 Beamer.of(context).beamToNamed('/adder');
                 break;

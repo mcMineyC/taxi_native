@@ -116,6 +116,9 @@ Future<List<Song>> findBatchSongs(FindBatchSongsRef ref, List<String> ids) async
   List<Song> returning = [];
   for(var i = ids.length - 1; i >= 0; i--) {
     if(desponse.containsKey(ids[i])) {
+      if(desponse[ids[i]] == null) {
+        continue;
+      }
       returning.add(Song.fromJson(desponse[ids[i]]));
     }else{
       returning.add(EmptySong());

@@ -23,6 +23,8 @@ import 'pages/adder.dart';
 import 'pages/queue.dart';
 import 'pages/landing.dart';
 import 'pages/search.dart';
+import 'pages/playlists.dart';
+import 'pages/playlist.dart';
 import 'login.dart';
 
 late AudioHandler audioHandler;
@@ -144,6 +146,21 @@ class App extends ConsumerWidget {
           popToNamed: '/home',
           child: HomePage(homeJunk: SearchPage()),
         ),
+        '/playlists': (context, state, data) => BeamPage(
+          key: const ValueKey('playlists'),
+          title: 'Playlists',
+          popToNamed: '/home',
+          child: HomePage(homeJunk: PlaylistsPage()),
+        ),
+        '/playlist/:playlistId': (context, state, data) {
+          final playlistId = state.uri.toString().split("/playlist/").last.split("/").first.split("?").first;
+          return BeamPage(
+            key: ValueKey("playlist-view-$playlistId"),
+            title: "Playlist",
+            popToNamed: '/home',
+            child: HomePage(homeJunk: PlaylistPage(id: playlistId)),
+          );
+        },
       }
     ),
     // buildListener: (p0, p1) {

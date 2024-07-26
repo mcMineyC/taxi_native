@@ -39,4 +39,13 @@ class FilledPlaylist with _$FilledPlaylist {
       added: added,
     );
   }
+
+  factory FilledPlaylist.empty() => FilledPlaylist(
+    id: "",
+    owner: "nobody (:",
+    displayName: "",
+    public: true,
+    songs: [],
+    added: 0
+  );
 }

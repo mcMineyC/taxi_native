@@ -487,7 +487,21 @@ Future playlistLogic(WidgetRef ref, BuildContext context, String thingId, String
   if(result != null && result["selected"] && (result["value"] as Playlist).id != "create") {
     // print("Adding song to playlist");
     // print("SID $thingId, PID ${result["value"].id}");
-    await ref.read(addIdToPlaylistProvider(result["value"].id, thingId).future);
+    List<String> oldSongs = [];
+    switch(thingType){
+      case "song":
+        oldSongs = [thingId];
+        break;
+      case "album":
+        oldSongs = (await ref.read(findSongsByAlbumProvider(thingId).future)).map((s) => s.id).toList();
+        print("Adding ${oldSongs.length} songs from album");
+        break;
+      case "artist":
+        oldSongs = (await ref.read(findSongsByArtistProvider(thingId).future)).map((s) => s.id).toList();
+        print("Adding ${oldSongs.length} songs from artist");
+        break;
+    }
+    await ref.read(addIdsToPlaylistProvider(result["value"].id, oldSongs).future);
   }else if(result != null && result["selected"] && (result["value"] as Playlist).id == "create"){
     List<String> oldSongs = [];
     switch(thingType){
@@ -496,14 +510,17 @@ Future playlistLogic(WidgetRef ref, BuildContext context, String thingId, String
         break;
       case "album":
         oldSongs = (await ref.read(findSongsByAlbumProvider(thingId).future)).map((s) => s.id).toList();
+        print("Adding ${oldSongs.length} songs from album");
         break;
       case "artist":
         oldSongs = (await ref.read(findSongsByArtistProvider(thingId).future)).map((s) => s.id).toList();
+        print("Adding ${oldSongs.length} songs from artist");
         break;
     }
     var p = result["value"] as Playlist;
     List<Song> newSongs = [];
     newSongs = await ref.read(findBatchSongsProvider(oldSongs).future);
+    print("Found ${newSongs.length} songs to add to playlist");
     var fp = FilledPlaylist(
       id: p.id,
       displayName: p.displayName,

@@ -185,7 +185,7 @@ class _AddPlaylistProviderElement extends AutoDisposeFutureProviderElement<bool>
   Playlist get playlist => (origin as AddPlaylistProvider).playlist;
 }
 
-String _$addIdToPlaylistHash() => r'd96a1c66ae2cd6137cdd3e18641013875b2b7d5e';
+String _$addIdToPlaylistHash() => r'ed38fcd4e5ad1b90752d4e3c253191aa1df682af';
 
 /// See also [addIdToPlaylist].
 @ProviderFor(addIdToPlaylist)
@@ -330,6 +330,299 @@ class _AddIdToPlaylistProviderElement
   String get id => (origin as AddIdToPlaylistProvider).id;
 }
 
+String _$addIdsToPlaylistHash() => r'6a3bb96a360ed38b90b20576c2ccefdd7696e5a7';
+
+/// See also [addIdsToPlaylist].
+@ProviderFor(addIdsToPlaylist)
+const addIdsToPlaylistProvider = AddIdsToPlaylistFamily();
+
+/// See also [addIdsToPlaylist].
+class AddIdsToPlaylistFamily extends Family<AsyncValue<bool>> {
+  /// See also [addIdsToPlaylist].
+  const AddIdsToPlaylistFamily();
+
+  /// See also [addIdsToPlaylist].
+  AddIdsToPlaylistProvider call(
+    String playlistId,
+    List<String> ids,
+  ) {
+    return AddIdsToPlaylistProvider(
+      playlistId,
+      ids,
+    );
+  }
+
+  @override
+  AddIdsToPlaylistProvider getProviderOverride(
+    covariant AddIdsToPlaylistProvider provider,
+  ) {
+    return call(
+      provider.playlistId,
+      provider.ids,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'addIdsToPlaylistProvider';
+}
+
+/// See also [addIdsToPlaylist].
+class AddIdsToPlaylistProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [addIdsToPlaylist].
+  AddIdsToPlaylistProvider(
+    String playlistId,
+    List<String> ids,
+  ) : this._internal(
+          (ref) => addIdsToPlaylist(
+            ref as AddIdsToPlaylistRef,
+            playlistId,
+            ids,
+          ),
+          from: addIdsToPlaylistProvider,
+          name: r'addIdsToPlaylistProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$addIdsToPlaylistHash,
+          dependencies: AddIdsToPlaylistFamily._dependencies,
+          allTransitiveDependencies:
+              AddIdsToPlaylistFamily._allTransitiveDependencies,
+          playlistId: playlistId,
+          ids: ids,
+        );
+
+  AddIdsToPlaylistProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.playlistId,
+    required this.ids,
+  }) : super.internal();
+
+  final String playlistId;
+  final List<String> ids;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(AddIdsToPlaylistRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: AddIdsToPlaylistProvider._internal(
+        (ref) => create(ref as AddIdsToPlaylistRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        playlistId: playlistId,
+        ids: ids,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _AddIdsToPlaylistProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is AddIdsToPlaylistProvider &&
+        other.playlistId == playlistId &&
+        other.ids == ids;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, playlistId.hashCode);
+    hash = _SystemHash.combine(hash, ids.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin AddIdsToPlaylistRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `playlistId` of this provider.
+  String get playlistId;
+
+  /// The parameter `ids` of this provider.
+  List<String> get ids;
+}
+
+class _AddIdsToPlaylistProviderElement
+    extends AutoDisposeFutureProviderElement<bool> with AddIdsToPlaylistRef {
+  _AddIdsToPlaylistProviderElement(super.provider);
+
+  @override
+  String get playlistId => (origin as AddIdsToPlaylistProvider).playlistId;
+  @override
+  List<String> get ids => (origin as AddIdsToPlaylistProvider).ids;
+}
+
+String _$deleteIndexFromPlaylistHash() =>
+    r'dd1d77c615b1cf10691c1deff9b48210690a0234';
+
+/// See also [deleteIndexFromPlaylist].
+@ProviderFor(deleteIndexFromPlaylist)
+const deleteIndexFromPlaylistProvider = DeleteIndexFromPlaylistFamily();
+
+/// See also [deleteIndexFromPlaylist].
+class DeleteIndexFromPlaylistFamily extends Family<AsyncValue<bool>> {
+  /// See also [deleteIndexFromPlaylist].
+  const DeleteIndexFromPlaylistFamily();
+
+  /// See also [deleteIndexFromPlaylist].
+  DeleteIndexFromPlaylistProvider call(
+    String playlistId,
+    int index,
+  ) {
+    return DeleteIndexFromPlaylistProvider(
+      playlistId,
+      index,
+    );
+  }
+
+  @override
+  DeleteIndexFromPlaylistProvider getProviderOverride(
+    covariant DeleteIndexFromPlaylistProvider provider,
+  ) {
+    return call(
+      provider.playlistId,
+      provider.index,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'deleteIndexFromPlaylistProvider';
+}
+
+/// See also [deleteIndexFromPlaylist].
+class DeleteIndexFromPlaylistProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [deleteIndexFromPlaylist].
+  DeleteIndexFromPlaylistProvider(
+    String playlistId,
+    int index,
+  ) : this._internal(
+          (ref) => deleteIndexFromPlaylist(
+            ref as DeleteIndexFromPlaylistRef,
+            playlistId,
+            index,
+          ),
+          from: deleteIndexFromPlaylistProvider,
+          name: r'deleteIndexFromPlaylistProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$deleteIndexFromPlaylistHash,
+          dependencies: DeleteIndexFromPlaylistFamily._dependencies,
+          allTransitiveDependencies:
+              DeleteIndexFromPlaylistFamily._allTransitiveDependencies,
+          playlistId: playlistId,
+          index: index,
+        );
+
+  DeleteIndexFromPlaylistProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.playlistId,
+    required this.index,
+  }) : super.internal();
+
+  final String playlistId;
+  final int index;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(DeleteIndexFromPlaylistRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: DeleteIndexFromPlaylistProvider._internal(
+        (ref) => create(ref as DeleteIndexFromPlaylistRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        playlistId: playlistId,
+        index: index,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _DeleteIndexFromPlaylistProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DeleteIndexFromPlaylistProvider &&
+        other.playlistId == playlistId &&
+        other.index == index;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, playlistId.hashCode);
+    hash = _SystemHash.combine(hash, index.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin DeleteIndexFromPlaylistRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `playlistId` of this provider.
+  String get playlistId;
+
+  /// The parameter `index` of this provider.
+  int get index;
+}
+
+class _DeleteIndexFromPlaylistProviderElement
+    extends AutoDisposeFutureProviderElement<bool>
+    with DeleteIndexFromPlaylistRef {
+  _DeleteIndexFromPlaylistProviderElement(super.provider);
+
+  @override
+  String get playlistId =>
+      (origin as DeleteIndexFromPlaylistProvider).playlistId;
+  @override
+  int get index => (origin as DeleteIndexFromPlaylistProvider).index;
+}
+
 String _$deletePlaylistHash() => r'0d1f278bb9fc7d56c9013c36bfa690407d638f65';
 
 /// See also [deletePlaylist].
@@ -458,7 +751,7 @@ class _DeletePlaylistProviderElement
   String get playlistId => (origin as DeletePlaylistProvider).playlistId;
 }
 
-String _$findPlaylistHash() => r'0f0daae17bf11821534f7a4d0b63f579ef67fe9b';
+String _$findPlaylistHash() => r'fe9a4cf55d36cebee9cc88247b5c173bd1ef9800';
 
 /// See also [findPlaylist].
 @ProviderFor(findPlaylist)
@@ -585,6 +878,137 @@ class _FindPlaylistProviderElement
 
   @override
   String get id => (origin as FindPlaylistProvider).id;
+}
+
+String _$findSongsByPlaylistHash() =>
+    r'2ee52e8797da7054a8b8a7bb6a4c7799ae782805';
+
+/// See also [findSongsByPlaylist].
+@ProviderFor(findSongsByPlaylist)
+const findSongsByPlaylistProvider = FindSongsByPlaylistFamily();
+
+/// See also [findSongsByPlaylist].
+class FindSongsByPlaylistFamily extends Family<AsyncValue<List<Song>>> {
+  /// See also [findSongsByPlaylist].
+  const FindSongsByPlaylistFamily();
+
+  /// See also [findSongsByPlaylist].
+  FindSongsByPlaylistProvider call(
+    String id,
+  ) {
+    return FindSongsByPlaylistProvider(
+      id,
+    );
+  }
+
+  @override
+  FindSongsByPlaylistProvider getProviderOverride(
+    covariant FindSongsByPlaylistProvider provider,
+  ) {
+    return call(
+      provider.id,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'findSongsByPlaylistProvider';
+}
+
+/// See also [findSongsByPlaylist].
+class FindSongsByPlaylistProvider
+    extends AutoDisposeFutureProvider<List<Song>> {
+  /// See also [findSongsByPlaylist].
+  FindSongsByPlaylistProvider(
+    String id,
+  ) : this._internal(
+          (ref) => findSongsByPlaylist(
+            ref as FindSongsByPlaylistRef,
+            id,
+          ),
+          from: findSongsByPlaylistProvider,
+          name: r'findSongsByPlaylistProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$findSongsByPlaylistHash,
+          dependencies: FindSongsByPlaylistFamily._dependencies,
+          allTransitiveDependencies:
+              FindSongsByPlaylistFamily._allTransitiveDependencies,
+          id: id,
+        );
+
+  FindSongsByPlaylistProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+  }) : super.internal();
+
+  final String id;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<Song>> Function(FindSongsByPlaylistRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FindSongsByPlaylistProvider._internal(
+        (ref) => create(ref as FindSongsByPlaylistRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<Song>> createElement() {
+    return _FindSongsByPlaylistProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FindSongsByPlaylistProvider && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin FindSongsByPlaylistRef on AutoDisposeFutureProviderRef<List<Song>> {
+  /// The parameter `id` of this provider.
+  String get id;
+}
+
+class _FindSongsByPlaylistProviderElement
+    extends AutoDisposeFutureProviderElement<List<Song>>
+    with FindSongsByPlaylistRef {
+  _FindSongsByPlaylistProviderElement(super.provider);
+
+  @override
+  String get id => (origin as FindSongsByPlaylistProvider).id;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

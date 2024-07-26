@@ -9,7 +9,7 @@ import '../service_locator.dart';
 
 import 'fetched_data_provider.dart';
 import 'info_provider.dart';
-import 'preferences_provider.dart';
+import 'playlist_provider.dart';
 
 import '../types/song.dart';
 import '../types/searchresult.dart';
@@ -193,6 +193,23 @@ class Player extends _$Player {
 
   void addArtistToQueue(String id) async {
     ref.read(findSongsByArtistProvider(id).future).then((songs) async {
+      state = state.copyWith(queue: [...audioHandler.queue.value.map((s) => s.toQueueItem()), ...songs.map((s) => s.toQueueItem())]);
+      audioHandler.updateQueue([...audioHandler.queue.value, ...songs.map((s) => s.toMediaItem()).toList()]);
+      print("Added artist to queue, new length: ${songs.length} : ${state.queue.length}sq & ${audioHandler.queue.value.length}ahq");
+    });
+  }
+
+  void setPlaylist(String id) async {
+    ref.read(findSongsByPlaylistProvider(id).future).then((songs) async {
+      audioHandler.updateQueue(songs.map((s) => s.toMediaItem()).toList());
+      audioHandler.skipToQueueItem(0);
+      state = state.copyWith(queue: songs.map((s) => s.toQueueItem()).toList());
+      print("Set artist, new length: ${state.queue.length} & ${audioHandler.queue.value.length}");
+    });
+  }
+
+  void addPlaylistToQueue(String id) async {
+    ref.read(findSongsByPlaylistProvider(id).future).then((songs) async {
       state = state.copyWith(queue: [...audioHandler.queue.value.map((s) => s.toQueueItem()), ...songs.map((s) => s.toQueueItem())]);
       audioHandler.updateQueue([...audioHandler.queue.value, ...songs.map((s) => s.toMediaItem()).toList()]);
       print("Added artist to queue, new length: ${songs.length} : ${state.queue.length}sq & ${audioHandler.queue.value.length}ahq");

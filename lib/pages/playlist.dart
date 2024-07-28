@@ -4,13 +4,13 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:cached_network_image/cached_network_image.dart';
 
 import '../providers/error_watcher.dart';
 import '../providers/playlist_provider.dart';
 import '../providers/playing_provider.dart';
 import '../types/playlist.dart';
 import '../types/song.dart';
+import '../helper_widgets.dart';
 
 class PlaylistPage extends ConsumerStatefulWidget {
   @override
@@ -66,7 +66,7 @@ class PlaylistPageState extends ConsumerState<PlaylistPage> {
       children: [
         Row(
           children: [
-            if(!loading && init) Skeletonizer(enabled: true, child: Container(width: 200, height: 200)),
+            if(!loading && init) Container(width: 200, height: 200, child: Center(child: Text("¯\\_(ツ)_/¯", style: Theme.of(context).textTheme.headlineMedium))),
             if(loading) Skeletonizer(enabled: true, child: Container(width: 200, height: 200)),
             Expanded(
               child: Container(

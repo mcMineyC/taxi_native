@@ -6,11 +6,12 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_side_sheet/modal_side_sheet.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart' as prov;
 
 import '../helper_widgets.dart';
 import '../providers/playing_provider.dart';
 import '../providers/search_provider.dart';
+import '../providers/theme_provider.dart';
 
 class HomePage extends ConsumerWidget {
   HomePage({super.key, required this.homeJunk});
@@ -103,8 +104,8 @@ class HomePage extends ConsumerWidget {
                 child: Center(
                   child: IconButton(
                     icon: const Icon(Icons.settings),
-                    // onPressed: () => Beamer.of(context).beamToNamed('/settings'),
-                    onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Settings not done yet :("))),
+                    onPressed: () => Beamer.of(context).beamToNamed('/settings'),
+                    // onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Settings not done yet :("))),
                     ),
                   ),
                 ),
@@ -191,7 +192,7 @@ class HomePage extends ConsumerWidget {
               case 2:
                 Beamer.of(context).beamToNamed('/albums');
                 break;
-             case 3:
+              case 3:
                 Beamer.of(context).beamToNamed('/songs');
                 break;
               case 4:
@@ -204,7 +205,7 @@ class HomePage extends ConsumerWidget {
                 Beamer.of(context).beamToNamed('/adder');
                 break;
               default:
-                const snacky = SnackBar(
+                var snacky = SnackBar(
                   content: Text("This feature isn't done yet :("),
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snacky);
@@ -246,11 +247,11 @@ class HomePage extends ConsumerWidget {
                           Expanded(
                             child: Text(
                               player.displayName,
-                              style: GoogleFonts.poppins(),
+                              style: GoogleFonts.poppins().copyWith(color: Theme.of(context).colorScheme.onSurface),
                               overflow: TextOverflow.ellipsis
                             )
                           ),
-                          
+
 
                           Container(  // Button group
                             child: Row(
@@ -302,7 +303,7 @@ class HomePage extends ConsumerWidget {
                           Expanded(
                             child: Text(
                               "",
-                              style: GoogleFonts.poppins(),
+                              style: GoogleFonts.poppins().copyWith(color: Theme.of(context).colorScheme.onSurface),
                               textAlign: TextAlign.end,
                               overflow: TextOverflow.ellipsis
                             )

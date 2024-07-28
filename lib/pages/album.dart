@@ -40,9 +40,9 @@ class AlbumPage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: album.when(
                   data: (data) => [
-                    Text(data.displayName, style: Theme.of(context).textTheme.headlineLarge, overflow: TextOverflow.ellipsis),
-                    Text(data.artistDisplayName, style: Theme.of(context).textTheme.headlineSmall, overflow: TextOverflow.ellipsis),
-                    Text("${data.songCount} song${(data.songCount > 1) ? "s" : ""}", style: Theme.of(context).textTheme.bodyLarge),
+                    Text(data.displayName, style: Theme.of(context).textTheme.headlineLarge!.copyWith(color: Theme.of(context).colorScheme.onSurface), overflow: TextOverflow.ellipsis),
+                    Text(data.artistDisplayName, style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Theme.of(context).colorScheme.onSurface), overflow: TextOverflow.ellipsis),
+                    Text("${data.songCount} song${(data.songCount > 1) ? "s" : ""}", style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurface), overflow: TextOverflow.ellipsis),
                   ],
                   loading: () => [
                     const Skeletonizer(enabled: true, child: Text("Loading")),

@@ -44,9 +44,9 @@ class ArtistPage extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: artist.when(
                       data: (data) => [
-                        Text(data.displayName, style: Theme.of(context).textTheme.headlineLarge),
-                        Text("${data.songCount} song${(data.songCount > 1) ? "s" : ""}"),
-                        Text("${data.albumCount} album${(data.albumCount > 1) ? "s" : ""}")
+                        Text(data.displayName, style: Theme.of(context).textTheme.headlineLarge!.copyWith(color: Theme.of(context).colorScheme.onSurface), overflow: TextOverflow.ellipsis),
+                        Text("${data.songCount} song${(data.songCount > 1) ? "s" : ""}", style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurface), overflow: TextOverflow.ellipsis),
+                        Text("${data.albumCount} album${(data.albumCount > 1) ? "s" : ""}", style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurface), overflow: TextOverflow.ellipsis),
                       ],
                       loading: () => [
                         const Skeletonizer(enabled: true, child: Text("Loading")),

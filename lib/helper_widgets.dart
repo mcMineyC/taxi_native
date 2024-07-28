@@ -172,8 +172,9 @@ class MediaCard extends ConsumerWidget{
                     height: 28,
                     child: Text(
                       text,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                       textAlign: TextAlign.center,
                       maxLines: 1,

@@ -6,10 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:context_menus/context_menus.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:provider/provider.dart' as prov;
 import 'service_locator.dart';
 import 'providers/playing_provider.dart';
 import 'providers/preferences_provider.dart';
 import 'platform_utils.dart';
+import 'providers/theme_provider.dart';
 
 
 import 'pages/error.dart';
@@ -25,6 +27,7 @@ import 'pages/landing.dart';
 import 'pages/search.dart';
 import 'pages/playlists.dart';
 import 'pages/playlist.dart';
+import 'pages/settings.dart';
 import 'login.dart';
 
 late AudioHandler audioHandler;
@@ -51,12 +54,19 @@ void main() async{
   var p = Prefs(backendUrl: "https://eatthecow.mooo.com:3030", authToken: "", username: "");
   await p.load();
   ServiceLocator().register<Prefs>(p);
+  ThemeChanger themeProvider = ThemeChanger();
+  await themeProvider.init();
   runApp(
-    ProviderScope(
-      child: ContextMenuOverlay(
-        child: App(),
-      ),
-    )
+    prov.MultiProvider(
+      providers: [
+        prov.ChangeNotifierProvider(create: (_) => themeProvider),
+      ],
+      child: ProviderScope(
+        child: ContextMenuOverlay(
+          child: App(),
+        ),
+      )
+    ),
   );
 }
 
@@ -161,6 +171,12 @@ class App extends ConsumerWidget {
             child: HomePage(homeJunk: PlaylistPage(id: playlistId)),
           );
         },
+        '/settings': (context, state, data) => BeamPage(
+          key: const ValueKey('settings'),
+          title: 'Settings',
+          popToNamed: '/home',
+          child: HomePage(homeJunk: SettingsPage()),
+        ),
       }
     ),
     // buildListener: (p0, p1) {
@@ -173,21 +189,22 @@ class App extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = prov.Provider.of<ThemeChanger>(context);
+    var scheme = ColorScheme.fromSeed(
+      seedColor: HexColor.fromHex(theme.seedColor),
+      brightness: theme.dark ? Brightness.dark : Brightness.light, 
+    );
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Taxi - Native',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue[600]!,
-          brightness: Brightness.dark
-        ),
+        colorScheme: scheme, 
+        textTheme: GoogleFonts.poppinsTextTheme().apply(bodyColor: scheme.onSurface, displayColor: scheme.onSurface),
         useMaterial3: true,
-        fontFamily: GoogleFonts.poppins().fontFamily,
-        // dividerColor: Color.fromARGB(255, 67, 71, 78)
-        dividerColor: Colors.pink[600]
       ),
       routerDelegate: routerDelegate,
       routeInformationParser: BeamerParser(),
     );
   }
 }
+

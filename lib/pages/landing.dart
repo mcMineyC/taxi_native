@@ -36,13 +36,24 @@ class LandingPage extends ConsumerWidget {
               loading: () => "Hello, User!",
               error: (err, stack) => "Greetings and salutations!"
             ),
-            style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 50,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
             textAlign: TextAlign.left,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(" Favorites", style: TextStyle(fontSize: 26, fontWeight: FontWeight.w500)),
+              Text(
+                " Favorites", 
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
               Container(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -63,7 +74,14 @@ class LandingPage extends ConsumerWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(" Recently Played", style: TextStyle(fontSize: 26, fontWeight: FontWeight.w500)),
+              Text(
+                " Recently Played",
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
               Container(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -106,7 +124,14 @@ class LandingPage extends ConsumerWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text("  Recommended By Others", style: TextStyle(fontSize: 26, fontWeight: FontWeight.w500)),
+              Text(
+                " Recommended By Others",
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
               Container(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -132,7 +157,14 @@ class LandingPage extends ConsumerWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text("  New Playlists", style: TextStyle(fontSize: 26, fontWeight: FontWeight.w500)),
+              Text(
+                "  New Playlists",
+                style: TextStyle(
+                  fontSize: 26, 
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
               Container(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -157,7 +189,14 @@ class LandingPage extends ConsumerWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text("  New Songs", style: TextStyle(fontSize: 26, fontWeight: FontWeight.w500)),
+              Text(
+                "  New Songs",
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
               Container(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,

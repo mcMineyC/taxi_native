@@ -28,6 +28,7 @@ import 'pages/search.dart';
 import 'pages/playlists.dart';
 import 'pages/playlist.dart';
 import 'pages/settings.dart';
+import 'pages/checklist.dart';
 import 'login.dart';
 
 late AudioHandler audioHandler;
@@ -176,6 +177,12 @@ class App extends ConsumerWidget {
           title: 'Settings',
           popToNamed: '/home',
           child: HomePage(homeJunk: SettingsPage()),
+        ),
+        '/checklist': (context, state, data) => BeamPage(
+          key: const ValueKey('checklist'),
+          title: 'Roadmap',
+          popToNamed: '/home',
+          child: HomePage(homeJunk: ChecklistPage()),
         ),
       }
     ),

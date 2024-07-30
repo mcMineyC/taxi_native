@@ -204,6 +204,9 @@ class HomePage extends ConsumerWidget {
               case 6:
                 Beamer.of(context).beamToNamed('/adder');
                 break;
+              case 7:
+                Beamer.of(context).beamToNamed('/checklist');
+                break;
               default:
                 var snacky = SnackBar(
                   content: Text("This feature isn't done yet :("),

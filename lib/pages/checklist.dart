@@ -39,7 +39,75 @@ class _ChecklistPageState extends ConsumerState<ChecklistPage> {
               Expanded(
                 child: OutlinedButton(
                   child: Text("Add Item"), 
-                  onPressed: (){}
+                  onPressed: (){
+                    final _formKey = GlobalKey<FormState>();
+                    final _name = TextEditingController();
+                    final _description = TextEditingController();
+                    showDialog(context: context, builder: (context) => 
+                      AlertDialog(
+                        title: Text("Request a feature"),
+                        content: SingleChildScrollView(
+                          child: Container(
+                            constraints: BoxConstraints(minWidth: 512, maxWidth: 512, maxHeight: 300),
+                            child: Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter some text';
+                                    }
+                                    return null;
+                                  },
+                                  controller: _name,
+                                  decoration: InputDecoration(
+                                    labelText: "Name of feature",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                ),
+                                Container(height: 8),
+                                Expanded(child: TextFormField(
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return "Please enter some text\nI need to know what it I'm trying to write";
+                                    }
+                                    return null;
+                                  },
+                                  controller: _description,
+                                  decoration: InputDecoration(
+                                    labelText: "Detailed description of feature",
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  // minLines: 1,
+                                  maxLines: 10,
+                                  keyboardType: TextInputType.multiline,
+                                ),)
+                              ],
+                            ),
+                          ),
+                          ),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: Text("Cancel"),
+                            onPressed: () => Navigator.of(context).pop(),
+                          ),
+                          TextButton(
+                            child: Text("Submit"),
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                await ref.read(addChecklistItemProvider([_name.text, _description.text]).future);
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Request sent!")));
+                                Navigator.of(context).pop();
+                                ref.refresh(getChecklistItemsProvider);
+                              }
+                            }
+                          ),
+                        ]
+                      ),
+                    );
+                  }
                 )
               ),
               Container(

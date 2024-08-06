@@ -37,7 +37,7 @@ void main() async{
   if(PlatformUtils.isDesktop){
     print("Using FFI");
   }
-
+  print("Current commit: ${String.fromEnvironment("GIT_REV")}");
   // Initialize FFI
   WidgetsFlutterBinding.ensureInitialized();
   var handy = AudioServiceHandler();

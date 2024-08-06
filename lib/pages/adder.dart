@@ -158,6 +158,7 @@ class _AdderPageState extends ConsumerState {
     List<FindResult> results = [];
     stateKeys.forEach((key) {
       results.add(key.currentState!.data);
+      print("Adding ${key.currentState!.data}");
     });
     ref.read(adderProvider.notifier).addFindResults(results);
     setState(() {page = 4;});
@@ -485,7 +486,13 @@ class InfoEditorCardState extends State<InfoEditorCard>{
               decoration: InputDecoration(
                 labelText: 'Name',
                 filled: true,
-              )
+              ),
+              onChanged: (_) {
+                var song = modifiedData.songs.toList();
+                song[0] = song[0].copyWith(title: nameController.text);
+                modifiedData = modifiedData.copyWith(songs: song);
+                print(modifiedData.songs[0].title);
+              },
             )
           ),
           (modifiedData.type == "song") ? 
@@ -495,7 +502,10 @@ class InfoEditorCardState extends State<InfoEditorCard>{
               decoration: InputDecoration(
                 labelText: 'Album',
                 filled: true,
-              )
+              ),
+              onChanged: (_) {
+                modifiedData = modifiedData.copyWith(name: albumController.text);
+              },
             ),
           ) :
           Container(),
@@ -505,7 +515,10 @@ class InfoEditorCardState extends State<InfoEditorCard>{
                decoration: InputDecoration(
                  labelText: 'Artist',
                  filled: true,
-               )
+               ),
+              onChanged: (_) {
+                modifiedData = modifiedData.copyWith(artist: artistController.text);
+              },
               )
             ) : Container(),
           ListTile(
@@ -520,7 +533,12 @@ class InfoEditorCardState extends State<InfoEditorCard>{
               decoration: InputDecoration(
                 labelText: 'Video ID',
                 filled: true,
-              )
+              ),
+              onChanged: (_) {
+                var song = modifiedData.songs.toList();
+                song[0] = song[0].copyWith(id: videoIdController.text);
+                modifiedData = modifiedData.copyWith(songs: song);
+              },
             )
           ),
           ListTile(
@@ -535,7 +553,10 @@ class InfoEditorCardState extends State<InfoEditorCard>{
               decoration: InputDecoration(
                 labelText: 'Image URL',
                 filled: true,
-              )
+              ),
+              onChanged: (_) {
+                modifiedData = modifiedData.copyWith(imageUrl: imageUrlController.text);
+              },
             ), 
           ),
         ]

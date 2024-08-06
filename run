@@ -1,5 +1,0 @@
-#!/bin/sh
-
-git_rev=`git rev-parse HEAD`
-
-flutter run -d$1 --dart-define=GIT_REV=$git_rev

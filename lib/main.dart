@@ -38,7 +38,7 @@ void main() async{
   if(PlatformUtils.isDesktop){
     print("Using FFI");
   }
-  print("Current commit: ${String.fromEnvironment("GIT_REV")}");
+  // print("Current commit: ${String.fromEnvironment("GIT_REV")}");
   // Initialize FFI
   WidgetsFlutterBinding.ensureInitialized();
   var handy = AudioServiceHandler();
@@ -58,6 +58,7 @@ void main() async{
   ServiceLocator().register<Prefs>(p);
   ThemeChanger themeProvider = ThemeChanger();
   await themeProvider.init();
+  print("Starting app");
   runApp(
     prov.MultiProvider(
       providers: [

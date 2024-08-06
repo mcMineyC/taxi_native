@@ -58,6 +58,10 @@ void main() async{
   ServiceLocator().register<Prefs>(p);
   ThemeChanger themeProvider = ThemeChanger();
   await themeProvider.init();
+  var scheme = ColorScheme.fromSeed(
+    seedColor: HexColor.fromHex(themeProvider.seedColor),
+    brightness: themeProvider.dark ? Brightness.dark : Brightness.light, 
+  );
   print("Starting app");
   runApp(
     prov.MultiProvider(
@@ -66,6 +70,39 @@ void main() async{
       ],
       child: ProviderScope(
         child: ContextMenuOverlay(
+          cardBuilder: (context, children) => Container(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            decoration: BoxDecoration(
+              color: scheme.surfaceContainerHigh,
+              borderRadius: const BorderRadius.all(Radius.circular(12)),
+            ),
+            child: Column(children: children)
+          ),
+          buttonBuilder: (context, config, [__]) => TextButton(
+            onPressed: config.onPressed,
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                children: [
+                  IconTheme(
+                    data: IconThemeData(color: scheme.onSurface),
+                    child: config.icon ?? Container(),
+                  ) ,
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      config.label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins().apply(
+                        color: scheme.onSurface,
+                      ),
+                    )
+                  ),
+                ],
+              ),
+            ) ,
+          ),
           child: App(),
         ),
       )

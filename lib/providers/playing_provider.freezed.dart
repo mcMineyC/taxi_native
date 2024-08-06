@@ -28,6 +28,8 @@ mixin _$PlayerInfo {
   bool get isPlaying => throw _privateConstructorUsedError;
   List<QueueItem> get queue => throw _privateConstructorUsedError;
   int get currentIndex => throw _privateConstructorUsedError;
+  bool get shuffle => throw _privateConstructorUsedError;
+  bool get loop => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $PlayerInfoCopyWith<PlayerInfo> get copyWith =>
@@ -51,7 +53,9 @@ abstract class $PlayerInfoCopyWith<$Res> {
       int position,
       bool isPlaying,
       List<QueueItem> queue,
-      int currentIndex});
+      int currentIndex,
+      bool shuffle,
+      bool loop});
 }
 
 /// @nodoc
@@ -78,6 +82,8 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
     Object? isPlaying = null,
     Object? queue = null,
     Object? currentIndex = null,
+    Object? shuffle = null,
+    Object? loop = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -124,6 +130,14 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
           ? _value.currentIndex
           : currentIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      shuffle: null == shuffle
+          ? _value.shuffle
+          : shuffle // ignore: cast_nullable_to_non_nullable
+              as bool,
+      loop: null == loop
+          ? _value.loop
+          : loop // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -147,7 +161,9 @@ abstract class _$$PlayerInfoImplCopyWith<$Res>
       int position,
       bool isPlaying,
       List<QueueItem> queue,
-      int currentIndex});
+      int currentIndex,
+      bool shuffle,
+      bool loop});
 }
 
 /// @nodoc
@@ -172,6 +188,8 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
     Object? isPlaying = null,
     Object? queue = null,
     Object? currentIndex = null,
+    Object? shuffle = null,
+    Object? loop = null,
   }) {
     return _then(_$PlayerInfoImpl(
       id: null == id
@@ -218,6 +236,14 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
           ? _value.currentIndex
           : currentIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      shuffle: null == shuffle
+          ? _value.shuffle
+          : shuffle // ignore: cast_nullable_to_non_nullable
+              as bool,
+      loop: null == loop
+          ? _value.loop
+          : loop // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -236,7 +262,9 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       required this.position,
       required this.isPlaying,
       required final List<QueueItem> queue,
-      required this.currentIndex})
+      required this.currentIndex,
+      required this.shuffle,
+      required this.loop})
       : _queue = queue;
 
   @override
@@ -268,10 +296,14 @@ class _$PlayerInfoImpl implements _PlayerInfo {
 
   @override
   final int currentIndex;
+  @override
+  final bool shuffle;
+  @override
+  final bool loop;
 
   @override
   String toString() {
-    return 'PlayerInfo(id: $id, artistId: $artistId, albumId: $albumId, displayName: $displayName, artistDisplayName: $artistDisplayName, albumDisplayName: $albumDisplayName, duration: $duration, position: $position, isPlaying: $isPlaying, queue: $queue, currentIndex: $currentIndex)';
+    return 'PlayerInfo(id: $id, artistId: $artistId, albumId: $albumId, displayName: $displayName, artistDisplayName: $artistDisplayName, albumDisplayName: $albumDisplayName, duration: $duration, position: $position, isPlaying: $isPlaying, queue: $queue, currentIndex: $currentIndex, shuffle: $shuffle, loop: $loop)';
   }
 
   @override
@@ -297,7 +329,9 @@ class _$PlayerInfoImpl implements _PlayerInfo {
                 other.isPlaying == isPlaying) &&
             const DeepCollectionEquality().equals(other._queue, _queue) &&
             (identical(other.currentIndex, currentIndex) ||
-                other.currentIndex == currentIndex));
+                other.currentIndex == currentIndex) &&
+            (identical(other.shuffle, shuffle) || other.shuffle == shuffle) &&
+            (identical(other.loop, loop) || other.loop == loop));
   }
 
   @override
@@ -313,7 +347,9 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       position,
       isPlaying,
       const DeepCollectionEquality().hash(_queue),
-      currentIndex);
+      currentIndex,
+      shuffle,
+      loop);
 
   @JsonKey(ignore: true)
   @override
@@ -334,7 +370,9 @@ abstract class _PlayerInfo implements PlayerInfo {
       required final int position,
       required final bool isPlaying,
       required final List<QueueItem> queue,
-      required final int currentIndex}) = _$PlayerInfoImpl;
+      required final int currentIndex,
+      required final bool shuffle,
+      required final bool loop}) = _$PlayerInfoImpl;
 
   @override
   String get id;
@@ -358,6 +396,10 @@ abstract class _PlayerInfo implements PlayerInfo {
   List<QueueItem> get queue;
   @override
   int get currentIndex;
+  @override
+  bool get shuffle;
+  @override
+  bool get loop;
   @override
   @JsonKey(ignore: true)
   _$$PlayerInfoImplCopyWith<_$PlayerInfoImpl> get copyWith =>

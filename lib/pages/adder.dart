@@ -233,9 +233,9 @@ class _AdderPageState extends ConsumerState {
                 // padding: EdgeInsets.all(8),
                 // margin: EdgeInsets.only(bottom: 16),
                 decoration: <Decoration>(){
-                  if(index == 0) return BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)), color: Theme.of(context).colorScheme.surface.tone(20));
-                  else if(index == results.length - 1) return BoxDecoration(borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)), color: Theme.of(context).colorScheme.surface.tone(20));
-                  else return BoxDecoration(color: Theme.of(context).colorScheme.surface.tone(20));
+                  if(index == 0) return BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)), color: Theme.of(context).colorScheme.surfaceContainer);
+                  else if(index == results.length - 1) return BoxDecoration(borderRadius: BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)), color: Theme.of(context).colorScheme.surfaceContainer);
+                  else return BoxDecoration(color: Theme.of(context).colorScheme.surfaceContainer);
                 }(),
                 // color: Theme.of(context).colorScheme.surface.tone(20),
                 height: 56,

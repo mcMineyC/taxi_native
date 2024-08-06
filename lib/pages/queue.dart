@@ -13,7 +13,6 @@ class QueuePage extends ConsumerWidget {
     final Color evenItemColor = colorScheme.primary.withOpacity(0.15);
 
     final queue = ref.watch(playerProvider.select((value) => value.queue));
-    final id = ref.watch(playerProvider.select((value) => value.id));
     final int playingIndex = ref.watch(playerProvider.select((value) => value.currentIndex));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

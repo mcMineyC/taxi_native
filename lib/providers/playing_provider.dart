@@ -14,6 +14,7 @@ import 'playlist_provider.dart';
 import '../types/song.dart';
 import '../types/searchresult.dart';
 import '../types/queueitem.dart';
+import '../../miller_shuffle.dart';
 
 part 'playing_provider.g.dart';
 part 'playing_provider.freezed.dart';
@@ -33,6 +34,8 @@ class PlayerInfo with _$PlayerInfo {
     required bool isPlaying,
     required List<QueueItem> queue,
     required int currentIndex,
+    required bool shuffle,
+    required bool loop,
   }) = _PlayerInfo;
 }
 
@@ -49,6 +52,7 @@ class Player extends _$Player {
   bool _hIsInit = false;
   late final _sp;
   bool _isInit = false;
+  List<QueueItem> _queue = [];
 
   @override
   PlayerInfo build() {
@@ -65,6 +69,8 @@ class Player extends _$Player {
       isPlaying: false,
       queue: [],
       currentIndex: -1,
+      loop: true,
+      shuffle: false,
     );
   }
 
@@ -120,7 +126,7 @@ class Player extends _$Player {
   void pause() async {
     audioHandler.pause();
     state = state.copyWith(isPlaying: false);
-    print("paused");
+    // print("paused");
   }
 
   void toggle() async {
@@ -142,12 +148,11 @@ class Player extends _$Player {
 
   void setPlaying(bool playing) async {
     state = state.copyWith(isPlaying: playing);
-    print(state.isPlaying ? "playing" : "paused");
+    // print(state.isPlaying ? "playing" : "paused");
   }
 
   void setSong(String id) async {
     // if(state.id == id) return; //Debounce duplicate calls :shrug: maybe this will fix the duplicates in recentlyplayed
-    print("Song setter: $id");
     ref.read(findSongProvider(id).future).then((songObject) async {
       state = state.copyWith(
         id: songObject.id,
@@ -159,6 +164,7 @@ class Player extends _$Player {
         queue: [songObject.toQueueItem()],
         isPlaying: true,
       );
+      _queue = [songObject.toQueueItem()];
       await audioHandler.playMediaItem(songObject.toMediaItem());
     });
   }
@@ -173,6 +179,7 @@ class Player extends _$Player {
       queue: [i],
       isPlaying: true,
     );
+    _queue = [i];
     audioHandler.updateQueue([i.toMediaItem()]);
     await audioHandler.playMediaItem(i.toMediaItem());
   }
@@ -182,16 +189,16 @@ class Player extends _$Player {
       audioHandler.updateQueue(songs.map((s) => s.toMediaItem()).toList());
       audioHandler.skipToQueueItem(0);
       state = state.copyWith(queue: songs.map((s) => s.toQueueItem()).toList());
-      print("Set album, new length: ${state.queue.length} & ${audioHandler.queue.value.length}");
+      _queue = songs.map((s) => s.toQueueItem()).toList();
     });
   }
 
   void addAlbumToQueue(String id) async {
     ref.read(findSongsByAlbumProvider(id).future).then((songs) async {
-      print("Adding ${songs.length} songs to queue");
-      state = state.copyWith(queue: [...audioHandler.queue.value.map((s) => s.toQueueItem()), ...songs.map((s) => s.toQueueItem())]);
+      var newQueue = [...state.queue, ...songs.map((s) => s.toQueueItem())];
+      state = state.copyWith(queue: newQueue);
+      _queue = newQueue;
       audioHandler.updateQueue([...audioHandler.queue.value, ...songs.map((s) => s.toMediaItem())]);
-      print("Added album to queue, new length: ${state.queue.length} & ${audioHandler.queue.value.length}");
     });
   }
 
@@ -199,53 +206,62 @@ class Player extends _$Player {
     ref.read(findSongsByArtistProvider(id).future).then((songs) async {
       audioHandler.updateQueue(songs.map((s) => s.toMediaItem()).toList());
       audioHandler.skipToQueueItem(0);
+      _queue = songs.map((s) => s.toQueueItem()).toList();
       state = state.copyWith(queue: songs.map((s) => s.toQueueItem()).toList());
-      print("Set artist, new length: ${state.queue.length} & ${audioHandler.queue.value.length}");
     });
   }
 
   void addArtistToQueue(String id) async {
     ref.read(findSongsByArtistProvider(id).future).then((songs) async {
-      state = state.copyWith(queue: [...audioHandler.queue.value.map((s) => s.toQueueItem()), ...songs.map((s) => s.toQueueItem())]);
+      var newQueue = [...state.queue, ...songs.map((s) => s.toQueueItem())];
+      state = state.copyWith(queue: newQueue);
+      _queue = newQueue;
       audioHandler.updateQueue([...audioHandler.queue.value, ...songs.map((s) => s.toMediaItem()).toList()]);
-      print("Added artist to queue, new length: ${songs.length} : ${state.queue.length}sq & ${audioHandler.queue.value.length}ahq");
     });
   }
 
   void setPlaylist(String id) async {
     ref.read(findSongsByPlaylistProvider(id).future).then((songs) async {
+      var newQueue = songs.map((s) => s.toQueueItem()).toList();
       audioHandler.updateQueue(songs.map((s) => s.toMediaItem()).toList());
       audioHandler.skipToQueueItem(0);
-      state = state.copyWith(queue: songs.map((s) => s.toQueueItem()).toList());
-      print("Set artist, new length: ${state.queue.length} & ${audioHandler.queue.value.length}");
+      state = state.copyWith(queue: newQueue);
+      _queue = newQueue;
     });
   }
 
   void addPlaylistToQueue(String id) async {
     ref.read(findSongsByPlaylistProvider(id).future).then((songs) async {
-      state = state.copyWith(queue: [...audioHandler.queue.value.map((s) => s.toQueueItem()), ...songs.map((s) => s.toQueueItem())]);
+      var newQueue = [...state.queue, ...songs.map((s) => s.toQueueItem())];
+      state = state.copyWith(queue: newQueue);
+      _queue = newQueue;
       audioHandler.updateQueue([...audioHandler.queue.value, ...songs.map((s) => s.toMediaItem()).toList()]);
-      print("Added artist to queue, new length: ${songs.length} : ${state.queue.length}sq & ${audioHandler.queue.value.length}ahq");
     });
   }
 
   void setQueue(List<Song> queue) async {
     audioHandler.updateQueue(queue.map((s) => s.toMediaItem()).toList());
-    state = state.copyWith(queue: queue.map((s) => s.toQueueItem()).toList());
+    var newQueue = queue.map((s) => s.toQueueItem()).toList();
+    state = state.copyWith(queue: newQueue);
+    _queue = newQueue;
   }
 
   void addToQueue(Song song) async {
+    var newQueue = [...state.queue, song.toQueueItem()];
     state = state.copyWith(
-      queue: [...state.queue, song.toQueueItem()],
+      queue: newQueue,
     );
+    _queue = newQueue;
     audioHandler.updateQueue([...audioHandler.queue.value, song.toMediaItem()]);
   }
 
   void addIdToQueue(String id) async {
     ref.read(findSongProvider(id).future).then((songObject) async {
+      var newQueue = [...state.queue, songObject.toQueueItem()];
       state = state.copyWith(
-        queue: [...state.queue, songObject.toQueueItem()],
+        queue: newQueue,
       );
+      _queue = newQueue;
       audioHandler.updateQueue([...audioHandler.queue.value, songObject.toMediaItem()]);
     });
   }
@@ -253,21 +269,20 @@ class Player extends _$Player {
   void clearQueue() async {
     audioHandler.updateQueue([]);
     state = state.copyWith(queue: []);
+    _queue = [];
     audioHandler.stop();
   }
 
   void moveQueueItem(int oldIndex, int newIndex) async {
-    print("Moving queue item $oldIndex to $newIndex");
     List<QueueItem> queue = [...state.queue];
     QueueItem s = queue.removeAt(oldIndex);
     queue.insert(newIndex - 1, s);
     state = state.copyWith(queue: queue);
+    _queue = queue;
     audioHandler.updateQueue(queue.map((s) => s.toMediaItem()).toList());
   }
 
   void playYoutubeId(String id) async {
-    // var video = await yt.videos.get(id);
-    // print("Playing youtube video $id");
     final item = MediaItem(
       id: id,
       title: "Youtube Video",
@@ -292,6 +307,26 @@ class Player extends _$Player {
     await audioHandler.playMediaItem(item);
     audioHandler.updateQueue([item]);
   }
+
+  Future<void> shuffle(bool enable) async {
+    if(!enable) {
+      state = state.copyWith(shuffle: enable, queue: _queue); 
+    }else if(enable) {
+      _queue = state.queue;
+      List<QueueItem> chew = List<QueueItem>.filled(state.queue.length, QueueItem.empty());
+      for(int i = 0; i < state.queue.length; i++) {
+        chew[i] = state.queue[superShuffle(i, DateTime.now().millisecondsSinceEpoch, state.queue.length)];
+      }
+      state = state.copyWith(shuffle: enable, queue: chew);
+      audioHandler.updateQueue(chew.map((s) => s.toMediaItem()).toList());
+    }
+    state = state.copyWith(shuffle: enable);
+  }
+
+  Future<void> loop(bool enable) async {
+    audioHandler.setRepeatMode(enable ? AudioServiceRepeatMode.all : AudioServiceRepeatMode.none);
+    state = state.copyWith(loop: enable);
+  }
 }
 
 class AudioServiceHandler extends BaseAudioHandler 
@@ -302,9 +337,11 @@ class AudioServiceHandler extends BaseAudioHandler
     String backendUrl = "";
     int playingIndex = 0;
     bool shuffle = false;
+    bool loop = true;
     bool nextPrepped = false;
     String nextUrl = "";
     int duration = 0;
+    List<MediaItem> unshuffledQueue = [];
 
     void init() async {
       if(backendUrl == "") backendUrl = (await SharedPreferences.getInstance()).getString("backendUrl") ?? "https://eatthecow.mooo.com:3030";
@@ -319,7 +356,7 @@ class AudioServiceHandler extends BaseAudioHandler
       player.onPlayerComplete.listen((_) {
         playbackState.add(playbackState.value.copyWith(playing: false));
         mediaItem.drain();
-        skipToNext();
+        if(loop) skipToNext();
       });
       queue.listen((q) {
         if(q.isNotEmpty && q.length-1 > playingIndex && !nextPrepped) {
@@ -423,10 +460,8 @@ class AudioServiceHandler extends BaseAudioHandler
 
     Future<void> prepMediaItem(MediaItem mediaITem) async {
       if(queue.value.isEmpty) nextPrepped = false;
-      print("AudioServiceHandler: extras: ${mediaITem.extras}");
       if(!nextPrepped) {
         player.stop();
-        print("AudioServiceHandler: playing item");
         MediaItem mediaitem = mediaITem;
         var video = await fetchYTVideo(mediaitem.id);
         var url = (PlatformUtils.isWeb) ? "$backendUrl/proxy/$video" : video;
@@ -436,7 +471,6 @@ class AudioServiceHandler extends BaseAudioHandler
         mediaItem.add(mediaitem.copyWith(extras: {"song": mediaITem.extras?["song"], "index": playingIndex}));
         prepNextItem();
       }else{
-        print("AudioServiceHandler: playing prepped item");
         player.play(UrlSource(nextUrl));
         nextPrepped = false;
         playbackState.add(playbackState.value.copyWith(playing: true));
@@ -453,12 +487,14 @@ class AudioServiceHandler extends BaseAudioHandler
     prepNextItem() async {
       if(queue.value.length <= 1) return;
       var nextIndex = (playingIndex + 1 > queue.value.length-1) ? 0 : playingIndex + 1;
-      print("AudioServiceHandler: preparing next item ($nextIndex) using secondary player");
       var mediaitem = queue.value[nextIndex];
       var video = await fetchYTVideo(queue.value[nextIndex].id);
       nextUrl = (PlatformUtils.isWeb) ? "$backendUrl/proxy/$video" : video;
-      print("Prefetching ${queue.value[nextIndex].id} on ${PlatformUtils.isWeb ? "web" : "desktop"}");
       nextPrepped = true;
-      print("AudioServiceHandler: prepared next item");
     }
+
+  @override
+  Future<void> setRepeatMode(AudioServiceRepeatMode repeatMode) async {
+    loop = repeatMode == AudioServiceRepeatMode.all;
+  }
 }

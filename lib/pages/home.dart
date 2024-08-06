@@ -253,8 +253,11 @@ class HomePage extends ConsumerWidget {
                             child: Row(
                               children: [
                                 IconButton(
-                                  onPressed: null,
+                                  onPressed: () {
+                                    ref.read(playerProvider.notifier).shuffle(!player.shuffle);
+                                  },
                                   icon: const Icon(Icons.shuffle_rounded),
+                                  color: player.shuffle ? Theme.of(context).colorScheme.primary : null,
                                 ),
                                 const SpacerWidget(width: 8),
                                 FilledButton.tonal(
@@ -300,8 +303,11 @@ class HomePage extends ConsumerWidget {
                                 ),
                                 const SpacerWidget(width: 8),
                                 IconButton(
-                                  onPressed: null,
+                                  onPressed: () {
+                                    ref.read(playerProvider.notifier).loop(!player.loop);
+                                  },
                                   icon: const Icon(Icons.loop_rounded),
+                                  color: player.loop ? Theme.of(context).colorScheme.primary : null,
                                 ),
                               ]
                             )
@@ -322,11 +328,13 @@ class HomePage extends ConsumerWidget {
                   Listener(
                     onPointerSignal: (event) {
                       if(event is PointerScrollEvent) {
-                        // print("${event.scrollDelta.dy<0 ? "Scrolling up" : "Scrolling down"}");
+                        print("${event.scrollDelta.dy<0 ? "Scrolling up" : "Scrolling down"}");
                         if(event.scrollDelta.dy < 0) {
                           ref.read(playerProvider.notifier).seekForward(3000);
+                          print("Seeking forward");
                         }else{
                           ref.read(playerProvider.notifier).seekBackward(3000);
+                          print("Seeking backward");
                         }
                       }
                     },

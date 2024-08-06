@@ -99,6 +99,19 @@ class Player extends _$Player {
     });
   }
 
+  void seek(Duration d) {
+    audioHandler.seek(d);
+  }
+
+  void seekForward(int milliseconds){
+    audioHandler.seek(audioHandler.playbackState.value.updatePosition + Duration(milliseconds: milliseconds));
+  }
+
+  void seekBackward(int milliseconds){
+    Duration computed = audioHandler.playbackState.value.updatePosition - Duration(milliseconds: milliseconds);
+    audioHandler.seek(computed.isNegative ? Duration.zero : computed);
+  }
+
   void play() async {
     audioHandler.play();
     state = state.copyWith(isPlaying: true);
@@ -285,46 +298,25 @@ class AudioServiceHandler extends BaseAudioHandler
     with QueueHandler {
     
     final player = AudioPlayer();
-    final secondaryPlayer = AudioPlayer();
     final bool isWeb = PlatformUtils.isWeb;
     String backendUrl = "";
     int playingIndex = 0;
     bool shuffle = false;
     bool nextPrepped = false;
-    bool mainInUse = false;
     String nextUrl = "";
     int duration = 0;
 
     void init() async {
       if(backendUrl == "") backendUrl = (await SharedPreferences.getInstance()).getString("backendUrl") ?? "https://eatthecow.mooo.com:3030";
       player.onPositionChanged.listen((Duration d) {
-        if(!mainInUse) return; 
         // print("AudioServiceHandler: player position changed");
         playbackState.add(playbackState.value.copyWith(updatePosition: d));
       });
       player.onDurationChanged.listen((Duration d) {
-        if(!mainInUse) return; 
-        if(mainInUse) mediaItem.add(mediaItem.value?.copyWith(duration: d));
-        duration = d.inMilliseconds;
-      });
-      player.onPlayerComplete.listen((_) {
-        if(!mainInUse) return; 
-        playbackState.add(playbackState.value.copyWith(playing: false));
-        mediaItem.drain();
-        skipToNext();
-      });
-      secondaryPlayer.onPositionChanged.listen((Duration d) {
-        if(mainInUse) return; 
-        // print("AudioServiceHandler: player secondary position changed");
-        playbackState.add(playbackState.value.copyWith(updatePosition: d));
-      });
-      secondaryPlayer.onDurationChanged.listen((Duration d) {
-        if(mainInUse) return; 
         mediaItem.add(mediaItem.value?.copyWith(duration: d));
         duration = d.inMilliseconds;
       });
-      secondaryPlayer.onPlayerComplete.listen((_) {
-        if(mainInUse) return; 
+      player.onPlayerComplete.listen((_) {
         playbackState.add(playbackState.value.copyWith(playing: false));
         mediaItem.drain();
         skipToNext();
@@ -364,7 +356,6 @@ class AudioServiceHandler extends BaseAudioHandler
     Future<void> playMediaItem(MediaItem mediaitem) async {
       playingIndex = 0;
       player.stop();
-      secondaryPlayer.stop();
       queue.value = [mediaitem];
       queue.add(queue.value);
       await prepMediaItem(mediaitem);
@@ -372,24 +363,19 @@ class AudioServiceHandler extends BaseAudioHandler
 
     @override
     Future<void> playFromUri(Uri uri, [Map<String, dynamic>? extras]) async {
-      print("AudioServiceHandler: playing using ${mainInUse ? "secondary" : "primary"} player");
       playbackState.add(playbackState.value.copyWith(playing: true));
-      await (mainInUse ? secondaryPlayer : player).play(UrlSource(uri.toString()));
-      mainInUse = !mainInUse;
+      await player.play(UrlSource(uri.toString()));
     }
     
     @override
     Future<void> play() async {
-      print("AudioServiceHandler: playing using ${!mainInUse ? "secondary" : "primary"} player");
       playbackState.add(playbackState.value.copyWith(playing: true));
-      return (!mainInUse ? secondaryPlayer : player).resume();
+      return player.resume();
     }
     
     @override
     Future<void> pause() async {
-      print("AudioServiceHandler: playing using ${!mainInUse ? "secondary" : "primary"} player");
       playbackState.add(playbackState.value.copyWith(playing: false));
-      secondaryPlayer.pause();
       return player.pause();
     }
     
@@ -398,15 +384,13 @@ class AudioServiceHandler extends BaseAudioHandler
       playbackState.add(playbackState.value.copyWith(playing: false));
       // mainInUse = !mainInUse;
       nextPrepped = false;
-      secondaryPlayer.stop();
       player.stop();
       player.setSourceUrl("");
-      secondaryPlayer.setSourceUrl("");
     }
 
     @override
     Future<void> seek(Duration position) async {
-      (!mainInUse ? secondaryPlayer : player).seek(position);
+      player.seek(position);
     }
 
     @override
@@ -442,21 +426,18 @@ class AudioServiceHandler extends BaseAudioHandler
       print("AudioServiceHandler: extras: ${mediaITem.extras}");
       if(!nextPrepped) {
         player.stop();
-        secondaryPlayer.stop();
         print("AudioServiceHandler: playing item");
         MediaItem mediaitem = mediaITem;
         var video = await fetchYTVideo(mediaitem.id);
         var url = (PlatformUtils.isWeb) ? "$backendUrl/proxy/$video" : video;
-        (mainInUse ? secondaryPlayer : player).play(UrlSource(url));
-        mainInUse = !mainInUse;
+        player.play(UrlSource(url));
         // if(mediaitem.artUri.toString() == "https://determine.com") mediaitem = mediaitem.copyWith(artUri: Uri.parse(video[1]));
         playbackState.add(playbackState.value.copyWith(playing: true));
         mediaItem.add(mediaitem.copyWith(extras: {"song": mediaITem.extras?["song"], "index": playingIndex}));
         prepNextItem();
       }else{
         print("AudioServiceHandler: playing prepped item");
-        (mainInUse ? secondaryPlayer : player).play(UrlSource(nextUrl));
-        mainInUse = !mainInUse;
+        player.play(UrlSource(nextUrl));
         nextPrepped = false;
         playbackState.add(playbackState.value.copyWith(playing: true));
         mediaItem.add(mediaITem.copyWith(extras: {"song": mediaITem.extras?["song"], "index": playingIndex}));
@@ -472,13 +453,11 @@ class AudioServiceHandler extends BaseAudioHandler
     prepNextItem() async {
       if(queue.value.length <= 1) return;
       var nextIndex = (playingIndex + 1 > queue.value.length-1) ? 0 : playingIndex + 1;
-      print("AudioServiceHandler: preparing next item ($nextIndex) using ${mainInUse ? "secondary" : "primary"} player");
+      print("AudioServiceHandler: preparing next item ($nextIndex) using secondary player");
       var mediaitem = queue.value[nextIndex];
       var video = await fetchYTVideo(queue.value[nextIndex].id);
       nextUrl = (PlatformUtils.isWeb) ? "$backendUrl/proxy/$video" : video;
       print("Prefetching ${queue.value[nextIndex].id} on ${PlatformUtils.isWeb ? "web" : "desktop"}");
-      (mainInUse ? secondaryPlayer : player).setSourceUrl(nextUrl);
-      // mainInUse = !mainInUse;
       nextPrepped = true;
       print("AudioServiceHandler: prepared next item");
     }

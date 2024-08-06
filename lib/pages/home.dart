@@ -1,5 +1,5 @@
 import 'package:beamer/beamer.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -99,12 +99,12 @@ class HomePage extends ConsumerWidget {
                   ),
                 ) :
                 Container(),
-              Container(
-                width: 96,
-                child: Center(
-                  child: IconButton(
-                    icon: const Icon(Icons.settings),
-                    onPressed: () => Beamer.of(context).beamToNamed('/settings'),
+                Container(
+                  width: 96,
+                  child: Center(
+                    child: IconButton(
+                      icon: const Icon(Icons.settings),
+                      onPressed: () => Beamer.of(context).beamToNamed('/settings'),
                     // onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Settings not done yet :("))),
                     ),
                   ),
@@ -126,25 +126,17 @@ class HomePage extends ConsumerWidget {
               label: Text("Home"),
             ),
             NavigationRailDestination(
-              icon: Icon(Icons.person),
-              label: Text("Artists"),
-            ),
-            NavigationRailDestination(
               icon: Icon(Icons.library_music_rounded),
-              label: Text("Albums"),
-            ),
-            NavigationRailDestination(
-              icon: Icon(Icons.music_note_rounded),
-              label: Text("Songs"),
+              label: Text("Library"),
             ),
             NavigationRailDestination(
               icon: Icon(Icons.queue_music),
               label: Text("Queue"),
             ),
-            NavigationRailDestination(
-              icon: Icon(Icons.playlist_add),
-              label: Text("Playlists"),
-            ),
+            // NavigationRailDestination(
+            //   icon: Icon(Icons.playlist_add),
+            //   label: Text("Playlists"),
+            // ),
             NavigationRailDestination(
               icon: Icon(Icons.download_rounded),
               label: Text("Adder"),
@@ -162,22 +154,18 @@ class HomePage extends ConsumerWidget {
             switch (Beamer.of(context).currentPages.last.key) {
               case ValueKey(value: 'home'):
                 return 0;
-              case ValueKey(value: 'artists'):
+              case ValueKey(value: 'library'):
                 return 1;
-              case ValueKey(value: 'albums'):
-                return 2;
-              case ValueKey(value: 'songs'):
-                return 3;
               case ValueKey(value: 'queue'):
-                return 4;
-              case ValueKey(value: 'playlists'):
-                return 5;
+                return 2;
+              // case ValueKey(value: 'playlists'):
+              //   return 3;
               case ValueKey(value: 'adder'):
-                return 6;
+                return 3;
               case ValueKey(value: 'roadmap'):
-                return 7;
+                return 4;
               case ValueKey(value: 'issues'):
-                return 8;
+                return 5;
               default:
                 return null;
           }}(),
@@ -187,24 +175,18 @@ class HomePage extends ConsumerWidget {
                 Beamer.of(context).beamToNamed('/home');
                 break;
               case 1:
-                Beamer.of(context).beamToNamed('/artists');
+                Beamer.of(context).beamToNamed('/library');
                 break;
               case 2:
-                Beamer.of(context).beamToNamed('/albums');
-                break;
-              case 3:
-                Beamer.of(context).beamToNamed('/songs');
-                break;
-              case 4:
                 Beamer.of(context).beamToNamed('/queue');
                 break;
-              case 5:
-                Beamer.of(context).beamToNamed('/playlists');
-                break;
-              case 6:
+              // case 3:
+              //   Beamer.of(context).beamToNamed('/playlists');
+              //   break;
+              case 3:
                 Beamer.of(context).beamToNamed('/adder');
                 break;
-              case 7:
+              case 4:
                 Beamer.of(context).beamToNamed('/checklist');
                 break;
               default:
@@ -235,6 +217,7 @@ class HomePage extends ConsumerWidget {
                   )
                 )
               ),
+
               //Controls
               Container(
                 constraints: BoxConstraints(
@@ -244,21 +227,36 @@ class HomePage extends ConsumerWidget {
                 child: Column(  // Player controls
                   children: [
                     Container(
-                      margin: EdgeInsets.fromLTRB(12, 12, 12, 12),
+                      margin: EdgeInsets.fromLTRB(16, 12, 12, 12),
                       child: Row(
                         children: [
                           Expanded(
-                            child: Text(
-                              player.displayName,
-                              style: GoogleFonts.poppins().copyWith(color: Theme.of(context).colorScheme.onSurface),
-                              overflow: TextOverflow.ellipsis
-                            )
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  player.displayName,
+                                  style: GoogleFonts.poppins().copyWith(color: Theme.of(context).colorScheme.onSurface),
+                                  overflow: TextOverflow.ellipsis
+                                ),
+                                Text(
+                                  player.albumDisplayName.isNotEmpty && player.artistDisplayName.isNotEmpty ? "${player.albumDisplayName} - ${player.artistDisplayName}" : "",
+                                  style: GoogleFonts.poppins().copyWith(color: Theme.of(context).colorScheme.onSurface),
+                                  overflow: TextOverflow.ellipsis
+                                ),
+                              ],
+                            ),
                           ),
 
 
                           Container(  // Button group
                             child: Row(
                               children: [
+                                IconButton(
+                                  onPressed: null,
+                                  icon: const Icon(Icons.shuffle_rounded),
+                                ),
+                                const SpacerWidget(width: 8),
                                 FilledButton.tonal(
                                   child: Container(
                                     constraints: const BoxConstraints(
@@ -300,6 +298,11 @@ class HomePage extends ConsumerWidget {
                                     ref.read(playerProvider.notifier).next();
                                   }
                                 ),
+                                const SpacerWidget(width: 8),
+                                IconButton(
+                                  onPressed: null,
+                                  icon: const Icon(Icons.loop_rounded),
+                                ),
                               ]
                             )
                           ),
@@ -316,14 +319,25 @@ class HomePage extends ConsumerWidget {
                   )]
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(16, 0, 12, 16),
-                    child: LinearProgressIndicator(
-                      minHeight: 8,
-                      borderRadius: BorderRadius.circular(9999),
-                      value: player.duration == 0 ? 0 : player.position / player.duration,
-                      // backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-                    )
+                  Listener(
+                    onPointerSignal: (event) {
+                      if(event is PointerScrollEvent) {
+                        // print("${event.scrollDelta.dy<0 ? "Scrolling up" : "Scrolling down"}");
+                        if(event.scrollDelta.dy < 0) {
+                          ref.read(playerProvider.notifier).seekForward(3000);
+                        }else{
+                          ref.read(playerProvider.notifier).seekBackward(3000);
+                        }
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.fromLTRB(16, 0, 12, 16),
+                      child: LinearProgressIndicator(
+                        minHeight: 8,
+                        borderRadius: BorderRadius.circular(9999),
+                        value: player.duration == 0 ? 0 : player.position / player.duration,
+                      )
+                    ),
                   ),
                 ]
               ))

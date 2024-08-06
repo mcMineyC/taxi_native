@@ -14,7 +14,7 @@ part 'new_provider.g.dart';
 Future<List<Song>> fetchNewSongs(FetchNewSongsRef ref) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("${await ref.read(backendUrlProvider.future)}/info/songs"),
+      Uri.parse("${await ref.read(backendUrlProvider.future)}/info/songs?limit=10"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
@@ -33,8 +33,7 @@ Future<List<Song>> fetchNewSongs(FetchNewSongsRef ref) async {
   //   listThings.add(song);
   // });
   for(var x = 0; x < (desponse.length >= 10 ? 10 : desponse.length); x++){
-    var outStr = jsonEncode(desponse[x]);
-    var song = Song.fromJson(jsonDecode(outStr));
+    var song = Song.fromJson(desponse[x]);
     listThings.add(song);
   }
   return listThings;

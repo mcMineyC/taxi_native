@@ -29,6 +29,7 @@ import 'pages/playlists.dart';
 import 'pages/playlist.dart';
 import 'pages/settings.dart';
 import 'pages/checklist.dart';
+import 'pages/library.dart';
 import 'login.dart';
 
 late AudioHandler audioHandler;
@@ -102,6 +103,12 @@ class App extends ConsumerWidget {
           key: const ValueKey('home'),
           title: 'Home',
           child: HomePage(homeJunk: LandingPage()),
+        ),
+        '/library': (context, state, data) => BeamPage(
+          key: const ValueKey('library'),
+          title: 'Library',
+          popToNamed: '/home',
+          child: HomePage(homeJunk: LibraryPage()),
         ),
         '/artist/:artistId': (context, state, data) {
           final artistId = state.uri.toString().split("/artist/").last.split("/").first.split("?").first;

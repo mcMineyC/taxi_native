@@ -18,7 +18,7 @@ jobs:
         with:
           channel: 'beta'
       - run: sudo apt-get update
-      - run: sudo apt-get install
+      - run: sudo apt-get install libunwind
       - run: sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
       - run: flutter pub get
 #      - run: flutter format --set-exit-if-changed .

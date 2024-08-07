@@ -12,8 +12,17 @@ jobs:
     steps:
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d %I:%M')"
-      - run: echo "SHORT_SHA=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_ENV
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d %I:%M
+      - name: Set outputs
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      - uses: ncipollo/release-action@v1
+        with:
+  #        artifacts: "build/app/outputs/apk/release/app-release.apk,taxi-native-linux_x64.zip"
+          tag: ${{ steps.vars.outputs.sha_short }}
+          makeLatest: true
+          name: ${{ steps.date.outputs.date }}
+          body: "## This was autoreleased via github actions"
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:

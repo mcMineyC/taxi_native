@@ -28,7 +28,9 @@ dependencies:
   cached_network_image: ^3.3.1
   skeletonizer: ^1.3.0
   context_menus: ^2.0.0+1
-  audio_service: ^0.18.13
+  audio_service:
+    git:
+      url: https://github.com/mcMineyC/audio_service.git
   audio_service_mpris: ^0.1.4
   audioplayers: any
   beamer: ^1.6.1

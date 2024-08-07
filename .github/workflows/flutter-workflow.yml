@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+      - run: echo hi > catty.txt
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "catty.txt"
       - uses: actions/setup-java@v4
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options

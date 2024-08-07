@@ -13,7 +13,6 @@ import 'providers/preferences_provider.dart';
 import 'platform_utils.dart';
 import 'providers/theme_provider.dart';
 
-
 import 'pages/error.dart';
 import 'pages/home.dart';
 import 'pages/artists.dart';

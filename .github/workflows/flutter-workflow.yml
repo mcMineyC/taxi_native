@@ -17,13 +17,7 @@ jobs:
       - name: Set outputs
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-      - uses: ncipollo/release-action@v1
-        with:
-  #        artifacts: "build/app/outputs/apk/release/app-release.apk,taxi-native-linux_x64.zip"
-          tag: ${{ steps.vars.outputs.sha_short }}
-          makeLatest: true
-          name: ${{ steps.date.outputs.date }}
-          body: "## This was autoreleased via github actions"
+
       - uses: actions/setup-java@v4
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
@@ -44,7 +38,7 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "build/app/outputs/apk/release/app-release.apk,taxi-native-linux_x64.zip"
-          tag: ${{ env.SHORT_SHA }}
+          tag: ${{ steps.vars.outputs.sha_short }}
           makeLatest: true
           name: ${{ steps.date.outputs.date }}
           body: "## This was autoreleased via github actions"

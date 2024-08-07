@@ -10,12 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - uses: actions/checkout@v4
-      - run: echo hi > catty.txt
-      - uses: ncipollo/release-action@v1
-        with:
-          artifacts: "catty.txt"
-          tag: "latest"
       - uses: actions/setup-java@v4
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
@@ -24,20 +22,21 @@ jobs:
         with:
           channel: 'beta'
       - run: sudo apt-get update
-      - run: sudo apt-get install libunwind-dev
+      - run: sudo apt-get install libunwind-dev zip
       - run: sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
       - run: flutter pub get
 #      - run: flutter format --set-exit-if-changed .
       - run: dart run build_runner build --delete-conflicting-outputs
       - run: flutter build apk
-#      - run: flutter build linux
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
+      - run: flutter build linux
+      - run: sh -c "cd build/linux/x64/release/bundle && zip -r taxi-native-linux_x64.zip . && cp taxi-natve-linux_x64.zip ../../../../../"
+      - uses: ncipollo/release-action@v1
         with:
-          body: Released on push
-          make_latest: true
-          files: build/app/outputs/apk/release/app-release.apk
+          artifacts: "build/app/outputs/apk/release/app-release.apk,taxi-native-linux_x64.zip"
+          tag: "latest"
+          makeLatest: true
+          name: ${{ steps.date.outputs.date }}
+          body: "## This was autoreleased via github actions"
       - uses: actions/upload-artifact@v1
         with:
           name: release-apk

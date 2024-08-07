@@ -10,10 +10,11 @@ class CardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-        crossAxisCount: (MediaQuery.of(context).size.width / 220).truncate(),
+        crossAxisCount: (MediaQuery.of(context).size.width / 224).ceil(),
         scrollDirection: Axis.vertical,
-        mainAxisSpacing: 10,
+        mainAxisSpacing: 0,
         crossAxisSpacing: 0,
+        childAspectRatio: 200 / 238,
         children: cardList.map(
           (card) => MediaCard(text: card["text"], image: card["image"], thingId: card["id"], thingType: card["type"])
         ).toList(),

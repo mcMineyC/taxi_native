@@ -55,6 +55,7 @@ class LandingPage extends ConsumerWidget {
                 ),
               ),
               Container(
+                height: 238,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -83,6 +84,7 @@ class LandingPage extends ConsumerWidget {
                 ),
               ),
               Container(
+                height: 238,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: backendUrl.when(
@@ -133,6 +135,7 @@ class LandingPage extends ConsumerWidget {
                 ),
               ),
               Container(
+                height: 238,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: backendUrl.when(
@@ -166,6 +169,7 @@ class LandingPage extends ConsumerWidget {
                 ),
               ),
               Container(
+                height: 238,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: backendUrl.when(
@@ -198,6 +202,7 @@ class LandingPage extends ConsumerWidget {
                 ),
               ),
               Container(
+                height: 238,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: backendUrl.when(

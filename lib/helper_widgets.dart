@@ -104,7 +104,9 @@ class MediaCard extends ConsumerWidget{
       contextMenu: GenericContextMenu(
         buttonConfigs: buildMenuButtons(context, ref),
       ),
-        child: FittedBox(
+      child: Container(
+        width: 200,
+        height: 230,
           child: Card(
             clipBehavior: Clip.hardEdge,
             child: InkWell(
@@ -138,38 +140,37 @@ class MediaCard extends ConsumerWidget{
               // onLongPress: () {
               //   print("Long press");
               // },
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                minWidth: 220.0, 
-                minHeight: 230.0, 
-                maxWidth: 220.0, 
-                // maxHeight: 350.0,
-              ),
+            child: Container(
               child: Column(
                 children: [
-                  Container(
-                    margin: EdgeInsets.fromLTRB(24, 20, 24, 0),
-                    height: 175,
-                    width: 200,
-                    child: CachedNetworkImage(
-                      imageUrl: image,
-                      imageBuilder: (context, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.contain,
+                    FittedBox(
+                      child: Container(
+                      margin: EdgeInsets.only(top: 12, left: 12, right: 12),
+                      height: 172,
+                      width: 172,
+                      // decoration: BoxDecoration(
+                      //   color: Colors.teal,
+                      //   borderRadius: BorderRadius.circular(12),
+                      // ),
+                      child: CachedNetworkImage(
+                        imageUrl: image,
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
+                        placeholder: (context, url) => Container(decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12))),
+                        errorWidget: (context, url, error) => Icon(Icons.error_outline_rounded,color:Colors.pink[700]),
                       ),
-                      placeholder: (context, url) => Container(decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12))),
-                      errorWidget: (context, url, error) => Icon(Icons.error_outline_rounded,color:Colors.pink[700]),
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    width: 172,
-                    height: 28,
+                    height: 26,
+                    margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     child: Text(
                       text,
                       style: TextStyle(
@@ -187,7 +188,8 @@ class MediaCard extends ConsumerWidget{
           )
         )
       )
-    )
+      // )
+      ),
     );
   }
 }

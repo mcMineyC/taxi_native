@@ -6,20 +6,30 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_side_sheet/modal_side_sheet.dart';
-import 'package:provider/provider.dart' as prov;
 
 import '../helper_widgets.dart';
 import '../providers/playing_provider.dart';
 import '../providers/search_provider.dart';
-import '../providers/theme_provider.dart';
 
 class HomePage extends ConsumerWidget {
   HomePage({super.key, required this.homeJunk});
+  final Widget homeJunk;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool useMobile = MediaQuery.of(context).size.width <= 840;
+    return useMobile ? MobileHomePage(homeJunk: homeJunk) : DesktopHomePage(homeJunk: homeJunk);
+  }
+}
+
+class DesktopHomePage extends ConsumerWidget {
+  DesktopHomePage({super.key, required this.homeJunk});
   final Widget homeJunk;
   final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print("Using desktop layout");
     ref.read(playerProvider.notifier).init();
     final player = ref.watch(playerProvider);
     // _searchController.text = ref.read(searchProvider.notifier).text;
@@ -191,7 +201,7 @@ class HomePage extends ConsumerWidget {
                 break;
               default:
                 var snacky = SnackBar(
-                  content: Text("This feature isn't done yet :("),
+                  content: Text("This feature isn't done yet :(${MediaQuery.of(context).size.width}x${MediaQuery.of(context).size.height})"),
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snacky);
                 break;
@@ -350,6 +360,283 @@ class HomePage extends ConsumerWidget {
                 ]
               ))
             )
+      );
+  }
+}
+
+
+class MobileHomePage extends ConsumerWidget {
+  MobileHomePage({super.key, required this.homeJunk});
+  final Widget homeJunk;
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    int width = MediaQuery.of(context).size.width.toInt();
+    print("Building MobileHomePage $width");
+    ref.read(playerProvider.notifier).init();
+    final player = ref.watch(playerProvider);
+    // _searchController.text = ref.read(searchProvider.notifier).text;
+    // ref.watch(searchProvider);
+    var qText = ref.watch(searchProvider.notifier).text;
+    if(Beamer.of(context).currentPages.last.key == ValueKey("search") && qText.isNotEmpty && _searchController.text == "") {
+      print("Restoring text: $qText");
+      _searchController.text = qText;
+    }else if(Beamer.of(context).currentPages.last.key == ValueKey("search") && qText == "") {
+      _searchController.clear();
+    }
+    if(Beamer.of(context).currentPages.last.key == ValueKey("search")) {
+      ref.watch(searchProvider.select((value) => value.query));
+    }
+    return Scaffold(
+      // extendBodyBehindAppBar: true,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Beamer.of(context).beamToNamed('/search'),
+        tooltip: "Search",
+        child: const Icon(Icons.search_rounded),
+      ),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(58),
+        child: Container(
+          color: Theme.of(context).colorScheme.surfaceContainer,
+          height: 58,
+          child: Row(
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () => Beamer.of(context).beamBack(),
+                ),
+              ),
+              Text(
+                Beamer.of(context).currentPages.last.title ?? "Home",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              Expanded(
+                child: Container(),
+              ),
+              Beamer.of(context).currentPages.last.key == ValueKey("search") ? 
+                Container(
+                  constraints: BoxConstraints(maxWidth: 512),
+                  child: TextField(
+                    controller: _searchController,
+                    autofocus: true,
+                    onChanged: (value) async {
+                      ref.read(searchProvider.notifier).search(value);
+                    },
+                    decoration: ref.read(searchProvider.notifier).text.isNotEmpty ? InputDecoration(
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(9999)),
+                      ),
+                      hintText: "Search",
+                      prefixIcon: const Icon(Icons.search_rounded),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.clear), 
+                        onPressed: () {
+                          _searchController.clear();
+                          ref.read(searchProvider.notifier).search("");
+                        },
+                      )
+                    ) :
+                    InputDecoration(
+                      filled: true,
+                      fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(9999)),
+                      ),
+                      hintText: "Search",
+                      prefixIcon: const Icon(Icons.search_rounded),
+                    )
+                  ),
+                ) :
+                Container(),
+                Container(
+                  width: 96,
+                  child: Center(
+                    child: IconButton(
+                      icon: const Icon(Icons.settings),
+                      onPressed: () => Beamer.of(context).beamToNamed('/settings'),
+                    // onPressed: () => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Settings not done yet :("))),
+                    ),
+                  ),
+                ),
+            ]
+          )
+        ),
+      ),
+      bottomNavigationBar: NavigationBar(
+        destinations: [
+          const NavigationDestination(
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          const NavigationDestination(
+            icon: Icon(Icons.library_music_rounded),
+            label: "Library",
+          ),
+          if(width >= 225) const NavigationDestination(
+            icon: Icon(Icons.queue_music),
+            label: "Queue",
+          ),
+          if(width >= 450) const NavigationDestination(
+            icon: Icon(Icons.download_rounded),
+            label: "Adder",
+          ),
+          if(width >= 700) const NavigationDestination(
+               icon: Icon(Icons.checklist_rounded),
+                label: "Roadmap",
+            ),
+          if(width >= 800) const NavigationDestination(
+            icon: Icon(Icons.bug_report_rounded),
+            label: "Report an issue",
+          ),
+        ],
+        selectedIndex: () {
+          switch (Beamer.of(context).currentPages.last.key) {
+            case ValueKey(value: 'home'):
+              return 0;
+            case ValueKey(value: 'library'):
+              return 1;
+            case ValueKey(value: 'queue'):
+              return 2;
+            case ValueKey(value: 'playlists'):
+              return 3;
+            case ValueKey(value: 'adder'):
+              return 3;
+            case ValueKey(value: 'roadmap'):
+              return 4;
+            case ValueKey(value: 'issues'):
+              return 5;
+            default:
+              return 0;
+        }}(),
+        onDestinationSelected: (int index) {
+          switch (index) {
+            case 0:
+              Beamer.of(context).beamToNamed('/home');
+              break;
+            case 1:
+              Beamer.of(context).beamToNamed('/library');
+              break;
+            case 2:
+              Beamer.of(context).beamToNamed('/queue');
+              break;
+            case 3:
+              Beamer.of(context).beamToNamed('/adder');
+              break;
+            case 4:
+              Beamer.of(context).beamToNamed('/checklist');
+              break;
+            default:
+              var snacky = SnackBar(
+                content: Text("This feature isn't done yet :("),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snacky);
+              break;
+          }
+        },
+      ),
+        body: Container(
+          color: Theme.of(context).colorScheme.surfaceContainer,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(0, 6, 0, 6),
+                    child: homeJunk,
+                  )
+                )
+              ),
+
+              //Controls
+              SizedBox(
+                height: 84,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              player.displayName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              player.albumDisplayName.isNotEmpty && 
+                              player.artistDisplayName.isNotEmpty 
+                                ? "${player.albumDisplayName} - ${player.artistDisplayName}" 
+                              : "",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(  // Button group
+                      margin: EdgeInsets.only(right: 84),
+                      child: Row(
+                        children: [
+                          if(width >= 296 && width <= 525) IconButton(
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Fullscreen player view not done")));
+                            },
+                            icon: const Icon(Icons.keyboard_arrow_up_rounded),
+                          ),
+                          if(width >= 324) IconButton(
+                            onPressed: () {
+                              ref.read(playerProvider.notifier).shuffle(!player.shuffle);
+                            },
+                            icon: const Icon(Icons.shuffle_rounded),
+                            color: player.shuffle ? Theme.of(context).colorScheme.primary : null,
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.skip_previous_rounded),
+                            onPressed: () {
+                              ref.read(playerProvider.notifier).previous();
+                            }
+                          ),
+                          IconButton(
+                            icon: (player.isPlaying == false) ? const Icon(Icons.play_circle_outline_rounded) : const Icon(Icons.pause_circle_outline_rounded),
+                           onPressed: () {
+                              ref.read(playerProvider.notifier).toggle(); 
+                            }
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.skip_next_rounded),
+                            onPressed: () {
+                              ref.read(playerProvider.notifier).next();
+                            }
+                          ),
+                          if(width >= 352) IconButton(
+                            onPressed: () {
+                              ref.read(playerProvider.notifier).loop(!player.loop);
+                            },
+                            icon: const Icon(Icons.loop_rounded),
+                            color: player.loop ? Theme.of(context).colorScheme.primary : null,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]
+                ),
+              ),
+            ]
+          )
+        )
       );
   }
 }

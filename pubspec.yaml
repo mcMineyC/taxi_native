@@ -31,6 +31,8 @@ dependencies:
   audio_service:
     git:
       url: https://github.com/mcMineyC/audio_service.git
+      ref: minor
+      path: audio_service
   audio_service_mpris: ^0.1.4
   audioplayers: any
   beamer: ^1.6.1

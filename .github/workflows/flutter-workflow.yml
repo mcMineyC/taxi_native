@@ -22,7 +22,7 @@ jobs:
       - run: sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
       - run: flutter pub get
 #      - run: flutter format --set-exit-if-changed .
-      - run: dart run build_runner build
+      - run: dart run build_runner build --delete-conflicting-outputs
       - run: flutter build apk
 #      - run: flutter build linux
       - uses: actions/upload-artifact@v1

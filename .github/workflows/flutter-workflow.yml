@@ -34,7 +34,7 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "build/app/outputs/apk/release/app-release.apk,taxi-native-linux_x64.zip"
-          tag: "latest"
+          tag: ${{ github.sha }}
           makeLatest: true
           name: ${{ steps.date.outputs.date }}
           body: "## This was autoreleased via github actions"

@@ -30,7 +30,7 @@ jobs:
       - run: dart run build_runner build --delete-conflicting-outputs
       - run: flutter build apk
       - run: flutter build linux
-      - run: sh -c "cd build/linux/x64/release/bundle && zip -r taxi-native-linux_x64.zip . && cp taxi-natve-linux_x64.zip ../../../../../"
+      - run: sh -c "cd build/linux/x64/release/bundle && zip -r taxi-native-linux_x64.zip . && cp taxi-native-linux_x64.zip ../../../../../"
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "build/app/outputs/apk/release/app-release.apk,taxi-native-linux_x64.zip"

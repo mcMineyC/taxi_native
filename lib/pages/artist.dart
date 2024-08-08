@@ -106,12 +106,13 @@ class ArtistPage extends ConsumerWidget {
             margin: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
             child: albums.when(
               data: (data) => GridView.count(
-                crossAxisCount: (MediaQuery.of(context).size.width / 200).truncate(),
+                crossAxisCount: (MediaQuery.of(context).size.width / 224).ceil(),
                 shrinkWrap: true,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 0,
                 // scrollDirection: Axis.vertical,
-                children: data.take((MediaQuery.of(context).size.width / 200).truncate()*2).map((a) => MediaCard(text: a.displayName, image: a.imageUrl, thingId: a.id, thingType: "album")).toList(),
+                childAspectRatio: 200 / 238,
+                children: data.take((MediaQuery.of(context).size.width / 224).ceil()*2).map((a) => MediaCard(text: a.displayName, image: a.imageUrl, thingId: a.id, thingType: "album")).toList(),
               ),
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (_, __) => const Center(child: CircularProgressIndicator()),
@@ -136,12 +137,13 @@ class ArtistPage extends ConsumerWidget {
             margin: EdgeInsets.symmetric(horizontal: 18, vertical: 12),
             child: singles.when(
               data: (data) => GridView.count(
-                crossAxisCount: (MediaQuery.of(context).size.width / 200).truncate(),
+                crossAxisCount: (MediaQuery.of(context).size.width / 224).ceil(),
                 shrinkWrap: true,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 0,
                 // scrollDirection: Axis.vertical,
-                children: data.take((MediaQuery.of(context).size.width / 200).truncate()*2).map((a) => MediaCard(text: a.displayName, image: a.imageUrl, thingId: a.id, thingType: "song")).toList(),
+                childAspectRatio: 200 / 238,
+                children: data.take((MediaQuery.of(context).size.width / 224).ceil()*2).map((a) => MediaCard(text: a.displayName, image: a.imageUrl, thingId: a.id, thingType: "song")).toList(),
               ),
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (_, __) => const Center(child: CircularProgressIndicator()),

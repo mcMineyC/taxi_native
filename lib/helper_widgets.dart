@@ -159,7 +159,7 @@ class MediaCard extends ConsumerWidget{
                             borderRadius: BorderRadius.circular(12),
                             image: DecorationImage(
                               image: imageProvider,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),

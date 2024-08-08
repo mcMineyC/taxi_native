@@ -7,7 +7,7 @@
         android:label="Taxi"
         android:icon="@mipmap/ic_launcher">
         <activity
-            android:name="com.example.taxi_native.MainActivity"
+            android:name="com.ryanheise.audioservice.AudioServiceActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"

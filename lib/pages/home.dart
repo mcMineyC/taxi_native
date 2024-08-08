@@ -9,6 +9,7 @@ import 'desktop/home/mediacontrols.dart';
 import 'desktop/home/appbar.dart';
 import 'mobile/home/navigation.dart';
 import 'mobile/home/media_controls.dart';
+import 'mobile/home/appbar.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key, required this.homeJunk});
@@ -78,7 +79,7 @@ class MobileHomePage extends ConsumerWidget {
       ),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(58),
-        child: DesktopAppBar(),
+        child: MobileAppBar(),
       ),
       bottomNavigationBar: MobileNav(),
         body: Container(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:context_menus/context_menus.dart';
 import '../helper_widgets.dart';
 
 class CardView extends StatelessWidget {
@@ -9,12 +8,13 @@ class CardView extends StatelessWidget {
   const CardView({super.key, required this.cardList});
   @override
   Widget build(BuildContext context) {
+    double count = (MediaQuery.of(context).size.width / (MediaCard.width+32));
     return GridView.count(
-        crossAxisCount: (MediaQuery.of(context).size.width / 224).ceil(),
+        crossAxisCount: count.ceil(),
         scrollDirection: Axis.vertical,
         mainAxisSpacing: 0,
         crossAxisSpacing: 0,
-        childAspectRatio: 200 / 238,
+        childAspectRatio: MediaCard.width / (MediaCard.height+6),
         children: cardList.map(
           (card) => MediaCard(text: card["text"], image: card["image"], thingId: card["id"], thingType: card["type"])
         ).toList(),

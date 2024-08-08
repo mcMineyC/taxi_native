@@ -102,18 +102,16 @@ packages:
   audioplayers:
     dependency: "direct main"
     description:
-      name: audioplayers
-      sha256: "752039d6aa752597c98ec212e9759519061759e402e7da59a511f39d43aa07d2"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../audioplayers/packages/audioplayers"
+      relative: true
+    source: path
     version: "6.0.0"
   audioplayers_android:
     dependency: transitive
     description:
-      name: audioplayers_android
-      sha256: de576b890befe27175c2f511ba8b742bec83765fa97c3ce4282bba46212f58e4
-      url: "https://pub.dev"
-    source: hosted
+      path: "../audioplayers/packages/audioplayers_android"
+      relative: true
+    source: path
     version: "5.0.0"
   audioplayers_darwin:
     dependency: transitive

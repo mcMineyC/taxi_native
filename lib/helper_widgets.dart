@@ -13,6 +13,9 @@ import 'types/playlist.dart';
 import 'types/song.dart';
 
 class MediaCard extends ConsumerWidget{
+  static const double height = 198;
+  static const double width = 168;
+
   final String text;
   final String thingId;
   final String thingType;
@@ -105,8 +108,8 @@ class MediaCard extends ConsumerWidget{
         buttonConfigs: buildMenuButtons(context, ref),
       ),
       child: Container(
-        width: 200,
-        height: 230,
+        width: width,
+        height: height,
           child: Card(
             clipBehavior: Clip.hardEdge,
             child: InkWell(
@@ -174,7 +177,7 @@ class MediaCard extends ConsumerWidget{
                     child: Text(
                       text,
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 14,
                         color: Theme.of(context).colorScheme.onSurface,
                       ),
                       textAlign: TextAlign.center,

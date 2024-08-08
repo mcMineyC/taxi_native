@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:context_menus/context_menus.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:audio_session/audio_session.dart';
 import 'package:provider/provider.dart' as prov;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'service_locator.dart';
 import 'providers/playing_provider.dart';
 import 'providers/preferences_provider.dart';
@@ -40,18 +42,20 @@ void main() async{
   // print("Current commit: ${String.fromEnvironment("GIT_REV")}");
   // Initialize FFI
   WidgetsFlutterBinding.ensureInitialized();
+  ServiceLocator().register<SharedPreferences>(await SharedPreferences.getInstance());
   var handy = AudioServiceHandler();
   handy.init();
   audioHandler = await AudioService.init(
     builder: () => handy,
     config: const AudioServiceConfig(
-      androidNotificationChannelId: 'com.forkleserver.taxi-native',
       androidNotificationChannelName: 'Media Player',
       androidNotificationOngoing: true,
     )
   );
-  // await audioHandler.playMediaItem(MediaItem(id: 'https://download.samplelib.com/mp3/sample-3s.mp3', title: 'Music', album: 'Album', artist: 'Artist', duration: const Duration(milliseconds: 20000)));
   ServiceLocator().register<AudioHandler>(audioHandler);
+  final session = await AudioSession.instance;
+  await session.configure(AudioSessionConfiguration.music());
+  await session.setActive(true);
   var p = Prefs(backendUrl: "https://eatthecow.mooo.com:3030", authToken: "", username: "");
   await p.load();
   ServiceLocator().register<Prefs>(p);

@@ -39,6 +39,7 @@ class QueueItem with _$QueueItem {
   MediaItem toMediaItem() => MediaItem(
         id: youtubeId,
         title: displayName,
+        displayTitle: displayName,
         album: albumName,
         artist: artistName,
         duration: Duration.zero,

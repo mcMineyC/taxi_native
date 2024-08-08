@@ -6,7 +6,9 @@ class MobileNav extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     int width = MediaQuery.of(context).size.width.toInt();
-    return NavigationBar(
+    return Container(
+      height: 58,
+      child: NavigationBar(
         destinations: [
           const NavigationDestination(
             icon: Icon(Icons.home),
@@ -77,6 +79,7 @@ class MobileNav extends ConsumerWidget {
               break;
           }
         },
-      );
+      ),
+    );
   }
 }

@@ -34,8 +34,8 @@ dependencies:
       ref: minor
       path: audio_service
   audio_service_mpris: ^0.1.4
-  audioplayers:
-    path: ../audioplayers/packages/audioplayers
+  # audioplayers:
+  #   path: ../audioplayers/packages/audioplayers
   beamer: ^1.6.1
   youtube_explode_dart: ^2.2.1
   socket_io_client: ^2.0.3+1

@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../types/song.dart';
-import '../providers/playing_provider.dart';
+import '../providers/services/player.dart';
 
 class QueuePage extends ConsumerWidget {
   @override

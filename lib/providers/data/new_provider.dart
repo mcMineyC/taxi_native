@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'preferences_provider.dart';
-import '../types/song.dart';
+import '../../types/song.dart';
 
 part 'new_provider.g.dart';
 

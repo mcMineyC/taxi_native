@@ -10,8 +10,8 @@ import 'package:audio_session/audio_session.dart';
 import 'package:provider/provider.dart' as prov;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'service_locator.dart';
-import 'providers/playing_provider.dart';
-import 'providers/preferences_provider.dart';
+import 'providers/services/player.dart';
+import 'providers/data/preferences_provider.dart';
 import 'platform_utils.dart';
 import 'providers/theme_provider.dart';
 

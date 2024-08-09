@@ -2,7 +2,7 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../providers/playing_provider.dart';
+import '../providers/services/player.dart';
 
 import 'desktop/home/navigation.dart';
 import 'desktop/home/mediacontrols.dart';

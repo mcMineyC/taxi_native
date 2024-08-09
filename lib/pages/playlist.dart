@@ -6,11 +6,10 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../providers/error_watcher.dart';
-import '../providers/playlist_provider.dart';
-import '../providers/playing_provider.dart';
+import '../providers/data/playlist_provider.dart';
+import '../providers/services/player.dart';
 import '../types/playlist.dart';
 import '../types/song.dart';
-import '../helper_widgets.dart';
 
 class PlaylistPage extends ConsumerStatefulWidget {
   @override

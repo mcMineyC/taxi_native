@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:beamer/beamer.dart';
 
 import 'cards.dart';
-import '../providers/fetched_data_provider.dart'; 
+import '../providers/data/fetched_data_provider.dart'; 
 import '../providers/error_watcher.dart';
-import '../providers/preferences_provider.dart';
+import '../providers/data/preferences_provider.dart';
 import '../types/album.dart';
 
 class AlbumsPage extends ConsumerWidget {

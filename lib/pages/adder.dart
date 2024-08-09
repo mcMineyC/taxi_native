@@ -5,9 +5,9 @@ import 'package:beamer/beamer.dart';
 
 import '../helper_widgets.dart';
 import '../types/searchresult.dart';
-import '../providers/add_provider.dart';
-import '../providers/playing_provider.dart';
-import '../providers/fetched_data_provider.dart';
+import '../providers/services/adder.dart';
+import '../providers/services/player.dart';
+import '../providers/data/fetched_data_provider.dart';
 import '../tone_extension.dart';
 
 class AdderPage extends ConsumerStatefulWidget {

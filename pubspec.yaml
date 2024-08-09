@@ -57,6 +57,9 @@ dependencies:
   just_audio_media_kit: 2.0.3
   media_kit_libs_linux: any
   media_kit_libs_windows_audio: any
+  just_audio_handlers:
+    git:
+      url: https://github.com/mcMineyC/just_audio_handlers.git
 
 flutter:
   uses-material-design: true

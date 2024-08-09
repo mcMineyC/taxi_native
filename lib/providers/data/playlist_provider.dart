@@ -7,8 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'preferences_provider.dart';
 import 'fetched_data_provider.dart';
-import '../types/playlist.dart';
-import '../types/song.dart';
+import '../../types/playlist.dart';
+import '../../types/song.dart';
 
 part 'playlist_provider.g.dart';
 

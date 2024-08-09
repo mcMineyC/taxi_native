@@ -6,20 +6,20 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../platform_utils.dart';
-import '../service_locator.dart';
+import '../../platform_utils.dart';
+import '../../service_locator.dart';
 
-import 'fetched_data_provider.dart';
-import 'info_provider.dart';
-import 'playlist_provider.dart';
+import '../data/fetched_data_provider.dart';
+import '../data/info_provider.dart';
+import '../data/playlist_provider.dart';
 
-import '../types/song.dart';
-import '../types/searchresult.dart';
-import '../types/queueitem.dart';
+import '../../types/song.dart';
+import '../../types/searchresult.dart';
+import '../../types/queueitem.dart';
 import '../../miller_shuffle.dart';
 
-part 'playing_provider.g.dart';
-part 'playing_provider.freezed.dart';
+part 'player.g.dart';
+part 'player.freezed.dart';
 
 @freezed
 class PlayerInfo with _$PlayerInfo {
@@ -158,6 +158,7 @@ class Player extends _$Player {
   void setSong(String id) async {
     // if(state.id == id) return; //Debounce duplicate calls :shrug: maybe this will fix the duplicates in recentlyplayed
     ref.read(findSongProvider(id).future).then((songObject) async {
+      if(songObject == null) return;
       state = state.copyWith(
         id: songObject.id,
         artistId: songObject.artistId,

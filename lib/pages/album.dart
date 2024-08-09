@@ -6,8 +6,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 // import 'package:cached_network_image/cached_network_image.dart';
 
 import '../providers/error_watcher.dart';
-import '../providers/fetched_data_provider.dart';
-import '../providers/playing_provider.dart';
+import '../providers/data/fetched_data_provider.dart';
+import '../providers/services/player.dart';
 import '../helper_widgets.dart';
 
 class AlbumPage extends ConsumerWidget {

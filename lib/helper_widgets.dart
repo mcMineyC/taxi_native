@@ -6,9 +6,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:context_menus/context_menus.dart';
-import 'providers/playing_provider.dart';
-import 'providers/playlist_provider.dart';
-import 'providers/fetched_data_provider.dart';
+import 'providers/services/player.dart';
+import 'providers/data/playlist_provider.dart';
+import 'providers/data/fetched_data_provider.dart';
 import 'types/playlist.dart';
 import 'types/song.dart';
 

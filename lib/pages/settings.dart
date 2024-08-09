@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as prov;
 import '../providers/theme_provider.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
-import '../providers/preferences_provider.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});

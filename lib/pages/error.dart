@@ -13,6 +13,14 @@ class ErrorPage extends StatelessWidget {
                 "How did you even get here? Well, you're here now. There's nothing to do here, so feel free to hit the back button.",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
+              const Text(
+                "Some debug info:",
+                style: TextStyle(fontSize: 16),
+              ),
+              Text(
+                "Beamer: ${Beamer.of(context).currentPages.last}",
+                style: const TextStyle(fontSize: 16),
+              ),
               IconButton.filledTonal(
                 onPressed: () => Beamer.of(context).beamToNamed('/home'),
                 icon: const Icon(Icons.arrow_upward_rounded),

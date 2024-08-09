@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:beamer/beamer.dart';
 
-import '../../../providers/search_provider.dart';
+import '../../../providers/services/search.dart';
 
 class DesktopAppBar extends ConsumerWidget {
   final TextEditingController _searchController = TextEditingController();

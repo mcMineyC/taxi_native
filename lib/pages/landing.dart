@@ -3,11 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../helper_widgets.dart';
 import '../types/song.dart';
 import '../providers/error_watcher.dart';
-import '../providers/new_provider.dart';
-import '../providers/info_provider.dart';
-import '../providers/user_provider.dart';
-import '../providers/preferences_provider.dart';
-import '../providers/playing_provider.dart';
+import '../providers/data/new_provider.dart';
+import '../providers/data/info_provider.dart';
+import '../providers/data/user_provider.dart';
+import '../providers/data/preferences_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:beamer/beamer.dart';
 

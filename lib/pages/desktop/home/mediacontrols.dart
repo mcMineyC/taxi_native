@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../providers/playing_provider.dart';
+import '../../../providers/services/player.dart';
 import '../../../helper_widgets.dart';
 
 class DesktopBottomBar extends ConsumerWidget {

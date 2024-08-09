@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import '../types/checklist_item.dart';
+import '../../types/checklist_item.dart';
 import 'preferences_provider.dart';
 
 part 'status_provider.g.dart';

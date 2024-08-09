@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:beamer/beamer.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../providers/playlist_provider.dart'; 
+import '../providers/data/playlist_provider.dart'; 
 import '../providers/error_watcher.dart';
 import '../types/playlist.dart';
 

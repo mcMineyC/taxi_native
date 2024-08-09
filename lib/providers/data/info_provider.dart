@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../types/song.dart';
+import '../../types/song.dart';
 import 'fetched_data_provider.dart';
 import 'preferences_provider.dart';
 

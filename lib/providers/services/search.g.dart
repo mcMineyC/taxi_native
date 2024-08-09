@@ -1,24 +1,24 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'add_provider.dart';
+part of 'search.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$adderHash() => r'7beae41c51720e5c2a6148ed69c4d462772952be';
+String _$searchHash() => r'cd3dccdb6d265e360db167248eacbf61529882bf';
 
-/// See also [Adder].
-@ProviderFor(Adder)
-final adderProvider = NotifierProvider<Adder, AddState>.internal(
-  Adder.new,
-  name: r'adderProvider',
+/// See also [Search].
+@ProviderFor(Search)
+final searchProvider = NotifierProvider<Search, SearchInfo>.internal(
+  Search.new,
+  name: r'searchProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$adderHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$searchHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$Adder = Notifier<AddState>;
+typedef _$Search = Notifier<SearchInfo>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

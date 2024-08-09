@@ -1,19 +1,15 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import '../service_locator.dart';
-import '../platform_utils.dart';
+import '../../platform_utils.dart';
 
-import 'fetched_data_provider.dart';
-import 'info_provider.dart';
-import 'user_provider.dart';
-import 'preferences_provider.dart';
+import '../data/user_provider.dart';
+import '../data/preferences_provider.dart';
 
-import '../types/searchresult.dart';
+import '../../types/searchresult.dart';
 
-part 'add_provider.g.dart';
-part 'add_provider.freezed.dart';
+part 'adder.g.dart';
+part 'adder.freezed.dart';
 
 @freezed
 class AddState with _$AddState {

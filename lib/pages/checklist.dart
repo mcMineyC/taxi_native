@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../types/checklist_item.dart';
-import '../providers/status_provider.dart';
+import '../providers/data/status_provider.dart';
 
 class ChecklistPage extends ConsumerStatefulWidget{
   _ChecklistPageState createState() => _ChecklistPageState();

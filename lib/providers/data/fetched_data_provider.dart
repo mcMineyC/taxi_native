@@ -6,9 +6,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'preferences_provider.dart';
-import '../types/song.dart';
-import '../types/album.dart';
-import '../types/artists.dart';
+import '../../types/song.dart';
+import '../../types/album.dart';
+import '../../types/artists.dart';
 
 part 'fetched_data_provider.g.dart';
 

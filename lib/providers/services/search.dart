@@ -7,14 +7,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 
-import 'preferences_provider.dart';
-import '../types/song.dart';
-import '../types/album.dart';
-import '../types/artists.dart';
-import '../types/searchresult.dart';
+import '../data/preferences_provider.dart';
+import '../../types/song.dart';
+import '../../types/album.dart';
+import '../../types/artists.dart';
+import '../../types/searchresult.dart';
 
-part 'search_provider.g.dart';
-part 'search_provider.freezed.dart';
+part 'search.g.dart';
+part 'search.freezed.dart';
 
 @freezed
 class SearchInfo with _$SearchInfo {

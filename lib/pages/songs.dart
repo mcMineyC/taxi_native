@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'cards.dart';
-import '../providers/preferences_provider.dart';
+import '../providers/data/preferences_provider.dart';
 import '../providers/error_watcher.dart';
-import '../providers/fetched_data_provider.dart'; 
+import '../providers/data/fetched_data_provider.dart'; 
 import '../types/song.dart';
 import 'package:beamer/beamer.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/preferences_provider.dart';
-import '../providers/search_provider.dart'; 
+import '../providers/data/preferences_provider.dart';
+import '../providers/services/search.dart'; 
 import '../helper_widgets.dart';
 
 class SearchPage extends ConsumerWidget {

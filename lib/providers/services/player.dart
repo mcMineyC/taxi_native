@@ -364,7 +364,7 @@ class AudioServiceHandler extends BaseAudioHandler
         playbackState.add(playbackState.value.copyWith(updatePosition: d));
       });
       player.durationStream.listen((Duration? d) {
-        mediaItem.add(mediaItem.value?.copyWith(duration: Duration(milliseconds: ((d?.inMilliseconds ?? 0)/2).ceil())));
+        mediaItem.add(mediaItem.value?.copyWith(duration: Duration(milliseconds: ((d?.inMilliseconds ?? 0)/((!isWeb && PlatformUtils.isIOS) ? 2 : 1)).ceil())));
         print("New duration: ${mediaItem.value?.duration}");
         duration = d ?? Duration.zero;
       });

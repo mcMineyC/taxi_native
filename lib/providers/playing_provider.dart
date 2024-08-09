@@ -352,9 +352,9 @@ class AudioServiceHandler extends BaseAudioHandler
 
     void init() async {
       if(backendUrl == "") backendUrl = (await SharedPreferences.getInstance()).getString("backendUrl") ?? "https://eatthecow.mooo.com:3030";
-      if(PlatformUtils.isLinux || PlatformUtils.isWindows && !PlatformUtils.isWeb) JustAudioMediaKit.ensureInitialized();
+      if(!isWeb && (PlatformUtils.isLinux || PlatformUtils.isWindows)) JustAudioMediaKit.ensureInitialized();
       player.positionStream.listen((Duration d) {
-        if(PlatformUtils.isIOS && (d.inMilliseconds > (duration.inMilliseconds / 2)) && canNext) {
+        if(!isWeb && PlatformUtils.isIOS && (d.inMilliseconds > (duration.inMilliseconds / 2)) && canNext) {
           print("Hacky workaround for ios. Skipping to next.");
           playbackState.add(playbackState.value.copyWith(playing: false));
           skipToNext();
@@ -511,7 +511,7 @@ class AudioServiceHandler extends BaseAudioHandler
         MediaItem mediaitem = mediaITem;
         print("MEPREP: $mediaitem");
         var video = await fetchYTVideo(mediaitem.id);
-        var url = (PlatformUtils.isWeb) ? "$backendUrl/proxy/$video" : video;
+        var url = (isWeb) ? "$backendUrl/proxy/$video" : video;
         player.setUrl(url);
         await player.play();
         // if(mediaitem.artUri.toString() == "https://determine.com") mediaitem = mediaitem.copyWith(artUri: Uri.parse(video[1]));
@@ -543,7 +543,7 @@ class AudioServiceHandler extends BaseAudioHandler
       var nextIndex = (playingIndex + 1 > queue.value.length-1) ? 0 : playingIndex + 1;
       var mediaitem = queue.value[nextIndex];
       var video = await fetchYTVideo(queue.value[nextIndex].id);
-      nextUrl = (PlatformUtils.isWeb) ? "$backendUrl/proxy/$video" : video;
+      nextUrl = (isWeb) ? "$backendUrl/proxy/$video" : video;
       nextPrepped = true;
     }
 

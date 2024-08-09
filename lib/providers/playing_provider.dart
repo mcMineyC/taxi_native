@@ -3,7 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:just_audio_media_kit/just_audio_media_kit.dart';
+// import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../platform_utils.dart';
@@ -352,7 +352,7 @@ class AudioServiceHandler extends BaseAudioHandler
 
     void init() async {
       if(backendUrl == "") backendUrl = (await SharedPreferences.getInstance()).getString("backendUrl") ?? "https://eatthecow.mooo.com:3030";
-      JustAudioMediaKit.ensureInitialized();
+      // if(PlatformUtils.isLinux || PlatformUtils.isWindows && !PlatformUtils.isWeb) JustAudioMediaKit.ensureInitialized();
       player.positionStream.listen((Duration d) {
         if(PlatformUtils.isIOS && (d.inMilliseconds > (duration.inMilliseconds / 2)) && canNext) {
           print("Hacky workaround for ios. Skipping to next.");

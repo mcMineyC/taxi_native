@@ -54,7 +54,7 @@ dependencies:
       url: https://github.com/mcMineyC/just_audio.git
       path: just_audio
       ref: minor
-  just_audio_media_kit: ^2.0.0
+  just_audio_media_kit: 2.0.3
   media_kit_libs_linux: any
   media_kit_libs_windows_audio: any
 

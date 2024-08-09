@@ -665,10 +665,10 @@ packages:
     dependency: "direct main"
     description:
       name: just_audio_media_kit
-      sha256: "7f57d317fafa04cb3e70b924e8f632ffb7eca7a97a369e1e44738ed89fbd5da1"
+      sha256: "31d2ec06eeb03d50766135008220274e6aa4b3c98e3cb94a0e7c232cea28f4fc"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.5"
+    version: "2.0.3"
   just_audio_platform_interface:
     dependency: transitive
     description:

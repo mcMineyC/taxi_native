@@ -10,6 +10,8 @@ import 'package:audio_session/audio_session.dart';
 import 'package:provider/provider.dart' as prov;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'service_locator.dart';
+// import 'package:just_audio_handlers/just_audio_handlers.dart';
+// import 'providers/services/better_handler.dart';
 import 'providers/services/player.dart';
 import 'providers/data/preferences_provider.dart';
 import 'platform_utils.dart';
@@ -43,14 +45,11 @@ void main() async{
   // Initialize FFI
   WidgetsFlutterBinding.ensureInitialized();
   ServiceLocator().register<SharedPreferences>(await SharedPreferences.getInstance());
+  // var handy = AudioHandlerJustAudio(player: AudioPlayer());
   var handy = AudioServiceHandler();
-  handy.init();
-  audioHandler = await AudioService.init(
+  await handy.init();
+  var audioHandler = await AudioService.init(
     builder: () => handy,
-    config: const AudioServiceConfig(
-      androidNotificationChannelName: 'Media Player',
-      androidNotificationOngoing: true,
-    )
   );
   ServiceLocator().register<AudioHandler>(audioHandler);
   final session = await AudioSession.instance;
@@ -250,7 +249,7 @@ class App extends ConsumerWidget {
       brightness: theme.dark ? Brightness.dark : Brightness.light, 
     );
     return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
+      // debugShowCheckedModeBanner: false,
       title: 'Taxi - Native',
       theme: ThemeData(
         colorScheme: scheme, 

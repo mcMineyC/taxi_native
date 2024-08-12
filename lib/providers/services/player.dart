@@ -2,8 +2,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:audio_service/audio_service.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:just_audio_media_kit/just_audio_media_kit.dart';
+import 'package:audioplayers/audioplayers.dart';
+// import 'package:just_audio/just_audio.dart';
+// import 'package:just_audio_media_kit/just_audio_media_kit.dart';
+// import 'better_handler.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../platform_utils.dart';
@@ -30,7 +32,7 @@ class PlayerInfo with _$PlayerInfo {
     required String displayName,
     required String artistDisplayName,
     required String albumDisplayName,
-    required double duration,
+    required int    duration,
     required int    position,
     // required double percent,
     required bool isPlaying,
@@ -50,7 +52,7 @@ class PlayerInfo with _$PlayerInfo {
 // interact with our Todos class.
 @riverpod
 class Player extends _$Player {
-  final AudioHandler audioHandler = ServiceLocator().get<AudioHandler>();
+  AudioHandler audioHandler = ServiceLocator().get<AudioHandler>();
   bool _hIsInit = false;
   late final _sp;
   bool _isInit = false;
@@ -66,7 +68,7 @@ class Player extends _$Player {
       displayName: '',
       artistDisplayName: '',
       albumDisplayName: '',
-      duration: 213.6,
+      duration: 0,
       position: 0,
       isPlaying: false,
       queue: [],
@@ -76,7 +78,7 @@ class Player extends _$Player {
     );
   }
 
-  void init() async {
+  Future<void> init() async {
     if(_hIsInit) return;
     _hIsInit = true;
     print("Playerinfo: init");
@@ -85,15 +87,17 @@ class Player extends _$Player {
         displayName: i?.title ?? "",
         albumDisplayName: i?.album ?? "",
         artistDisplayName: i?.artist ?? "",
-        duration: i?.duration?.inMilliseconds.toDouble() ?? 0,
+        duration: i?.duration?.inMilliseconds ?? 0,
         currentIndex: (i?.extras?["index"] ?? -1) as int,
       );
     });
-    audioHandler.playbackState.map((state) => state.position).distinct().listen((Duration? d) {
+    audioHandler.playbackState.map((state) => state.position)..listen((Duration? d) {
+      // print("Position: ${d?.inMilliseconds}");
       state = state.copyWith(position: d?.inMilliseconds ?? 0);
     });
     audioHandler.mediaItem.map((state) => state?.duration ?? Duration.zero).distinct().listen((Duration? d) {
-      state = state.copyWith(duration: (d?.inMilliseconds.toDouble() ?? 0));
+      // print("Duration: ${d?.inMilliseconds}");
+      state = state.copyWith(duration: d?.inMilliseconds ?? 0);
     });
     audioHandler.playbackState.map((s) => s.playing).distinct().listen((bool b) {
       state = state.copyWith(isPlaying: b);
@@ -158,7 +162,7 @@ class Player extends _$Player {
   void setSong(String id) async {
     // if(state.id == id) return; //Debounce duplicate calls :shrug: maybe this will fix the duplicates in recentlyplayed
     ref.read(findSongProvider(id).future).then((songObject) async {
-      if(songObject == null) return;
+      print(songObject);
       state = state.copyWith(
         id: songObject.id,
         artistId: songObject.artistId,
@@ -170,7 +174,7 @@ class Player extends _$Player {
         isPlaying: true,
       );
       _queue = [songObject.toQueueItem()];
-      await audioHandler.playMediaItem(songObject.toMediaItem());
+      await audioHandler.updateQueue([songObject.toMediaItem()]);
     });
   }
   void setItem(QueueItem i) async {
@@ -186,13 +190,12 @@ class Player extends _$Player {
     );
     _queue = [i];
     audioHandler.updateQueue([i.toMediaItem()]);
-    await audioHandler.playMediaItem(i.toMediaItem());
+    await audioHandler.updateQueue([i.toMediaItem()]);
   }
 
   void setAlbum(String id) async {
     ref.read(findSongsByAlbumProvider(id).future).then((songs) async {
       audioHandler.updateQueue(songs.map((s) => s.toMediaItem()).toList());
-      audioHandler.skipToQueueItem(0);
       state = state.copyWith(queue: songs.map((s) => s.toQueueItem()).toList());
       _queue = songs.map((s) => s.toQueueItem()).toList();
     });
@@ -351,25 +354,27 @@ class AudioServiceHandler extends BaseAudioHandler
     Duration duration = Duration.zero;
     List<MediaItem> unshuffledQueue = [];
 
-    void init() async {
+    Future<void> init() async {
       if(backendUrl == "") backendUrl = (await SharedPreferences.getInstance()).getString("backendUrl") ?? "https://eatthecow.mooo.com:3030";
-      if(!isWeb && (PlatformUtils.isLinux || PlatformUtils.isWindows)) JustAudioMediaKit.ensureInitialized();
-      player.positionStream.listen((Duration d) {
+      // if(!isWeb && (PlatformUtils.isLinux || PlatformUtils.isWindows)) JustAudioMediaKit.ensureInitialized();
+      player.onPositionChanged.listen((Duration d) {
         if(!isWeb && PlatformUtils.isIOS && (d.inMilliseconds > (duration.inMilliseconds / 2)) && canNext) {
           print("Hacky workaround for ios. Skipping to next.");
           playbackState.add(playbackState.value.copyWith(playing: false));
           skipToNext();
         }
-        print("New position: $d");
         playbackState.add(playbackState.value.copyWith(updatePosition: d));
       });
-      player.durationStream.listen((Duration? d) {
-        mediaItem.add(mediaItem.value?.copyWith(duration: Duration(milliseconds: ((d?.inMilliseconds ?? 0)/2).ceil())));
-        print("New duration: ${mediaItem.value?.duration}");
-        duration = d ?? Duration.zero;
+      player.onDurationChanged.listen((Duration? d) {
+        mediaItem.add(mediaItem.value?.copyWith(duration: Duration(milliseconds: ((d?.inMilliseconds ?? 0)/(!isWeb && PlatformUtils.isIOS ? 2 : 1)).ceil())));
+        duration = Duration(milliseconds:
+          (
+            (d?.inMilliseconds ?? 0) / (!isWeb && PlatformUtils.isIOS ? 2 : 1)
+          ).ceil()
+        );
+        print("New duration: $duration");
       });
-      player.currentIndexStream.listen((int? i) {
-        if(player.previousIndex == null || (i ?? -1) <= (player.previousIndex ?? 0)) return;
+      player.onPlayerComplete.listen((_) {
         playbackState.add(playbackState.value.copyWith(playing: false));
         if(canNext) skipToNext();
         if(canNext) print("Going next");
@@ -411,6 +416,12 @@ class AudioServiceHandler extends BaseAudioHandler
       queue.value.removeAt(index);
       queue.add(queue.value);
     }
+
+    @override
+    Future<void> updateQueue(List<MediaItem> newQueue) async {
+      queue.add(newQueue);
+      skipToQueueItem(0);
+    }
     
     @override
     Future<void> playMediaItem(MediaItem mediaitem) async {
@@ -425,8 +436,7 @@ class AudioServiceHandler extends BaseAudioHandler
     @override
     Future<void> playFromUri(Uri uri, [Map<String, dynamic>? extras]) async {
       playbackState.add(playbackState.value.copyWith(playing: true));
-      await player.setUrl(uri.toString());
-      player.play();
+      await player.play(UrlSource(uri.toString()));
     }
     
     @override
@@ -439,7 +449,7 @@ class AudioServiceHandler extends BaseAudioHandler
           MediaControl.skipToNext
         ]
       ));
-      await player.play();
+      await player.resume();
     }
     
     @override
@@ -465,7 +475,7 @@ class AudioServiceHandler extends BaseAudioHandler
       // mainInUse = !mainInUse;
       nextPrepped = false;
       player.stop();
-      player.setUrl("");
+      player.setSource(UrlSource(""));
       player.dispose();
     }
 
@@ -513,8 +523,7 @@ class AudioServiceHandler extends BaseAudioHandler
         print("MEPREP: $mediaitem");
         var video = await fetchYTVideo(mediaitem.id);
         var url = (isWeb) ? "$backendUrl/proxy/$video" : video;
-        player.setUrl(url);
-        await player.play();
+        await player.play(UrlSource(url));
         // if(mediaitem.artUri.toString() == "https://determine.com") mediaitem = mediaitem.copyWith(artUri: Uri.parse(video[1]));
         playbackState.add(playbackState.value.copyWith(
           playing: true,
@@ -525,8 +534,7 @@ class AudioServiceHandler extends BaseAudioHandler
         print("PREPPED: ${mediaItem.value}");
         prepNextItem();
       }else{
-        player.setUrl(nextUrl);
-        await player.play();
+        await player.play(UrlSource(nextUrl));
         nextPrepped = false;
         playbackState.add(playbackState.value.copyWith(playing: true));
         mediaItem.add(mediaITem.copyWith(extras: {"song": mediaITem.extras?["song"], "index": playingIndex}));

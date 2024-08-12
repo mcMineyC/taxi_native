@@ -19,9 +19,6 @@ dependencies:
   riverpod_annotation: ^2.3.5
   hooks_riverpod: ^2.5.1
   mobx: ^2.3.3+1
-  modal_side_sheet:
-    git:
-      url: https://github.com/mcMineyC/modal_side_sheet.git
   freezed: ^2.5.2
   freezed_annotation: ^2.4.1
   json_annotation: ^4.9.0
@@ -34,7 +31,7 @@ dependencies:
       ref: minor
       path: audio_service
   audio_service_mpris: ^0.1.4
-  # audioplayers:
+  audioplayers:
   #   path: ../audioplayers/packages/audioplayers
   beamer: ^1.6.1
   youtube_explode_dart: ^2.2.1
@@ -49,17 +46,18 @@ dependencies:
   device_info_plus: ^10.1.0
   provider: ^6.1.2
   flex_color_picker: ^3.5.1
-  just_audio: 
-    git:
-      url: https://github.com/mcMineyC/just_audio.git
-      path: just_audio
-      ref: minor
-  just_audio_media_kit: 2.0.3
-  media_kit_libs_linux: any
-  media_kit_libs_windows_audio: any
-  just_audio_handlers:
-    git:
-      url: https://github.com/mcMineyC/just_audio_handlers.git
+  # just_audio: 
+  #   git:
+  #     url: https://github.com/mcMineyC/just_audio.git
+  #     path: just_audio
+  #     ref: minor
+  # just_audio_media_kit: 2.0.3
+  # media_kit_libs_linux: any
+  # media_kit_libs_windows_audio: any
+  # just_audio_handlers:
+  #   # git:
+  #   #   url: https://github.com/mcMineyC/just_audio_handlers.git
+  #   path: ../just_audio_handlers
 
 flutter:
   uses-material-design: true

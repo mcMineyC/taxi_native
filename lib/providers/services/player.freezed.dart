@@ -22,7 +22,7 @@ mixin _$PlayerInfo {
   String get displayName => throw _privateConstructorUsedError;
   String get artistDisplayName => throw _privateConstructorUsedError;
   String get albumDisplayName => throw _privateConstructorUsedError;
-  double get duration => throw _privateConstructorUsedError;
+  int get duration => throw _privateConstructorUsedError;
   int get position =>
       throw _privateConstructorUsedError; // required double percent,
   bool get isPlaying => throw _privateConstructorUsedError;
@@ -49,7 +49,7 @@ abstract class $PlayerInfoCopyWith<$Res> {
       String displayName,
       String artistDisplayName,
       String albumDisplayName,
-      double duration,
+      int duration,
       int position,
       bool isPlaying,
       List<QueueItem> queue,
@@ -113,7 +113,7 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
       duration: null == duration
           ? _value.duration
           : duration // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -157,7 +157,7 @@ abstract class _$$PlayerInfoImplCopyWith<$Res>
       String displayName,
       String artistDisplayName,
       String albumDisplayName,
-      double duration,
+      int duration,
       int position,
       bool isPlaying,
       List<QueueItem> queue,
@@ -219,7 +219,7 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
       duration: null == duration
           ? _value.duration
           : duration // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       position: null == position
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
@@ -280,7 +280,7 @@ class _$PlayerInfoImpl implements _PlayerInfo {
   @override
   final String albumDisplayName;
   @override
-  final double duration;
+  final int duration;
   @override
   final int position;
 // required double percent,
@@ -366,7 +366,7 @@ abstract class _PlayerInfo implements PlayerInfo {
       required final String displayName,
       required final String artistDisplayName,
       required final String albumDisplayName,
-      required final double duration,
+      required final int duration,
       required final int position,
       required final bool isPlaying,
       required final List<QueueItem> queue,
@@ -387,7 +387,7 @@ abstract class _PlayerInfo implements PlayerInfo {
   @override
   String get albumDisplayName;
   @override
-  double get duration;
+  int get duration;
   @override
   int get position;
   @override // required double percent,

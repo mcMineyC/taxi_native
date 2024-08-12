@@ -7,7 +7,6 @@ import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../platform_utils.dart';
-import '../../service_locator.dart';
 
 import '../data/fetched_data_provider.dart';
 import '../data/info_provider.dart';
@@ -32,26 +31,28 @@ class PlayerInfo with _$PlayerInfo {
     required String albumDisplayName,
     required int    duration,
     required int    position,
-    // required double percent,
     required bool isPlaying,
     required List<QueueItem> queue,
     required int currentIndex,
     required bool shuffle,
     required bool loop,
   }) = _PlayerInfo;
+
+  factory PlayerInfo.fromJson(Map<String, dynamic> json) => _$PlayerInfoFromJson(json);
 }
 
 @riverpod
 class Player extends _$Player {
   AudioPlayer player = AudioPlayer();
-  bool _hIsInit = false;
-  late final _sp;
+  late final SharedPreferences _sp;
   bool _isInit = false;
   List<QueueItem> _queue = [];
   List<QueueItem> queue = [];
   final String backendUrl = "https://eatthecow.mooo.com:3030";
   bool paused = false;
   bool thinking = false;
+  bool needInteraction = false;
+  int needSeekTo = 0;
 
   @override
   PlayerInfo build() {
@@ -74,8 +75,9 @@ class Player extends _$Player {
   }
 
   Future<void> init() async {
-    if(_hIsInit) return;
-    _hIsInit = true;
+    if(_isInit) return;
+    _isInit = true;
+    _sp = await SharedPreferences.getInstance();
     print("Playerinfo: init");
     if(!PlatformUtils.isWeb && PlatformUtils.isLinux) JustAudioMediaKit.ensureInitialized();
     player.positionStream.listen((Duration d) {
@@ -83,15 +85,28 @@ class Player extends _$Player {
       if(!PlatformUtils.isWeb && PlatformUtils.isIOS && (d.inMilliseconds > (state.duration / 2)) && canNext) next();
     });
     player.durationStream.listen((Duration? d) => state = state.copyWith(duration: d?.inMilliseconds ?? 0));
-
     player.playerStateStream.listen((state) {
-      // print("PlayerState: $state");
       if(state.processingState == ProcessingState.completed && canNext && !thinking) {
         thinking = true;
         next();
       }
       if(state.processingState == ProcessingState.ready && !paused) this.state = this.state.copyWith(isPlaying: true);
+      if(state.processingState == ProcessingState.ready && needInteraction) {
+        needInteraction = false;
+        player.seek(Duration(milliseconds: needSeekTo));
+        print("Seeked position to ${needSeekTo}");
+      }
     }); 
+    player.playingStream.listen((bool playing) {
+      state = state.copyWith(isPlaying: playing);
+    });
+    if(_sp.containsKey("playerinfo")) {
+      var i = PlayerInfo.fromJson(jsonDecode(_sp.getString("playerinfo")!));
+      print("Loading persisted playerinfo");
+      needSeekTo = i.position;
+      state = i;
+      needInteraction = true;
+    }
   }
 
   void seek(Duration d) {
@@ -108,6 +123,13 @@ class Player extends _$Player {
   }
 
   void play() async {
+    if(needInteraction) {
+      print("Play called, but need interaction");
+      playQueueItem(state.queue[state.currentIndex]);
+      await player.play();
+      state = state.copyWith(isPlaying: true);
+      return;
+    }
     player.play();
     state = state.copyWith(isPlaying: true);
   }
@@ -119,11 +141,11 @@ class Player extends _$Player {
 
   void toggle() async {
     if(state.isPlaying) {
-      player.pause();
+      pause();
     }else{
-      player.play();
+      play();
     }
-    setPlaying(!state.isPlaying);
+    setPlaying(state.isPlaying);
   }
 
   void next() async {
@@ -144,10 +166,8 @@ class Player extends _$Player {
   }
 
   void skip(int num){
-    // print("skipping $num ${state.currentIndex}");
     int newIndex = skipDex(num);
     skipToItem(newIndex);
-    // print("skipping: end ${state.currentIndex}");
   }
 
   int skipDex(int num){
@@ -185,6 +205,7 @@ class Player extends _$Player {
     ref.read(findSongProvider(id).future).then((songObject) async {
       _queue = [songObject.toQueueItem()];
       setQueue([songObject.toQueueItem()]);
+      state = state.copyWith(shuffle: false);
       skipToItem(0);
     });
   }
@@ -201,6 +222,7 @@ class Player extends _$Player {
     );
     _queue = [i];
     setQueue([i]);
+    state = state.copyWith(shuffle: false);
     skipToItem(0);
   }
 
@@ -208,6 +230,7 @@ class Player extends _$Player {
     ref.read(findSongsByAlbumProvider(id).future).then((songs) async {
       List<QueueItem> newQueue = songs.map((s) => s.toQueueItem()).toList();
       setQueue(newQueue);
+      state = state.copyWith(shuffle: false);
       _queue = newQueue;
       skipToItem(0);
     });
@@ -225,6 +248,7 @@ class Player extends _$Player {
     ref.read(findSongsByArtistProvider(id).future).then((songs) async {
       var newQueue = songs.map((s) => s.toQueueItem()).toList();
       setQueue(newQueue);
+      state = state.copyWith(shuffle: false);
       _queue = newQueue;
       skipToItem(0);
     });
@@ -242,6 +266,7 @@ class Player extends _$Player {
     ref.read(findSongsByPlaylistProvider(id).future).then((songs) async {
       var newQueue = songs.map((s) => s.toQueueItem()).toList();
       setQueue(newQueue);
+      state = state.copyWith(shuffle: false);
       _queue = newQueue;
       skipToItem(0);
     });
@@ -250,7 +275,7 @@ class Player extends _$Player {
   void addPlaylistToQueue(String id) async {
     ref.read(findSongsByPlaylistProvider(id).future).then((songs) async {
       var newQueue = [...state.queue, ...songs.map((s) => s.toQueueItem())];
-      state = state.copyWith(queue: newQueue);
+      setQueue(newQueue);
       _queue = newQueue;
     });
   }
@@ -270,7 +295,6 @@ class Player extends _$Player {
   }
 
   void clearQueue() async {
-    // player.stop();
     player.pause();
     setQueue([]);
     _queue = [];
@@ -316,20 +340,14 @@ class Player extends _$Player {
   }
 
   Future<void> shuffle(bool enable) async {
-    if(!enable) {
-      state = state.copyWith(shuffle: enable); 
-      setQueue(_queue);
-      skipToItem(0);
-    }else if(enable) {
-      List<QueueItem> chew = List<QueueItem>.filled(state.queue.length, QueueItem.empty());
-      for(int i = 0; i < state.queue.length; i++) {
-        chew[i] = state.queue[superShuffle(i, DateTime.now().millisecondsSinceEpoch, state.queue.length)];
-      }
-      _queue = chew;
-      state = state.copyWith(shuffle: enable);
-      setQueue(chew);
-      skipToItem(0);
+    List<QueueItem> chew = List<QueueItem>.filled(state.queue.length, QueueItem.empty());
+    for(int i = 0; i < state.queue.length; i++) {
+      chew[i] = state.queue[superShuffle(i, DateTime.now().millisecondsSinceEpoch, state.queue.length)];
     }
+    _queue = chew;
+    state = state.copyWith(shuffle: true);
+    setQueue(chew);
+    skipToItem(0);
   }
 
   Future<void> loop(bool enable) async {
@@ -343,7 +361,6 @@ class Player extends _$Player {
       if(PlatformUtils.isWeb) url = "$backendUrl/proxy/$url";
     }
     print("Going to play $url");
-    // await player.stop();
     await player.setAudioSource(AudioSource.uri(
       Uri.parse(url),
       tag: MediaItem(id: DateTime.now().microsecondsSinceEpoch.toString(), title: item.displayName, album: item.albumName, artist: item.artistName, artUri: Uri.parse(item.imageUrl)),
@@ -360,7 +377,7 @@ class Player extends _$Player {
       var nq = state.queue.toList();
       nq[skipDex(1)] = nq[skipDex(1)].copyWith(audioUrl: nextUrl);
       print("PREPPED: ${nq[skipDex(1)].displayName}");
-      state = state.copyWith(queue: nq);
+      setQueue(nq);
     }
   }
   Future<String> fetchYTVideo(String id) async {
@@ -372,226 +389,7 @@ class Player extends _$Player {
   get canNext => (state.currentIndex + 1 > state.queue.length) ? false || state.loop : true;
 }
 
-// class AudioServiceHandler extends BaseAudioHandler 
-//     with QueueHandler, SeekHandler {
-//     
-//     final player = AudioPlayer();
-//     final bool isWeb = PlatformUtils.isWeb;
-//     String backendUrl = "";
-//     int playingIndex = 0;
-//     bool shuffle = false;
-//     bool loop = true;
-//     bool nextPrepped = false;
-//     String nextUrl = "";
-//     Duration duration = Duration.zero;
-//     List<MediaItem> unshuffledQueue = [];
-//
-//     Future<void> init() async {
-//       if(backendUrl == "") backendUrl = (await SharedPreferences.getInstance()).getString("backendUrl") ?? "https://eatthecow.mooo.com:3030";
-//       // if(!isWeb && (PlatformUtils.isLinux || PlatformUtils.isWindows)) JustAudioMediaKit.ensureInitialized();
-//       player.onPositionChanged.listen((Duration d) {
-//         if(!isWeb && PlatformUtils.isIOS && (d.inMilliseconds > (duration.inMilliseconds / 2)) && canNext) {
-//           print("Hacky workaround for ios. Skipping to next.");
-//           playbackState.add(playbackState.value.copyWith(playing: false));
-//           skipToNext();
-//         }
-//         playbackState.add(playbackState.value.copyWith(updatePosition: d));
-//       });
-//       player.onDurationChanged.listen((Duration? d) {
-//         mediaItem.add(mediaItem.value?.copyWith(duration: Duration(milliseconds: ((d?.inMilliseconds ?? 0)/(!isWeb && PlatformUtils.isIOS ? 2 : 1)).ceil())));
-//         duration = Duration(milliseconds:
-//           (
-//             (d?.inMilliseconds ?? 0) / (!isWeb && PlatformUtils.isIOS ? 2 : 1)
-//           ).ceil()
-//         );
-//         print("New duration: $duration");
-//       });
-//       player.onPlayerComplete.listen((_) {
-//         playbackState.add(playbackState.value.copyWith(playing: false));
-//         if(canNext) skipToNext();
-//         if(canNext) print("Going next");
-//       });
-//       queue.listen((q) {
-//         if(q.isNotEmpty && q.length-1 > playingIndex && !nextPrepped && canNext) {
-//           prepNextItem();
-//         }
-//       });
-//       playbackState.listen((s) {
-//         // print("PlaybackState: $s");
-//       });
-//       playbackState.add(playbackState.value.copyWith(controls: [MediaControl.skipToPrevious, MediaControl.play, MediaControl.skipToNext]));
-//       mediaItem.listen((m) {
-//         print("MediaItem: $m");
-//       });
-//     }
-//
-//     @override
-//     Future<void> addQueueItem(MediaItem mediaItem) async {
-//       queue.value.add(mediaItem);
-//       queue.add(queue.value);
-//     }
-//     
-//     @override
-//     Future<void> addQueueItems(List<MediaItem> mediaItems) async {
-//       queue.value.addAll(mediaItems);
-//       queue.add(queue.value);
-//     }
-//     
-//     @override
-//     Future<void> removeQueueItem(MediaItem mediaItem) async {
-//       queue.value.remove(mediaItem);
-//       queue.add(queue.value);
-//     }
-//     
-//     @override
-//     Future<void> removeQueueItemAt(int index) async {
-//       queue.value.removeAt(index);
-//       queue.add(queue.value);
-//     }
-//
-//     @override
-//     Future<void> updateQueue(List<MediaItem> newQueue) async {
-//       queue.add(newQueue);
-//       skipToQueueItem(0);
-//     }
-//     
-//     @override
-//     Future<void> playMediaItem(MediaItem mediaitem) async {
-//       nextPrepped = false;
-//       playingIndex = 0;
-//       player.stop();
-//       queue.value = [mediaitem];
-//       queue.add(queue.value);
-//       await prepMediaItem(mediaitem);
-//     }
-//
-//     @override
-//     Future<void> playFromUri(Uri uri, [Map<String, dynamic>? extras]) async {
-//       playbackState.add(playbackState.value.copyWith(playing: true));
-//       await player.play(UrlSource(uri.toString()));
-//     }
-//     
-//     @override
-//     Future<void> play() async {
-//       playbackState.add(playbackState.value.copyWith(
-//         playing: true,
-//         controls: [
-//           MediaControl.skipToPrevious,
-//           MediaControl.pause,
-//           MediaControl.skipToNext
-//         ]
-//       ));
-//       await player.resume();
-//     }
-//     
-//     @override
-//     Future<void> pause() async {
-//       playbackState.add(playbackState.value.copyWith(
-//         playing: false,
-//         controls: [
-//           MediaControl.skipToPrevious,
-//           MediaControl.pause,
-//           MediaControl.skipToNext
-//         ]
-//       ));
-//       await player.pause();
-//     }
-//     
-//     @override
-//     Future<void> stop() async {
-//       playbackState.add(playbackState.value.copyWith(
-//         playing: false,
-//         controls: [],
-//         updatePosition: Duration.zero,
-//       ));
-//       // mainInUse = !mainInUse;
-//       nextPrepped = false;
-//       player.stop();
-//       player.setSource(UrlSource(""));
-//       player.dispose();
-//     }
-//
-//     @override
-//     Future<void> seek(Duration position) async {
-//       player.seek(position);
-//     }
-//
-//     @override
-//     Future<void> skipToQueueItem(int index) async {
-//       playingIndex = index;
-//       nextPrepped = false;
-//       prepMediaItem(queue.value[index]);
-//       await super.skipToQueueItem(index);
-//     }
-//     
-//     @override
-//     Future<void> skipToNext() async {
-//       if(playingIndex+1 > queue.value.length-1) {
-//         playingIndex = 0;
-//       }else{
-//         playingIndex++;
-//       }
-//       prepMediaItem(queue.value[playingIndex]);
-//       await super.skipToNext();
-//     }
-//     
-//     @override
-//     Future<void> skipToPrevious() async {
-//       if(playingIndex-1 < 0) {
-//         playingIndex = queue.value.length - 1;
-//       }else{
-//         playingIndex--;
-//       }
-//       nextPrepped = false;
-//       prepMediaItem(queue.value[playingIndex]);
-//       await super.skipToPrevious();
-//     }
-//
-//     Future<void> prepMediaItem(MediaItem mediaITem) async {
-//       if(queue.value.isEmpty) nextPrepped = false;
-//       if(!nextPrepped) {
-//         player.stop();
-//         MediaItem mediaitem = mediaITem;
-//         print("MEPREP: $mediaitem");
-//         var video = await fetchYTVideo(mediaitem.id);
-//         var url = (isWeb) ? "$backendUrl/proxy/$video" : video;
-//         await player.play(UrlSource(url));
-//         // if(mediaitem.artUri.toString() == "https://determine.com") mediaitem = mediaitem.copyWith(artUri: Uri.parse(video[1]));
-//         playbackState.add(playbackState.value.copyWith(
-//           playing: true,
-//           processingState: AudioProcessingState.ready,
-//           controls: [MediaControl.skipToPrevious, MediaControl.pause, MediaControl.skipToNext]
-//         ));
-//         mediaItem.add(mediaitem.copyWith(extras: {"song": mediaITem.extras?["song"], "index": playingIndex}));
-//         print("PREPPED: ${mediaItem.value}");
-//         prepNextItem();
-//       }else{
-//         await player.play(UrlSource(nextUrl));
-//         nextPrepped = false;
-//         playbackState.add(playbackState.value.copyWith(playing: true));
-//         mediaItem.add(mediaITem.copyWith(extras: {"song": mediaITem.extras?["song"], "index": playingIndex}));
-//         prepNextItem();
-//       }
-//     }
-//
-//     Future<String> fetchYTVideo(String id) async {
-//       var url = await http.get(Uri.parse("https://eatthecow.mooo.com:3030/video/url${PlatformUtils.isWeb || PlatformUtils.isIOS || PlatformUtils.isMacOS ? "/ios" : ""}/$id"));
-//       return url.body;
-//     }
-//     
-//     prepNextItem() async {
-//       if(queue.value.length <= 1) return;
-//       var nextIndex = (playingIndex + 1 > queue.value.length-1) ? 0 : playingIndex + 1;
-//       var mediaitem = queue.value[nextIndex];
-//       var video = await fetchYTVideo(queue.value[nextIndex].id);
-//       nextUrl = (isWeb) ? "$backendUrl/proxy/$video" : video;
-//       nextPrepped = true;
-//     }
-//
-//   @override
-//   Future<void> setRepeatMode(AudioServiceRepeatMode repeatMode) async {
-//     loop = repeatMode == AudioServiceRepeatMode.all;
-//   }
-//
-//   get canNext => (playingIndex + 1 > queue.value.length-1) ? false || loop : true;
-// }
+Future<void> persistPlayerInfo(PlayerInfo pi) async {
+    (await SharedPreferences.getInstance()).setString("playerinfo", jsonEncode(pi.toJson()));
+    print("Persisted playerinfo");
+}

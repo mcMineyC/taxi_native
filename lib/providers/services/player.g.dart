@@ -3,10 +3,50 @@
 part of 'player.dart';
 
 // **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$PlayerInfoImpl _$$PlayerInfoImplFromJson(Map<String, dynamic> json) =>
+    _$PlayerInfoImpl(
+      id: json['id'] as String,
+      artistId: json['artistId'] as String,
+      albumId: json['albumId'] as String,
+      displayName: json['displayName'] as String,
+      artistDisplayName: json['artistDisplayName'] as String,
+      albumDisplayName: json['albumDisplayName'] as String,
+      duration: (json['duration'] as num).toInt(),
+      position: (json['position'] as num).toInt(),
+      isPlaying: json['isPlaying'] as bool,
+      queue: (json['queue'] as List<dynamic>)
+          .map((e) => QueueItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      currentIndex: (json['currentIndex'] as num).toInt(),
+      shuffle: json['shuffle'] as bool,
+      loop: json['loop'] as bool,
+    );
+
+Map<String, dynamic> _$$PlayerInfoImplToJson(_$PlayerInfoImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'artistId': instance.artistId,
+      'albumId': instance.albumId,
+      'displayName': instance.displayName,
+      'artistDisplayName': instance.artistDisplayName,
+      'albumDisplayName': instance.albumDisplayName,
+      'duration': instance.duration,
+      'position': instance.position,
+      'isPlaying': instance.isPlaying,
+      'queue': instance.queue,
+      'currentIndex': instance.currentIndex,
+      'shuffle': instance.shuffle,
+      'loop': instance.loop,
+    };
+
+// **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$playerHash() => r'41019d4ec34609d023b5f99e68289be22957bcd5';
+String _$playerHash() => r'643c5cc1822223bbc29a1f07980a2c4fb1d66624';
 
 /// See also [Player].
 @ProviderFor(Player)

@@ -1,6 +1,10 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import "package:rxdart/rxdart.dart";
+import "dart:async";
+import 'dart:convert';
 
 import '../providers/services/player.dart';
 
@@ -12,20 +16,33 @@ import 'mobile/home/media_controls.dart';
 import 'mobile/home/appbar.dart';
 
 class HomePage extends ConsumerWidget {
-  const HomePage({super.key, required this.homeJunk});
+  HomePage({super.key, required this.homeJunk});
   final Widget homeJunk;
+  final subject = BehaviorSubject<PlayerInfo>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(playerProvider.notifier).init();
+    subject.throttleTime(const Duration(seconds: 1)).listen((value) {
+      _persistPlayerInfo(value).then((_) => print("Persisted player info"));
+    });
+    
     bool useMobile = MediaQuery.of(context).size.width <= 840;
-    return useMobile ? MobileHomePage(homeJunk: homeJunk) : DesktopHomePage(homeJunk: homeJunk);
+    return useMobile ? MobileHomePage(homeJunk: homeJunk, persistenceFunction: persistPlayerInfo) : DesktopHomePage(homeJunk: homeJunk, persistenceFunction: persistPlayerInfo);
+  }
+  void persistPlayerInfo(PlayerInfo info) {
+    subject.add(info);
+  }
+
+  Future<void> _persistPlayerInfo(PlayerInfo info) async {
+    (await SharedPreferences.getInstance()).setString("playerinfo", jsonEncode(info.toJson()));
   }
 }
 
 class DesktopHomePage extends ConsumerWidget {
-  const DesktopHomePage({super.key, required this.homeJunk});
+  const DesktopHomePage({super.key, required this.homeJunk, required this.persistenceFunction});
   final Widget homeJunk;
+  final Function(PlayerInfo info) persistenceFunction;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,7 +71,7 @@ class DesktopHomePage extends ConsumerWidget {
               ],
             ),
           ),
-          DesktopBottomBar(),
+          DesktopBottomBar(persistenceFunction: persistenceFunction),
         ]
       ),
     );
@@ -62,8 +79,9 @@ class DesktopHomePage extends ConsumerWidget {
 }
 
 class MobileHomePage extends ConsumerWidget {
-  const MobileHomePage({super.key, required this.homeJunk});
+  const MobileHomePage({super.key, required this.homeJunk, required this.persistenceFunction});
   final Widget homeJunk;
+  final Function(PlayerInfo info) persistenceFunction;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -90,7 +108,7 @@ class MobileHomePage extends ConsumerWidget {
               Expanded(
                 child: GenericViewport(homeJunk: homeJunk),
               ),
-              MobilePlayerControls(),
+              MobilePlayerControls(persistenceFunction: persistenceFunction),
             ]
           )
         )

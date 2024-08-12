@@ -49,11 +49,11 @@ class DesktopAppBar extends ConsumerWidget {
                 border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(9999)),
                 ),
-               hintText: "Search",
+                hintText: "Search",
                   prefixIcon: const Icon(Icons.search_rounded),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.clear), 
-                   onPressed: () {
+                    onPressed: () {
                       _searchController.clear();
                       ref.read(searchProvider.notifier).search("");
                     },
@@ -66,7 +66,7 @@ class DesktopAppBar extends ConsumerWidget {
                     borderRadius: BorderRadius.all(Radius.circular(9999)),
                   ),
                   hintText: "Search",
-              prefixIcon: const Icon(Icons.search_rounded),
+                  prefixIcon: const Icon(Icons.search_rounded),
                 )
               ),
             ),

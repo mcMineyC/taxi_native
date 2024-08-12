@@ -55,6 +55,7 @@ dependencies:
   media_kit_libs_linux: any
   just_audio_background: any
   media_kit_native_event_loop: ^1.0.8
+  rxdart: ^0.27.7
   # media_kit_libs_windows_audio: any
   # just_audio_handlers:
   #   # git:

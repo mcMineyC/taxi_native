@@ -14,6 +14,10 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
+PlayerInfo _$PlayerInfoFromJson(Map<String, dynamic> json) {
+  return _PlayerInfo.fromJson(json);
+}
+
 /// @nodoc
 mixin _$PlayerInfo {
   String get id => throw _privateConstructorUsedError;
@@ -23,14 +27,14 @@ mixin _$PlayerInfo {
   String get artistDisplayName => throw _privateConstructorUsedError;
   String get albumDisplayName => throw _privateConstructorUsedError;
   int get duration => throw _privateConstructorUsedError;
-  int get position =>
-      throw _privateConstructorUsedError; // required double percent,
+  int get position => throw _privateConstructorUsedError;
   bool get isPlaying => throw _privateConstructorUsedError;
   List<QueueItem> get queue => throw _privateConstructorUsedError;
   int get currentIndex => throw _privateConstructorUsedError;
   bool get shuffle => throw _privateConstructorUsedError;
   bool get loop => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $PlayerInfoCopyWith<PlayerInfo> get copyWith =>
       throw _privateConstructorUsedError;
@@ -249,7 +253,7 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$PlayerInfoImpl implements _PlayerInfo {
   _$PlayerInfoImpl(
       {required this.id,
@@ -267,6 +271,9 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       required this.loop})
       : _queue = queue;
 
+  factory _$PlayerInfoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PlayerInfoImplFromJson(json);
+
   @override
   final String id;
   @override
@@ -283,7 +290,6 @@ class _$PlayerInfoImpl implements _PlayerInfo {
   final int duration;
   @override
   final int position;
-// required double percent,
   @override
   final bool isPlaying;
   final List<QueueItem> _queue;
@@ -334,6 +340,7 @@ class _$PlayerInfoImpl implements _PlayerInfo {
             (identical(other.loop, loop) || other.loop == loop));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -356,6 +363,13 @@ class _$PlayerInfoImpl implements _PlayerInfo {
   @pragma('vm:prefer-inline')
   _$$PlayerInfoImplCopyWith<_$PlayerInfoImpl> get copyWith =>
       __$$PlayerInfoImplCopyWithImpl<_$PlayerInfoImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$PlayerInfoImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _PlayerInfo implements PlayerInfo {
@@ -374,6 +388,9 @@ abstract class _PlayerInfo implements PlayerInfo {
       required final bool shuffle,
       required final bool loop}) = _$PlayerInfoImpl;
 
+  factory _PlayerInfo.fromJson(Map<String, dynamic> json) =
+      _$PlayerInfoImpl.fromJson;
+
   @override
   String get id;
   @override
@@ -390,7 +407,7 @@ abstract class _PlayerInfo implements PlayerInfo {
   int get duration;
   @override
   int get position;
-  @override // required double percent,
+  @override
   bool get isPlaying;
   @override
   List<QueueItem> get queue;

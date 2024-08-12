@@ -7,9 +7,12 @@ import '../../../providers/services/player.dart';
 import '../../../helper_widgets.dart';
 
 class DesktopBottomBar extends ConsumerWidget {
+  DesktopBottomBar({required this.persistenceFunction});
+  final Function(PlayerInfo) persistenceFunction;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final player = ref.watch(playerProvider);
+    persistenceFunction(player);
     return Container(
       color: Theme.of(context).colorScheme.surfaceContainer,
                     height: 96,

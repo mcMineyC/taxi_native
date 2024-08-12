@@ -5,11 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../providers/services/player.dart';
 
 class MobilePlayerControls extends ConsumerWidget {
+  MobilePlayerControls({required this.persistenceFunction});
+  final Function(PlayerInfo) persistenceFunction;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     int width = MediaQuery.of(context).size.width.toInt();
     int height = MediaQuery.of(context).size.height.toInt();
     final player = ref.watch(playerProvider);
+    persistenceFunction(player);
     return Container(
                 padding: EdgeInsets.only(top: (height >= 560 ? 16 : 0)),
                 height: (height >= 560 ? 100 : 84),

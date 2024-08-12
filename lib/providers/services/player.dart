@@ -376,6 +376,7 @@ class Player extends _$Player {
       if(PlatformUtils.isWeb) nextUrl = "$backendUrl/proxy/$nextUrl";
       var nq = state.queue.toList();
       nq[skipDex(1)] = nq[skipDex(1)].copyWith(audioUrl: nextUrl);
+      nq[state.currentIndex] = state.queue[state.currentIndex].copyWith(audioUrl: "not_fetched");
       print("PREPPED: ${nq[skipDex(1)].displayName}");
       setQueue(nq);
     }
@@ -387,9 +388,4 @@ class Player extends _$Player {
   }
 
   get canNext => (state.currentIndex + 1 > state.queue.length) ? false || state.loop : true;
-}
-
-Future<void> persistPlayerInfo(PlayerInfo pi) async {
-    (await SharedPreferences.getInstance()).setString("playerinfo", jsonEncode(pi.toJson()));
-    print("Persisted playerinfo");
 }

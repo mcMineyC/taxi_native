@@ -31,7 +31,7 @@ class HomePage extends ConsumerWidget {
     return useMobile ? MobileHomePage(homeJunk: homeJunk, persistenceFunction: persistPlayerInfo) : DesktopHomePage(homeJunk: homeJunk, persistenceFunction: persistPlayerInfo);
   }
   void persistPlayerInfo(PlayerInfo info) {
-    subject.add(info);
+    subject.add(info.copyWith(queue: info.queue.map((e) => e.copyWith(audioUrl: "not_fetched")).toList()));
   }
 
   Future<void> _persistPlayerInfo(PlayerInfo info) async {

@@ -84,7 +84,7 @@ class Player extends _$Player {
       state = state.copyWith(position: d.inMilliseconds);
       if(!PlatformUtils.isWeb && PlatformUtils.isIOS && (d.inMilliseconds > (state.duration / 2)) && canNext) next();
     });
-    player.durationStream.listen((Duration? d) => state = state.copyWith(duration: d?.inMilliseconds ?? 0));
+    player.durationStream.listen((Duration? d) => state = state.copyWith(duration: (d?.inMilliseconds ?? 0) ~/ (!PlatformUtils.isWeb && PlatformUtils.isIOS ? 2 : 1)));
     player.playerStateStream.listen((state) {
       if(state.processingState == ProcessingState.completed && canNext && !thinking) {
         thinking = true;

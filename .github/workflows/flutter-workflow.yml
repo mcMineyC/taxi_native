@@ -28,7 +28,7 @@ jobs:
       - run: sudo apt-get update
       - run: sudo apt-get install libunwind-dev zip
       - run: sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
-      - run: sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+      - run: sudo apt install libmpv-dev mpv
       - run: flutter pub get
 #      - run: flutter format --set-exit-if-changed .
       - run: dart run build_runner build --delete-conflicting-outputs

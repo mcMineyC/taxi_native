@@ -49,7 +49,8 @@ class Song with _$Song {
     artistName: artistDisplayName,
     imageUrl: imageUrl,
     youtubeId: youtubeId,
-    duration: duration
+    duration: duration,
+    audioUrl: "not_fetched",
   );
 }
 
@@ -65,6 +66,7 @@ extension ConvertToQueueItem on MediaItem {
     imageUrl: extras!["song"]?.imageUrl ?? "",
     youtubeId: extras!["song"]?.youtubeId ?? "",
     duration: extras!["song"]?.duration ?? 0,
+    audioUrl: "not_fetched",
   );
 }    
 

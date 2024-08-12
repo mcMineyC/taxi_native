@@ -1,5 +1,5 @@
 import "package:freezed_annotation/freezed_annotation.dart";
-import "package:audio_service/audio_service.dart";
+import "package:just_audio_background/just_audio_background.dart";
 import 'song.dart';
 
 part 'queueitem.freezed.dart';
@@ -19,6 +19,7 @@ class QueueItem with _$QueueItem {
     required String imageUrl,
     required String youtubeId,
     required double duration,
+    required String audioUrl,
   }) = _QueueItem;
 
   factory QueueItem.fromJson(Map<String, Object?> json) => _$QueueItemFromJson(json);
@@ -34,12 +35,12 @@ class QueueItem with _$QueueItem {
     imageUrl: "",
     youtubeId: "",
     duration: 0,
+    audioUrl: "not_fetched",
   );
     
   MediaItem toMediaItem() => MediaItem(
-        id: youtubeId,
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
         title: displayName,
-        displayTitle: displayName,
         album: albumName,
         artist: artistName,
         duration: Duration.zero,

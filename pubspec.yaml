@@ -25,13 +25,13 @@ dependencies:
   cached_network_image: ^3.3.1
   skeletonizer: ^1.3.0
   context_menus: ^2.0.0+1
-  audio_service:
-    git:
-      url: https://github.com/mcMineyC/audio_service.git
-      ref: minor
-      path: audio_service
+  # audio_service:
+  #   git:
+  #     url: https://github.com/mcMineyC/audio_service.git
+  #     ref: minor
+  #     path: audio_service
   audio_service_mpris: ^0.1.4
-  audioplayers:
+  # audioplayers:
   #   path: ../audioplayers/packages/audioplayers
   beamer: ^1.6.1
   youtube_explode_dart: ^2.2.1
@@ -46,13 +46,15 @@ dependencies:
   device_info_plus: ^10.1.0
   provider: ^6.1.2
   flex_color_picker: ^3.5.1
-  # just_audio: 
-  #   git:
-  #     url: https://github.com/mcMineyC/just_audio.git
-  #     path: just_audio
-  #     ref: minor
-  # just_audio_media_kit: 2.0.3
-  # media_kit_libs_linux: any
+  just_audio: 
+    git:
+      url: https://github.com/mcMineyC/just_audio.git
+      path: just_audio
+      ref: minor
+  just_audio_media_kit: 2.0.3
+  media_kit_libs_linux: any
+  just_audio_background: any
+  media_kit_native_event_loop: ^1.0.8
   # media_kit_libs_windows_audio: any
   # just_audio_handlers:
   #   # git:

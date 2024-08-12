@@ -5,13 +5,10 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:context_menus/context_menus.dart';
-import 'package:audio_service/audio_service.dart';
-import 'package:audio_session/audio_session.dart';
 import 'package:provider/provider.dart' as prov;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'service_locator.dart';
-// import 'package:just_audio_handlers/just_audio_handlers.dart';
-// import 'providers/services/better_handler.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'providers/services/player.dart';
 import 'providers/data/preferences_provider.dart';
 import 'platform_utils.dart';
@@ -35,8 +32,6 @@ import 'pages/checklist.dart';
 import 'pages/library.dart';
 import 'login.dart';
 
-late AudioHandler audioHandler;
-
 void main() async{
   if(PlatformUtils.isDesktop){
     print("Using FFI");
@@ -45,16 +40,11 @@ void main() async{
   // Initialize FFI
   WidgetsFlutterBinding.ensureInitialized();
   ServiceLocator().register<SharedPreferences>(await SharedPreferences.getInstance());
-  // var handy = AudioHandlerJustAudio(player: AudioPlayer());
-  var handy = AudioServiceHandler();
-  await handy.init();
-  var audioHandler = await AudioService.init(
-    builder: () => handy,
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
   );
-  ServiceLocator().register<AudioHandler>(audioHandler);
-  final session = await AudioSession.instance;
-  await session.configure(AudioSessionConfiguration.music());
-  await session.setActive(true);
   var p = Prefs(backendUrl: "https://eatthecow.mooo.com:3030", authToken: "", username: "");
   await p.load();
   ServiceLocator().register<Prefs>(p);

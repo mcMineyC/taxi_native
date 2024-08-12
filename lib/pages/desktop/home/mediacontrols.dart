@@ -112,13 +112,10 @@ class DesktopBottomBar extends ConsumerWidget {
                         Listener(
                           onPointerSignal: (event) {
                             if(event is PointerScrollEvent) {
-                              print(event.scrollDelta.dy<0 ? "Scrolling up" : "Scrolling down");
                               if(event.scrollDelta.dy < 0) {
                                 ref.read(playerProvider.notifier).seekForward(3000);
-                                print("Seeking forward");
                               }else{
                                 ref.read(playerProvider.notifier).seekBackward(3000);
-                                print("Seeking backward");
                               }
                             }
                           },

@@ -6,21 +6,7 @@ part of 'user_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userNameHash() => r'37b8047efde37f5260586f8b26e878b3845243c9';
-
-/// See also [userName].
-@ProviderFor(userName)
-final userNameProvider = AutoDisposeFutureProvider<String>.internal(
-  userName,
-  name: r'userNameProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$userNameHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef UserNameRef = AutoDisposeFutureProviderRef<String>;
-String _$loginPasswordHash() => r'b357fa8e38ec6d90306bd59bc025f414c30f7be5';
+String _$loginPasswordHash() => r'969f646ca435737d8b530b6173ec89615e5096f2';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -186,7 +172,7 @@ class _LoginPasswordProviderElement
   String get password => (origin as LoginPasswordProvider).password;
 }
 
-String _$loginTokenHash() => r'4e3ca3405222931d91e524e5f29567cacbcb6462';
+String _$loginTokenHash() => r'809a9bc0bfd44fe3d790b3341cc52a502a5a6281';
 
 /// See also [loginToken].
 @ProviderFor(loginToken)

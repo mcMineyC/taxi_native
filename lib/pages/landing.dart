@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import "package:provider/provider.dart" as prov;
 import '../helper_widgets.dart';
 import '../types/song.dart';
 import '../providers/error_watcher.dart';
 import '../providers/data/new_provider.dart';
 import '../providers/data/info_provider.dart';
-import '../providers/data/user_provider.dart';
 import '../providers/data/preferences_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:beamer/beamer.dart';
@@ -13,15 +13,13 @@ import 'package:beamer/beamer.dart';
 class LandingPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    PreferencesProvider p = prov.Provider.of<PreferencesProvider>(context);
     final AsyncValue<List<Song>> newSongs = ref.watch(fetchNewSongsProvider);
     final AsyncValue<List<Song>> recentlyPlayed = ref.watch(fetchRecentlyPlayedProvider);
-    final AsyncValue<String> user = ref.watch(userNameProvider);
-    final AsyncValue<String> backendUrl = ref.watch(backendUrlProvider);
     // Handle unauth errors
     BeamerDelegate bd = Beamer.of(context);
     handleError(ref, fetchNewSongsProvider, bd);
     handleError(ref, fetchRecentlyPlayedProvider, bd);
-    handleError(ref, userNameProvider, bd);
 
     // ref.read(playerProvider.notifier).setArtist("d37ebd110ec1813f206f2f339c3c077e77ddbac3ae981174df651ebc1fd56f9b");
 
@@ -30,11 +28,7 @@ class LandingPage extends ConsumerWidget {
       child: ListView(
         children: [
           Text(
-            user.when(
-              data: (data) => "Hello, $data!",
-              loading: () => "Hello, User!",
-              error: (err, stack) => "Greetings and salutations!"
-            ),
+            "Hello, ${p.username}!",
             style: TextStyle(
               fontSize: 50,
               fontWeight: FontWeight.bold,
@@ -86,38 +80,30 @@ class LandingPage extends ConsumerWidget {
                 height: MediaCard.height,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: backendUrl.when(
-                    data: (url) => recentlyPlayed.when(
-                      data: (data) {
-                        return Row(
-                          children: data.map((song) => MediaCard(
-                            text: song.displayName,
-                            image: song.imageUrl,
-                            thingId: song.id,
-                            thingType: "song",
-                          )).toList(),
-                        );
-                      },
-                      loading: () => SingleChildScrollView(
-                        child: Skeletonizer(
-                          enabled: true,
-                          child: EmptyCardRow()
-                        )
-                      ),
-                      error: (err, stack) => Skeletonizer(
+                  child: recentlyPlayed.when(
+                    data: (data) {
+                      return Row(
+                        children: data.map((song) => MediaCard(
+                          text: song.displayName,
+                          image: song.imageUrl,
+                          thingId: song.id,
+                          thingType: "song",
+                        )).toList(),
+                      );
+                    },
+                    loading: () => SingleChildScrollView(
+                      child: Skeletonizer(
+                        enabled: true,
+                        child: EmptyCardRow()
+                      )
+                    ),
+                    error: (err, stack) => SingleChildScrollView(
+                      child: Skeletonizer(
                         enabled: true,
                         child: EmptyCardRow()
                       ),
                     ),
-                    loading: () => Skeletonizer(
-                      enabled: true,
-                      child: EmptyCardRow()
-                    ),
-                    error: (err, stack) => Skeletonizer(
-                      enabled: true,
-                      child: EmptyCardRow()
-                    ),
-                  )
+                  ),
                 )
               )
             ]
@@ -137,21 +123,16 @@ class LandingPage extends ConsumerWidget {
                 height: MediaCard.height,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: backendUrl.when(
-                    data: (url) => 
-                      Row(
-                      children: [ 
-                        MediaCard(
-                          text: "Megalovania",
-                          thingId: "idklol",
-                          thingType: "placeholder",
-                          image: "https://placehold.co/512x512.png",
-                        ),
-                      ],
-                    ),
-                    loading: () => Skeletonizer(enabled: true, child: EmptyCardRow()),
-                    error: (err, stack) => Skeletonizer(enabled: true, child: EmptyCardRow()),
-                  )
+                  child: Row(
+                    children: [ 
+                      MediaCard(
+                        text: "Megalovania",
+                        thingId: "idklol",
+                        thingType: "placeholder",
+                        image: "https://placehold.co/512x512.png",
+                      ),
+                    ],
+                  ),
                 )
               )
             ]
@@ -171,21 +152,17 @@ class LandingPage extends ConsumerWidget {
                 height: MediaCard.height,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: backendUrl.when(
-                    data: (url) => Row(
-                      children: [
-                        MediaCard(
-                          text: "HYPE",
-                          thingId: "idklol",
-                          thingType: "playlist",
-                          image: "https://placehold.co/512x512.png",
-                        ),
-                      ],
-                    ),
-                    loading: () => Skeletonizer(enabled: true, child: EmptyCardRow()),
-                    error: (err, stack) => Skeletonizer(enabled: true, child: EmptyCardRow()),
+                  child: Row(
+                    children: [
+                      MediaCard(
+                        text: "HYPE",
+                        thingId: "idklol",
+                        thingType: "playlist",
+                        image: "https://placehold.co/512x512.png",
+                      ),
+                    ],
                   ),
-                )
+                ),
               )
             ]
           ),
@@ -204,36 +181,28 @@ class LandingPage extends ConsumerWidget {
                 height: MediaCard.height,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: backendUrl.when(
-                    data: (url) => newSongs.when(
-                      data: (data) {
-                        return Row(
-                          children: data.map((song) => MediaCard(
-                            text: song.displayName,
-                            image: song.imageUrl,
-                            thingId: song.id,
-                            thingType: "song",
-                          )).toList(),
-                        );
-                      },
-                      loading: () => SingleChildScrollView(
-                        child: Skeletonizer(
-                          enabled: true,
-                          child: EmptyCardRow()
-                        )
-                      ),
-                      error: (err, stack) => Skeletonizer(
+                  child: newSongs.when(
+                    data: (data) {
+                      return Row(
+                        children: data.map((song) => MediaCard(
+                          text: song.displayName,
+                          image: song.imageUrl,
+                          thingId: song.id,
+                          thingType: "song",
+                        )).toList(),
+                      );
+                    },
+                    loading: () => SingleChildScrollView(
+                      child: Skeletonizer(
+                        enabled: true,
+                        child: EmptyCardRow()
+                      )
+                    ),
+                    error: (err, stack) => SingleChildScrollView(
+                      child: Skeletonizer(
                         enabled: true,
                         child: EmptyCardRow()
                       ),
-                    ),
-                    loading: () => Skeletonizer(
-                      enabled: true,
-                      child: EmptyCardRow()
-                    ),
-                    error: (err, stack) => Skeletonizer(
-                      enabled: true,
-                      child: EmptyCardRow()
                     ),
                   )
                 )

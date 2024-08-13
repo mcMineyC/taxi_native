@@ -9,9 +9,7 @@ import 'package:provider/provider.dart' as prov;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'service_locator.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'providers/services/player.dart';
 import 'providers/data/preferences_provider.dart';
-import 'platform_utils.dart';
 import 'providers/theme_provider.dart';
 
 import 'pages/error.dart';
@@ -33,11 +31,7 @@ import 'pages/library.dart';
 import 'login.dart';
 
 void main() async{
-  if(PlatformUtils.isDesktop){
-    print("Using FFI");
-  }
   // print("Current commit: ${String.fromEnvironment("GIT_REV")}");
-  // Initialize FFI
   WidgetsFlutterBinding.ensureInitialized();
   ServiceLocator().register<SharedPreferences>(await SharedPreferences.getInstance());
   await JustAudioBackground.init(
@@ -45,9 +39,9 @@ void main() async{
     androidNotificationChannelName: 'Audio playback',
     androidNotificationOngoing: true,
   );
-  var p = Prefs(backendUrl: "https://eatthecow.mooo.com:3030", authToken: "", username: "");
-  await p.load();
-  ServiceLocator().register<Prefs>(p);
+  PreferencesProvider prefsProvider = PreferencesProvider();
+  await prefsProvider.init();
+  ServiceLocator().register<PreferencesProvider>(prefsProvider);
   ThemeChanger themeProvider = ThemeChanger();
   await themeProvider.init();
   var scheme = ColorScheme.fromSeed(
@@ -59,6 +53,7 @@ void main() async{
     prov.MultiProvider(
       providers: [
         prov.ChangeNotifierProvider(create: (_) => themeProvider),
+        prov.ChangeNotifierProvider(create: (_) => prefsProvider),
       ],
       child: ProviderScope(
         child: ContextMenuOverlay(
@@ -238,12 +233,14 @@ class App extends ConsumerWidget {
       seedColor: HexColor.fromHex(theme.seedColor),
       brightness: theme.dark ? Brightness.dark : Brightness.light, 
     );
+    theme.textTheme = GoogleFonts.poppinsTextTheme().apply(bodyColor: scheme.onSurface, displayColor: scheme.onSurface);
+    theme.colorScheme = scheme;
     return MaterialApp.router(
       // debugShowCheckedModeBanner: false,
       title: 'Taxi - Native',
       theme: ThemeData(
         colorScheme: scheme, 
-        textTheme: GoogleFonts.poppinsTextTheme().apply(bodyColor: scheme.onSurface, displayColor: scheme.onSurface),
+        textTheme: theme.textTheme,
         useMaterial3: true,
       ),
       routerDelegate: routerDelegate,

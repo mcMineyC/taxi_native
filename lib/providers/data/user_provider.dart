@@ -1,25 +1,20 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import '../../service_locator.dart';
 import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'preferences_provider.dart';
 
 part 'user_provider.g.dart';
-
-@riverpod
-Future<String> userName(UserNameRef ref) async {
-  final prefs = await SharedPreferences.getInstance();
-  String? user = prefs.getString('username') ?? "user";
-  return user.substring(0, 1).toUpperCase() + user.substring(1);
-}
+PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
 
 @riverpod
 Future<int> loginPassword(LoginPasswordRef ref, String username, String password) async {
   SharedPreferences _sp = await SharedPreferences.getInstance();
   try{
     var response = await http.post(
-      Uri.parse("${await ref.read(backendUrlProvider.future)}/auth"),
+      Uri.parse("${p.backendUrl}/auth"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
@@ -50,7 +45,7 @@ Future<int> loginToken(LoginTokenRef ref, String token) async {
   SharedPreferences _sp = await SharedPreferences.getInstance();
   try{
     var response = await http.post(
-      Uri.parse("${await ref.read(backendUrlProvider.future)}/authtoken"),
+      Uri.parse("${p.backendUrl}/authtoken"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),

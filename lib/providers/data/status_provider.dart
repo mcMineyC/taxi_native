@@ -1,18 +1,20 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import '../../service_locator.dart';
 import 'dart:convert';
 
 import '../../types/checklist_item.dart';
 import 'preferences_provider.dart';
 
 part 'status_provider.g.dart';
+PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
 
 @Riverpod(keepAlive: false)
 Future<List<ChecklistItem>> getChecklistItems(GetChecklistItemsRef ref) async {
 SharedPreferences _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-    Uri.parse("${await ref.read(backendUrlProvider.future)}/checklist"),
+    Uri.parse("${p.backendUrl}/checklist"),
     headers: Map<String, String>.from({
       'Content-Type': 'application/json',
     }),
@@ -36,7 +38,7 @@ SharedPreferences _sp = await SharedPreferences.getInstance();
 Future<bool> addChecklistItem(AddChecklistItemRef ref, List<String> data) async {
   SharedPreferences _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-    Uri.parse("${await ref.read(backendUrlProvider.future)}/checklist/add"),
+    Uri.parse("${p.backendUrl}/checklist/add"),
     headers: Map<String, String>.from({
       'Content-Type': 'application/json',
     }),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import '../../service_locator.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../types/song.dart';
@@ -8,6 +9,7 @@ import 'fetched_data_provider.dart';
 import 'preferences_provider.dart';
 
 part 'info_provider.g.dart';
+PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
 
 @riverpod
 Future<bool> addRecentlyPlayed(AddRecentlyPlayedRef ref, String id) async {
@@ -15,7 +17,7 @@ Future<bool> addRecentlyPlayed(AddRecentlyPlayedRef ref, String id) async {
   print("Adding recently played: $id");
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("${await ref.read(backendUrlProvider.future)}/recently-played/${(_sp.getString("username") ?? "")}/add"),
+      Uri.parse("${p.backendUrl}/recently-played/${(_sp.getString("username") ?? "")}/add"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
@@ -37,7 +39,7 @@ Future<bool> addRecentlyPlayed(AddRecentlyPlayedRef ref, String id) async {
 Future<List<Song>> fetchRecentlyPlayed(FetchRecentlyPlayedRef ref) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("${await ref.read(backendUrlProvider.future)}/recently-played/"+(_sp.getString("username") ?? "")),
+      Uri.parse("${p.backendUrl}/recently-played/"+(_sp.getString("username") ?? "")),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
@@ -60,7 +62,7 @@ Future<List<Song>> fetchRecentlyPlayed(FetchRecentlyPlayedRef ref) async {
 Future<List<Song>> fetchFavorites(FetchFavoritesRef ref) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("${await ref.read(backendUrlProvider.future)}/favorites/"+(_sp.getString("username") ?? "")),
+      Uri.parse("${p.backendUrl}/favorites/"+(_sp.getString("username") ?? "")),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),

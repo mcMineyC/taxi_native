@@ -3,22 +3,39 @@
 part of 'preferences_provider.dart';
 
 // **************************************************************************
-// RiverpodGenerator
+// JsonSerializableGenerator
 // **************************************************************************
 
-String _$backendUrlHash() => r'4effdde9c1867c236834c61e53664b201243c41d';
+_$PersistenceOptionsImpl _$$PersistenceOptionsImplFromJson(
+        Map<String, dynamic> json) =>
+    _$PersistenceOptionsImpl(
+      autoplaySong: json['autoplaySong'] as bool,
+      persistInfo: json['persistInfo'] as bool,
+      saveLibraryTab: json['saveLibraryTab'] as bool,
+    );
 
-/// See also [backendUrl].
-@ProviderFor(backendUrl)
-final backendUrlProvider = AutoDisposeFutureProvider<String>.internal(
-  backendUrl,
-  name: r'backendUrlProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$backendUrlHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+Map<String, dynamic> _$$PersistenceOptionsImplToJson(
+        _$PersistenceOptionsImpl instance) =>
+    <String, dynamic>{
+      'autoplaySong': instance.autoplaySong,
+      'persistInfo': instance.persistInfo,
+      'saveLibraryTab': instance.saveLibraryTab,
+    };
 
-typedef BackendUrlRef = AutoDisposeFutureProviderRef<String>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+_$BackendResponseImpl _$$BackendResponseImplFromJson(
+        Map<String, dynamic> json) =>
+    _$BackendResponseImpl(
+      shuffleOnLoop: json['shuffleOnLoop'] as bool,
+      shuffleDefault: json['shuffleDefault'] as bool,
+      username: json['username'] as String,
+      backendUrl: json['backendUrl'] as String,
+    );
+
+Map<String, dynamic> _$$BackendResponseImplToJson(
+        _$BackendResponseImpl instance) =>
+    <String, dynamic>{
+      'shuffleOnLoop': instance.shuffleOnLoop,
+      'shuffleDefault': instance.shuffleDefault,
+      'username': instance.username,
+      'backendUrl': instance.backendUrl,
+    };

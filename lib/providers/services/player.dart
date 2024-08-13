@@ -7,10 +7,12 @@ import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../platform_utils.dart';
+import '../../service_locator.dart';
 
 import '../data/fetched_data_provider.dart';
 import '../data/info_provider.dart';
 import '../data/playlist_provider.dart';
+import '../data/preferences_provider.dart';
 
 import '../../types/song.dart';
 import '../../types/searchresult.dart';
@@ -44,6 +46,7 @@ class PlayerInfo with _$PlayerInfo {
 @riverpod
 class Player extends _$Player {
   AudioPlayer player = AudioPlayer();
+  PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
   late final SharedPreferences _sp;
   bool _isInit = false;
   List<QueueItem> _queue = [];
@@ -106,6 +109,9 @@ class Player extends _$Player {
       needSeekTo = i.position;
       state = i;
       needInteraction = true;
+      if(!PlatformUtils.isWeb && p.autoResume){
+        await playQueueItem(state.queue[state.currentIndex]);
+      }
     }
   }
 
@@ -120,6 +126,12 @@ class Player extends _$Player {
   void seekBackward(int milliseconds){
     Duration computed = Duration(milliseconds: state.position) - Duration(milliseconds: milliseconds);
     player.seek(computed.isNegative ? Duration.zero : computed);
+  }
+
+  void stop(){
+    player.stop();
+    state = state.copyWith(isPlaying: false);
+    setQueue([]);
   }
 
   void play() async {
@@ -339,7 +351,7 @@ class Player extends _$Player {
     ));
   }
 
-  Future<void> shuffle(bool enable) async {
+  Future<void> shuffle() async {
     List<QueueItem> chew = List<QueueItem>.filled(state.queue.length, QueueItem.empty());
     for(int i = 0; i < state.queue.length; i++) {
       chew[i] = state.queue[superShuffle(i, DateTime.now().millisecondsSinceEpoch, state.queue.length)];
@@ -387,5 +399,13 @@ class Player extends _$Player {
     return url.body;
   }
 
-  get canNext => (state.currentIndex + 1 > state.queue.length) ? false || state.loop : true;
+  get canNext {
+    print("Checking if can next");
+    if(state.currentIndex + 1 >= state.queue.length && state.loop && p.shuffleOnLoop){
+      print("Shuffling");
+      thinking = true;
+      shuffle();
+    } 
+    return (state.currentIndex + 1 >= state.queue.length) ? false || state.loop : true;
+  }
 }

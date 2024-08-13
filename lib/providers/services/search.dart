@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -8,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 
 import '../data/preferences_provider.dart';
+import '../../service_locator.dart';
 import '../../types/song.dart';
 import '../../types/album.dart';
 import '../../types/artists.dart';
@@ -15,6 +15,8 @@ import '../../types/searchresult.dart';
 
 part 'search.g.dart';
 part 'search.freezed.dart';
+
+PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
 
 @freezed
 class SearchInfo with _$SearchInfo {
@@ -78,7 +80,7 @@ class Search extends _$Search {
   Future<SearchResponse> searchAll(String query) async {
     final _sp = await SharedPreferences.getInstance();
     var response = await http.post(
-        Uri.parse("${await ref.read(backendUrlProvider.future)}/searchAll"),
+        Uri.parse("${p.backendUrl}/searchAll"),
         headers: Map<String, String>.from({
           'Content-Type': 'application/json'
         }),
@@ -99,7 +101,7 @@ class Search extends _$Search {
   Future<List<Song>> searchSongs(String query) async {
     final _sp = await SharedPreferences.getInstance();
     var response = await http.post(
-        Uri.parse("${await ref.read(backendUrlProvider.future)}/search"),
+        Uri.parse("${p.backendUrl}/search"),
         headers: Map<String, String>.from({
           'Content-Type': 'application/json'
         }),
@@ -123,7 +125,7 @@ class Search extends _$Search {
   Future<List<Album>> searchAlbums(String query) async {
     final _sp = await SharedPreferences.getInstance();
     var response = await http.post(
-        Uri.parse("${await ref.read(backendUrlProvider.future)}/search"),
+        Uri.parse("${p.backendUrl}/search"),
         headers: Map<String, String>.from({
           'Content-Type': 'application/json'
         }),
@@ -147,7 +149,7 @@ class Search extends _$Search {
   Future<List<Artist>> searchArtists(String query) async {
     final _sp = await SharedPreferences.getInstance();
     var response = await http.post(
-        Uri.parse("${await ref.read(backendUrlProvider.future)}/search"),
+        Uri.parse("${p.backendUrl}/search"),
         headers: Map<String, String>.from({
           'Content-Type': 'application/json'
         }),

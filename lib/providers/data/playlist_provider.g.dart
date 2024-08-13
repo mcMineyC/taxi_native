@@ -6,7 +6,7 @@ part of 'playlist_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchPlaylistsHash() => r'f06f2b7732e853860d7a8988a36f4d37820702c0';
+String _$fetchPlaylistsHash() => r'259c6501faa8d1bfce42c911a41d1b3ae61f96a2';
 
 /// See also [fetchPlaylists].
 @ProviderFor(fetchPlaylists)
@@ -21,7 +21,7 @@ final fetchPlaylistsProvider = FutureProvider<List<Playlist>>.internal(
 );
 
 typedef FetchPlaylistsRef = FutureProviderRef<List<Playlist>>;
-String _$fetchNewPlaylistsHash() => r'217b67b408420cb4a0b3910787cac0263ca61908';
+String _$fetchNewPlaylistsHash() => r'425d704bec4ea4374e6e748b550987300cb9d844';
 
 /// See also [fetchNewPlaylists].
 @ProviderFor(fetchNewPlaylists)
@@ -36,7 +36,7 @@ final fetchNewPlaylistsProvider = FutureProvider<List<Playlist>>.internal(
 );
 
 typedef FetchNewPlaylistsRef = FutureProviderRef<List<Playlist>>;
-String _$addPlaylistHash() => r'cacf4f6084987d9f08599b65709b25cc95d23932';
+String _$addPlaylistHash() => r'af50dc3d7ab7bb7a206547ff999b119965ad4286';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -185,7 +185,7 @@ class _AddPlaylistProviderElement extends AutoDisposeFutureProviderElement<bool>
   Playlist get playlist => (origin as AddPlaylistProvider).playlist;
 }
 
-String _$addIdToPlaylistHash() => r'ed38fcd4e5ad1b90752d4e3c253191aa1df682af';
+String _$addIdToPlaylistHash() => r'4cd2ab830e8c0c787329a32ef6b7755d115c3f00';
 
 /// See also [addIdToPlaylist].
 @ProviderFor(addIdToPlaylist)
@@ -330,7 +330,7 @@ class _AddIdToPlaylistProviderElement
   String get id => (origin as AddIdToPlaylistProvider).id;
 }
 
-String _$addIdsToPlaylistHash() => r'6a3bb96a360ed38b90b20576c2ccefdd7696e5a7';
+String _$addIdsToPlaylistHash() => r'd41069ac61b1462628e34b4a5e3076839ce095d9';
 
 /// See also [addIdsToPlaylist].
 @ProviderFor(addIdsToPlaylist)
@@ -476,7 +476,7 @@ class _AddIdsToPlaylistProviderElement
 }
 
 String _$deleteIndexFromPlaylistHash() =>
-    r'dd1d77c615b1cf10691c1deff9b48210690a0234';
+    r'3e7c10b158c98399a5136ded78b345470bfe8e45';
 
 /// See also [deleteIndexFromPlaylist].
 @ProviderFor(deleteIndexFromPlaylist)
@@ -623,7 +623,7 @@ class _DeleteIndexFromPlaylistProviderElement
   int get index => (origin as DeleteIndexFromPlaylistProvider).index;
 }
 
-String _$deletePlaylistHash() => r'0d1f278bb9fc7d56c9013c36bfa690407d638f65';
+String _$deletePlaylistHash() => r'1b77dd39f17392d488f4691bd2467e05391b5d61';
 
 /// See also [deletePlaylist].
 @ProviderFor(deletePlaylist)
@@ -751,7 +751,7 @@ class _DeletePlaylistProviderElement
   String get playlistId => (origin as DeletePlaylistProvider).playlistId;
 }
 
-String _$findPlaylistHash() => r'fe9a4cf55d36cebee9cc88247b5c173bd1ef9800';
+String _$findPlaylistHash() => r'c09804457752fe153dd623d014da056b538e76ef';
 
 /// See also [findPlaylist].
 @ProviderFor(findPlaylist)
@@ -881,7 +881,7 @@ class _FindPlaylistProviderElement
 }
 
 String _$findSongsByPlaylistHash() =>
-    r'2ee52e8797da7054a8b8a7bb6a4c7799ae782805';
+    r'e2309917049ba91c6bb1ae3a8e635b363ab67bf9';
 
 /// See also [findSongsByPlaylist].
 @ProviderFor(findSongsByPlaylist)

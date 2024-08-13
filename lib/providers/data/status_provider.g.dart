@@ -6,7 +6,7 @@ part of 'status_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getChecklistItemsHash() => r'df1bb69a4c31ca6e47152c7749f3b6a237e8bc64';
+String _$getChecklistItemsHash() => r'1b3d0884ff5e067f570a14afa8ac7ecdfc86bf68';
 
 /// See also [getChecklistItems].
 @ProviderFor(getChecklistItems)
@@ -23,7 +23,7 @@ final getChecklistItemsProvider =
 
 typedef GetChecklistItemsRef
     = AutoDisposeFutureProviderRef<List<ChecklistItem>>;
-String _$addChecklistItemHash() => r'e025d410bdc3421c1a399b8f154a5dc770e0f1e0';
+String _$addChecklistItemHash() => r'd6ef2ee6dc593aa5ecea8141c4c34eae9e033adf';
 
 /// Copied from Dart SDK
 class _SystemHash {

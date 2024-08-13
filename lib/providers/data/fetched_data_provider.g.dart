@@ -6,7 +6,7 @@ part of 'fetched_data_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchSongsHash() => r'f5d0987a75bc9e41361b66af9eb828eba70747f0';
+String _$fetchSongsHash() => r'e734cf15a1a29381f938165778e308d2ec5c46ec';
 
 /// See also [fetchSongs].
 @ProviderFor(fetchSongs)
@@ -20,7 +20,7 @@ final fetchSongsProvider = FutureProvider<List<Song>>.internal(
 );
 
 typedef FetchSongsRef = FutureProviderRef<List<Song>>;
-String _$fetchAlbumsHash() => r'd22223e5fe54004fc7419a88af635e73c61f8095';
+String _$fetchAlbumsHash() => r'34c67f71d8ca6468d2540cb8ccc85c7b0f87dcb9';
 
 /// See also [fetchAlbums].
 @ProviderFor(fetchAlbums)
@@ -34,7 +34,7 @@ final fetchAlbumsProvider = FutureProvider<List<Album>>.internal(
 );
 
 typedef FetchAlbumsRef = FutureProviderRef<List<Album>>;
-String _$fetchArtistsHash() => r'4a774bbc0771055ab9ffe56a7636a454b21a6d38';
+String _$fetchArtistsHash() => r'27ff9afac70222e926b0f1b90ea4e727d0a4d990';
 
 /// See also [fetchArtists].
 @ProviderFor(fetchArtists)
@@ -48,7 +48,7 @@ final fetchArtistsProvider = FutureProvider<List<Artist>>.internal(
 );
 
 typedef FetchArtistsRef = FutureProviderRef<List<Artist>>;
-String _$findBatchSongsHash() => r'6a05a4ef25eb70a20a5efb0744b31a466a96c4b1';
+String _$findBatchSongsHash() => r'201123f41ff4c841063761250d0319d92c0d006e';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -198,7 +198,7 @@ class _FindBatchSongsProviderElement
   List<String> get ids => (origin as FindBatchSongsProvider).ids;
 }
 
-String _$findSongHash() => r'222e36ca6c34033ebb337291e87c920af809dc3d';
+String _$findSongHash() => r'7c98b3906d371a167312e1cae3d51ded3432c703';
 
 /// See also [findSong].
 @ProviderFor(findSong)
@@ -325,7 +325,7 @@ class _FindSongProviderElement extends AutoDisposeFutureProviderElement<Song>
   String get id => (origin as FindSongProvider).id;
 }
 
-String _$findSongsByAlbumHash() => r'c31a1318dd37fca7905fc0cc45813fe4b204d761';
+String _$findSongsByAlbumHash() => r'048bf2c0af339054d6e504e94516ae853f4f9466';
 
 /// See also [findSongsByAlbum].
 @ProviderFor(findSongsByAlbum)
@@ -454,7 +454,7 @@ class _FindSongsByAlbumProviderElement
   String get id => (origin as FindSongsByAlbumProvider).id;
 }
 
-String _$findSongsByArtistHash() => r'41fe276751564de0d223cbb1e465070eb789a6c4';
+String _$findSongsByArtistHash() => r'ebcfceb33f8213dbb9ff4e66ea0108bb1bbf5f9d';
 
 /// See also [findSongsByArtist].
 @ProviderFor(findSongsByArtist)
@@ -584,7 +584,7 @@ class _FindSongsByArtistProviderElement
 }
 
 String _$findAlbumsByArtistHash() =>
-    r'8a51736745cfa5b42f2e208b84df56225239cf3e';
+    r'29b1d6e729f17dfed2e1f07f08894c9f16669978';
 
 /// See also [findAlbumsByArtist].
 @ProviderFor(findAlbumsByArtist)
@@ -715,7 +715,7 @@ class _FindAlbumsByArtistProviderElement
 }
 
 String _$findNoSinglesByArtistHash() =>
-    r'f576a659a5d8a0a573c213e4a2233ac0507bb7e9';
+    r'5c4ddf64a47427968f832093ad94b74667a5a6fc';
 
 /// See also [findNoSinglesByArtist].
 @ProviderFor(findNoSinglesByArtist)
@@ -846,7 +846,7 @@ class _FindNoSinglesByArtistProviderElement
 }
 
 String _$findSinglesByArtistHash() =>
-    r'f90c769726bb6b723ad68d8a0818f2c8580bf396';
+    r'767d6119199d0bcd664c77949369b5500f13a1ec';
 
 /// See also [findSinglesByArtist].
 @ProviderFor(findSinglesByArtist)
@@ -976,7 +976,7 @@ class _FindSinglesByArtistProviderElement
   String get id => (origin as FindSinglesByArtistProvider).id;
 }
 
-String _$findAlbumHash() => r'6ff745283a9f706628605132a4124570fa94c697';
+String _$findAlbumHash() => r'10972ead24cdcf31f190d0bc6e32e75a5350d554';
 
 /// See also [findAlbum].
 @ProviderFor(findAlbum)
@@ -1103,7 +1103,7 @@ class _FindAlbumProviderElement extends AutoDisposeFutureProviderElement<Album>
   String get id => (origin as FindAlbumProvider).id;
 }
 
-String _$findArtistHash() => r'7c096ca627ddd07ed4e6072f3df855470281b701';
+String _$findArtistHash() => r'a8dbaf5a77c301855af2c062ed54b040491b36d6';
 
 /// See also [findArtist].
 @ProviderFor(findArtist)

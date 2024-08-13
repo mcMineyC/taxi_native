@@ -24,7 +24,7 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(playerProvider.notifier).init();
     subject.throttleTime(const Duration(seconds: 1)).listen((value) {
-      _persistPlayerInfo(value).then((_) => print("Persisted player info"));
+      _persistPlayerInfo(value).then((_) {});
     });
     
     bool useMobile = MediaQuery.of(context).size.width <= 840;
@@ -35,6 +35,7 @@ class HomePage extends ConsumerWidget {
   }
 
   Future<void> _persistPlayerInfo(PlayerInfo info) async {
+    if(info.position == 0) return;
     (await SharedPreferences.getInstance()).setString("playerinfo", jsonEncode(info.toJson()));
   }
 }

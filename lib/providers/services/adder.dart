@@ -48,7 +48,7 @@ class Adder extends _$Adder {
 
   void init() async {
     if(_isInit) return;
-    String backendUrl = await ref.read(backendUrlProvider.future);
+    String backendUrl = p.backendUrl;
     var optionBuilder = IO.OptionBuilder();
     if(!PlatformUtils.isWeb) optionBuilder.setTransports(['websocket']);
     var options = optionBuilder.build();

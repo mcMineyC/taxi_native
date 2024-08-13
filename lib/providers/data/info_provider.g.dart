@@ -6,7 +6,7 @@ part of 'info_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$addRecentlyPlayedHash() => r'2b4ed9e146af008674ecc52c4ef2174febdd8b0a';
+String _$addRecentlyPlayedHash() => r'9c942570a769eb85ef31d3d23a137119a5d933a7';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -156,7 +156,7 @@ class _AddRecentlyPlayedProviderElement
 }
 
 String _$fetchRecentlyPlayedHash() =>
-    r'39e11fa2a2eb760acecd30c0e80d5e3829b118f4';
+    r'8f7a10cc430bb08e3734518b704be5cf55be2b94';
 
 /// See also [fetchRecentlyPlayed].
 @ProviderFor(fetchRecentlyPlayed)
@@ -171,7 +171,7 @@ final fetchRecentlyPlayedProvider = FutureProvider<List<Song>>.internal(
 );
 
 typedef FetchRecentlyPlayedRef = FutureProviderRef<List<Song>>;
-String _$fetchFavoritesHash() => r'ce9e6eb270bfe464ccb748759c4b5ca9be11bf64';
+String _$fetchFavoritesHash() => r'1dd74bab56f4de4452f98d21b8d3ad1915866bde';
 
 /// See also [fetchFavorites].
 @ProviderFor(fetchFavorites)

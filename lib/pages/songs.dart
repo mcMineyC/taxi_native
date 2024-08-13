@@ -12,22 +12,17 @@ class SongsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<List<Song>> songs = ref.watch(fetchSongsProvider);
-    final AsyncValue<String> backendUrl = ref.watch(backendUrlProvider);
     handleError(ref, fetchSongsProvider, Beamer.of(context));
-    return backendUrl.when(
-      data: (url) => songs.when(
-        data: (data) {
-          var cardList = data.map((e) => {
-            "text": e.displayName,
-            "image": e.imageUrl,
-            "id": e.id,
-            "type": "song"
-          }).toList();
-          return CardView(cardList: cardList);
-        },
-        loading: () => LoadingCardView(),
-        error: (error, stack) => LoadingCardView(),
-      ),
+    return songs.when(
+      data: (data) {
+        var cardList = data.map((e) => {
+          "text": e.displayName,
+          "image": e.imageUrl,
+          "id": e.id,
+          "type": "song"
+        }).toList();
+        return CardView(cardList: cardList);
+      },
       loading: () => LoadingCardView(),
       error: (error, stack) => LoadingCardView(),
     );

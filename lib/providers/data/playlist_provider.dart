@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import '../../service_locator.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,12 +12,13 @@ import '../../types/playlist.dart';
 import '../../types/song.dart';
 
 part 'playlist_provider.g.dart';
+PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
 
 @Riverpod(keepAlive: true)
 Future<List<Playlist>> fetchPlaylists(FetchPlaylistsRef ref) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("${await ref.read(backendUrlProvider.future)}/playlists?sort=none"),
+      Uri.parse("${p.backendUrl}/playlists?sort=none"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
@@ -45,7 +47,7 @@ Future<List<Playlist>> fetchPlaylists(FetchPlaylistsRef ref) async {
 Future<List<Playlist>> fetchNewPlaylists(FetchNewPlaylistsRef ref) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("${await ref.read(backendUrlProvider.future)}/playlists?sort=new"),
+      Uri.parse("${p.backendUrl}/playlists?sort=new"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),
@@ -74,7 +76,7 @@ Future<List<Playlist>> fetchNewPlaylists(FetchNewPlaylistsRef ref) async {
 Future<bool> addPlaylist(AddPlaylistRef ref, Playlist playlist) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-    Uri.parse("${await ref.read(backendUrlProvider.future)}/playlists/modify/create"),
+    Uri.parse("${p.backendUrl}/playlists/modify/create"),
     headers: Map<String, String>.from({
       'Content-Type': 'application/json',
     }),
@@ -105,7 +107,7 @@ Future<bool> addIdToPlaylist(AddIdToPlaylistRef ref, String playlistId, String i
   playlist.songs.forEach((el) => newSongs.add(el));
   newSongs.add(id);
   var response = await http.post(
-    Uri.parse("${await ref.read(backendUrlProvider.future)}/playlists/modify/$playlistId/"),
+    Uri.parse("${p.backendUrl}/playlists/modify/$playlistId/"),
     headers: Map<String, String>.from({
       'Content-Type': 'application/json',
     }),
@@ -136,7 +138,7 @@ Future<bool> addIdsToPlaylist(AddIdsToPlaylistRef ref, String playlistId, List<S
   playlist.songs.forEach((el) => newSongs.add(el));
   newSongs.addAll(ids);
   var response = await http.post(
-    Uri.parse("${await ref.read(backendUrlProvider.future)}/playlists/modify/$playlistId/"),
+    Uri.parse("${p.backendUrl}/playlists/modify/$playlistId/"),
     headers: Map<String, String>.from({
       'Content-Type': 'application/json',
     }),
@@ -167,7 +169,7 @@ Future<bool> deleteIndexFromPlaylist(DeleteIndexFromPlaylistRef ref, String play
   playlist.songs.forEach((el) => newSongs.add(el));
   newSongs.removeAt(index);
   var response = await http.post(
-    Uri.parse("${await ref.read(backendUrlProvider.future)}/playlists/modify/$playlistId/"),
+    Uri.parse("${p.backendUrl}/playlists/modify/$playlistId/"),
     headers: Map<String, String>.from({
       'Content-Type': 'application/json',
     }),
@@ -195,7 +197,7 @@ Future<bool> deleteIndexFromPlaylist(DeleteIndexFromPlaylistRef ref, String play
 Future<bool> deletePlaylist(DeletePlaylistRef ref, String playlistId) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-    Uri.parse("${await ref.read(backendUrlProvider.future)}/playlists/remove/$playlistId"),
+    Uri.parse("${p.backendUrl}/playlists/remove/$playlistId"),
     headers: Map<String, String>.from({
       'Content-Type': 'application/json',
     }),
@@ -219,7 +221,7 @@ Future<bool> deletePlaylist(DeletePlaylistRef ref, String playlistId) async {
 Future<FilledPlaylist> findPlaylist(FindPlaylistRef ref, String id) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-    Uri.parse("${await ref.read(backendUrlProvider.future)}/playlists/$id"),
+    Uri.parse("${p.backendUrl}/playlists/$id"),
     headers: Map<String, String>.from({
       'Content-Type': 'application/json',
     }),
@@ -248,7 +250,7 @@ Future<FilledPlaylist> findPlaylist(FindPlaylistRef ref, String id) async {
 Future<List<Song>> findSongsByPlaylist(FindSongsByPlaylistRef ref, String id) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-    Uri.parse("${await ref.read(backendUrlProvider.future)}/playlists/$id"),
+    Uri.parse("${p.backendUrl}/playlists/$id"),
     headers: Map<String, String>.from({
       'Content-Type': 'application/json',
     }),

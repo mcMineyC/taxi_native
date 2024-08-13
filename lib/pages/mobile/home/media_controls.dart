@@ -57,7 +57,7 @@ class MobilePlayerControls extends ConsumerWidget {
                                 ),
                                 if(width >= 324) IconButton(
                                   onPressed: () {
-                                    ref.read(playerProvider.notifier).shuffle(!player.shuffle);
+                                    ref.read(playerProvider.notifier).shuffle();
                                   },
                                   icon: const Icon(Icons.shuffle_rounded),
                                   color: player.shuffle ? Theme.of(context).colorScheme.primary : null,

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import '../../service_locator.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,12 +10,13 @@ import 'preferences_provider.dart';
 import '../../types/song.dart';
 
 part 'new_provider.g.dart';
+PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
 
 @riverpod
 Future<List<Song>> fetchNewSongs(FetchNewSongsRef ref) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("${await ref.read(backendUrlProvider.future)}/info/songs?limit=10"),
+      Uri.parse("${p.backendUrl}/info/songs?limit=10"),
       headers: Map<String, String>.from({
         'Content-Type': 'application/json'
       }),

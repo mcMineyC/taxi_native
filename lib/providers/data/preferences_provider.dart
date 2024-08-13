@@ -60,7 +60,7 @@ class PreferencesProvider extends ChangeNotifier {
     sp = await SharedPreferences.getInstance();
     _persistence = sp.containsKey("persistenceOptions") ? PersistenceOptions.fromJson(jsonDecode(sp.getString("persistenceOptions")!)) : _persistence;
     _prefs = sp.containsKey("storedPrefs") ? StorablePrefs.fromJson(jsonDecode(sp.getString("storedPrefs")!)) : _prefs;
-    if(prefs.username == "user") username = sp.getString("username") ?? "someone";
+    if(prefs.username == "user" || prefs.username == "someone") username = sp.getString("username") ?? "someone";
     print("Loaded preferences");
     spInit = true;
   }

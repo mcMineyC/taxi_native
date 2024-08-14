@@ -35,11 +35,11 @@ class SearchPage extends ConsumerWidget {
             ),
           ),
           if(info.songs.isNotEmpty) Container(
-            constraints: BoxConstraints(maxHeight: info.songs.length > (MediaQuery.of(context).size.width ~/ 300)*2 ? 500 : 256),
+            constraints: BoxConstraints(maxHeight: info.songs.length > (MediaQuery.of(context).size.width ~/ MediaCard.width)*2 ? (MediaCard.height*2) : MediaCard.height),
             child: GridView.count(
               scrollDirection: Axis.horizontal,
-              crossAxisSpacing: 8.0,
-              crossAxisCount: info.songs.length > (MediaQuery.of(context).size.width ~/ 300)*2 ? 2 : 1,
+              childAspectRatio: (MediaCard.height+6) / MediaCard.width,
+              crossAxisCount: info.songs.length > (MediaQuery.of(context).size.width ~/ MediaCard.width)*2 ? 2 : 1,
               children: info.songs.map((e) => MediaCard(
                 image: e.imageUrl,
                 text: e.displayName,
@@ -58,11 +58,12 @@ class SearchPage extends ConsumerWidget {
             ),
           ),
           if(info.albums.isNotEmpty) Container(
-            constraints: BoxConstraints(maxHeight: info.albums.length > (MediaQuery.of(context).size.width ~/ 300)*2 ? 500 : 256),
+            constraints: BoxConstraints(maxHeight: info.albums.length > (MediaQuery.of(context).size.width ~/ MediaCard.width)*2 ? (MediaCard.height*2) : MediaCard.height),
             child: GridView.count(
               scrollDirection: Axis.horizontal,
               crossAxisSpacing: 8.0,
-              crossAxisCount: info.albums.length > (MediaQuery.of(context).size.width ~/ 300)*2 ? 2 : 1,
+              childAspectRatio: (MediaCard.height+6) / MediaCard.width,
+              crossAxisCount: info.albums.length > (MediaQuery.of(context).size.width ~/ MediaCard.width)*2 ? 2 : 1,
               children: info.albums.map((e) => MediaCard(
                 image: e.imageUrl,
                 text: e.displayName,
@@ -81,11 +82,12 @@ class SearchPage extends ConsumerWidget {
             ),
           ),
           if(info.artists.isNotEmpty) Container(
-            constraints: BoxConstraints(maxHeight: info.artists.length > (MediaQuery.of(context).size.width ~/ 300)*2 ? 500 : 256),
+            constraints: BoxConstraints(maxHeight: info.artists.length > (MediaQuery.of(context).size.width ~/ MediaCard.width)*2 ? (MediaCard.height*2) : MediaCard.height),
             child: GridView.count(
               scrollDirection: Axis.horizontal,
               crossAxisSpacing: 8.0,
-              crossAxisCount: info.artists.length > (MediaQuery.of(context).size.width ~/ 300)*2 ? 2 : 1,
+              childAspectRatio: (MediaCard.height+6) / MediaCard.width,
+              crossAxisCount: info.artists.length > (MediaQuery.of(context).size.width ~/ MediaCard.width)*2 ? 2 : 1,
               children: info.artists.map((e) => MediaCard(
                 image: e.imageUrl,
                 text: e.displayName,

@@ -30,10 +30,10 @@ class MobileNav extends ConsumerWidget {
                icon: Icon(Icons.checklist_rounded),
                 label: "Roadmap",
             ),
-          if(width >= 800) const NavigationDestination(
-            icon: Icon(Icons.bug_report_rounded),
-            label: "Report an issue",
-          ),
+          // if(width >= 800) const NavigationDestination(
+          //   icon: Icon(Icons.bug_report_rounded),
+          //   label: "Report an issue",
+          // ),
         ],
         selectedIndex: () {
           switch (Beamer.of(context).currentPages.last.key) {

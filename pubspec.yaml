@@ -30,7 +30,7 @@ dependencies:
   #     url: https://github.com/mcMineyC/audio_service.git
   #     ref: minor
   #     path: audio_service
-  audio_service_mpris: ^0.1.4
+  # audio_service_mpris: ^0.1.4
   # audioplayers:
   #   path: ../audioplayers/packages/audioplayers
   beamer: ^1.6.1
@@ -46,14 +46,14 @@ dependencies:
   device_info_plus: ^10.1.0
   provider: ^6.1.2
   flex_color_picker: ^3.5.1
-  just_audio: 
-    git:
-      url: https://github.com/mcMineyC/just_audio.git
-      path: just_audio
-      ref: minor
-  just_audio_media_kit: 2.0.3
+  just_audio:
+    path: ../just_audio/just_audio
+  just_audio_media_kit: 
+    path: ../just_audio/just_audio_media_kit
   media_kit_libs_linux: any
-  just_audio_background: any
+  # just_audio_background: any
+  just_audio_background:
+    path: ../just_audio/just_audio_background
   media_kit_native_event_loop: ^1.0.8
   rxdart: ^0.27.7
   # media_kit_libs_windows_audio: any

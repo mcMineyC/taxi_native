@@ -28,6 +28,9 @@ import 'pages/playlist.dart';
 import 'pages/settings.dart';
 import 'pages/checklist.dart';
 import 'pages/library.dart';
+
+import 'pages/admin/dashboard.dart';
+
 import 'login.dart';
 
 void main() async{
@@ -215,6 +218,13 @@ class App extends ConsumerWidget {
           title: 'Roadmap',
           popToNamed: '/home',
           child: HomePage(homeJunk: ChecklistPage()),
+        ),
+        
+        '/admin/dashboard': (context, state, data) => BeamPage(
+          key: const ValueKey('admin-dashboard'),
+          title: 'Admin Dashboard',
+          popToNamed: '/home',
+          child: HomePage(homeJunk: AdminDashboardPage()),
         ),
       }
     ),

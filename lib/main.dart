@@ -11,6 +11,7 @@ import 'service_locator.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'providers/data/preferences_provider.dart';
 import 'providers/theme_provider.dart';
+import 'uppercase_extension.dart';
 
 import 'pages/error.dart';
 import 'pages/home.dart';
@@ -28,6 +29,9 @@ import 'pages/playlist.dart';
 import 'pages/settings.dart';
 import 'pages/checklist.dart';
 import 'pages/library.dart';
+
+import 'pages/admin/dashboard.dart';
+
 import 'login.dart';
 
 void main() async{
@@ -216,6 +220,22 @@ class App extends ConsumerWidget {
           popToNamed: '/home',
           child: HomePage(homeJunk: ChecklistPage()),
         ),
+        '/admin': (context, state, data) => BeamPage(
+          key: const ValueKey('admin'),
+          title: 'Admin Dashboard',
+          popToNamed: '/home',
+          child: AdminDashboardPage("stats"),
+        ),
+        '/admin/:route': (context, state, data) {
+          final route = state.uri.toString().split("/admin/").last.split("/").first.split("?").first;
+          print("Admin route: $route");
+          return BeamPage(
+            key: ValueKey("admin-$route"),
+            title: "Admin: ${route.capitalize()}",
+            popToNamed: '/admin',
+            child: AdminDashboardPage(route),
+          );
+        },
       }
     ),
     // buildListener: (p0, p1) {

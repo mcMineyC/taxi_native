@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:beamer/beamer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -103,95 +105,115 @@ class MediaCard extends ConsumerWidget{
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ContextMenuRegion(
-      contextMenu: GenericContextMenu(
-        buttonConfigs: buildMenuButtons(context, ref),
+    return Tooltip(
+      decoration: const BoxDecoration(
+        color: Colors.transparent,
       ),
-      child: Container(
-        width: width,
-        height: height,
-          child: Card(
-            clipBehavior: Clip.hardEdge,
-            child: InkWell(
-              onTap: () {
-                debugPrint("Pressed card with id: $thingId and type: $thingType");
-                switch (thingType) {
-                  case "song":
-                    print("Setting song");
-                    ref.read(playerProvider.notifier).setSong(thingId);
-                    break;
-                  case "album":
-                    print("Setting album");
-                    // ref.read(playerProvider.notifier).setAlbum(thingId);
-                    Beamer.of(context).beamToNamed("/album/$thingId");
-                    break;
-                  case "artist":
-                    print("Setting artist");
-                    // ref.read(playerProvider.notifier).setArtist(thingId);
-                    Beamer.of(context).beamToNamed("/artist/$thingId");
-                    // Beamer.of(context).update(: BeamState.fromUriString('/artist/$thingId'));
-                    break;
-                  case "placeholder":
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Hmm, nothing here. The real question is why do you just go around randomly clicking loading things? ><")));
-                  default:
-                    debugPrint("No implementation for $thingType");
-                }
-              },
-              // onSecondaryTap: () {
-              //   print("Secondary tapped");
-              // },
-              // onLongPress: () {
-              //   print("Long press");
-              // },
+      richMessage: WidgetSpan(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: BackdropFilter(
             child: Container(
-              child: Column(
-                children: [
-                    FittedBox(
-                      child: Container(
-                      margin: EdgeInsets.only(top: 12, left: 12, right: 12),
-                      height: 172,
-                      width: 172,
-                      // decoration: BoxDecoration(
-                      //   color: Colors.teal,
-                      //   borderRadius: BorderRadius.circular(12),
-                      // ),
-                      child: CachedNetworkImage(
-                        imageUrl: image,
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.contain,
+              margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              child: Text(
+                text,
+                style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 14)
+              )
+            ),
+            filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+          ),
+        ),
+      ),
+      child: ContextMenuRegion(
+        contextMenu: GenericContextMenu(
+          buttonConfigs: buildMenuButtons(context, ref),
+        ),
+        child: Container(
+          width: width,
+          height: height,
+            child: Card(
+              clipBehavior: Clip.hardEdge,
+              child: InkWell(
+                onTap: () {
+                  debugPrint("Pressed card with id: $thingId and type: $thingType");
+                  switch (thingType) {
+                    case "song":
+                      print("Setting song");
+                      ref.read(playerProvider.notifier).setSong(thingId);
+                      break;
+                    case "album":
+                      print("Setting album");
+                      // ref.read(playerProvider.notifier).setAlbum(thingId);
+                      Beamer.of(context).beamToNamed("/album/$thingId");
+                      break;
+                    case "artist":
+                      print("Setting artist");
+                      // ref.read(playerProvider.notifier).setArtist(thingId);
+                      Beamer.of(context).beamToNamed("/artist/$thingId");
+                      // Beamer.of(context).update(: BeamState.fromUriString('/artist/$thingId'));
+                      break;
+                    case "placeholder":
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Hmm, nothing here. The real question is why do you just go around randomly clicking loading things? ><")));
+                    default:
+                      debugPrint("No implementation for $thingType");
+                  }
+                },
+                // onSecondaryTap: () {
+                //   print("Secondary tapped");
+                // },
+                // onLongPress: () {
+                //   print("Long press");
+                // },
+              child: Container(
+                child: Column(
+                  children: [
+                      FittedBox(
+                        child: Container(
+                        margin: EdgeInsets.only(top: 12, left: 12, right: 12),
+                        height: 172,
+                        width: 172,
+                        // decoration: BoxDecoration(
+                        //   color: Colors.teal,
+                        //   borderRadius: BorderRadius.circular(12),
+                        // ),
+                        child: CachedNetworkImage(
+                          imageUrl: image,
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.contain,
+                              ),
                             ),
                           ),
+                          placeholder: (context, url) => Container(decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12))),
+                          errorWidget: (context, url, error) => Icon(Icons.error_outline_rounded,color:Colors.pink[700]),
                         ),
-                        placeholder: (context, url) => Container(decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12))),
-                        errorWidget: (context, url, error) => Icon(Icons.error_outline_rounded,color:Colors.pink[700]),
                       ),
                     ),
-                  ),
-                  Container(
-                    height: 26,
-                    margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    child: Text(
-                      text,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    )
-                  ),
-                ]
-              )
-            
+                    Container(
+                      height: 26,
+                      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      child: Text(
+                        text,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      )
+                    ),
+                  ]
+                )
+              
+            )
           )
         )
-      )
-      // )
+        // )
+        ),
       ),
     );
   }

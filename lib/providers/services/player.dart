@@ -85,16 +85,20 @@ class Player extends _$Player {
     if(!PlatformUtils.isWeb && PlatformUtils.isLinux) JustAudioMediaKit.ensureInitialized();
     player.positionStream.listen((Duration d) {
       state = state.copyWith(position: d.inMilliseconds);
-      if(!PlatformUtils.isWeb && PlatformUtils.isIOS && (d.inMilliseconds > (state.duration / 2)) && canNext) next();
+      if(d.inMilliseconds > 0 && state.duration > 0 && !PlatformUtils.isWeb && (PlatformUtils.isIOS || PlatformUtils.isMacOS) && (d.inMilliseconds > state.duration) && canNext) next();
+      if(d.inMilliseconds > 0 && state.duration > 0 && !PlatformUtils.isWeb && (PlatformUtils.isIOS || PlatformUtils.isMacOS) && (d.inMilliseconds > state.duration) && canNext) print("Hacky darwin workaround");
     });
-    player.durationStream.listen((Duration? d) => state = state.copyWith(duration: (d?.inMilliseconds ?? 0) ~/ (!PlatformUtils.isWeb && PlatformUtils.isIOS ? 2 : 1)));
+    player.durationStream.listen((Duration? d) => state = state.copyWith(duration: (d?.inMilliseconds ?? 0) ~/ (!PlatformUtils.isWeb && (PlatformUtils.isIOS || PlatformUtils.isMacOS) ? 2 : 1)));
     player.playerStateStream.listen((state) {
+      print("New state: $state");
       if(state.processingState == ProcessingState.completed && canNext && !thinking) {
+        print("Skipping");
         thinking = true;
+        paused = false;
         next();
       }
-      if(state.processingState == ProcessingState.ready && !paused) this.state = this.state.copyWith(isPlaying: true);
-      if(state.processingState == ProcessingState.ready && needInteraction) {
+      if(state.processingState == ProcessingState.ready) this.state = this.state.copyWith(isPlaying: state.playing);
+      if(state.processingState == ProcessingState.ready && !state.playing && needInteraction) {
         needInteraction = false;
         player.seek(Duration(milliseconds: needSeekTo));
         print("Seeked position to ${needSeekTo}");

@@ -223,8 +223,7 @@ class App extends ConsumerWidget {
         '/admin': (context, state, data) => BeamPage(
           key: const ValueKey('admin'),
           title: 'Admin Dashboard',
-          popToNamed: '/home',
-          child: AdminDashboardPage("stats"),
+          child: AdminDashboardPage(""),
         ),
         '/admin/:route': (context, state, data) {
           final route = state.uri.toString().split("/admin/").last.split("/").first.split("?").first;

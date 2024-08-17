@@ -9,16 +9,16 @@ part of 'searchresult.dart';
 _$SearchResponseImpl _$$SearchResponseImplFromJson(Map<String, dynamic> json) =>
     _$SearchResponseImpl(
       songs: (json['songs'] as List<dynamic>)
-          .map((e) => LocalSearchResult.fromJson(e as Map<String, dynamic>))
+          .map((e) => Song.fromJson(e as Map<String, dynamic>))
           .toList(),
       albums: (json['albums'] as List<dynamic>)
-          .map((e) => LocalSearchResult.fromJson(e as Map<String, dynamic>))
+          .map((e) => Album.fromJson(e as Map<String, dynamic>))
           .toList(),
       artists: (json['artists'] as List<dynamic>)
-          .map((e) => LocalSearchResult.fromJson(e as Map<String, dynamic>))
+          .map((e) => Artist.fromJson(e as Map<String, dynamic>))
           .toList(),
       singles: (json['singles'] as List<dynamic>)
-          .map((e) => LocalSearchResult.fromJson(e as Map<String, dynamic>))
+          .map((e) => Song.fromJson(e as Map<String, dynamic>))
           .toList(),
       relevancy:
           (json['relevancy'] as List<dynamic>).map((e) => e as String).toList(),

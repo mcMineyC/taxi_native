@@ -20,10 +20,10 @@ SearchResponse _$SearchResponseFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SearchResponse {
-  List<LocalSearchResult> get songs => throw _privateConstructorUsedError;
-  List<LocalSearchResult> get albums => throw _privateConstructorUsedError;
-  List<LocalSearchResult> get artists => throw _privateConstructorUsedError;
-  List<LocalSearchResult> get singles => throw _privateConstructorUsedError;
+  List<Song> get songs => throw _privateConstructorUsedError;
+  List<Album> get albums => throw _privateConstructorUsedError;
+  List<Artist> get artists => throw _privateConstructorUsedError;
+  List<Song> get singles => throw _privateConstructorUsedError;
   List<String> get relevancy => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,10 +39,10 @@ abstract class $SearchResponseCopyWith<$Res> {
       _$SearchResponseCopyWithImpl<$Res, SearchResponse>;
   @useResult
   $Res call(
-      {List<LocalSearchResult> songs,
-      List<LocalSearchResult> albums,
-      List<LocalSearchResult> artists,
-      List<LocalSearchResult> singles,
+      {List<Song> songs,
+      List<Album> albums,
+      List<Artist> artists,
+      List<Song> singles,
       List<String> relevancy});
 }
 
@@ -69,19 +69,19 @@ class _$SearchResponseCopyWithImpl<$Res, $Val extends SearchResponse>
       songs: null == songs
           ? _value.songs
           : songs // ignore: cast_nullable_to_non_nullable
-              as List<LocalSearchResult>,
+              as List<Song>,
       albums: null == albums
           ? _value.albums
           : albums // ignore: cast_nullable_to_non_nullable
-              as List<LocalSearchResult>,
+              as List<Album>,
       artists: null == artists
           ? _value.artists
           : artists // ignore: cast_nullable_to_non_nullable
-              as List<LocalSearchResult>,
+              as List<Artist>,
       singles: null == singles
           ? _value.singles
           : singles // ignore: cast_nullable_to_non_nullable
-              as List<LocalSearchResult>,
+              as List<Song>,
       relevancy: null == relevancy
           ? _value.relevancy
           : relevancy // ignore: cast_nullable_to_non_nullable
@@ -99,10 +99,10 @@ abstract class _$$SearchResponseImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {List<LocalSearchResult> songs,
-      List<LocalSearchResult> albums,
-      List<LocalSearchResult> artists,
-      List<LocalSearchResult> singles,
+      {List<Song> songs,
+      List<Album> albums,
+      List<Artist> artists,
+      List<Song> singles,
       List<String> relevancy});
 }
 
@@ -127,19 +127,19 @@ class __$$SearchResponseImplCopyWithImpl<$Res>
       songs: null == songs
           ? _value._songs
           : songs // ignore: cast_nullable_to_non_nullable
-              as List<LocalSearchResult>,
+              as List<Song>,
       albums: null == albums
           ? _value._albums
           : albums // ignore: cast_nullable_to_non_nullable
-              as List<LocalSearchResult>,
+              as List<Album>,
       artists: null == artists
           ? _value._artists
           : artists // ignore: cast_nullable_to_non_nullable
-              as List<LocalSearchResult>,
+              as List<Artist>,
       singles: null == singles
           ? _value._singles
           : singles // ignore: cast_nullable_to_non_nullable
-              as List<LocalSearchResult>,
+              as List<Song>,
       relevancy: null == relevancy
           ? _value._relevancy
           : relevancy // ignore: cast_nullable_to_non_nullable
@@ -152,10 +152,10 @@ class __$$SearchResponseImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SearchResponseImpl extends _SearchResponse {
   const _$SearchResponseImpl(
-      {required final List<LocalSearchResult> songs,
-      required final List<LocalSearchResult> albums,
-      required final List<LocalSearchResult> artists,
-      required final List<LocalSearchResult> singles,
+      {required final List<Song> songs,
+      required final List<Album> albums,
+      required final List<Artist> artists,
+      required final List<Song> singles,
       required final List<String> relevancy})
       : _songs = songs,
         _albums = albums,
@@ -167,33 +167,33 @@ class _$SearchResponseImpl extends _SearchResponse {
   factory _$SearchResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$SearchResponseImplFromJson(json);
 
-  final List<LocalSearchResult> _songs;
+  final List<Song> _songs;
   @override
-  List<LocalSearchResult> get songs {
+  List<Song> get songs {
     if (_songs is EqualUnmodifiableListView) return _songs;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_songs);
   }
 
-  final List<LocalSearchResult> _albums;
+  final List<Album> _albums;
   @override
-  List<LocalSearchResult> get albums {
+  List<Album> get albums {
     if (_albums is EqualUnmodifiableListView) return _albums;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_albums);
   }
 
-  final List<LocalSearchResult> _artists;
+  final List<Artist> _artists;
   @override
-  List<LocalSearchResult> get artists {
+  List<Artist> get artists {
     if (_artists is EqualUnmodifiableListView) return _artists;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_artists);
   }
 
-  final List<LocalSearchResult> _singles;
+  final List<Song> _singles;
   @override
-  List<LocalSearchResult> get singles {
+  List<Song> get singles {
     if (_singles is EqualUnmodifiableListView) return _singles;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_singles);
@@ -252,10 +252,10 @@ class _$SearchResponseImpl extends _SearchResponse {
 
 abstract class _SearchResponse extends SearchResponse {
   const factory _SearchResponse(
-      {required final List<LocalSearchResult> songs,
-      required final List<LocalSearchResult> albums,
-      required final List<LocalSearchResult> artists,
-      required final List<LocalSearchResult> singles,
+      {required final List<Song> songs,
+      required final List<Album> albums,
+      required final List<Artist> artists,
+      required final List<Song> singles,
       required final List<String> relevancy}) = _$SearchResponseImpl;
   const _SearchResponse._() : super._();
 
@@ -263,13 +263,13 @@ abstract class _SearchResponse extends SearchResponse {
       _$SearchResponseImpl.fromJson;
 
   @override
-  List<LocalSearchResult> get songs;
+  List<Song> get songs;
   @override
-  List<LocalSearchResult> get albums;
+  List<Album> get albums;
   @override
-  List<LocalSearchResult> get artists;
+  List<Artist> get artists;
   @override
-  List<LocalSearchResult> get singles;
+  List<Song> get singles;
   @override
   List<String> get relevancy;
   @override

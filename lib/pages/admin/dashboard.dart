@@ -8,7 +8,12 @@ import "../../types/album.dart";
 import "../../types/artists.dart";
 import "../../types/playlist.dart";
 
+import "generics.dart";
 import "songs.dart";
+//import "albums.dart";
+import "artists.dart";
+//import "playlists.dart";
+//import "users.dart";
 
 class AdminDashboardPage extends StatefulWidget {
   String selected = "";
@@ -76,8 +81,9 @@ class AdminDashboardPageState extends State<AdminDashboardPage> {
                         color: Theme.of(context).colorScheme.surfaceContainer,
                       ),
                       child: switch(selectedPage) {
-                        0 => Text("Overview"),
-                        1 => SongsPane1(callback: songPageSwitched),
+                        0 => const Text("Overview"),
+                        1 => SearchableTypedView(callback: selectedPageSwitched, type: "songs"),
+                        3 => SearchableTypedView(callback: selectedPageSwitched, type: "artists"),
                         _ => Text(item.$1),
                       },
                     ),
@@ -93,9 +99,10 @@ class AdminDashboardPageState extends State<AdminDashboardPage> {
                   color: Theme.of(context).colorScheme.surfaceContainer,
                 ),
                 child: switch(selectedPage) {
-                  0 => Text("Overview pane2"),
+                  0 => const Text("Overview pane2 (shouldnt be shown)"),
                   1 => SongsPane2(selected: selectedObject),
-                  _ => Text(item.$1 + " pane2"),
+                  3 => ArtistsPane2(selected: selectedObject),
+                  _ => Text("${item.$1} pane2"),
                 },
               ),
             ),
@@ -105,7 +112,7 @@ class AdminDashboardPageState extends State<AdminDashboardPage> {
     );
   }
 
-  void songPageSwitched(Song s){
+  void selectedPageSwitched(dynamic s){
     setState(() {
       selectedObject = s;
     });

@@ -7,32 +7,46 @@ import "../../providers/data/info_provider.dart";
 import "../../providers/data/playlist_provider.dart";
 import "../../providers/services/search.dart";
 import "../../providers/services/player.dart";
-import "../../types/song.dart";
+import "../../types/artists.dart";
+import "../../helper_widgets.dart";
 import "../../info_card.dart";
 import "generics.dart";
 
-class SongsPane2 extends ConsumerStatefulWidget {
-  final Song selected;
-  SongsPane2({required this.selected});
-  get mutated => _sp2state?.mutated ?? false;
-  _SongPane2State? _sp2state;
+class ArtistsPane1 extends ConsumerStatefulWidget {
+  int selectedIndex = 0;
+  void Function(Artist) callback;
+  ArtistsPane1({required this.callback, selectedIndex});
   @override
-  _SongPane2State createState() {
+  _ArtistPane1State createState() => _ArtistPane1State();
+}
+
+class _ArtistPane1State extends ConsumerState<ArtistsPane1> {
+  @override
+  Widget build(BuildContext context){
+    return SearchableTypedView(callback: widget.callback as void Function(dynamic), type: "artists", selectedIndex: widget.selectedIndex);
+  }
+}
+
+
+class ArtistsPane2 extends ConsumerStatefulWidget {
+  final Artist selected;
+  ArtistsPane2({required this.selected});
+  get mutated => _sp2state?.mutated ?? false;
+  _ArtistPane2State? _sp2state;
+  @override
+  _ArtistPane2State createState() {
     print("Creating _SongPane2State");
-    _sp2state = _SongPane2State();
+    _sp2state = _ArtistPane2State();
     return _sp2state!;
   }
 }
 
-class _SongPane2State extends ConsumerState<SongsPane2> {
-  Song selected = Song.empty();
-  Song currentSong = Song.empty();
+class _ArtistPane2State extends ConsumerState<ArtistsPane2> {
+  Artist selected = Artist.empty();
+  Artist currentSong = Artist.empty();
   bool mutated = false;
 
   TextEditingController nameController = TextEditingController();
-  TextEditingController artistController = TextEditingController();
-  TextEditingController albumController = TextEditingController();
-  TextEditingController youtubeIdController = TextEditingController();
   TextEditingController imageUrlController = TextEditingController();
 
   @override
@@ -47,6 +61,7 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
       showDialog<bool>(context: context, builder: discardDialog).then((bool? save) {
         if(save != null && !save) {
           setState(() {
+            print("Discarding changes");
             mutated = false;
           });
         }
@@ -57,9 +72,6 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
       currentSong = widget.selected;
       selected = widget.selected;
       nameController.text = currentSong.displayName;
-      artistController.text = currentSong.artistDisplayName;
-      albumController.text = currentSong.albumDisplayName;
-      youtubeIdController.text = currentSong.youtubeId;
       imageUrlController.text = currentSong.imageUrl;
     }
     print("Current song: ${currentSong.displayName}");
@@ -96,49 +108,6 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
                 setState(() => mutated = true);
                 currentSong = currentSong.copyWith(displayName: value);
               },
-            ),
-          ),
-          ListTile(
-            title: TextField(
-              controller: albumController,
-              decoration: const InputDecoration(
-                labelText: "Album",
-                filled: true
-              ),
-              onChanged: (value) {
-                setState(() => mutated = true);
-                currentSong = currentSong.copyWith(albumDisplayName: value);
-              },
-            ),
-          ),
-          ListTile(
-            title: TextField(
-              controller: artistController,
-              decoration: const InputDecoration(
-                labelText: "Artist",
-                filled: true
-              ),
-              onChanged: (value) {
-                setState(() => mutated = true);
-                currentSong = currentSong.copyWith(artistDisplayName: value);
-              },
-            ),
-          ),
-          ListTile(
-            title: TextField(
-              controller: youtubeIdController,
-              decoration: const InputDecoration(
-                labelText: "Video ID",
-                filled: true
-              ),
-              onChanged: (value) {
-                setState(() => mutated = true);
-                currentSong = currentSong.copyWith(youtubeId: value);
-              }
-            ),
-            trailing: IconButton(
-              icon: const Icon(Icons.play_arrow_rounded),
-              onPressed: () => ref.read(playerProvider.notifier).playYoutubeId(youtubeIdController.text),
             ),
           ),
           ListTile(
@@ -182,8 +151,6 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
                         const Text("You have made changes to the current song. Do you want to save them?"),
                         const Text("The new info is as follows:"),
                         Text("Name: ${nameController.text}"),
-                        Text("Album: ${albumController.text}"),
-                        Text("Artist: ${artistController.text}"),
                         FittedBox(
                           fit: BoxFit.contain,
                           child: Container(
@@ -214,7 +181,16 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
                     ],
                   )) ?? false;
                   if(!confirm) return;
-                  if(await saveChanges()) refreshChanges();
+                  //bool success = await ref.read(updateSongProvider(currentSong).future);
+                  bool success = false;
+                  if(success){
+                    ref.read(playerProvider.notifier).clear();
+                    ref.refresh(fetchSongsProvider);
+                    ref.refresh(fetchAlbumsProvider);
+                    ref.refresh(fetchArtistsProvider);
+                    ref.refresh(fetchPlaylistsProvider);
+                    ref.refresh(fetchRecentlyPlayedProvider);
+                  }
                 }
               )
             ],
@@ -222,20 +198,6 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
         ]
       )
     );
-  }
-  
-  Future<bool> saveChanges() async {
-    //return await ref.read(updateSongProvider(currentSong).future);
-    return false;
-  }
-
-  void refreshChanges() {
-    ref.read(playerProvider.notifier).clear();
-    ref.refresh(fetchSongsProvider);
-    ref.refresh(fetchAlbumsProvider);
-    ref.refresh(fetchArtistsProvider);
-    ref.refresh(fetchPlaylistsProvider);
-    ref.refresh(fetchRecentlyPlayedProvider);
   }
 
   AlertDialog discardDialog(BuildContext context) {
@@ -247,8 +209,6 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
           const Text("You have made changes to the current song. Do you want to save them?"),
           const Text("The new info is as follows:"),
           Text("Name: ${nameController.text}"),
-          Text("Album: ${albumController.text}"),
-          Text("Artist: ${artistController.text}"),
           Expanded(
             child: FittedBox(
               fit: BoxFit.contain,

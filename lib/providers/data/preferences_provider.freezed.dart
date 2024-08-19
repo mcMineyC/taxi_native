@@ -194,7 +194,7 @@ abstract class _PersistenceOptions implements PersistenceOptions {
 }
 
 StorablePrefs _$StorablePrefsFromJson(Map<String, dynamic> json) {
-  return _BackendResponse.fromJson(json);
+  return _StorablePrefs.fromJson(json);
 }
 
 /// @nodoc
@@ -203,6 +203,7 @@ mixin _$StorablePrefs {
   bool get shuffleDefault => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
   String get backendUrl => throw _privateConstructorUsedError;
+  bool get debugMode => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -220,7 +221,8 @@ abstract class $StorablePrefsCopyWith<$Res> {
       {bool shuffleOnLoop,
       bool shuffleDefault,
       String username,
-      String backendUrl});
+      String backendUrl,
+      bool debugMode});
 }
 
 /// @nodoc
@@ -240,6 +242,7 @@ class _$StorablePrefsCopyWithImpl<$Res, $Val extends StorablePrefs>
     Object? shuffleDefault = null,
     Object? username = null,
     Object? backendUrl = null,
+    Object? debugMode = null,
   }) {
     return _then(_value.copyWith(
       shuffleOnLoop: null == shuffleOnLoop
@@ -258,31 +261,36 @@ class _$StorablePrefsCopyWithImpl<$Res, $Val extends StorablePrefs>
           ? _value.backendUrl
           : backendUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      debugMode: null == debugMode
+          ? _value.debugMode
+          : debugMode // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$BackendResponseImplCopyWith<$Res>
+abstract class _$$StorablePrefsImplCopyWith<$Res>
     implements $StorablePrefsCopyWith<$Res> {
-  factory _$$BackendResponseImplCopyWith(_$BackendResponseImpl value,
-          $Res Function(_$BackendResponseImpl) then) =
-      __$$BackendResponseImplCopyWithImpl<$Res>;
+  factory _$$StorablePrefsImplCopyWith(
+          _$StorablePrefsImpl value, $Res Function(_$StorablePrefsImpl) then) =
+      __$$StorablePrefsImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {bool shuffleOnLoop,
       bool shuffleDefault,
       String username,
-      String backendUrl});
+      String backendUrl,
+      bool debugMode});
 }
 
 /// @nodoc
-class __$$BackendResponseImplCopyWithImpl<$Res>
-    extends _$StorablePrefsCopyWithImpl<$Res, _$BackendResponseImpl>
-    implements _$$BackendResponseImplCopyWith<$Res> {
-  __$$BackendResponseImplCopyWithImpl(
-      _$BackendResponseImpl _value, $Res Function(_$BackendResponseImpl) _then)
+class __$$StorablePrefsImplCopyWithImpl<$Res>
+    extends _$StorablePrefsCopyWithImpl<$Res, _$StorablePrefsImpl>
+    implements _$$StorablePrefsImplCopyWith<$Res> {
+  __$$StorablePrefsImplCopyWithImpl(
+      _$StorablePrefsImpl _value, $Res Function(_$StorablePrefsImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -292,8 +300,9 @@ class __$$BackendResponseImplCopyWithImpl<$Res>
     Object? shuffleDefault = null,
     Object? username = null,
     Object? backendUrl = null,
+    Object? debugMode = null,
   }) {
-    return _then(_$BackendResponseImpl(
+    return _then(_$StorablePrefsImpl(
       shuffleOnLoop: null == shuffleOnLoop
           ? _value.shuffleOnLoop
           : shuffleOnLoop // ignore: cast_nullable_to_non_nullable
@@ -310,21 +319,26 @@ class __$$BackendResponseImplCopyWithImpl<$Res>
           ? _value.backendUrl
           : backendUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      debugMode: null == debugMode
+          ? _value.debugMode
+          : debugMode // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$BackendResponseImpl implements _BackendResponse {
-  _$BackendResponseImpl(
+class _$StorablePrefsImpl implements _StorablePrefs {
+  _$StorablePrefsImpl(
       {required this.shuffleOnLoop,
       required this.shuffleDefault,
       required this.username,
-      required this.backendUrl});
+      required this.backendUrl,
+      required this.debugMode});
 
-  factory _$BackendResponseImpl.fromJson(Map<String, dynamic> json) =>
-      _$$BackendResponseImplFromJson(json);
+  factory _$StorablePrefsImpl.fromJson(Map<String, dynamic> json) =>
+      _$$StorablePrefsImplFromJson(json);
 
   @override
   final bool shuffleOnLoop;
@@ -334,17 +348,19 @@ class _$BackendResponseImpl implements _BackendResponse {
   final String username;
   @override
   final String backendUrl;
+  @override
+  final bool debugMode;
 
   @override
   String toString() {
-    return 'StorablePrefs(shuffleOnLoop: $shuffleOnLoop, shuffleDefault: $shuffleDefault, username: $username, backendUrl: $backendUrl)';
+    return 'StorablePrefs(shuffleOnLoop: $shuffleOnLoop, shuffleDefault: $shuffleDefault, username: $username, backendUrl: $backendUrl, debugMode: $debugMode)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$BackendResponseImpl &&
+            other is _$StorablePrefsImpl &&
             (identical(other.shuffleOnLoop, shuffleOnLoop) ||
                 other.shuffleOnLoop == shuffleOnLoop) &&
             (identical(other.shuffleDefault, shuffleDefault) ||
@@ -352,38 +368,40 @@ class _$BackendResponseImpl implements _BackendResponse {
             (identical(other.username, username) ||
                 other.username == username) &&
             (identical(other.backendUrl, backendUrl) ||
-                other.backendUrl == backendUrl));
+                other.backendUrl == backendUrl) &&
+            (identical(other.debugMode, debugMode) ||
+                other.debugMode == debugMode));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, shuffleOnLoop, shuffleDefault, username, backendUrl);
+  int get hashCode => Object.hash(runtimeType, shuffleOnLoop, shuffleDefault,
+      username, backendUrl, debugMode);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$BackendResponseImplCopyWith<_$BackendResponseImpl> get copyWith =>
-      __$$BackendResponseImplCopyWithImpl<_$BackendResponseImpl>(
-          this, _$identity);
+  _$$StorablePrefsImplCopyWith<_$StorablePrefsImpl> get copyWith =>
+      __$$StorablePrefsImplCopyWithImpl<_$StorablePrefsImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$BackendResponseImplToJson(
+    return _$$StorablePrefsImplToJson(
       this,
     );
   }
 }
 
-abstract class _BackendResponse implements StorablePrefs {
-  factory _BackendResponse(
+abstract class _StorablePrefs implements StorablePrefs {
+  factory _StorablePrefs(
       {required final bool shuffleOnLoop,
       required final bool shuffleDefault,
       required final String username,
-      required final String backendUrl}) = _$BackendResponseImpl;
+      required final String backendUrl,
+      required final bool debugMode}) = _$StorablePrefsImpl;
 
-  factory _BackendResponse.fromJson(Map<String, dynamic> json) =
-      _$BackendResponseImpl.fromJson;
+  factory _StorablePrefs.fromJson(Map<String, dynamic> json) =
+      _$StorablePrefsImpl.fromJson;
 
   @override
   bool get shuffleOnLoop;
@@ -394,7 +412,9 @@ abstract class _BackendResponse implements StorablePrefs {
   @override
   String get backendUrl;
   @override
+  bool get debugMode;
+  @override
   @JsonKey(ignore: true)
-  _$$BackendResponseImplCopyWith<_$BackendResponseImpl> get copyWith =>
+  _$$StorablePrefsImplCopyWith<_$StorablePrefsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

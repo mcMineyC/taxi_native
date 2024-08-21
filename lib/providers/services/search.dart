@@ -87,7 +87,8 @@ class Search extends _$Search {
         state = state.copyWith(query: query, artists: ss, hasResults: true, isLoading: false);
       }else{
         SearchResponse sr = await searchAll(query);
-        state = state.copyWith(query: query, songs: sr.songs, albums: sr.albums, artists: sr.artists, hasResults: true, isLoading: false);
+        print("SearchResponse: $sr");
+        state = state.copyWith(query: query, songs: sr.songs, albums: sr.albums, artists: sr.artists, order: sr.relevancy, hasResults: true, isLoading: false);
       }
     }else{
       state = state.copyWith(hasResults: false, isLoading: false);

@@ -41,7 +41,7 @@ class DesktopAppBar extends ConsumerWidget {
               controller: _searchController,
               autofocus: true,
               onChanged: (value) async {
-                ref.read(searchProvider.notifier).search(value);
+                ref.read(searchProvider.notifier).search(value, "all");
               },
               decoration: ref.read(searchProvider.notifier).text.isNotEmpty ? InputDecoration(
                 filled: true,
@@ -55,7 +55,7 @@ class DesktopAppBar extends ConsumerWidget {
                     icon: const Icon(Icons.clear), 
                     onPressed: () {
                       _searchController.clear();
-                      ref.read(searchProvider.notifier).search("");
+                      ref.read(searchProvider.notifier).search("", "all");
                     },
                   )
                 ) :

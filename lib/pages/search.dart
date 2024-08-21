@@ -25,6 +25,8 @@ class SearchPage extends ConsumerWidget {
           ),
         )
       ];
+      print(info.order);
+      print(info.songs.length);
       Map<String, List<Widget>> groups = {
         "song": [
           if(info.songs.isNotEmpty) Container(

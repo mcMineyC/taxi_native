@@ -1230,5 +1230,20 @@ class _FindArtistProviderElement
   @override
   String get id => (origin as FindArtistProvider).id;
 }
+
+String _$updateSongHash() => r'd2aea79eebc82356d503f943c1e352770bab12ce';
+
+/// See also [updateSong].
+@ProviderFor(updateSong)
+final updateSongProvider = AutoDisposeFutureProvider<bool>.internal(
+  updateSong,
+  name: r'updateSongProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$updateSongHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef UpdateSongRef = AutoDisposeFutureProviderRef<bool>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -18,12 +18,15 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
   Color schemeColor = Colors.black;
   bool init = false;
 
+  TextEditingController _serverUrlController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     PreferencesProvider prefProvider = prov.Provider.of<PreferencesProvider>(context);
     ThemeChanger themeChanger = prov.Provider.of<ThemeChanger>(context);
     if(!init) {
       schemeColor = HexColor.fromHex(themeChanger.seedColor);
+      _serverUrlController.text = prefProvider.backendUrl;
       init = true;
     }
     List<(String header, Widget content)> _settings = [
@@ -128,6 +131,47 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
               ]
             ),
           ]
+        ),
+      ),
+      (
+        "Development",
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  child: const Text("Debug mode"),
+                ),
+                Switch(
+                  value: prefProvider.debugMode,
+                  onChanged: (value) => prefProvider.debugMode = value,
+                ),
+              ]
+            ),
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 372,
+                  child: TextField(
+                  controller: _serverUrlController,
+                    decoration: const InputDecoration(
+                      labelText: "Server URL",
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (value) => prefProvider.backendUrl = value,
+                  ),
+                ),
+                FilledButton(
+                  child: const Text("Save"),
+                  onPressed: () async {
+                    Beamer.of(context).beamToNamed("/login");
+                  },
+                )
+              ],
+            ),
+          ],
         ),
       ),
       (

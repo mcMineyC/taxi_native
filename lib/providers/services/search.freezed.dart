@@ -20,9 +20,9 @@ mixin _$SearchInfo {
   bool get hasText => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
   bool get hasResults => throw _privateConstructorUsedError;
-  List<LocalSearchResult> get albums => throw _privateConstructorUsedError;
-  List<LocalSearchResult> get artists => throw _privateConstructorUsedError;
-  List<LocalSearchResult> get songs => throw _privateConstructorUsedError;
+  List<Album> get albums => throw _privateConstructorUsedError;
+  List<Artist> get artists => throw _privateConstructorUsedError;
+  List<Song> get songs => throw _privateConstructorUsedError;
   List<String> get order => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -41,9 +41,9 @@ abstract class $SearchInfoCopyWith<$Res> {
       bool hasText,
       bool isLoading,
       bool hasResults,
-      List<LocalSearchResult> albums,
-      List<LocalSearchResult> artists,
-      List<LocalSearchResult> songs,
+      List<Album> albums,
+      List<Artist> artists,
+      List<Song> songs,
       List<String> order});
 }
 
@@ -89,15 +89,15 @@ class _$SearchInfoCopyWithImpl<$Res, $Val extends SearchInfo>
       albums: null == albums
           ? _value.albums
           : albums // ignore: cast_nullable_to_non_nullable
-              as List<LocalSearchResult>,
+              as List<Album>,
       artists: null == artists
           ? _value.artists
           : artists // ignore: cast_nullable_to_non_nullable
-              as List<LocalSearchResult>,
+              as List<Artist>,
       songs: null == songs
           ? _value.songs
           : songs // ignore: cast_nullable_to_non_nullable
-              as List<LocalSearchResult>,
+              as List<Song>,
       order: null == order
           ? _value.order
           : order // ignore: cast_nullable_to_non_nullable
@@ -119,9 +119,9 @@ abstract class _$$SearchInfoImplCopyWith<$Res>
       bool hasText,
       bool isLoading,
       bool hasResults,
-      List<LocalSearchResult> albums,
-      List<LocalSearchResult> artists,
-      List<LocalSearchResult> songs,
+      List<Album> albums,
+      List<Artist> artists,
+      List<Song> songs,
       List<String> order});
 }
 
@@ -165,15 +165,15 @@ class __$$SearchInfoImplCopyWithImpl<$Res>
       albums: null == albums
           ? _value._albums
           : albums // ignore: cast_nullable_to_non_nullable
-              as List<LocalSearchResult>,
+              as List<Album>,
       artists: null == artists
           ? _value._artists
           : artists // ignore: cast_nullable_to_non_nullable
-              as List<LocalSearchResult>,
+              as List<Artist>,
       songs: null == songs
           ? _value._songs
           : songs // ignore: cast_nullable_to_non_nullable
-              as List<LocalSearchResult>,
+              as List<Song>,
       order: null == order
           ? _value._order
           : order // ignore: cast_nullable_to_non_nullable
@@ -190,9 +190,9 @@ class _$SearchInfoImpl implements _SearchInfo {
       required this.hasText,
       required this.isLoading,
       required this.hasResults,
-      required final List<LocalSearchResult> albums,
-      required final List<LocalSearchResult> artists,
-      required final List<LocalSearchResult> songs,
+      required final List<Album> albums,
+      required final List<Artist> artists,
+      required final List<Song> songs,
       required final List<String> order})
       : _albums = albums,
         _artists = artists,
@@ -207,25 +207,25 @@ class _$SearchInfoImpl implements _SearchInfo {
   final bool isLoading;
   @override
   final bool hasResults;
-  final List<LocalSearchResult> _albums;
+  final List<Album> _albums;
   @override
-  List<LocalSearchResult> get albums {
+  List<Album> get albums {
     if (_albums is EqualUnmodifiableListView) return _albums;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_albums);
   }
 
-  final List<LocalSearchResult> _artists;
+  final List<Artist> _artists;
   @override
-  List<LocalSearchResult> get artists {
+  List<Artist> get artists {
     if (_artists is EqualUnmodifiableListView) return _artists;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_artists);
   }
 
-  final List<LocalSearchResult> _songs;
+  final List<Song> _songs;
   @override
-  List<LocalSearchResult> get songs {
+  List<Song> get songs {
     if (_songs is EqualUnmodifiableListView) return _songs;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_songs);
@@ -286,9 +286,9 @@ abstract class _SearchInfo implements SearchInfo {
       required final bool hasText,
       required final bool isLoading,
       required final bool hasResults,
-      required final List<LocalSearchResult> albums,
-      required final List<LocalSearchResult> artists,
-      required final List<LocalSearchResult> songs,
+      required final List<Album> albums,
+      required final List<Artist> artists,
+      required final List<Song> songs,
       required final List<String> order}) = _$SearchInfoImpl;
 
   @override
@@ -300,11 +300,11 @@ abstract class _SearchInfo implements SearchInfo {
   @override
   bool get hasResults;
   @override
-  List<LocalSearchResult> get albums;
+  List<Album> get albums;
   @override
-  List<LocalSearchResult> get artists;
+  List<Artist> get artists;
   @override
-  List<LocalSearchResult> get songs;
+  List<Song> get songs;
   @override
   List<String> get order;
   @override

@@ -22,20 +22,20 @@ Map<String, dynamic> _$$PersistenceOptionsImplToJson(
       'saveLibraryTab': instance.saveLibraryTab,
     };
 
-_$BackendResponseImpl _$$BackendResponseImplFromJson(
-        Map<String, dynamic> json) =>
-    _$BackendResponseImpl(
+_$StorablePrefsImpl _$$StorablePrefsImplFromJson(Map<String, dynamic> json) =>
+    _$StorablePrefsImpl(
       shuffleOnLoop: json['shuffleOnLoop'] as bool,
       shuffleDefault: json['shuffleDefault'] as bool,
       username: json['username'] as String,
       backendUrl: json['backendUrl'] as String,
+      debugMode: json['debugMode'] as bool,
     );
 
-Map<String, dynamic> _$$BackendResponseImplToJson(
-        _$BackendResponseImpl instance) =>
+Map<String, dynamic> _$$StorablePrefsImplToJson(_$StorablePrefsImpl instance) =>
     <String, dynamic>{
       'shuffleOnLoop': instance.shuffleOnLoop,
       'shuffleDefault': instance.shuffleDefault,
       'username': instance.username,
       'backendUrl': instance.backendUrl,
+      'debugMode': instance.debugMode,
     };

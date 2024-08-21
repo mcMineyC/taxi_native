@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart' as prov;
 import 'providers/data/user_provider.dart';
+import 'providers/data/preferences_provider.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -37,11 +39,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     _beenSubmitted = true;
     setState(() {});
     showDialog(context: context, builder: (context) {
-      return const AlertDialog(
+      return AlertDialog(
         content: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text("Logging in..."),
-            CircularProgressIndicator()
+            const Text("Logging in..."),
+            Container(height: 10),
+            const CircularProgressIndicator()
           ],
         )
       );
@@ -49,6 +53,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     int success = await ref.read(loginPasswordProvider(username, password).future);
     _triedLogin = true;
     if(success == 1) {
+        prov.Provider.of<PreferencesProvider>(context, listen: false).username = username;
         Navigator.of(context).pop(); // Close the dialog
         Beamer.of(context).beamToReplacementNamed("/home");
         // Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Just Some Random Cards')));
@@ -87,14 +92,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     _beenSubmitted = true;
     setState(() {
       showDialog(context: context, builder: (context) {
-        return const AlertDialog(
-          content: Wrap(
-              children: [
-                Text("Logging in with authtoken..."),
-                CircularProgressIndicator()
-              ]
-            )
-          );
+        return AlertDialog(
+          content: Column(
+          mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text("Logging in with authtoken..."),
+              Container(height: 10),
+              const CircularProgressIndicator()
+            ]
+          )
+        );
       });
     });
     int code = await ref.read(loginTokenProvider(token).future);

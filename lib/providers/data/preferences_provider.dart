@@ -27,6 +27,7 @@ class PreferencesProvider extends ChangeNotifier {
     sp.setString("persistenceOptions", jsonEncode(p.toJson()));
   }
 
+  bool get debugMode => prefs.debugMode;
   String get backendUrl => prefs.backendUrl;
   String get username => prefs.username.substring(0, 1).toUpperCase() + prefs.username.substring(1);
   bool get shuffleOnLoop => prefs.shuffleOnLoop;
@@ -35,6 +36,7 @@ class PreferencesProvider extends ChangeNotifier {
   bool get persistInfo => _persistence.persistInfo;
   bool get saveLibraryTab => _persistence.saveLibraryTab;
 
+  set debugMode(bool d)      => prefs = prefs.copyWith(debugMode: d);
   set backendUrl(String u)   => prefs = prefs.copyWith(backendUrl: u);
   set username(String u)     => prefs = prefs.copyWith(username: u);
   set shuffleOnLoop(bool s)  => prefs = prefs.copyWith(shuffleOnLoop: s);
@@ -58,9 +60,17 @@ class PreferencesProvider extends ChangeNotifier {
   Future<void> init() async {
     if (spInit) return;
     sp = await SharedPreferences.getInstance();
-    _persistence = sp.containsKey("persistenceOptions") ? PersistenceOptions.fromJson(jsonDecode(sp.getString("persistenceOptions")!)) : _persistence;
-    _prefs = sp.containsKey("storedPrefs") ? StorablePrefs.fromJson(jsonDecode(sp.getString("storedPrefs")!)) : _prefs;
-    if(prefs.username == "user" || prefs.username == "someone") username = sp.getString("username") ?? "someone";
+    try{
+      _persistence = sp.containsKey("persistenceOptions") ? PersistenceOptions.fromJson(jsonDecode(sp.getString("persistenceOptions")!)) : _persistence;
+    }catch(e){
+      _persistence = PersistenceOptions.defaults();
+    }
+    try{
+      _prefs = sp.containsKey("storedPrefs") ? StorablePrefs.fromJson(jsonDecode(sp.getString("storedPrefs")!)) : _prefs;
+    }catch(e){
+      _prefs = StorablePrefs.defaults();
+    }
+    if(prefs.username == "nobody" || prefs.username == "someone") username = sp.getString("username") ?? "user";
     print("Loaded preferences");
     spInit = true;
   }
@@ -85,8 +95,9 @@ class StorablePrefs with _$StorablePrefs {
     required bool shuffleDefault,
     required String username,
     required String backendUrl,
-  }) = _BackendResponse;
+    required bool debugMode,
+  }) = _StorablePrefs;
 
-  factory StorablePrefs.defaults() => StorablePrefs(shuffleOnLoop: true, shuffleDefault: false, username: "user", backendUrl: "https://eatthecow.mooo.com:3030");
+  factory StorablePrefs.defaults() => StorablePrefs(shuffleOnLoop: true, shuffleDefault: false, username: "nobody", backendUrl: "https://eatthecow.mooo.com:3030", debugMode: false);
   factory StorablePrefs.fromJson(Map<String, dynamic> json) => _$StorablePrefsFromJson(json);
 }

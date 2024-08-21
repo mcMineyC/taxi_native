@@ -1,4 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import "song.dart";
+import "album.dart";
+import "artists.dart";
 
 part 'searchresult.freezed.dart';
 part 'searchresult.g.dart';
@@ -7,15 +10,23 @@ part 'searchresult.g.dart';
 class SearchResponse with _$SearchResponse {
   const SearchResponse._();
   const factory SearchResponse({
-    required List<LocalSearchResult> songs,
-    required List<LocalSearchResult> albums,
-    required List<LocalSearchResult> artists,
-    required List<LocalSearchResult> singles,
+    required List<Song> songs,
+    required List<Album> albums,
+    required List<Artist> artists,
+    required List<Song> singles,
     required List<String> relevancy,
   }) = _SearchResponse;
 
   factory SearchResponse.fromJson(Map<String, dynamic> json) =>
       _$SearchResponseFromJson(json);
+
+  factory SearchResponse.empty() => SearchResponse(
+    songs: [],
+    albums: [],
+    artists: [],
+    singles: [],
+    relevancy: [],
+  );
 }
 
 @freezed
@@ -77,6 +88,15 @@ class FindResult with _$FindResult {
 
   factory FindResult.fromJson(Map<String, dynamic> json) =>
       _$FindResultFromJson(json);
+
+  factory FindResult.fromSong(Song song) => FindResult(
+    type: "song",
+    name: song.displayName,
+    album: song.albumDisplayName,
+    artist: song.artistDisplayName,
+    imageUrl: song.imageUrl,
+    songs: [FindResultSong(title: song.displayName, id: song.youtubeId, trackNumber: 0)],
+    );
 
 }
 

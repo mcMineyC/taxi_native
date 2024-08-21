@@ -74,6 +74,9 @@ class DesktopNav extends ConsumerWidget {
           case 4:
             Beamer.of(context).beamToNamed('/checklist');
             break;
+          case 5:
+            Beamer.of(context).beamToNamed('/admin');
+            break;
           default:
             var snacky = SnackBar(
               content: Text("This feature isn't done yet :(${MediaQuery.of(context).size.width}x${MediaQuery.of(context).size.height})"),

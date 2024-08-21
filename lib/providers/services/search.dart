@@ -25,9 +25,9 @@ class SearchInfo with _$SearchInfo {
     required bool hasText,
     required bool isLoading,
     required bool hasResults,
-    required List<LocalSearchResult> albums,
-    required List<LocalSearchResult> artists,
-    required List<LocalSearchResult> songs,
+    required List<Album> albums,
+    required List<Artist> artists,
+    required List<Song> songs,
     required List<String> order,
   }) = _SearchInfo;
 }
@@ -35,11 +35,17 @@ class SearchInfo with _$SearchInfo {
 @Riverpod(keepAlive: true)
 class Search extends _$Search {
   get text => state.query;
+  get songs => state.songs;
+  get albums => state.albums;
+  get artists => state.artists;
+  get hasText => state.hasText;
+  get isLoading => state.isLoading;
+  get hasResults => state.hasResults;
 
   @override
   SearchInfo build() {
     print("SearchProvider build");
-    bouncedSearch(); 
+    bouncedSearch("all"); 
     return SearchInfo(
       query: "",
       albums: [],
@@ -52,26 +58,38 @@ class Search extends _$Search {
     );
   }
 
-  void bouncedSearch(){
+  void bouncedSearch(String type) {
     EasyDebounce.debounce(
       'dbounce',                 // <-- An ID for this particular debouncer
       Duration(milliseconds: 200),    // <-- The debounce duration
-      () => searchAction()              // <-- The target method
+      () => searchAction(type)              // <-- The target method
     );
   }
 
-  void search(String q){
+  void search(String q, String type) {
     state = state.copyWith(query: q, hasText: q.isNotEmpty, isLoading: state.isLoading || q.isNotEmpty);
-    bouncedSearch();
+    bouncedSearch(type);
   }
 
-  void searchAction() async {
+  void searchAction(String type) async {
     print("SearchAction");
     var query = state.query;
     if(query.isNotEmpty) {
-      state = state.copyWith(isLoading: true);
-      SearchResponse sr = await searchAll(query);
-      state = state.copyWith(query: query, albums: sr.albums, artists: sr.artists, songs: sr.songs, order: sr.relevancy, hasResults: true, isLoading: false);
+      state = state.copyWith(isLoading: true, hasResults: false);
+      if(type == "song") {
+        List<Song> ss = await _searchSongs(query);
+        state = state.copyWith(query: query, songs: ss, hasResults: true, isLoading: false);
+      }else if(type == "album") {
+        List<Album> ss = await _searchAlbums(query);
+        state = state.copyWith(query: query, albums: ss, hasResults: true, isLoading: false);
+      }else if(type == "artist") {
+        List<Artist> ss = await _searchArtists(query);
+        state = state.copyWith(query: query, artists: ss, hasResults: true, isLoading: false);
+      }else{
+        SearchResponse sr = await searchAll(query);
+        print("SearchResponse: $sr");
+        state = state.copyWith(query: query, songs: sr.songs, albums: sr.albums, artists: sr.artists, order: sr.relevancy, hasResults: true, isLoading: false);
+      }
     }else{
       state = state.copyWith(hasResults: false, isLoading: false);
     }
@@ -98,7 +116,7 @@ class Search extends _$Search {
     return sr;
   }
 
-  Future<List<Song>> searchSongs(String query) async {
+  Future<List<Song>> _searchSongs(String query) async {
     final _sp = await SharedPreferences.getInstance();
     var response = await http.post(
         Uri.parse("${p.backendUrl}/search"),
@@ -122,7 +140,7 @@ class Search extends _$Search {
     return songs;
   }
 
-  Future<List<Album>> searchAlbums(String query) async {
+  Future<List<Album>> _searchAlbums(String query) async {
     final _sp = await SharedPreferences.getInstance();
     var response = await http.post(
         Uri.parse("${p.backendUrl}/search"),
@@ -146,7 +164,7 @@ class Search extends _$Search {
     return albums;
   }
 
-  Future<List<Artist>> searchArtists(String query) async {
+  Future<List<Artist>> _searchArtists(String query) async {
     final _sp = await SharedPreferences.getInstance();
     var response = await http.post(
         Uri.parse("${p.backendUrl}/search"),

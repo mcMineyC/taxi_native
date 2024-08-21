@@ -314,6 +314,21 @@ class Player extends _$Player {
     player.pause();
     setQueue([]);
     _queue = [];
+    state = state.copyWith(currentIndex: 0);
+  }
+
+  void clear() {
+    clearQueue();
+    state = state.copyWith(
+      id: "",
+      albumId: "",
+      artistId: "",
+      displayName: "",
+      albumDisplayName: "",
+      artistDisplayName: "",
+      position: 0,
+      duration: 0,
+    );
   }
 
   void moveQueueItem(int oldIndex, int newIndex) async {
@@ -324,6 +339,9 @@ class Player extends _$Player {
   }
 
   void playYoutubeId(String id) async {
+    needInteraction = false;
+    state = state.copyWith(position: 0);
+    print("Playing youtube $id");
     playQueueItem(QueueItem(
       type: "youtube-song",
       id: DateTime.now().microsecondsSinceEpoch.toString(),

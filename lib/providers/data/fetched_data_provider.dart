@@ -306,3 +306,24 @@ Future<Artist> findArtist(FindArtistRef ref, String id) async {
   }
   return Artist.fromJson(desponse["artist"]);
 }
+
+@Riverpod(keepAlive: false)
+Future<bool> updateSong(UpdateSongRef ref) async {
+  final _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+      Uri.parse("${p.backendUrl}/info/albums"),
+      headers: Map<String, String>.from({
+        'Content-Type': 'application/json'
+      }),
+      body: jsonEncode(<String, String>{
+        'authtoken': _sp.getString("token") ?? ""
+      })
+  );
+  var desponse = jsonDecode(response.body);
+  if(desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
+  desponse = desponse["albums"];
+  var listThings = <Album>[];
+  return false;
+}

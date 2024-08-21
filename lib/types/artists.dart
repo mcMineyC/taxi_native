@@ -15,4 +15,13 @@ class Artist with _$Artist {
   }) = _Artist;
 
   factory Artist.fromJson(Map<String, dynamic> json) => _$ArtistFromJson(json);
+
+  factory Artist.empty() => Artist(
+    id: '',
+    displayName: '',
+    albumCount: 0,
+    songCount: 0,
+    imageUrl: '',
+    added: 0,
+  );
 }

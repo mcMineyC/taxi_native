@@ -13,6 +13,9 @@ _$ArtistImpl _$$ArtistImplFromJson(Map<String, dynamic> json) => _$ArtistImpl(
       songCount: (json['songCount'] as num).toInt(),
       imageUrl: json['imageUrl'] as String,
       added: (json['added'] as num).toInt(),
+      visibleTo:
+          (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
+      addedBy: json['addedBy'] as String,
     );
 
 Map<String, dynamic> _$$ArtistImplToJson(_$ArtistImpl instance) =>
@@ -23,4 +26,6 @@ Map<String, dynamic> _$$ArtistImplToJson(_$ArtistImpl instance) =>
       'songCount': instance.songCount,
       'imageUrl': instance.imageUrl,
       'added': instance.added,
+      'visibleTo': instance.visibleTo,
+      'addedBy': instance.addedBy,
     };

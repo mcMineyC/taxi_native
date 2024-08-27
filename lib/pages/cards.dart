@@ -16,7 +16,7 @@ class CardView extends StatelessWidget {
         crossAxisSpacing: 0,
         childAspectRatio: MediaCard.width / (MediaCard.height+6),
         children: cardList.map(
-          (card) => MediaCard(text: card["text"], image: card["image"], thingId: card["id"], thingType: card["type"])
+          (card) => MediaCard(text: card["text"], image: card["image"], thingId: card["id"], thingType: card["type"], addedBy: card["addedby"])
         ).toList(),
     );
   }

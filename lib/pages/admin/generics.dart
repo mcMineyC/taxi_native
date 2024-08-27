@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import "../../providers/data/fetched_data_provider.dart";
 import "../../providers/data/playlist_provider.dart";
 import "../../providers/services/search.dart";
+import "../../types/album.dart";
 
 class SearchableTypedView extends ConsumerStatefulWidget {
   int selectedIndex = -1;
@@ -22,18 +23,36 @@ class _SearchableTypedViewState extends ConsumerState<SearchableTypedView> {
   @override
   Widget build(BuildContext context) {
     SearchInfo searchInfo = ref.watch(searchProvider);
-    AsyncValue<List<dynamic>> datas = ref.watch(
-      switch(widget.type) {
-        "songs" => fetchSongsProvider,
-        "albums" => fetchAlbumsProvider,
-        "artists" => fetchArtistsProvider,
-        "playlists" => fetchPlaylistsProvider,
-        _ => fetchSongsProvider,
-      }
-    );
+    //AsyncValue<List<dynamic>> datas = ref.watch(
+    //  switch(widget.type) {
+    //    "songs" => fetchSongsProvider(ignore: true),
+    //    "albums" => fetchAlbumsProvider(ignore: true),
+    //    "artists" => fetchArtistsProvider(ignore: true),
+    //    //"playlists" => fetchPlaylistsProvider,
+    //    _ => fetchSongsProvider(ignore: true),
+    //  }
+    //);
+    print("Rebuilding SearchableTypedView");
+    AsyncValue<List<dynamic>> datas;
+    switch(widget.type) {
+      case "songs":
+        datas = ref.watch(fetchSongsProvider(ignore: true));
+        break;
+      case "albums":
+        datas = ref.watch(fetchAlbumsProvider(ignore: true));
+        break;
+      case "artists":
+        datas = ref.watch(fetchArtistsProvider(ignore: true));
+        break;
+      case "playlists":
+        datas = ref.watch(fetchPlaylistsProvider);
+        break;
+      default: 
+        datas = AsyncValue.data([Album.empty()]);
+        break;
+    }
     var qText = ref.watch(searchProvider.notifier).text;
     if(qText.isNotEmpty && _searchController.text == "") {
-      //print("Restoring text: $qText");
       _searchController.text = qText;
     }else if(qText == "") {
       _searchController.clear();
@@ -48,7 +67,7 @@ class _SearchableTypedViewState extends ConsumerState<SearchableTypedView> {
               controller: _searchController,
               autofocus: true,
               onChanged: (value) async {
-                ref.read(searchProvider.notifier).search(value, widget.type);
+                ref.read(searchProvider.notifier).search(value, widget.type.substring(0, widget.type.length - 1), ignore: true);
               },
               decoration: ref.read(searchProvider.notifier).text.isNotEmpty ? InputDecoration(
                 filled: true,
@@ -62,7 +81,7 @@ class _SearchableTypedViewState extends ConsumerState<SearchableTypedView> {
                     icon: const Icon(Icons.clear), 
                     onPressed: () {
                       _searchController.clear();
-                      ref.read(searchProvider.notifier).search("", widget.type);
+                      ref.read(searchProvider.notifier).search("", widget.type.substring(0, widget.type.length - 1), ignore: true);
                     },
                   )
                 ) :
@@ -81,7 +100,9 @@ class _SearchableTypedViewState extends ConsumerState<SearchableTypedView> {
                 List<dynamic> datum = data;
                 if(searching && searchInfo.hasResults){
                   //print("Showing search results");
-                  datum = searchInfo.songs;
+                  if(widget.type == "songs") datum = searchInfo.songs;
+                  if(widget.type == "albums") datum = searchInfo.albums;
+                  if(widget.type == "artists") datum = searchInfo.artists;
                 }else if(searching && searchInfo.isLoading) {
                   //print("Loading search results");
                   return const Center(child: CircularProgressIndicator());
@@ -105,4 +126,21 @@ class _SearchableTypedViewState extends ConsumerState<SearchableTypedView> {
       ),
     );
   }
+}
+AlertDialog deleteDialog(BuildContext context, String type, List<Widget>? extraBody) {
+  return AlertDialog(
+    title: const Text("Delete?"),
+    content: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text("Do you want to delete this $type?"),
+        const Text("This action is irreversible."),
+        if(extraBody != null) ...extraBody,
+      ],
+    ),
+    actions: [
+      TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text("No")),
+      TextButton(onPressed: () => Navigator.of(context).pop(true), child: const Text("Yes")),
+    ],
+  );
 }

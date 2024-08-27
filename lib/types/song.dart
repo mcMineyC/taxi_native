@@ -18,7 +18,9 @@ class Song with _$Song {
     required String imageUrl,
     required String youtubeId,
     required int    added,
+    required String addedBy,
     required double duration,
+    required List<String> visibleTo,
   }) = _Song;
 
   factory Song.fromJson(Map<String, dynamic> json) => _$SongFromJson(json);
@@ -70,6 +72,19 @@ extension ConvertToQueueItem on MediaItem {
   );
 }    
 
- Song EmptySong(){
-  return Song(id: 'empty', albumId: 'empty', artistId: 'empty', displayName: 'Unknown', albumDisplayName: 'Unknown', artistDisplayName: 'Unknown', added: 0, duration: 0.1, imageUrl: '', youtubeId: '000000');
+Song EmptySong(){
+  return Song(
+    id: 'empty',
+    albumId: 'empty',
+    artistId: 'empty',
+    displayName: 'Unknown',
+    albumDisplayName: 'Unknown', 
+    artistDisplayName: 'Unknown',
+    added: 0,
+    duration: 0.1,
+    imageUrl: '',
+    youtubeId: '000000',
+    visibleTo: [],
+    addedBy: 'testguy'
+  );
 }

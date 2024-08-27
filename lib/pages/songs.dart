@@ -11,8 +11,8 @@ import 'package:beamer/beamer.dart';
 class SongsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<Song>> songs = ref.watch(fetchSongsProvider);
-    handleError(ref, fetchSongsProvider, Beamer.of(context));
+    final AsyncValue<List<Song>> songs = ref.watch(fetchSongsProvider(ignore: false));
+    handleError(ref, fetchSongsProvider(ignore: false), Beamer.of(context));
     return songs.when(
       data: (data) {
         var cardList = data.map((e) => {

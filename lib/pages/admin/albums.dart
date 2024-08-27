@@ -5,37 +5,53 @@ import 'package:cached_network_image/cached_network_image.dart';
 import "../../providers/data/fetched_data_provider.dart";
 import "../../providers/data/info_provider.dart";
 import "../../providers/data/playlist_provider.dart";
-import "../../providers/services/player.dart";
 import "../../providers/services/search.dart";
+import "../../providers/services/player.dart";
+import "../../types/album.dart";
 import "../../types/song.dart";
+import "../../helper_widgets.dart";
 import "../../info_card.dart";
 import "generics.dart";
-import "../../helper_widgets.dart";
 
-class SongsPane2 extends ConsumerStatefulWidget {
-  final Song selected;
-  final Function(dynamic) deselect;
-  SongsPane2({required this.selected, required this.deselect});
-  get mutated => _sp2state?.mutated ?? false;
-  _SongPane2State? _sp2state;
+class AlbumsPane1 extends ConsumerStatefulWidget {
+  int selectedIndex = 0;
+  void Function(Album) callback;
+  AlbumsPane1({required this.callback, selectedIndex});
   @override
-  _SongPane2State createState() {
+  _AlbumPane1State createState() => _AlbumPane1State();
+}
+
+class _AlbumPane1State extends ConsumerState<AlbumsPane1> {
+  @override
+  Widget build(BuildContext context){
+    return SearchableTypedView(callback: widget.callback as void Function(dynamic), type: "albums", selectedIndex: widget.selectedIndex);
+  }
+}
+
+
+class AlbumsPane2 extends ConsumerStatefulWidget {
+  final Album selected;
+  final Function(dynamic) deselect;
+  AlbumsPane2({required this.selected, required this.deselect});
+  get mutated => _sp2state?.mutated ?? false;
+  _AlbumPane2State? _sp2state;
+  @override
+  _AlbumPane2State createState() {
     print("Creating _SongPane2State");
-    _sp2state = _SongPane2State();
+    _sp2state = _AlbumPane2State();
     return _sp2state!;
   }
 }
 
-class _SongPane2State extends ConsumerState<SongsPane2> {
-  Song selected = Song.empty();
-  Song currentSong = Song.empty();
-  Song previous = Song.empty();
+class _AlbumPane2State extends ConsumerState<AlbumsPane2> {
+  Album selected = Album.empty();
+  Album currentSong = Album.empty();
+  Album previous = Album.empty();
+  List<Song> currentSongs = [];
   bool mutated = false;
+  bool dataLoaded = false;
 
   TextEditingController nameController = TextEditingController();
-  TextEditingController artistController = TextEditingController();
-  TextEditingController albumController = TextEditingController();
-  TextEditingController youtubeIdController = TextEditingController();
   TextEditingController imageUrlController = TextEditingController();
 
   @override
@@ -50,22 +66,38 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
       showDialog<bool>(context: context, builder: (context) => discardDialog(context, previous)).then((bool? save) {
         if(save != null && !save) {
           setState(() {
+            print("Discarding changes");
             mutated = false;
           });
         }
       });
       }
     );
-    if(mutated && selected.id != widget.selected.id) previous = currentSong;
-    if(selected == Song.empty() || selected.id != widget.selected.id) {
+    if(mutated && widget.selected != selected) {
+      previous = currentSong;
+    }
+    if(selected == Album.empty() || selected.id != widget.selected.id) {
       currentSong = widget.selected;
       selected = widget.selected;
       nameController.text = currentSong.displayName;
-      artistController.text = currentSong.artistDisplayName;
-      albumController.text = currentSong.albumDisplayName;
-      youtubeIdController.text = currentSong.youtubeId;
       imageUrlController.text = currentSong.imageUrl;
     }
+    AsyncValue<List<Song>> songs = ref.watch(findSongsByAlbumProvider(selected.id));
+    songs.when(
+      data: (data) {
+        if(mutated) return;
+        setState(() {
+          dataLoaded = true;
+          currentSongs = data;
+        });
+      },
+      loading: () => setState(() => dataLoaded = false),
+      error: (err, stack) {
+        print("Error: $err");
+        print(stack);
+        dataLoaded = false;
+      }
+    );
     print("Current song: ${currentSong.displayName}");
     return Container(
       child: Column(
@@ -104,49 +136,6 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
           ),
           ListTile(
             title: TextField(
-              controller: albumController,
-              decoration: const InputDecoration(
-                labelText: "Album",
-                filled: true
-              ),
-              onChanged: (value) {
-                setState(() => mutated = true);
-                currentSong = currentSong.copyWith(albumDisplayName: value);
-              },
-            ),
-          ),
-          ListTile(
-            title: TextField(
-              controller: artistController,
-              decoration: const InputDecoration(
-                labelText: "Artist",
-                filled: true
-              ),
-              onChanged: (value) {
-                setState(() => mutated = true);
-                currentSong = currentSong.copyWith(artistDisplayName: value);
-              },
-            ),
-          ),
-          ListTile(
-            title: TextField(
-              controller: youtubeIdController,
-              decoration: const InputDecoration(
-                labelText: "Video ID",
-                filled: true
-              ),
-              onChanged: (value) {
-                setState(() => mutated = true);
-                currentSong = currentSong.copyWith(youtubeId: value);
-              }
-            ),
-            trailing: IconButton(
-              icon: const Icon(Icons.play_arrow_rounded),
-              onPressed: () => ref.read(playerProvider.notifier).playYoutubeId(youtubeIdController.text),
-            ),
-          ),
-          ListTile(
-            title: TextField(
               controller: imageUrlController,
               decoration: const InputDecoration(
                 labelText: "Image URL",
@@ -165,27 +154,58 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
           VisibleToField(
             value: currentSong.visibleTo.toList(),
             onChanged: (value) => currentSong = currentSong.copyWith(visibleTo: value),
-            onSaved: (v) async => await ref.read(editItemVisibilityProvider("song", currentSong.id, v).future),
+            onSaved: (v) async => await ref.read(editItemVisibilityProvider("album", currentSong.id, v).future),
             id: currentSong.id,
           ),
-          Expanded(child:Container()),
+          Expanded(
+            child: dataLoaded ? ListView.separated(
+              itemCount: currentSongs.length,
+              separatorBuilder: (context, index) => const Divider(),
+              itemBuilder: (context, index) => ListTile(
+                title: Text(currentSongs[index].displayName),
+                subtitle: Text(currentSongs[index].artistDisplayName),
+                trailing: IconButton(
+                  icon: const Icon(Icons.delete_rounded),
+                  color: Colors.red,
+                  onPressed: () =>
+                    setState(() {
+                      currentSongs.removeAt(index);
+                      mutated = true;
+                    })
+                ),
+              )
+            )
+            : const Center(child: CircularProgressIndicator()),
+            //error: (error, stackTrace) => Center(child: Text("Error: $error, stackTrace: $stackTrace")),
+          ),
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             child: Row(
             children: [
               FilledButton(
                 child: Row(children: [const Icon(Icons.delete_rounded), Container(width: 6), const Text("Delete")]),
                 style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.red), foregroundColor: WidgetStateProperty.all(Colors.white)),
-                onPressed: () => showDialog<bool>(context: context, builder: (context) => deleteDialog(context, "song", null)).then((bool? delete) async {
-                  if(delete != null && delete) {
-                    bool deleted = await ref.read(deleteItemProvider("song", currentSong.id, "").future);
-                    if(deleted) {
-                      print("Song deleted");
-                      widget.deselect(null);
-                      refreshChanges();
+                onPressed: () {
+                  CheckBox deleteSongsCheck = CheckBox(initialValue: false, callback: (b){});
+                  showDialog<bool>(
+                    context: context,
+                    builder: (context) => deleteDialog(
+                      context,
+                      "album", 
+                      [
+                        Row(children: [deleteSongsCheck, Container(width: 6), const Text("Delete contained songs")]),
+                      ]
+                    )
+                  ).then((bool? delete) async {
+                    if(delete != null && delete) {
+                      bool deleted = await ref.read(deleteItemProvider("album", currentSong.id, "?deleteSongs=${deleteSongsCheck.value}").future);
+                      if(deleted){
+                        refreshChanges();
+                        widget.deselect(null);
+                      }
                     }
-                  }
-                }),
+                  });
+                }
               ),
               Expanded(child: Container()),
               if(mutated) Container(
@@ -205,15 +225,13 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
                 ),
                 onPressed: () async {
                   bool confirm = await showDialog<bool>(context: context, builder: (context) => AlertDialog(
-                    title: const Text("Save changes? page"),
+                    title: const Text("Save changes?"),
                     content: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         const Text("You have made changes to the current song. Do you want to save them?"),
                         const Text("The new info is as follows:"),
                         Text("Name: ${nameController.text}"),
-                        Text("Album: ${albumController.text}"),
-                        Text("Artist: ${artistController.text}"),
                         FittedBox(
                           fit: BoxFit.contain,
                           child: Container(
@@ -253,9 +271,9 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
       )
     );
   }
-  
+
   Future<bool> saveChanges() async {
-    return await ref.read(updateSongProvider(currentSong).future);
+    return await ref.read(updateAlbumProvider(currentSong, currentSongs).future);
   }
 
   void refreshChanges() {
@@ -266,7 +284,7 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
     ref.refresh(fetchSongsProvider(ignore: true));
     ref.refresh(fetchAlbumsProvider(ignore: true));
     ref.refresh(fetchArtistsProvider(ignore: true));
-    ref.read(searchProvider.notifier).search(ref.read(searchProvider.notifier).query, "song", ignore: true);
+    ref.read(searchProvider.notifier).search(ref.read(searchProvider.notifier).query, "album", ignore: true);
     ref.refresh(fetchPlaylistsProvider);
     ref.refresh(fetchRecentlyPlayedProvider);
     setState(() {
@@ -275,7 +293,7 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
     });
   }
 
-  AlertDialog discardDialog(BuildContext context, Song current) {
+  AlertDialog discardDialog(BuildContext context, Album current) {
     return AlertDialog(
       title: const Text("Save changes?"),
       content: Column(
@@ -284,8 +302,6 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
           const Text("You have made changes to the current song. Do you want to save them?"),
           const Text("The new info is as follows:"),
           Text("Name: ${current.displayName}"),
-          Text("Album: ${current.albumDisplayName}"),
-          Text("Artist: ${current.artistDisplayName}"),
           Expanded(
             child: FittedBox(
               fit: BoxFit.contain,

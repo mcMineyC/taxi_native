@@ -41,6 +41,7 @@ class Search extends _$Search {
   get hasText => state.hasText;
   get isLoading => state.isLoading;
   get hasResults => state.hasResults;
+  get query => state.query;
 
   @override
   SearchInfo build() {
@@ -58,36 +59,34 @@ class Search extends _$Search {
     );
   }
 
-  void bouncedSearch(String type) {
+  void bouncedSearch(String type, {bool ignore = false}) {
     EasyDebounce.debounce(
       'dbounce',                 // <-- An ID for this particular debouncer
       Duration(milliseconds: 200),    // <-- The debounce duration
-      () => searchAction(type)              // <-- The target method
+      () => searchAction(type, ignore)              // <-- The target method
     );
   }
 
-  void search(String q, String type) {
+  void search(String q, String type, {bool ignore = false}) {
     state = state.copyWith(query: q, hasText: q.isNotEmpty, isLoading: state.isLoading || q.isNotEmpty);
-    bouncedSearch(type);
+    bouncedSearch(type, ignore: ignore);
   }
 
-  void searchAction(String type) async {
-    print("SearchAction");
+  void searchAction(String type, bool ignore) async {
     var query = state.query;
     if(query.isNotEmpty) {
       state = state.copyWith(isLoading: true, hasResults: false);
       if(type == "song") {
-        List<Song> ss = await _searchSongs(query);
+        List<Song> ss = await _searchSongs(query, ignore: ignore);
         state = state.copyWith(query: query, songs: ss, hasResults: true, isLoading: false);
       }else if(type == "album") {
-        List<Album> ss = await _searchAlbums(query);
+        List<Album> ss = await _searchAlbums(query, ignore: ignore);
         state = state.copyWith(query: query, albums: ss, hasResults: true, isLoading: false);
       }else if(type == "artist") {
-        List<Artist> ss = await _searchArtists(query);
+        List<Artist> ss = await _searchArtists(query, ignore: ignore);
         state = state.copyWith(query: query, artists: ss, hasResults: true, isLoading: false);
       }else{
-        SearchResponse sr = await searchAll(query);
-        print("SearchResponse: $sr");
+        SearchResponse sr = await searchAll(query, ignore: ignore);
         state = state.copyWith(query: query, songs: sr.songs, albums: sr.albums, artists: sr.artists, order: sr.relevancy, hasResults: true, isLoading: false);
       }
     }else{
@@ -95,10 +94,10 @@ class Search extends _$Search {
     }
   }
 
-  Future<SearchResponse> searchAll(String query) async {
+  Future<SearchResponse> searchAll(String query, {bool ignore = false}) async {
     final _sp = await SharedPreferences.getInstance();
     var response = await http.post(
-        Uri.parse("${p.backendUrl}/searchAll"),
+        Uri.parse("${p.backendUrl}/searchAll${ignore ? "?ignore=true" : ""}"),
         headers: Map<String, String>.from({
           'Content-Type': 'application/json'
         }),
@@ -116,10 +115,10 @@ class Search extends _$Search {
     return sr;
   }
 
-  Future<List<Song>> _searchSongs(String query) async {
+  Future<List<Song>> _searchSongs(String query, {bool ignore = false}) async {
     final _sp = await SharedPreferences.getInstance();
     var response = await http.post(
-        Uri.parse("${p.backendUrl}/search"),
+        Uri.parse("${p.backendUrl}/search${ignore ? "?ignore=true" : ""}"),
         headers: Map<String, String>.from({
           'Content-Type': 'application/json'
         }),
@@ -140,10 +139,10 @@ class Search extends _$Search {
     return songs;
   }
 
-  Future<List<Album>> _searchAlbums(String query) async {
+  Future<List<Album>> _searchAlbums(String query, {bool ignore = false}) async {
     final _sp = await SharedPreferences.getInstance();
     var response = await http.post(
-        Uri.parse("${p.backendUrl}/search"),
+        Uri.parse("${p.backendUrl}/search${ignore ? "?ignore=true" : ""}"),
         headers: Map<String, String>.from({
           'Content-Type': 'application/json'
         }),
@@ -164,10 +163,10 @@ class Search extends _$Search {
     return albums;
   }
 
-  Future<List<Artist>> _searchArtists(String query) async {
+  Future<List<Artist>> _searchArtists(String query, {bool ignore = false}) async {
     final _sp = await SharedPreferences.getInstance();
     var response = await http.post(
-        Uri.parse("${p.backendUrl}/search"),
+        Uri.parse("${p.backendUrl}/search${ignore ? "?ignore=true" : ""}"),
         headers: Map<String, String>.from({
           'Content-Type': 'application/json'
         }),

@@ -27,6 +27,8 @@ mixin _$Album {
   int get songCount => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
   int get added => throw _privateConstructorUsedError;
+  List<String> get visibleTo => throw _privateConstructorUsedError;
+  String get addedBy => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,7 +47,9 @@ abstract class $AlbumCopyWith<$Res> {
       String artistDisplayName,
       int songCount,
       String imageUrl,
-      int added});
+      int added,
+      List<String> visibleTo,
+      String addedBy});
 }
 
 /// @nodoc
@@ -68,6 +72,8 @@ class _$AlbumCopyWithImpl<$Res, $Val extends Album>
     Object? songCount = null,
     Object? imageUrl = null,
     Object? added = null,
+    Object? visibleTo = null,
+    Object? addedBy = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -98,6 +104,14 @@ class _$AlbumCopyWithImpl<$Res, $Val extends Album>
           ? _value.added
           : added // ignore: cast_nullable_to_non_nullable
               as int,
+      visibleTo: null == visibleTo
+          ? _value.visibleTo
+          : visibleTo // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      addedBy: null == addedBy
+          ? _value.addedBy
+          : addedBy // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -116,7 +130,9 @@ abstract class _$$AlbumImplCopyWith<$Res> implements $AlbumCopyWith<$Res> {
       String artistDisplayName,
       int songCount,
       String imageUrl,
-      int added});
+      int added,
+      List<String> visibleTo,
+      String addedBy});
 }
 
 /// @nodoc
@@ -137,6 +153,8 @@ class __$$AlbumImplCopyWithImpl<$Res>
     Object? songCount = null,
     Object? imageUrl = null,
     Object? added = null,
+    Object? visibleTo = null,
+    Object? addedBy = null,
   }) {
     return _then(_$AlbumImpl(
       id: null == id
@@ -167,6 +185,14 @@ class __$$AlbumImplCopyWithImpl<$Res>
           ? _value.added
           : added // ignore: cast_nullable_to_non_nullable
               as int,
+      visibleTo: null == visibleTo
+          ? _value._visibleTo
+          : visibleTo // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      addedBy: null == addedBy
+          ? _value.addedBy
+          : addedBy // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -181,7 +207,10 @@ class _$AlbumImpl implements _Album {
       required this.artistDisplayName,
       required this.songCount,
       required this.imageUrl,
-      required this.added});
+      required this.added,
+      required final List<String> visibleTo,
+      required this.addedBy})
+      : _visibleTo = visibleTo;
 
   factory _$AlbumImpl.fromJson(Map<String, dynamic> json) =>
       _$$AlbumImplFromJson(json);
@@ -200,10 +229,20 @@ class _$AlbumImpl implements _Album {
   final String imageUrl;
   @override
   final int added;
+  final List<String> _visibleTo;
+  @override
+  List<String> get visibleTo {
+    if (_visibleTo is EqualUnmodifiableListView) return _visibleTo;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_visibleTo);
+  }
+
+  @override
+  final String addedBy;
 
   @override
   String toString() {
-    return 'Album(id: $id, artistId: $artistId, displayName: $displayName, artistDisplayName: $artistDisplayName, songCount: $songCount, imageUrl: $imageUrl, added: $added)';
+    return 'Album(id: $id, artistId: $artistId, displayName: $displayName, artistDisplayName: $artistDisplayName, songCount: $songCount, imageUrl: $imageUrl, added: $added, visibleTo: $visibleTo, addedBy: $addedBy)';
   }
 
   @override
@@ -222,13 +261,25 @@ class _$AlbumImpl implements _Album {
                 other.songCount == songCount) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
-            (identical(other.added, added) || other.added == added));
+            (identical(other.added, added) || other.added == added) &&
+            const DeepCollectionEquality()
+                .equals(other._visibleTo, _visibleTo) &&
+            (identical(other.addedBy, addedBy) || other.addedBy == addedBy));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, artistId, displayName,
-      artistDisplayName, songCount, imageUrl, added);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      artistId,
+      displayName,
+      artistDisplayName,
+      songCount,
+      imageUrl,
+      added,
+      const DeepCollectionEquality().hash(_visibleTo),
+      addedBy);
 
   @JsonKey(ignore: true)
   @override
@@ -252,7 +303,9 @@ abstract class _Album implements Album {
       required final String artistDisplayName,
       required final int songCount,
       required final String imageUrl,
-      required final int added}) = _$AlbumImpl;
+      required final int added,
+      required final List<String> visibleTo,
+      required final String addedBy}) = _$AlbumImpl;
 
   factory _Album.fromJson(Map<String, dynamic> json) = _$AlbumImpl.fromJson;
 
@@ -270,6 +323,10 @@ abstract class _Album implements Album {
   String get imageUrl;
   @override
   int get added;
+  @override
+  List<String> get visibleTo;
+  @override
+  String get addedBy;
   @override
   @JsonKey(ignore: true)
   _$$AlbumImplCopyWith<_$AlbumImpl> get copyWith =>

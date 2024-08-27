@@ -11,8 +11,8 @@ import '../types/artists.dart';
 class ArtistsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<Artist>> artists = ref.watch(fetchArtistsProvider);
-    handleError(ref, fetchArtistsProvider, Beamer.of(context));
+    final AsyncValue<List<Artist>> artists = ref.watch(fetchArtistsProvider(ignore: false));
+    handleError(ref, fetchArtistsProvider(ignore: false), Beamer.of(context));
     return artists.when(
       data: (data) {
         var cardList = data.map((e) => {

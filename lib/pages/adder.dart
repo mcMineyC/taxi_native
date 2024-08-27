@@ -41,6 +41,7 @@ class _AdderPageState extends ConsumerState {
       stateKeys = List.generate(state.findResults.length, (index) => GlobalKey<InfoEditorCardState>());
     }else if(state.state == "addresult") {
       print("Adder: Done!");
+      page = 1;
     }
     return Container(
       margin: EdgeInsets.fromLTRB(14, 10, 14, 10),
@@ -136,9 +137,6 @@ class _AdderPageState extends ConsumerState {
   done(){
     page = 1;
     ref.read(adderProvider.notifier).cancel();
-    ref.refresh(fetchSongsProvider);
-    ref.refresh(fetchAlbumsProvider);
-    ref.refresh(fetchArtistsProvider);
     Beamer.of(context).beamBack();
   }
 

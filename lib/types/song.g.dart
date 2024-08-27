@@ -16,7 +16,10 @@ _$SongImpl _$$SongImplFromJson(Map<String, dynamic> json) => _$SongImpl(
       imageUrl: json['imageUrl'] as String,
       youtubeId: json['youtubeId'] as String,
       added: (json['added'] as num).toInt(),
+      addedBy: json['addedBy'] as String,
       duration: (json['duration'] as num).toDouble(),
+      visibleTo:
+          (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$$SongImplToJson(_$SongImpl instance) =>
@@ -30,5 +33,7 @@ Map<String, dynamic> _$$SongImplToJson(_$SongImpl instance) =>
       'imageUrl': instance.imageUrl,
       'youtubeId': instance.youtubeId,
       'added': instance.added,
+      'addedBy': instance.addedBy,
       'duration': instance.duration,
+      'visibleTo': instance.visibleTo,
     };

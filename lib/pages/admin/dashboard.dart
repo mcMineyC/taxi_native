@@ -10,7 +10,7 @@ import "../../types/playlist.dart";
 
 import "generics.dart";
 import "songs.dart";
-//import "albums.dart";
+import "albums.dart";
 import "artists.dart";
 //import "playlists.dart";
 //import "users.dart";
@@ -83,6 +83,7 @@ class AdminDashboardPageState extends State<AdminDashboardPage> {
                       child: switch(selectedPage) {
                         0 => const Text("Overview"),
                         1 => SearchableTypedView(callback: selectedPageSwitched, type: "songs"),
+                        2 => SearchableTypedView(callback: selectedPageSwitched, type: "albums"),
                         3 => SearchableTypedView(callback: selectedPageSwitched, type: "artists"),
                         _ => Text(item.$1),
                       },
@@ -100,8 +101,9 @@ class AdminDashboardPageState extends State<AdminDashboardPage> {
                 ),
                 child: switch(selectedPage) {
                   0 => const Text("Overview pane2 (shouldnt be shown)"),
-                  1 => SongsPane2(selected: selectedObject),
-                  3 => ArtistsPane2(selected: selectedObject),
+                  1 => SongsPane2(selected: selectedObject, deselect: selectedPageSwitched),
+                  2 => AlbumsPane2(selected: selectedObject, deselect: selectedPageSwitched),
+                  3 => ArtistsPane2(selected: selectedObject, deselect: selectedPageSwitched),
                   _ => Text("${item.$1} pane2"),
                 },
               ),

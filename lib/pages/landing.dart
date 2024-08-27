@@ -23,6 +23,7 @@ class LandingPage extends ConsumerWidget {
 
     // ref.read(playerProvider.notifier).setArtist("d37ebd110ec1813f206f2f339c3c077e77ddbac3ae981174df651ebc1fd56f9b");
 
+    //print("Rebuilding containing page");
     return Container(
       margin: EdgeInsets.fromLTRB(12, 0, 12, 0),
       child: ListView(
@@ -58,6 +59,7 @@ class LandingPage extends ConsumerWidget {
                         thingId: "thisisgreat",
                         thingType: "placeholder",
                         image: "https://placehold.co/512x512.png",
+                        addedBy: "jedi",
                       ),
                     ],
                   ),
@@ -88,6 +90,7 @@ class LandingPage extends ConsumerWidget {
                           image: song.imageUrl,
                           thingId: song.id,
                           thingType: "song",
+                          addedBy: song.addedBy,
                         )).toList(),
                       );
                     },
@@ -130,6 +133,7 @@ class LandingPage extends ConsumerWidget {
                         thingId: "idklol",
                         thingType: "placeholder",
                         image: "https://placehold.co/512x512.png",
+                        addedBy: "jedi",
                       ),
                     ],
                   ),
@@ -159,6 +163,7 @@ class LandingPage extends ConsumerWidget {
                         thingId: "idklol",
                         thingType: "playlist",
                         image: "https://placehold.co/512x512.png",
+                        addedBy: "jedi",
                       ),
                     ],
                   ),
@@ -189,6 +194,7 @@ class LandingPage extends ConsumerWidget {
                           image: song.imageUrl,
                           thingId: song.id,
                           thingType: "song",
+                          addedBy: song.addedBy,
                         )).toList(),
                       );
                     },
@@ -209,6 +215,12 @@ class LandingPage extends ConsumerWidget {
               )
             ]
           ),
+          VisibleToField(
+            value: ["jedi", "connor"],
+            onChanged: (v) => print("VisibleTo field updated to $v"),
+            onSaved: (v) async => print("VisibleTo field saved to $v"),
+            id: "landingBanana"
+          )
         ]
       )
     );

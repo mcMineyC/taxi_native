@@ -1,11 +1,9 @@
 import 'dart:ui';
+import 'dart:async';
 
 import 'package:beamer/beamer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:context_menus/context_menus.dart';
 import 'providers/services/player.dart';
@@ -22,12 +20,14 @@ class MediaCard extends ConsumerWidget{
   final String thingId;
   final String thingType;
   final String image;
+  final String addedBy;
   const MediaCard({
     super.key, 
     required this.text, 
     required this.thingId, 
     required this.thingType, 
     required this.image,
+    required this.addedBy
   });
   
   List<ContextMenuButtonConfig> buildMenuButtons(BuildContext context, WidgetRef ref){
@@ -100,6 +100,10 @@ class MediaCard extends ConsumerWidget{
         buttons.add(ContextMenuButtonConfig("Placeholder", icon: const Icon(Icons.abc), onPressed: (){}));
         break;
     }
+    buttons.add(ContextMenuButtonConfig(
+      "Added by: $addedBy",
+      onPressed: (){},
+    ));
     return buttons;
   }
 
@@ -239,7 +243,9 @@ Widget EmptyCardRow(){
         text: "meh who cares",
         thingId: "idklol",
         thingType: "placeholder",
-        image: "https://placehold.co/512x512.png")
+        image: "https://placehold.co/512x512.png",
+        addedBy: "jedi",
+      ),
     ]
   );
 }
@@ -247,9 +253,12 @@ Widget EmptyCardRow(){
 class CheckBox extends StatefulWidget {
   final Function(bool) callback;
   final bool initialValue;
+  bool _checkbox = false;
+  bool get value => _checkbox;
+  set value(bool value) => _checkbox = value;
 
-  const CheckBox({Key? key, required this.callback, required this.initialValue}) : super(key: key);
-
+  CheckBox({Key? key, required this.callback, required this.initialValue}) : super(key: key);
+  
   @override
   _CheckBoxState createState() => _CheckBoxState(initalValue: initialValue);
 }
@@ -270,6 +279,7 @@ class _CheckBoxState extends State<CheckBox> {
           clicked = true;
           _checkbox = value!;
           widget.callback(value);
+          widget.value = value;
         });
       }
     );
@@ -572,5 +582,102 @@ Future playlistLogic(WidgetRef ref, BuildContext context, String thingId, String
     }
   }else if(result != null && !result["selected"]){
     print("User cancelled");
+  }
+}
+
+
+
+
+//const List<String> _users = <String>[
+//  'Jedi',
+//  'Abby',
+//  'Connor',
+//  'Braden',
+//  'Eli',
+//  'Colt',
+//  'Najayah',
+//  'Luke',
+//  'James',
+//];
+
+class VisibleToField extends ConsumerStatefulWidget {
+  VisibleToField({super.key, required this.onChanged, required this.value, required this.onSaved, required this.id});
+  Function(List<String> data) onChanged;
+  Future<void> Function(List<String> data) onSaved;
+  String id;
+  List<String> value = [];
+  _VisibleToFieldState? state;
+
+  @override
+  _VisibleToFieldState createState() {
+    state = _VisibleToFieldState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => state!.initalValue = value);
+    return state!;
+  }
+}
+
+class _VisibleToFieldState extends ConsumerState<VisibleToField> {
+  List<String> _value = [];
+  List<String> _userList = [];
+  List<String> get value => _value;
+  String id = "";
+  set initalValue(List<String> v) => setState(() {_value = v; id = widget.id;});
+  set value(List<String> v) => setState(() => _value = v);
+  bool _loading = true;
+  @override
+  Widget build(BuildContext context) {
+    if(widget.id != id) initalValue = widget.value;
+    AsyncValue<List<String>> users = ref.watch(fetchUsernamesProvider);
+    users.when(
+      data: (d) => setState(() {
+        _userList = d;
+        _loading = false;
+        if(_value.contains("all")) setState(() => _value = _userList.toList());
+      }),
+      loading: () => setState(() => _loading = true),
+      error: (e, stack) => setState(() {_loading = true; print("Error: $e");print("Stack: $stack");}),
+    );
+    print("Value: $value, initial: ${widget.value}");
+    return Container(
+      child: _loading ? 
+        Center(
+          child: CircularProgressIndicator()
+        ) : Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [..._userList.map((e) => 
+            InputChip(
+              label: Text(e.substring(0, 1).toUpperCase() + e.substring(1)),
+              selected: _value.contains(e),
+              onSelected: (t) {
+                if(_value.contains(e)){
+                  _value.remove(e);
+                }else{
+                  _value.add(e);
+                }
+                setValue(_value);
+              }
+            ),
+          ),
+            FilledButton(
+              child: const Text("Save"),
+              onPressed: () => widget.onSaved(_value).then((_) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Saved")));
+                ref.refresh(fetchSongsProvider(ignore: true));
+                ref.refresh(fetchAlbumsProvider(ignore: true));
+                ref.refresh(fetchArtistsProvider(ignore: true));
+              }),
+            ),
+          ]
+        )
+    );
+  }
+
+  void setValue(List<String> v){
+    if(v.isEmpty && _userList.isNotEmpty) v = _userList;
+    else if(v.isEmpty && _userList.isEmpty) return;
+    setState(() => _value = v);
+    //print("\t$value\n\t${widget.value}");
+    widget.onChanged(v);
   }
 }

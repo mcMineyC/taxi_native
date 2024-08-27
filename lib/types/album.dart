@@ -13,7 +13,21 @@ class Album with _$Album {
     required int    songCount,
     required String imageUrl,
     required int    added,
+    required List<String> visibleTo,
+    required String addedBy,
   }) = _Album;
 
   factory Album.fromJson(Map<String, dynamic> json) => _$AlbumFromJson(json);
+
+  factory Album.empty() => Album(
+    id: '',
+    artistId: '',
+    displayName: '',
+    artistDisplayName: '',
+    songCount: 0,
+    imageUrl: '',
+    added: 0,
+    visibleTo: [],
+    addedBy: '',
+  );
 }

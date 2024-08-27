@@ -61,6 +61,8 @@ class QueueItem with _$QueueItem {
     duration: duration,
     youtubeId: youtubeId,
     added: 0,
+    addedBy: "jedi",
+    visibleTo: ["all"],
   );
 
 

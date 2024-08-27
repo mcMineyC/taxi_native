@@ -11,8 +11,8 @@ import '../types/album.dart';
 class AlbumsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<Album>> albums = ref.watch(fetchAlbumsProvider);
-    handleError(ref, fetchAlbumsProvider, Beamer.of(context));
+    final AsyncValue<List<Album>> albums = ref.watch(fetchAlbumsProvider(ignore: false));
+    handleError(ref, fetchAlbumsProvider(ignore: false), Beamer.of(context));
     return albums.when(
       data: (data) {
         var cardList = data.map((e) => {
@@ -20,6 +20,7 @@ class AlbumsPage extends ConsumerWidget {
           "image": e.imageUrl,
           "id": e.id,
           "type": "album",
+          "addedBy": e.addedBy
         }).toList();
         return CardView(cardList: cardList);
       },

@@ -6,49 +6,7 @@ part of 'fetched_data_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchSongsHash() => r'e734cf15a1a29381f938165778e308d2ec5c46ec';
-
-/// See also [fetchSongs].
-@ProviderFor(fetchSongs)
-final fetchSongsProvider = FutureProvider<List<Song>>.internal(
-  fetchSongs,
-  name: r'fetchSongsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$fetchSongsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef FetchSongsRef = FutureProviderRef<List<Song>>;
-String _$fetchAlbumsHash() => r'34c67f71d8ca6468d2540cb8ccc85c7b0f87dcb9';
-
-/// See also [fetchAlbums].
-@ProviderFor(fetchAlbums)
-final fetchAlbumsProvider = FutureProvider<List<Album>>.internal(
-  fetchAlbums,
-  name: r'fetchAlbumsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$fetchAlbumsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef FetchAlbumsRef = FutureProviderRef<List<Album>>;
-String _$fetchArtistsHash() => r'27ff9afac70222e926b0f1b90ea4e727d0a4d990';
-
-/// See also [fetchArtists].
-@ProviderFor(fetchArtists)
-final fetchArtistsProvider = FutureProvider<List<Artist>>.internal(
-  fetchArtists,
-  name: r'fetchArtistsProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$fetchArtistsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef FetchArtistsRef = FutureProviderRef<List<Artist>>;
-String _$findBatchSongsHash() => r'201123f41ff4c841063761250d0319d92c0d006e';
+String _$fetchSongsHash() => r'ee898abf6003221575acbff9cb340963c1f00018';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -71,6 +29,390 @@ class _SystemHash {
   }
 }
 
+/// See also [fetchSongs].
+@ProviderFor(fetchSongs)
+const fetchSongsProvider = FetchSongsFamily();
+
+/// See also [fetchSongs].
+class FetchSongsFamily extends Family<AsyncValue<List<Song>>> {
+  /// See also [fetchSongs].
+  const FetchSongsFamily();
+
+  /// See also [fetchSongs].
+  FetchSongsProvider call({
+    bool? ignore = false,
+  }) {
+    return FetchSongsProvider(
+      ignore: ignore,
+    );
+  }
+
+  @override
+  FetchSongsProvider getProviderOverride(
+    covariant FetchSongsProvider provider,
+  ) {
+    return call(
+      ignore: provider.ignore,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'fetchSongsProvider';
+}
+
+/// See also [fetchSongs].
+class FetchSongsProvider extends FutureProvider<List<Song>> {
+  /// See also [fetchSongs].
+  FetchSongsProvider({
+    bool? ignore = false,
+  }) : this._internal(
+          (ref) => fetchSongs(
+            ref as FetchSongsRef,
+            ignore: ignore,
+          ),
+          from: fetchSongsProvider,
+          name: r'fetchSongsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$fetchSongsHash,
+          dependencies: FetchSongsFamily._dependencies,
+          allTransitiveDependencies:
+              FetchSongsFamily._allTransitiveDependencies,
+          ignore: ignore,
+        );
+
+  FetchSongsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.ignore,
+  }) : super.internal();
+
+  final bool? ignore;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<Song>> Function(FetchSongsRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FetchSongsProvider._internal(
+        (ref) => create(ref as FetchSongsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        ignore: ignore,
+      ),
+    );
+  }
+
+  @override
+  FutureProviderElement<List<Song>> createElement() {
+    return _FetchSongsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FetchSongsProvider && other.ignore == ignore;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, ignore.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin FetchSongsRef on FutureProviderRef<List<Song>> {
+  /// The parameter `ignore` of this provider.
+  bool? get ignore;
+}
+
+class _FetchSongsProviderElement extends FutureProviderElement<List<Song>>
+    with FetchSongsRef {
+  _FetchSongsProviderElement(super.provider);
+
+  @override
+  bool? get ignore => (origin as FetchSongsProvider).ignore;
+}
+
+String _$fetchAlbumsHash() => r'00ad7d60a5515af9e8d4a7d7e8fc174559516f66';
+
+/// See also [fetchAlbums].
+@ProviderFor(fetchAlbums)
+const fetchAlbumsProvider = FetchAlbumsFamily();
+
+/// See also [fetchAlbums].
+class FetchAlbumsFamily extends Family<AsyncValue<List<Album>>> {
+  /// See also [fetchAlbums].
+  const FetchAlbumsFamily();
+
+  /// See also [fetchAlbums].
+  FetchAlbumsProvider call({
+    bool ignore = false,
+  }) {
+    return FetchAlbumsProvider(
+      ignore: ignore,
+    );
+  }
+
+  @override
+  FetchAlbumsProvider getProviderOverride(
+    covariant FetchAlbumsProvider provider,
+  ) {
+    return call(
+      ignore: provider.ignore,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'fetchAlbumsProvider';
+}
+
+/// See also [fetchAlbums].
+class FetchAlbumsProvider extends FutureProvider<List<Album>> {
+  /// See also [fetchAlbums].
+  FetchAlbumsProvider({
+    bool ignore = false,
+  }) : this._internal(
+          (ref) => fetchAlbums(
+            ref as FetchAlbumsRef,
+            ignore: ignore,
+          ),
+          from: fetchAlbumsProvider,
+          name: r'fetchAlbumsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$fetchAlbumsHash,
+          dependencies: FetchAlbumsFamily._dependencies,
+          allTransitiveDependencies:
+              FetchAlbumsFamily._allTransitiveDependencies,
+          ignore: ignore,
+        );
+
+  FetchAlbumsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.ignore,
+  }) : super.internal();
+
+  final bool ignore;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<Album>> Function(FetchAlbumsRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FetchAlbumsProvider._internal(
+        (ref) => create(ref as FetchAlbumsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        ignore: ignore,
+      ),
+    );
+  }
+
+  @override
+  FutureProviderElement<List<Album>> createElement() {
+    return _FetchAlbumsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FetchAlbumsProvider && other.ignore == ignore;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, ignore.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin FetchAlbumsRef on FutureProviderRef<List<Album>> {
+  /// The parameter `ignore` of this provider.
+  bool get ignore;
+}
+
+class _FetchAlbumsProviderElement extends FutureProviderElement<List<Album>>
+    with FetchAlbumsRef {
+  _FetchAlbumsProviderElement(super.provider);
+
+  @override
+  bool get ignore => (origin as FetchAlbumsProvider).ignore;
+}
+
+String _$fetchArtistsHash() => r'c8c6538768762b822e70ba6bba722a2ea5183e05';
+
+/// See also [fetchArtists].
+@ProviderFor(fetchArtists)
+const fetchArtistsProvider = FetchArtistsFamily();
+
+/// See also [fetchArtists].
+class FetchArtistsFamily extends Family<AsyncValue<List<Artist>>> {
+  /// See also [fetchArtists].
+  const FetchArtistsFamily();
+
+  /// See also [fetchArtists].
+  FetchArtistsProvider call({
+    bool ignore = false,
+  }) {
+    return FetchArtistsProvider(
+      ignore: ignore,
+    );
+  }
+
+  @override
+  FetchArtistsProvider getProviderOverride(
+    covariant FetchArtistsProvider provider,
+  ) {
+    return call(
+      ignore: provider.ignore,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'fetchArtistsProvider';
+}
+
+/// See also [fetchArtists].
+class FetchArtistsProvider extends FutureProvider<List<Artist>> {
+  /// See also [fetchArtists].
+  FetchArtistsProvider({
+    bool ignore = false,
+  }) : this._internal(
+          (ref) => fetchArtists(
+            ref as FetchArtistsRef,
+            ignore: ignore,
+          ),
+          from: fetchArtistsProvider,
+          name: r'fetchArtistsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$fetchArtistsHash,
+          dependencies: FetchArtistsFamily._dependencies,
+          allTransitiveDependencies:
+              FetchArtistsFamily._allTransitiveDependencies,
+          ignore: ignore,
+        );
+
+  FetchArtistsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.ignore,
+  }) : super.internal();
+
+  final bool ignore;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<Artist>> Function(FetchArtistsRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FetchArtistsProvider._internal(
+        (ref) => create(ref as FetchArtistsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        ignore: ignore,
+      ),
+    );
+  }
+
+  @override
+  FutureProviderElement<List<Artist>> createElement() {
+    return _FetchArtistsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FetchArtistsProvider && other.ignore == ignore;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, ignore.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin FetchArtistsRef on FutureProviderRef<List<Artist>> {
+  /// The parameter `ignore` of this provider.
+  bool get ignore;
+}
+
+class _FetchArtistsProviderElement extends FutureProviderElement<List<Artist>>
+    with FetchArtistsRef {
+  _FetchArtistsProviderElement(super.provider);
+
+  @override
+  bool get ignore => (origin as FetchArtistsProvider).ignore;
+}
+
+String _$findBatchSongsHash() => r'c49b0679f7f0377e39087ad2696452c3f314a8cf';
+
 /// See also [findBatchSongs].
 @ProviderFor(findBatchSongs)
 const findBatchSongsProvider = FindBatchSongsFamily();
@@ -82,10 +424,12 @@ class FindBatchSongsFamily extends Family<AsyncValue<List<Song>>> {
 
   /// See also [findBatchSongs].
   FindBatchSongsProvider call(
-    List<String> ids,
-  ) {
+    List<String> ids, {
+    bool ignore = false,
+  }) {
     return FindBatchSongsProvider(
       ids,
+      ignore: ignore,
     );
   }
 
@@ -95,6 +439,7 @@ class FindBatchSongsFamily extends Family<AsyncValue<List<Song>>> {
   ) {
     return call(
       provider.ids,
+      ignore: provider.ignore,
     );
   }
 
@@ -117,11 +462,13 @@ class FindBatchSongsFamily extends Family<AsyncValue<List<Song>>> {
 class FindBatchSongsProvider extends AutoDisposeFutureProvider<List<Song>> {
   /// See also [findBatchSongs].
   FindBatchSongsProvider(
-    List<String> ids,
-  ) : this._internal(
+    List<String> ids, {
+    bool ignore = false,
+  }) : this._internal(
           (ref) => findBatchSongs(
             ref as FindBatchSongsRef,
             ids,
+            ignore: ignore,
           ),
           from: findBatchSongsProvider,
           name: r'findBatchSongsProvider',
@@ -133,6 +480,7 @@ class FindBatchSongsProvider extends AutoDisposeFutureProvider<List<Song>> {
           allTransitiveDependencies:
               FindBatchSongsFamily._allTransitiveDependencies,
           ids: ids,
+          ignore: ignore,
         );
 
   FindBatchSongsProvider._internal(
@@ -143,9 +491,11 @@ class FindBatchSongsProvider extends AutoDisposeFutureProvider<List<Song>> {
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.ids,
+    required this.ignore,
   }) : super.internal();
 
   final List<String> ids;
+  final bool ignore;
 
   @override
   Override overrideWith(
@@ -161,6 +511,7 @@ class FindBatchSongsProvider extends AutoDisposeFutureProvider<List<Song>> {
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         ids: ids,
+        ignore: ignore,
       ),
     );
   }
@@ -172,13 +523,16 @@ class FindBatchSongsProvider extends AutoDisposeFutureProvider<List<Song>> {
 
   @override
   bool operator ==(Object other) {
-    return other is FindBatchSongsProvider && other.ids == ids;
+    return other is FindBatchSongsProvider &&
+        other.ids == ids &&
+        other.ignore == ignore;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, ids.hashCode);
+    hash = _SystemHash.combine(hash, ignore.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -187,6 +541,9 @@ class FindBatchSongsProvider extends AutoDisposeFutureProvider<List<Song>> {
 mixin FindBatchSongsRef on AutoDisposeFutureProviderRef<List<Song>> {
   /// The parameter `ids` of this provider.
   List<String> get ids;
+
+  /// The parameter `ignore` of this provider.
+  bool get ignore;
 }
 
 class _FindBatchSongsProviderElement
@@ -196,9 +553,11 @@ class _FindBatchSongsProviderElement
 
   @override
   List<String> get ids => (origin as FindBatchSongsProvider).ids;
+  @override
+  bool get ignore => (origin as FindBatchSongsProvider).ignore;
 }
 
-String _$findSongHash() => r'7c98b3906d371a167312e1cae3d51ded3432c703';
+String _$findSongHash() => r'0459e926269a860a0be819235ccea631603cabcc';
 
 /// See also [findSong].
 @ProviderFor(findSong)
@@ -211,10 +570,12 @@ class FindSongFamily extends Family<AsyncValue<Song>> {
 
   /// See also [findSong].
   FindSongProvider call(
-    String id,
-  ) {
+    String id, {
+    bool ignore = false,
+  }) {
     return FindSongProvider(
       id,
+      ignore: ignore,
     );
   }
 
@@ -224,6 +585,7 @@ class FindSongFamily extends Family<AsyncValue<Song>> {
   ) {
     return call(
       provider.id,
+      ignore: provider.ignore,
     );
   }
 
@@ -246,11 +608,13 @@ class FindSongFamily extends Family<AsyncValue<Song>> {
 class FindSongProvider extends AutoDisposeFutureProvider<Song> {
   /// See also [findSong].
   FindSongProvider(
-    String id,
-  ) : this._internal(
+    String id, {
+    bool ignore = false,
+  }) : this._internal(
           (ref) => findSong(
             ref as FindSongRef,
             id,
+            ignore: ignore,
           ),
           from: findSongProvider,
           name: r'findSongProvider',
@@ -261,6 +625,7 @@ class FindSongProvider extends AutoDisposeFutureProvider<Song> {
           dependencies: FindSongFamily._dependencies,
           allTransitiveDependencies: FindSongFamily._allTransitiveDependencies,
           id: id,
+          ignore: ignore,
         );
 
   FindSongProvider._internal(
@@ -271,9 +636,11 @@ class FindSongProvider extends AutoDisposeFutureProvider<Song> {
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.id,
+    required this.ignore,
   }) : super.internal();
 
   final String id;
+  final bool ignore;
 
   @override
   Override overrideWith(
@@ -289,6 +656,7 @@ class FindSongProvider extends AutoDisposeFutureProvider<Song> {
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         id: id,
+        ignore: ignore,
       ),
     );
   }
@@ -300,13 +668,16 @@ class FindSongProvider extends AutoDisposeFutureProvider<Song> {
 
   @override
   bool operator ==(Object other) {
-    return other is FindSongProvider && other.id == id;
+    return other is FindSongProvider &&
+        other.id == id &&
+        other.ignore == ignore;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, ignore.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -315,6 +686,9 @@ class FindSongProvider extends AutoDisposeFutureProvider<Song> {
 mixin FindSongRef on AutoDisposeFutureProviderRef<Song> {
   /// The parameter `id` of this provider.
   String get id;
+
+  /// The parameter `ignore` of this provider.
+  bool get ignore;
 }
 
 class _FindSongProviderElement extends AutoDisposeFutureProviderElement<Song>
@@ -323,9 +697,11 @@ class _FindSongProviderElement extends AutoDisposeFutureProviderElement<Song>
 
   @override
   String get id => (origin as FindSongProvider).id;
+  @override
+  bool get ignore => (origin as FindSongProvider).ignore;
 }
 
-String _$findSongsByAlbumHash() => r'048bf2c0af339054d6e504e94516ae853f4f9466';
+String _$findSongsByAlbumHash() => r'9ae6f2ebbd4ff079ac413fd4a32eb591e38c9d36';
 
 /// See also [findSongsByAlbum].
 @ProviderFor(findSongsByAlbum)
@@ -338,10 +714,12 @@ class FindSongsByAlbumFamily extends Family<AsyncValue<List<Song>>> {
 
   /// See also [findSongsByAlbum].
   FindSongsByAlbumProvider call(
-    String id,
-  ) {
+    String id, {
+    bool ignore = false,
+  }) {
     return FindSongsByAlbumProvider(
       id,
+      ignore: ignore,
     );
   }
 
@@ -351,6 +729,7 @@ class FindSongsByAlbumFamily extends Family<AsyncValue<List<Song>>> {
   ) {
     return call(
       provider.id,
+      ignore: provider.ignore,
     );
   }
 
@@ -373,11 +752,13 @@ class FindSongsByAlbumFamily extends Family<AsyncValue<List<Song>>> {
 class FindSongsByAlbumProvider extends AutoDisposeFutureProvider<List<Song>> {
   /// See also [findSongsByAlbum].
   FindSongsByAlbumProvider(
-    String id,
-  ) : this._internal(
+    String id, {
+    bool ignore = false,
+  }) : this._internal(
           (ref) => findSongsByAlbum(
             ref as FindSongsByAlbumRef,
             id,
+            ignore: ignore,
           ),
           from: findSongsByAlbumProvider,
           name: r'findSongsByAlbumProvider',
@@ -389,6 +770,7 @@ class FindSongsByAlbumProvider extends AutoDisposeFutureProvider<List<Song>> {
           allTransitiveDependencies:
               FindSongsByAlbumFamily._allTransitiveDependencies,
           id: id,
+          ignore: ignore,
         );
 
   FindSongsByAlbumProvider._internal(
@@ -399,9 +781,11 @@ class FindSongsByAlbumProvider extends AutoDisposeFutureProvider<List<Song>> {
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.id,
+    required this.ignore,
   }) : super.internal();
 
   final String id;
+  final bool ignore;
 
   @override
   Override overrideWith(
@@ -417,6 +801,7 @@ class FindSongsByAlbumProvider extends AutoDisposeFutureProvider<List<Song>> {
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         id: id,
+        ignore: ignore,
       ),
     );
   }
@@ -428,13 +813,16 @@ class FindSongsByAlbumProvider extends AutoDisposeFutureProvider<List<Song>> {
 
   @override
   bool operator ==(Object other) {
-    return other is FindSongsByAlbumProvider && other.id == id;
+    return other is FindSongsByAlbumProvider &&
+        other.id == id &&
+        other.ignore == ignore;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, ignore.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -443,6 +831,9 @@ class FindSongsByAlbumProvider extends AutoDisposeFutureProvider<List<Song>> {
 mixin FindSongsByAlbumRef on AutoDisposeFutureProviderRef<List<Song>> {
   /// The parameter `id` of this provider.
   String get id;
+
+  /// The parameter `ignore` of this provider.
+  bool get ignore;
 }
 
 class _FindSongsByAlbumProviderElement
@@ -452,9 +843,11 @@ class _FindSongsByAlbumProviderElement
 
   @override
   String get id => (origin as FindSongsByAlbumProvider).id;
+  @override
+  bool get ignore => (origin as FindSongsByAlbumProvider).ignore;
 }
 
-String _$findSongsByArtistHash() => r'ebcfceb33f8213dbb9ff4e66ea0108bb1bbf5f9d';
+String _$findSongsByArtistHash() => r'c0003ad62d8fcbcb1a132b6dea4176b244d4ed47';
 
 /// See also [findSongsByArtist].
 @ProviderFor(findSongsByArtist)
@@ -467,10 +860,12 @@ class FindSongsByArtistFamily extends Family<AsyncValue<List<Song>>> {
 
   /// See also [findSongsByArtist].
   FindSongsByArtistProvider call(
-    String id,
-  ) {
+    String id, {
+    bool ignore = false,
+  }) {
     return FindSongsByArtistProvider(
       id,
+      ignore: ignore,
     );
   }
 
@@ -480,6 +875,7 @@ class FindSongsByArtistFamily extends Family<AsyncValue<List<Song>>> {
   ) {
     return call(
       provider.id,
+      ignore: provider.ignore,
     );
   }
 
@@ -502,11 +898,13 @@ class FindSongsByArtistFamily extends Family<AsyncValue<List<Song>>> {
 class FindSongsByArtistProvider extends AutoDisposeFutureProvider<List<Song>> {
   /// See also [findSongsByArtist].
   FindSongsByArtistProvider(
-    String id,
-  ) : this._internal(
+    String id, {
+    bool ignore = false,
+  }) : this._internal(
           (ref) => findSongsByArtist(
             ref as FindSongsByArtistRef,
             id,
+            ignore: ignore,
           ),
           from: findSongsByArtistProvider,
           name: r'findSongsByArtistProvider',
@@ -518,6 +916,7 @@ class FindSongsByArtistProvider extends AutoDisposeFutureProvider<List<Song>> {
           allTransitiveDependencies:
               FindSongsByArtistFamily._allTransitiveDependencies,
           id: id,
+          ignore: ignore,
         );
 
   FindSongsByArtistProvider._internal(
@@ -528,9 +927,11 @@ class FindSongsByArtistProvider extends AutoDisposeFutureProvider<List<Song>> {
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.id,
+    required this.ignore,
   }) : super.internal();
 
   final String id;
+  final bool ignore;
 
   @override
   Override overrideWith(
@@ -546,6 +947,7 @@ class FindSongsByArtistProvider extends AutoDisposeFutureProvider<List<Song>> {
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         id: id,
+        ignore: ignore,
       ),
     );
   }
@@ -557,13 +959,16 @@ class FindSongsByArtistProvider extends AutoDisposeFutureProvider<List<Song>> {
 
   @override
   bool operator ==(Object other) {
-    return other is FindSongsByArtistProvider && other.id == id;
+    return other is FindSongsByArtistProvider &&
+        other.id == id &&
+        other.ignore == ignore;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, ignore.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -572,6 +977,9 @@ class FindSongsByArtistProvider extends AutoDisposeFutureProvider<List<Song>> {
 mixin FindSongsByArtistRef on AutoDisposeFutureProviderRef<List<Song>> {
   /// The parameter `id` of this provider.
   String get id;
+
+  /// The parameter `ignore` of this provider.
+  bool get ignore;
 }
 
 class _FindSongsByArtistProviderElement
@@ -581,10 +989,12 @@ class _FindSongsByArtistProviderElement
 
   @override
   String get id => (origin as FindSongsByArtistProvider).id;
+  @override
+  bool get ignore => (origin as FindSongsByArtistProvider).ignore;
 }
 
 String _$findAlbumsByArtistHash() =>
-    r'29b1d6e729f17dfed2e1f07f08894c9f16669978';
+    r'c9bbc3b8d9a3e130ec5d93ab3ed0927ff12f6c51';
 
 /// See also [findAlbumsByArtist].
 @ProviderFor(findAlbumsByArtist)
@@ -597,10 +1007,12 @@ class FindAlbumsByArtistFamily extends Family<AsyncValue<List<Album>>> {
 
   /// See also [findAlbumsByArtist].
   FindAlbumsByArtistProvider call(
-    String id,
-  ) {
+    String id, {
+    bool ignore = false,
+  }) {
     return FindAlbumsByArtistProvider(
       id,
+      ignore: ignore,
     );
   }
 
@@ -610,6 +1022,7 @@ class FindAlbumsByArtistFamily extends Family<AsyncValue<List<Album>>> {
   ) {
     return call(
       provider.id,
+      ignore: provider.ignore,
     );
   }
 
@@ -633,11 +1046,13 @@ class FindAlbumsByArtistProvider
     extends AutoDisposeFutureProvider<List<Album>> {
   /// See also [findAlbumsByArtist].
   FindAlbumsByArtistProvider(
-    String id,
-  ) : this._internal(
+    String id, {
+    bool ignore = false,
+  }) : this._internal(
           (ref) => findAlbumsByArtist(
             ref as FindAlbumsByArtistRef,
             id,
+            ignore: ignore,
           ),
           from: findAlbumsByArtistProvider,
           name: r'findAlbumsByArtistProvider',
@@ -649,6 +1064,7 @@ class FindAlbumsByArtistProvider
           allTransitiveDependencies:
               FindAlbumsByArtistFamily._allTransitiveDependencies,
           id: id,
+          ignore: ignore,
         );
 
   FindAlbumsByArtistProvider._internal(
@@ -659,9 +1075,11 @@ class FindAlbumsByArtistProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.id,
+    required this.ignore,
   }) : super.internal();
 
   final String id;
+  final bool ignore;
 
   @override
   Override overrideWith(
@@ -677,6 +1095,7 @@ class FindAlbumsByArtistProvider
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         id: id,
+        ignore: ignore,
       ),
     );
   }
@@ -688,13 +1107,16 @@ class FindAlbumsByArtistProvider
 
   @override
   bool operator ==(Object other) {
-    return other is FindAlbumsByArtistProvider && other.id == id;
+    return other is FindAlbumsByArtistProvider &&
+        other.id == id &&
+        other.ignore == ignore;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, ignore.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -703,6 +1125,9 @@ class FindAlbumsByArtistProvider
 mixin FindAlbumsByArtistRef on AutoDisposeFutureProviderRef<List<Album>> {
   /// The parameter `id` of this provider.
   String get id;
+
+  /// The parameter `ignore` of this provider.
+  bool get ignore;
 }
 
 class _FindAlbumsByArtistProviderElement
@@ -712,10 +1137,12 @@ class _FindAlbumsByArtistProviderElement
 
   @override
   String get id => (origin as FindAlbumsByArtistProvider).id;
+  @override
+  bool get ignore => (origin as FindAlbumsByArtistProvider).ignore;
 }
 
 String _$findNoSinglesByArtistHash() =>
-    r'5c4ddf64a47427968f832093ad94b74667a5a6fc';
+    r'f1259e350c2ecf405ae52a7a10dad236227b7154';
 
 /// See also [findNoSinglesByArtist].
 @ProviderFor(findNoSinglesByArtist)
@@ -728,10 +1155,12 @@ class FindNoSinglesByArtistFamily extends Family<AsyncValue<List<Album>>> {
 
   /// See also [findNoSinglesByArtist].
   FindNoSinglesByArtistProvider call(
-    String id,
-  ) {
+    String id, {
+    bool ignore = false,
+  }) {
     return FindNoSinglesByArtistProvider(
       id,
+      ignore: ignore,
     );
   }
 
@@ -741,6 +1170,7 @@ class FindNoSinglesByArtistFamily extends Family<AsyncValue<List<Album>>> {
   ) {
     return call(
       provider.id,
+      ignore: provider.ignore,
     );
   }
 
@@ -764,11 +1194,13 @@ class FindNoSinglesByArtistProvider
     extends AutoDisposeFutureProvider<List<Album>> {
   /// See also [findNoSinglesByArtist].
   FindNoSinglesByArtistProvider(
-    String id,
-  ) : this._internal(
+    String id, {
+    bool ignore = false,
+  }) : this._internal(
           (ref) => findNoSinglesByArtist(
             ref as FindNoSinglesByArtistRef,
             id,
+            ignore: ignore,
           ),
           from: findNoSinglesByArtistProvider,
           name: r'findNoSinglesByArtistProvider',
@@ -780,6 +1212,7 @@ class FindNoSinglesByArtistProvider
           allTransitiveDependencies:
               FindNoSinglesByArtistFamily._allTransitiveDependencies,
           id: id,
+          ignore: ignore,
         );
 
   FindNoSinglesByArtistProvider._internal(
@@ -790,9 +1223,11 @@ class FindNoSinglesByArtistProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.id,
+    required this.ignore,
   }) : super.internal();
 
   final String id;
+  final bool ignore;
 
   @override
   Override overrideWith(
@@ -808,6 +1243,7 @@ class FindNoSinglesByArtistProvider
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         id: id,
+        ignore: ignore,
       ),
     );
   }
@@ -819,13 +1255,16 @@ class FindNoSinglesByArtistProvider
 
   @override
   bool operator ==(Object other) {
-    return other is FindNoSinglesByArtistProvider && other.id == id;
+    return other is FindNoSinglesByArtistProvider &&
+        other.id == id &&
+        other.ignore == ignore;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, ignore.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -834,6 +1273,9 @@ class FindNoSinglesByArtistProvider
 mixin FindNoSinglesByArtistRef on AutoDisposeFutureProviderRef<List<Album>> {
   /// The parameter `id` of this provider.
   String get id;
+
+  /// The parameter `ignore` of this provider.
+  bool get ignore;
 }
 
 class _FindNoSinglesByArtistProviderElement
@@ -843,10 +1285,12 @@ class _FindNoSinglesByArtistProviderElement
 
   @override
   String get id => (origin as FindNoSinglesByArtistProvider).id;
+  @override
+  bool get ignore => (origin as FindNoSinglesByArtistProvider).ignore;
 }
 
 String _$findSinglesByArtistHash() =>
-    r'767d6119199d0bcd664c77949369b5500f13a1ec';
+    r'5ce46207610e8378b6ff1debb2a4c8510c94d9f8';
 
 /// See also [findSinglesByArtist].
 @ProviderFor(findSinglesByArtist)
@@ -859,10 +1303,12 @@ class FindSinglesByArtistFamily extends Family<AsyncValue<List<Song>>> {
 
   /// See also [findSinglesByArtist].
   FindSinglesByArtistProvider call(
-    String id,
-  ) {
+    String id, {
+    bool ignore = false,
+  }) {
     return FindSinglesByArtistProvider(
       id,
+      ignore: ignore,
     );
   }
 
@@ -872,6 +1318,7 @@ class FindSinglesByArtistFamily extends Family<AsyncValue<List<Song>>> {
   ) {
     return call(
       provider.id,
+      ignore: provider.ignore,
     );
   }
 
@@ -895,11 +1342,13 @@ class FindSinglesByArtistProvider
     extends AutoDisposeFutureProvider<List<Song>> {
   /// See also [findSinglesByArtist].
   FindSinglesByArtistProvider(
-    String id,
-  ) : this._internal(
+    String id, {
+    bool ignore = false,
+  }) : this._internal(
           (ref) => findSinglesByArtist(
             ref as FindSinglesByArtistRef,
             id,
+            ignore: ignore,
           ),
           from: findSinglesByArtistProvider,
           name: r'findSinglesByArtistProvider',
@@ -911,6 +1360,7 @@ class FindSinglesByArtistProvider
           allTransitiveDependencies:
               FindSinglesByArtistFamily._allTransitiveDependencies,
           id: id,
+          ignore: ignore,
         );
 
   FindSinglesByArtistProvider._internal(
@@ -921,9 +1371,11 @@ class FindSinglesByArtistProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.id,
+    required this.ignore,
   }) : super.internal();
 
   final String id;
+  final bool ignore;
 
   @override
   Override overrideWith(
@@ -939,6 +1391,7 @@ class FindSinglesByArtistProvider
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         id: id,
+        ignore: ignore,
       ),
     );
   }
@@ -950,13 +1403,16 @@ class FindSinglesByArtistProvider
 
   @override
   bool operator ==(Object other) {
-    return other is FindSinglesByArtistProvider && other.id == id;
+    return other is FindSinglesByArtistProvider &&
+        other.id == id &&
+        other.ignore == ignore;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, ignore.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -965,6 +1421,9 @@ class FindSinglesByArtistProvider
 mixin FindSinglesByArtistRef on AutoDisposeFutureProviderRef<List<Song>> {
   /// The parameter `id` of this provider.
   String get id;
+
+  /// The parameter `ignore` of this provider.
+  bool get ignore;
 }
 
 class _FindSinglesByArtistProviderElement
@@ -974,9 +1433,11 @@ class _FindSinglesByArtistProviderElement
 
   @override
   String get id => (origin as FindSinglesByArtistProvider).id;
+  @override
+  bool get ignore => (origin as FindSinglesByArtistProvider).ignore;
 }
 
-String _$findAlbumHash() => r'10972ead24cdcf31f190d0bc6e32e75a5350d554';
+String _$findAlbumHash() => r'643a2ea8a386c67d2149ff34090c5e16a10f4a7e';
 
 /// See also [findAlbum].
 @ProviderFor(findAlbum)
@@ -989,10 +1450,12 @@ class FindAlbumFamily extends Family<AsyncValue<Album>> {
 
   /// See also [findAlbum].
   FindAlbumProvider call(
-    String id,
-  ) {
+    String id, {
+    bool ignore = false,
+  }) {
     return FindAlbumProvider(
       id,
+      ignore: ignore,
     );
   }
 
@@ -1002,6 +1465,7 @@ class FindAlbumFamily extends Family<AsyncValue<Album>> {
   ) {
     return call(
       provider.id,
+      ignore: provider.ignore,
     );
   }
 
@@ -1024,11 +1488,13 @@ class FindAlbumFamily extends Family<AsyncValue<Album>> {
 class FindAlbumProvider extends AutoDisposeFutureProvider<Album> {
   /// See also [findAlbum].
   FindAlbumProvider(
-    String id,
-  ) : this._internal(
+    String id, {
+    bool ignore = false,
+  }) : this._internal(
           (ref) => findAlbum(
             ref as FindAlbumRef,
             id,
+            ignore: ignore,
           ),
           from: findAlbumProvider,
           name: r'findAlbumProvider',
@@ -1039,6 +1505,7 @@ class FindAlbumProvider extends AutoDisposeFutureProvider<Album> {
           dependencies: FindAlbumFamily._dependencies,
           allTransitiveDependencies: FindAlbumFamily._allTransitiveDependencies,
           id: id,
+          ignore: ignore,
         );
 
   FindAlbumProvider._internal(
@@ -1049,9 +1516,11 @@ class FindAlbumProvider extends AutoDisposeFutureProvider<Album> {
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.id,
+    required this.ignore,
   }) : super.internal();
 
   final String id;
+  final bool ignore;
 
   @override
   Override overrideWith(
@@ -1067,6 +1536,7 @@ class FindAlbumProvider extends AutoDisposeFutureProvider<Album> {
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         id: id,
+        ignore: ignore,
       ),
     );
   }
@@ -1078,13 +1548,16 @@ class FindAlbumProvider extends AutoDisposeFutureProvider<Album> {
 
   @override
   bool operator ==(Object other) {
-    return other is FindAlbumProvider && other.id == id;
+    return other is FindAlbumProvider &&
+        other.id == id &&
+        other.ignore == ignore;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, ignore.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -1093,6 +1566,9 @@ class FindAlbumProvider extends AutoDisposeFutureProvider<Album> {
 mixin FindAlbumRef on AutoDisposeFutureProviderRef<Album> {
   /// The parameter `id` of this provider.
   String get id;
+
+  /// The parameter `ignore` of this provider.
+  bool get ignore;
 }
 
 class _FindAlbumProviderElement extends AutoDisposeFutureProviderElement<Album>
@@ -1101,9 +1577,11 @@ class _FindAlbumProviderElement extends AutoDisposeFutureProviderElement<Album>
 
   @override
   String get id => (origin as FindAlbumProvider).id;
+  @override
+  bool get ignore => (origin as FindAlbumProvider).ignore;
 }
 
-String _$findArtistHash() => r'a8dbaf5a77c301855af2c062ed54b040491b36d6';
+String _$findArtistHash() => r'a27d1cde2ca5e5ada937ece0ef0ec9b490437a3f';
 
 /// See also [findArtist].
 @ProviderFor(findArtist)
@@ -1116,10 +1594,12 @@ class FindArtistFamily extends Family<AsyncValue<Artist>> {
 
   /// See also [findArtist].
   FindArtistProvider call(
-    String id,
-  ) {
+    String id, {
+    bool ignore = false,
+  }) {
     return FindArtistProvider(
       id,
+      ignore: ignore,
     );
   }
 
@@ -1129,6 +1609,7 @@ class FindArtistFamily extends Family<AsyncValue<Artist>> {
   ) {
     return call(
       provider.id,
+      ignore: provider.ignore,
     );
   }
 
@@ -1151,11 +1632,13 @@ class FindArtistFamily extends Family<AsyncValue<Artist>> {
 class FindArtistProvider extends AutoDisposeFutureProvider<Artist> {
   /// See also [findArtist].
   FindArtistProvider(
-    String id,
-  ) : this._internal(
+    String id, {
+    bool ignore = false,
+  }) : this._internal(
           (ref) => findArtist(
             ref as FindArtistRef,
             id,
+            ignore: ignore,
           ),
           from: findArtistProvider,
           name: r'findArtistProvider',
@@ -1167,6 +1650,7 @@ class FindArtistProvider extends AutoDisposeFutureProvider<Artist> {
           allTransitiveDependencies:
               FindArtistFamily._allTransitiveDependencies,
           id: id,
+          ignore: ignore,
         );
 
   FindArtistProvider._internal(
@@ -1177,9 +1661,11 @@ class FindArtistProvider extends AutoDisposeFutureProvider<Artist> {
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.id,
+    required this.ignore,
   }) : super.internal();
 
   final String id;
+  final bool ignore;
 
   @override
   Override overrideWith(
@@ -1195,6 +1681,7 @@ class FindArtistProvider extends AutoDisposeFutureProvider<Artist> {
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         id: id,
+        ignore: ignore,
       ),
     );
   }
@@ -1206,13 +1693,16 @@ class FindArtistProvider extends AutoDisposeFutureProvider<Artist> {
 
   @override
   bool operator ==(Object other) {
-    return other is FindArtistProvider && other.id == id;
+    return other is FindArtistProvider &&
+        other.id == id &&
+        other.ignore == ignore;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, ignore.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -1221,6 +1711,9 @@ class FindArtistProvider extends AutoDisposeFutureProvider<Artist> {
 mixin FindArtistRef on AutoDisposeFutureProviderRef<Artist> {
   /// The parameter `id` of this provider.
   String get id;
+
+  /// The parameter `ignore` of this provider.
+  bool get ignore;
 }
 
 class _FindArtistProviderElement
@@ -1229,21 +1722,745 @@ class _FindArtistProviderElement
 
   @override
   String get id => (origin as FindArtistProvider).id;
+  @override
+  bool get ignore => (origin as FindArtistProvider).ignore;
 }
 
-String _$updateSongHash() => r'd2aea79eebc82356d503f943c1e352770bab12ce';
+String _$updateSongHash() => r'07e386ccdb690ffe9bf85d6f17e1af5055afea25';
 
 /// See also [updateSong].
 @ProviderFor(updateSong)
-final updateSongProvider = AutoDisposeFutureProvider<bool>.internal(
-  updateSong,
-  name: r'updateSongProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$updateSongHash,
+const updateSongProvider = UpdateSongFamily();
+
+/// See also [updateSong].
+class UpdateSongFamily extends Family<AsyncValue<bool>> {
+  /// See also [updateSong].
+  const UpdateSongFamily();
+
+  /// See also [updateSong].
+  UpdateSongProvider call(
+    Song s,
+  ) {
+    return UpdateSongProvider(
+      s,
+    );
+  }
+
+  @override
+  UpdateSongProvider getProviderOverride(
+    covariant UpdateSongProvider provider,
+  ) {
+    return call(
+      provider.s,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'updateSongProvider';
+}
+
+/// See also [updateSong].
+class UpdateSongProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [updateSong].
+  UpdateSongProvider(
+    Song s,
+  ) : this._internal(
+          (ref) => updateSong(
+            ref as UpdateSongRef,
+            s,
+          ),
+          from: updateSongProvider,
+          name: r'updateSongProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$updateSongHash,
+          dependencies: UpdateSongFamily._dependencies,
+          allTransitiveDependencies:
+              UpdateSongFamily._allTransitiveDependencies,
+          s: s,
+        );
+
+  UpdateSongProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.s,
+  }) : super.internal();
+
+  final Song s;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(UpdateSongRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: UpdateSongProvider._internal(
+        (ref) => create(ref as UpdateSongRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        s: s,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _UpdateSongProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UpdateSongProvider && other.s == s;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, s.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin UpdateSongRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `s` of this provider.
+  Song get s;
+}
+
+class _UpdateSongProviderElement extends AutoDisposeFutureProviderElement<bool>
+    with UpdateSongRef {
+  _UpdateSongProviderElement(super.provider);
+
+  @override
+  Song get s => (origin as UpdateSongProvider).s;
+}
+
+String _$updateAlbumHash() => r'b60d3b7f67632ac1f8cf145ce5ecc900430d9eef';
+
+/// See also [updateAlbum].
+@ProviderFor(updateAlbum)
+const updateAlbumProvider = UpdateAlbumFamily();
+
+/// See also [updateAlbum].
+class UpdateAlbumFamily extends Family<AsyncValue<bool>> {
+  /// See also [updateAlbum].
+  const UpdateAlbumFamily();
+
+  /// See also [updateAlbum].
+  UpdateAlbumProvider call(
+    Album a,
+    List<Song> songs,
+  ) {
+    return UpdateAlbumProvider(
+      a,
+      songs,
+    );
+  }
+
+  @override
+  UpdateAlbumProvider getProviderOverride(
+    covariant UpdateAlbumProvider provider,
+  ) {
+    return call(
+      provider.a,
+      provider.songs,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'updateAlbumProvider';
+}
+
+/// See also [updateAlbum].
+class UpdateAlbumProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [updateAlbum].
+  UpdateAlbumProvider(
+    Album a,
+    List<Song> songs,
+  ) : this._internal(
+          (ref) => updateAlbum(
+            ref as UpdateAlbumRef,
+            a,
+            songs,
+          ),
+          from: updateAlbumProvider,
+          name: r'updateAlbumProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$updateAlbumHash,
+          dependencies: UpdateAlbumFamily._dependencies,
+          allTransitiveDependencies:
+              UpdateAlbumFamily._allTransitiveDependencies,
+          a: a,
+          songs: songs,
+        );
+
+  UpdateAlbumProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.a,
+    required this.songs,
+  }) : super.internal();
+
+  final Album a;
+  final List<Song> songs;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(UpdateAlbumRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: UpdateAlbumProvider._internal(
+        (ref) => create(ref as UpdateAlbumRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        a: a,
+        songs: songs,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _UpdateAlbumProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UpdateAlbumProvider && other.a == a && other.songs == songs;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, a.hashCode);
+    hash = _SystemHash.combine(hash, songs.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin UpdateAlbumRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `a` of this provider.
+  Album get a;
+
+  /// The parameter `songs` of this provider.
+  List<Song> get songs;
+}
+
+class _UpdateAlbumProviderElement extends AutoDisposeFutureProviderElement<bool>
+    with UpdateAlbumRef {
+  _UpdateAlbumProviderElement(super.provider);
+
+  @override
+  Album get a => (origin as UpdateAlbumProvider).a;
+  @override
+  List<Song> get songs => (origin as UpdateAlbumProvider).songs;
+}
+
+String _$updateArtistHash() => r'9812e0c4c3a987cecf3f9774e51def2b71ca93fd';
+
+/// See also [updateArtist].
+@ProviderFor(updateArtist)
+const updateArtistProvider = UpdateArtistFamily();
+
+/// See also [updateArtist].
+class UpdateArtistFamily extends Family<AsyncValue<bool>> {
+  /// See also [updateArtist].
+  const UpdateArtistFamily();
+
+  /// See also [updateArtist].
+  UpdateArtistProvider call(
+    Artist a,
+  ) {
+    return UpdateArtistProvider(
+      a,
+    );
+  }
+
+  @override
+  UpdateArtistProvider getProviderOverride(
+    covariant UpdateArtistProvider provider,
+  ) {
+    return call(
+      provider.a,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'updateArtistProvider';
+}
+
+/// See also [updateArtist].
+class UpdateArtistProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [updateArtist].
+  UpdateArtistProvider(
+    Artist a,
+  ) : this._internal(
+          (ref) => updateArtist(
+            ref as UpdateArtistRef,
+            a,
+          ),
+          from: updateArtistProvider,
+          name: r'updateArtistProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$updateArtistHash,
+          dependencies: UpdateArtistFamily._dependencies,
+          allTransitiveDependencies:
+              UpdateArtistFamily._allTransitiveDependencies,
+          a: a,
+        );
+
+  UpdateArtistProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.a,
+  }) : super.internal();
+
+  final Artist a;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(UpdateArtistRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: UpdateArtistProvider._internal(
+        (ref) => create(ref as UpdateArtistRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        a: a,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _UpdateArtistProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UpdateArtistProvider && other.a == a;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, a.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin UpdateArtistRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `a` of this provider.
+  Artist get a;
+}
+
+class _UpdateArtistProviderElement
+    extends AutoDisposeFutureProviderElement<bool> with UpdateArtistRef {
+  _UpdateArtistProviderElement(super.provider);
+
+  @override
+  Artist get a => (origin as UpdateArtistProvider).a;
+}
+
+String _$deleteItemHash() => r'53f1875780edcc9fd312eef5a3cc88bccd2edccc';
+
+/// See also [deleteItem].
+@ProviderFor(deleteItem)
+const deleteItemProvider = DeleteItemFamily();
+
+/// See also [deleteItem].
+class DeleteItemFamily extends Family<AsyncValue<bool>> {
+  /// See also [deleteItem].
+  const DeleteItemFamily();
+
+  /// See also [deleteItem].
+  DeleteItemProvider call(
+    String type,
+    String id,
+    String extraParams,
+  ) {
+    return DeleteItemProvider(
+      type,
+      id,
+      extraParams,
+    );
+  }
+
+  @override
+  DeleteItemProvider getProviderOverride(
+    covariant DeleteItemProvider provider,
+  ) {
+    return call(
+      provider.type,
+      provider.id,
+      provider.extraParams,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'deleteItemProvider';
+}
+
+/// See also [deleteItem].
+class DeleteItemProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [deleteItem].
+  DeleteItemProvider(
+    String type,
+    String id,
+    String extraParams,
+  ) : this._internal(
+          (ref) => deleteItem(
+            ref as DeleteItemRef,
+            type,
+            id,
+            extraParams,
+          ),
+          from: deleteItemProvider,
+          name: r'deleteItemProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$deleteItemHash,
+          dependencies: DeleteItemFamily._dependencies,
+          allTransitiveDependencies:
+              DeleteItemFamily._allTransitiveDependencies,
+          type: type,
+          id: id,
+          extraParams: extraParams,
+        );
+
+  DeleteItemProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.type,
+    required this.id,
+    required this.extraParams,
+  }) : super.internal();
+
+  final String type;
+  final String id;
+  final String extraParams;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(DeleteItemRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: DeleteItemProvider._internal(
+        (ref) => create(ref as DeleteItemRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        type: type,
+        id: id,
+        extraParams: extraParams,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _DeleteItemProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DeleteItemProvider &&
+        other.type == type &&
+        other.id == id &&
+        other.extraParams == extraParams;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, type.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, extraParams.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin DeleteItemRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `type` of this provider.
+  String get type;
+
+  /// The parameter `id` of this provider.
+  String get id;
+
+  /// The parameter `extraParams` of this provider.
+  String get extraParams;
+}
+
+class _DeleteItemProviderElement extends AutoDisposeFutureProviderElement<bool>
+    with DeleteItemRef {
+  _DeleteItemProviderElement(super.provider);
+
+  @override
+  String get type => (origin as DeleteItemProvider).type;
+  @override
+  String get id => (origin as DeleteItemProvider).id;
+  @override
+  String get extraParams => (origin as DeleteItemProvider).extraParams;
+}
+
+String _$fetchUsernamesHash() => r'3e90f4ed468ed1b9932e141a8aaefba61a7db6b9';
+
+/// See also [fetchUsernames].
+@ProviderFor(fetchUsernames)
+final fetchUsernamesProvider = FutureProvider<List<String>>.internal(
+  fetchUsernames,
+  name: r'fetchUsernamesProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$fetchUsernamesHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef UpdateSongRef = AutoDisposeFutureProviderRef<bool>;
+typedef FetchUsernamesRef = FutureProviderRef<List<String>>;
+String _$editItemVisibilityHash() =>
+    r'8e6c24301024684ee8cb131db2bb8cdab35dfca6';
+
+/// See also [editItemVisibility].
+@ProviderFor(editItemVisibility)
+const editItemVisibilityProvider = EditItemVisibilityFamily();
+
+/// See also [editItemVisibility].
+class EditItemVisibilityFamily extends Family<AsyncValue<bool>> {
+  /// See also [editItemVisibility].
+  const EditItemVisibilityFamily();
+
+  /// See also [editItemVisibility].
+  EditItemVisibilityProvider call(
+    String type,
+    String id,
+    List<String> users,
+  ) {
+    return EditItemVisibilityProvider(
+      type,
+      id,
+      users,
+    );
+  }
+
+  @override
+  EditItemVisibilityProvider getProviderOverride(
+    covariant EditItemVisibilityProvider provider,
+  ) {
+    return call(
+      provider.type,
+      provider.id,
+      provider.users,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'editItemVisibilityProvider';
+}
+
+/// See also [editItemVisibility].
+class EditItemVisibilityProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [editItemVisibility].
+  EditItemVisibilityProvider(
+    String type,
+    String id,
+    List<String> users,
+  ) : this._internal(
+          (ref) => editItemVisibility(
+            ref as EditItemVisibilityRef,
+            type,
+            id,
+            users,
+          ),
+          from: editItemVisibilityProvider,
+          name: r'editItemVisibilityProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$editItemVisibilityHash,
+          dependencies: EditItemVisibilityFamily._dependencies,
+          allTransitiveDependencies:
+              EditItemVisibilityFamily._allTransitiveDependencies,
+          type: type,
+          id: id,
+          users: users,
+        );
+
+  EditItemVisibilityProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.type,
+    required this.id,
+    required this.users,
+  }) : super.internal();
+
+  final String type;
+  final String id;
+  final List<String> users;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(EditItemVisibilityRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: EditItemVisibilityProvider._internal(
+        (ref) => create(ref as EditItemVisibilityRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        type: type,
+        id: id,
+        users: users,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _EditItemVisibilityProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is EditItemVisibilityProvider &&
+        other.type == type &&
+        other.id == id &&
+        other.users == users;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, type.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, users.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin EditItemVisibilityRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `type` of this provider.
+  String get type;
+
+  /// The parameter `id` of this provider.
+  String get id;
+
+  /// The parameter `users` of this provider.
+  List<String> get users;
+}
+
+class _EditItemVisibilityProviderElement
+    extends AutoDisposeFutureProviderElement<bool> with EditItemVisibilityRef {
+  _EditItemVisibilityProviderElement(super.provider);
+
+  @override
+  String get type => (origin as EditItemVisibilityProvider).type;
+  @override
+  String get id => (origin as EditItemVisibilityProvider).id;
+  @override
+  List<String> get users => (origin as EditItemVisibilityProvider).users;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

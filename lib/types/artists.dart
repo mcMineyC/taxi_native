@@ -12,6 +12,8 @@ class Artist with _$Artist {
     required int    songCount,
     required String imageUrl,
     required int    added,
+    required List<String> visibleTo,
+    required String addedBy,
   }) = _Artist;
 
   factory Artist.fromJson(Map<String, dynamic> json) => _$ArtistFromJson(json);
@@ -23,5 +25,7 @@ class Artist with _$Artist {
     songCount: 0,
     imageUrl: '',
     added: 0,
+    visibleTo: ["all"],
+    addedBy: '',
   );
 }

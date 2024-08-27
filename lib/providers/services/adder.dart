@@ -1,10 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../../platform_utils.dart';
 
 import '../data/user_provider.dart';
 import '../data/preferences_provider.dart';
+import '../data/fetched_data_provider.dart';
 
 import '../../types/searchresult.dart';
 
@@ -92,6 +94,11 @@ class Adder extends _$Adder {
     socket.on('addresult', (data) {
       var result = AddResult.fromJson(data);
       state = state.copyWith(state: "addresult", addResult: result);
+      print("Got success message!!");
+      ref.refresh(fetchSongsProvider(ignore: false));
+      ref.refresh(fetchAlbumsProvider(ignore: false));
+      ref.refresh(fetchArtistsProvider(ignore: false));
+      
     });
     _isInit = true;
 

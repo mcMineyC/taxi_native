@@ -358,6 +358,8 @@ class Player extends _$Player {
   }
 
   void playFindResult(FindResult result) async {
+    needInteraction = false;
+    state = state.copyWith(position: 0);
     playQueueItem(QueueItem(
       type: "found-song",
       id: DateTime.now().microsecondsSinceEpoch.toString(),

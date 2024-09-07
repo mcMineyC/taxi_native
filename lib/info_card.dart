@@ -5,20 +5,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import "types/searchresult.dart";
 import "providers/services/player.dart";
 
-class InfoEditorCard extends StatefulWidget{
+class InfoEditorCard extends ConsumerStatefulWidget{
   final FindResult data;
-  final WidgetRef ref;
   const InfoEditorCard(
     {
     super.key,
     required this.data,
-    required this.ref
     }
   );
+  @override
   InfoEditorCardState createState() => InfoEditorCardState();
 }
 
-class InfoEditorCardState extends State<InfoEditorCard>{
+class InfoEditorCardState extends ConsumerState<InfoEditorCard>{
   bool nameCorrect = true;
   TextEditingController nameController = TextEditingController();
   bool albumCorrect = true;
@@ -29,28 +28,28 @@ class InfoEditorCardState extends State<InfoEditorCard>{
   TextEditingController videoIdController = TextEditingController();
   bool imageUrlCorrect = true;
   TextEditingController imageUrlController = TextEditingController();
-  late FindResult modifiedData;
+  late FindResult _modifiedData;
+  FindResult get modifiedData => _modifiedData;
+  set modifiedData(FindResult data) => setState(() => _modifiedData = data);
   bool modified = false;
 
-  get data => (modified) ? modifiedData : widget.data;
+  get data {print("Get data $modified"); return (modified) ? _modifiedData : widget.data;}
   List<FindResultSong> songs = [];
 
   @override
   Widget build(BuildContext context) {
     if(!modified) {
-      var other = widget.data;
-      other.songs.forEach((element) {
-        songs.add(element);
-      });
-      modifiedData = widget.data;
+      songs = widget.data.songs.toList();
+      _modifiedData = widget.data;
+      nameController.text = (modifiedData.type == "song") ? modifiedData.songs[0].title : modifiedData.name;
+      albumController.text = (modifiedData.type == "song" || modifiedData.type == "album") ? modifiedData.album : "This isn't going to actually be used";
+      artistController.text = (modifiedData.type == "song" || modifiedData.type == "album") ? modifiedData.artist : "This isn't going to actually be used";
+      videoIdController.text = modifiedData.songs[0].id;
+      imageUrlController.text = modifiedData.imageUrl;
+      modified = true;
+      print("Set data $modified");
     }
-    modified = true;
-
-    nameController.text = (modifiedData.type == "song") ? modifiedData.songs[0].title : modifiedData.name;
-    albumController.text = (modifiedData.type == "song" || modifiedData.type == "album") ? modifiedData.album : "This isn't going to actually be used";
-    artistController.text = modifiedData.artist;
-    videoIdController.text = modifiedData.songs[0].id;
-    imageUrlController.text = modifiedData.imageUrl;
+    print("InfoEditorCard rebuild");
 
     return Card(
       child: Column(
@@ -62,7 +61,7 @@ class InfoEditorCardState extends State<InfoEditorCard>{
                 height: 128,
                 width: 128,
                 child: CachedNetworkImage(
-                  imageUrl: widget.data.imageUrl,
+                  imageUrl: modifiedData.imageUrl,
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4),
@@ -124,80 +123,79 @@ class InfoEditorCardState extends State<InfoEditorCard>{
           ),
           ListTile(
             title: TextField(
-              controller: nameController,
               decoration: InputDecoration(
                 labelText: 'Name',
                 filled: true,
               ),
-              onChanged: (_) {
-                var song = modifiedData.songs.toList();
-                song[0] = song[0].copyWith(title: nameController.text);
-                modifiedData = modifiedData.copyWith(songs: song);
-                print(modifiedData.songs[0].title);
+              onChanged: (String name) {
+                if(modifiedData.type == "song") {
+                  var song = modifiedData.songs.toList();
+                  song[0] = song[0].copyWith(title: nameController.text);
+                  modifiedData = modifiedData.copyWith(songs: song);
+                  print(modifiedData.songs[0].title);
+                } else {
+                  modifiedData = modifiedData.copyWith(name: name);
+                }
               },
             )
           ),
-          (modifiedData.type == "song") ? 
-          ListTile(
+          if (modifiedData.type == "song") ListTile(
             title: TextField(
-              controller: albumController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Album',
                 filled: true,
               ),
-              onChanged: (_) {
-                modifiedData = modifiedData.copyWith(name: albumController.text);
+              onChanged: (String album) {
+                modifiedData = modifiedData.copyWith(name: album);
               },
             ),
-          ) :
-          Container(),
-          (modifiedData.type == "song" || modifiedData.type == "album") ? ListTile(
+          ),
+          if (modifiedData.type == "song" || modifiedData.type == "album") ListTile(
             title: TextField(
-               controller: artistController,
-               decoration: InputDecoration(
+               decoration: const InputDecoration(
                  labelText: 'Artist',
                  filled: true,
                ),
-              onChanged: (_) {
-                modifiedData = modifiedData.copyWith(artist: artistController.text);
+              onChanged: (String artist) {
+                modifiedData = modifiedData.copyWith(artist: artist);
               },
               )
-            ) : Container(),
-          ListTile(
+          ),
+          if (modifiedData.type == "song") ListTile(
             trailing: IconButton(
-              icon: Icon(Icons.play_arrow_rounded),
+              icon: const Icon(Icons.play_arrow_rounded),
               onPressed: () {
-                widget.ref.read(playerProvider.notifier).playFindResult(modifiedData);
+                ref.read(playerProvider.notifier).playFindResult(modifiedData);
               },
             ),
             title: TextField(
-              controller: videoIdController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Video ID',
                 filled: true,
               ),
-              onChanged: (_) {
-                var song = modifiedData.songs.toList();
-                song[0] = song[0].copyWith(id: videoIdController.text);
-                modifiedData = modifiedData.copyWith(songs: song);
+              onChanged: (String videoId) {
+                if(modifiedData.type == "song") {
+                  var song = modifiedData.songs.toList();
+                  song[0] = song[0].copyWith(id: videoId);
+                  modifiedData = modifiedData.copyWith(songs: song);
+                }
               },
             )
           ),
           ListTile(
             trailing: IconButton(
-              icon: Icon(Icons.link_rounded),
+              icon: const Icon(Icons.link_rounded),
               onPressed: () {
                 showImage(context, modifiedData.imageUrl);
               },
             ),
             title: TextField(
-              controller: imageUrlController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Image URL',
                 filled: true,
               ),
-              onChanged: (_) {
-                modifiedData = modifiedData.copyWith(imageUrl: imageUrlController.text);
+              onChanged: (String imageUrl) {
+                modifiedData = modifiedData.copyWith(imageUrl: imageUrl);
               },
             ), 
           ),

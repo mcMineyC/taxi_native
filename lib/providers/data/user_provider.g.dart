@@ -6,7 +6,7 @@ part of 'user_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$loginPasswordHash() => r'969f646ca435737d8b530b6173ec89615e5096f2';
+String _$loginPasswordHash() => r'5ab98728508fac08aa73ea19b570394242285e56';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -172,7 +172,7 @@ class _LoginPasswordProviderElement
   String get password => (origin as LoginPasswordProvider).password;
 }
 
-String _$loginTokenHash() => r'809a9bc0bfd44fe3d790b3341cc52a502a5a6281';
+String _$loginTokenHash() => r'c0f1a8ac8768934a55c257af100634c34559eefc';
 
 /// See also [loginToken].
 @ProviderFor(loginToken)
@@ -314,5 +314,19 @@ final authtokenProvider = AutoDisposeFutureProvider<String>.internal(
 );
 
 typedef AuthtokenRef = AutoDisposeFutureProviderRef<String>;
+String _$getRolesHash() => r'0c870d051c6afd96af5546dddb97cc4a2bc61fab';
+
+/// See also [getRoles].
+@ProviderFor(getRoles)
+final getRolesProvider = FutureProvider<List<String>>.internal(
+  getRoles,
+  name: r'getRolesProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$getRolesHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef GetRolesRef = FutureProviderRef<List<String>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -20,6 +20,7 @@ class ArtistsPage extends ConsumerWidget {
           "image": e.imageUrl,
           "id": e.id,
           "type": "artist",
+          "addedBy": e.addedBy,
         }).toList();
         return CardView(cardList: cardList);
       },

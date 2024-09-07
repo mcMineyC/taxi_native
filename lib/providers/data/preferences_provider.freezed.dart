@@ -202,7 +202,7 @@ mixin _$StorablePrefs {
   bool get shuffleOnLoop => throw _privateConstructorUsedError;
   bool get shuffleDefault => throw _privateConstructorUsedError;
   String get username => throw _privateConstructorUsedError;
-  String get backendUrl => throw _privateConstructorUsedError;
+  String get backendUrl => throw _privateConstructorUsedError; //required String
   bool get debugMode => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -348,6 +348,7 @@ class _$StorablePrefsImpl implements _StorablePrefs {
   final String username;
   @override
   final String backendUrl;
+//required String
   @override
   final bool debugMode;
 
@@ -411,7 +412,7 @@ abstract class _StorablePrefs implements StorablePrefs {
   String get username;
   @override
   String get backendUrl;
-  @override
+  @override //required String
   bool get debugMode;
   @override
   @JsonKey(ignore: true)

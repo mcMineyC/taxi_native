@@ -215,12 +215,6 @@ class LandingPage extends ConsumerWidget {
               )
             ]
           ),
-          VisibleToField(
-            value: ["jedi", "connor"],
-            onChanged: (v) => print("VisibleTo field updated to $v"),
-            onSaved: (v) async => print("VisibleTo field saved to $v"),
-            id: "landingBanana"
-          )
         ]
       )
     );

@@ -95,6 +95,7 @@ class StorablePrefs with _$StorablePrefs {
     required bool shuffleDefault,
     required String username,
     required String backendUrl,
+    //required String
     required bool debugMode,
   }) = _StorablePrefs;
 

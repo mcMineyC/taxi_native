@@ -101,7 +101,8 @@ class MobileHomePage extends ConsumerWidget {
         child: MobileAppBar(),
       ),
       bottomNavigationBar: MobileNav(),
-        body: Container(
+      body: SafeArea(
+        child: Container(
           color: Theme.of(context).colorScheme.surfaceContainer,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -113,6 +114,7 @@ class MobileHomePage extends ConsumerWidget {
             ]
           )
         )
+      ),
     );
   }
 }

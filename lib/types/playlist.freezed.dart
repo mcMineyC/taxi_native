@@ -27,8 +27,12 @@ mixin _$Playlist {
   List<String> get songs => throw _privateConstructorUsedError;
   int get added => throw _privateConstructorUsedError;
 
+  /// Serializes this Playlist to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Playlist
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PlaylistCopyWith<Playlist> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -57,6 +61,8 @@ class _$PlaylistCopyWithImpl<$Res, $Val extends Playlist>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Playlist
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -121,6 +127,8 @@ class __$$PlaylistImplCopyWithImpl<$Res>
       _$PlaylistImpl _value, $Res Function(_$PlaylistImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Playlist
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -213,12 +221,14 @@ class _$PlaylistImpl implements _Playlist {
             (identical(other.added, added) || other.added == added));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, owner, displayName, public,
       const DeepCollectionEquality().hash(_songs), added);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Playlist
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PlaylistImplCopyWith<_$PlaylistImpl> get copyWith =>
@@ -256,8 +266,11 @@ abstract class _Playlist implements Playlist {
   List<String> get songs;
   @override
   int get added;
+
+  /// Create a copy of Playlist
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PlaylistImplCopyWith<_$PlaylistImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -271,7 +284,9 @@ mixin _$FilledPlaylist {
   List<Song> get songs => throw _privateConstructorUsedError;
   int get added => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FilledPlaylist
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FilledPlaylistCopyWith<FilledPlaylist> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -301,6 +316,8 @@ class _$FilledPlaylistCopyWithImpl<$Res, $Val extends FilledPlaylist>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FilledPlaylist
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -365,6 +382,8 @@ class __$$FilledPlaylistImplCopyWithImpl<$Res>
       _$FilledPlaylistImpl _value, $Res Function(_$FilledPlaylistImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FilledPlaylist
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -459,7 +478,9 @@ class _$FilledPlaylistImpl extends _FilledPlaylist {
   int get hashCode => Object.hash(runtimeType, id, owner, displayName, public,
       const DeepCollectionEquality().hash(_songs), added);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FilledPlaylist
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FilledPlaylistImplCopyWith<_$FilledPlaylistImpl> get copyWith =>
@@ -489,8 +510,11 @@ abstract class _FilledPlaylist extends FilledPlaylist {
   List<Song> get songs;
   @override
   int get added;
+
+  /// Create a copy of FilledPlaylist
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FilledPlaylistImplCopyWith<_$FilledPlaylistImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

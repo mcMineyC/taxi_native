@@ -16,7 +16,7 @@ class CardView extends StatelessWidget {
         crossAxisSpacing: 0,
         childAspectRatio: MediaCard.width / (MediaCard.height+6),
         children: cardList.map(
-          (card) => MediaCard(text: card["text"], image: card["image"], thingId: card["id"], thingType: card["type"], addedBy: card["addedby"])
+          (card) => MediaCard(text: card["text"], image: card["image"], thingId: card["id"], thingType: card["type"], addedBy: card["addedBy"] ?? "no data")
         ).toList(),
     );
   }
@@ -25,6 +25,6 @@ class CardView extends StatelessWidget {
 Skeletonizer LoadingCardView(){
   return Skeletonizer(
           enabled: true,
-          child: CardView(cardList: [for (int i = 0; i < 32; i++) {"text": "meh who cares", "id": "idklol", "type": "placeholder", "image": "https://placehold.co/512x512.png"}]),
+          child: CardView(cardList: [for (int i = 0; i < 32; i++) {"text": "meh who cares", "id": "idklol", "type": "placeholder", "image": "https://placehold.co/512x512.png","addedBy": "a banana"}]),
         );
 }

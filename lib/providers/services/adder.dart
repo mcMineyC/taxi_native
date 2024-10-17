@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../../platform_utils.dart';
+import '../../service_locator.dart';
 
 import '../data/user_provider.dart';
 import '../data/preferences_provider.dart';
@@ -31,6 +32,7 @@ class AddState with _$AddState {
 @Riverpod(keepAlive: true)
 class Adder extends _$Adder {
   late final IO.Socket socket;
+  PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
   bool _isInit = false;
   bool authed = false;
 
@@ -84,6 +86,8 @@ class Adder extends _$Adder {
     });
 
     socket.on('findresults', (data) {
+      print("Adder: Find results");
+      print(data["results"][0].toString());
       var found = List<FindResult>.empty(growable: true);
       data["results"].forEach((element) {
         found.add(FindResult.fromJson(element));
@@ -106,6 +110,7 @@ class Adder extends _$Adder {
   }
 
   void search(String query, SearchType type) async {
+    print("Searcher: Searching ${query}");
     state = state.copyWith(state: "loading");
     socket.emit('search', {"query": query, "source": "spotify", "mediaType": type.type});
   }

@@ -29,8 +29,12 @@ mixin _$Artist {
   List<String> get visibleTo => throw _privateConstructorUsedError;
   String get addedBy => throw _privateConstructorUsedError;
 
+  /// Serializes this Artist to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Artist
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ArtistCopyWith<Artist> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -60,6 +64,8 @@ class _$ArtistCopyWithImpl<$Res, $Val extends Artist>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Artist
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -135,6 +141,8 @@ class __$$ArtistImplCopyWithImpl<$Res>
       _$ArtistImpl _value, $Res Function(_$ArtistImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Artist
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -249,7 +257,7 @@ class _$ArtistImpl implements _Artist {
             (identical(other.addedBy, addedBy) || other.addedBy == addedBy));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -262,7 +270,9 @@ class _$ArtistImpl implements _Artist {
       const DeepCollectionEquality().hash(_visibleTo),
       addedBy);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Artist
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ArtistImplCopyWith<_$ArtistImpl> get copyWith =>
@@ -305,8 +315,11 @@ abstract class _Artist implements Artist {
   List<String> get visibleTo;
   @override
   String get addedBy;
+
+  /// Create a copy of Artist
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ArtistImplCopyWith<_$ArtistImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

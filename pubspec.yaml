@@ -59,6 +59,7 @@ dependencies:
   media_kit_native_event_loop: ^1.0.8
   rxdart: ^0.27.7
   just_audio_web: ^0.4.11
+  squiggly_slider: ^1.0.5
   # media_kit_libs_windows_audio: any
   # just_audio_handlers:
   #   # git:

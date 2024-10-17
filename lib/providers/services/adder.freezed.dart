@@ -24,7 +24,9 @@ mixin _$AddState {
   bool get done => throw _privateConstructorUsedError;
   bool get authed => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AddStateCopyWith<AddState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,6 +58,8 @@ class _$AddStateCopyWithImpl<$Res, $Val extends AddState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AddState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -99,6 +103,8 @@ class _$AddStateCopyWithImpl<$Res, $Val extends AddState>
     ) as $Val);
   }
 
+  /// Create a copy of AddState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AddResultCopyWith<$Res> get addResult {
@@ -137,6 +143,8 @@ class __$$AddStateImplCopyWithImpl<$Res>
       _$AddStateImpl _value, $Res Function(_$AddStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AddState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -256,7 +264,9 @@ class _$AddStateImpl extends _AddState {
       done,
       authed);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddStateImplCopyWith<_$AddStateImpl> get copyWith =>
@@ -288,8 +298,11 @@ abstract class _AddState extends AddState {
   bool get done;
   @override
   bool get authed;
+
+  /// Create a copy of AddState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddStateImplCopyWith<_$AddStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

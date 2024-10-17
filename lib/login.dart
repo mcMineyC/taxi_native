@@ -56,7 +56,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         prov.Provider.of<PreferencesProvider>(context, listen: false).username = username;
         Navigator.of(context).pop(); // Close the dialog
         Beamer.of(context).beamToReplacementNamed("/home");
-        // Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage(title: 'Just Some Random Cards')));
         reset(() {});
     }else if(success == 0){
       reset(() {
@@ -64,7 +63,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         Navigator.of(context).pop();
         showDialog(context: context, builder: (context) {
           return AlertDialog(
-            content: Text("Invalid username or password"),
+            content: const Text("Invalid username or password"),
+            actions: [
+              TextButton(
+                child: const Text("Ok"),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ]
           );
         });
       });
@@ -74,7 +79,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         Navigator.of(context).pop();
         showDialog(context: context, builder: (context) {
           return AlertDialog(
-            content: Text("Server error (it's probably down)"),
+            content: const Text("Server error (it's probably down)"),
+            actions: [
+              TextButton(
+                child: const Text("Edit URL"),
+                onPressed: () async {
+                  if(await showEditUrlDialog(context)){login(username, password);}
+                }
+              ),
+              TextButton(
+                child: const Text("Retry"),
+                onPressed: () => login(username, password)
+              ),
+              TextButton(
+                child: const Text("Ok"),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ]
           );
         });
       });
@@ -119,6 +140,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         showDialog(context: context, builder: (context) {
           return AlertDialog(
             content: Text("Server error (it's probably down)"),
+            actions: [
+              TextButton(
+                child: const Text("Edit URL"),
+                onPressed: () async {
+                  _triedToken = false;
+                  if(await showEditUrlDialog(context)){loginToken();}
+                }
+              ),
+              TextButton(
+                child: const Text("Retry"),
+                onPressed: () =>loginToken(), 
+              ),
+              TextButton(
+                child: const Text("Ok"),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ]
           );
         });
         break;
@@ -225,4 +263,34 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ),
     );
   }
+}
+
+Future<bool> showEditUrlDialog(BuildContext context) async {
+  PreferencesProvider prefs = prov.Provider.of<PreferencesProvider>(context, listen: false);
+  TextEditingController urlController = TextEditingController(text: prefs.backendUrl);
+  bool result = await showDialog(context: context, builder: (context) => AlertDialog(
+    title: const Text("Edit URL"),
+    content: TextField(
+      controller: urlController,
+      decoration: const InputDecoration(
+        hintText: "URL",
+        border: OutlineInputBorder(),
+      ),
+    ),
+    actions: [
+      TextButton(
+        child: const Text("Cancel"),
+        onPressed: () => Navigator.of(context).pop(false),
+      ),
+      TextButton(
+        child: const Text("Save"),
+        onPressed: () => Navigator.of(context).pop(true),
+      ),
+    ],
+  ));
+  if(result) {
+    prefs.backendUrl = urlController.text;
+    return true;
+  }
+  return false;
 }

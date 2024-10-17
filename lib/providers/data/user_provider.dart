@@ -7,11 +7,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'preferences_provider.dart';
 
 part 'user_provider.g.dart';
-PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
+
+PreferencesProvider _p = ServiceLocator().get<PreferencesProvider>();
 
 @riverpod
 Future<int> loginPassword(LoginPasswordRef ref, String username, String password) async {
   SharedPreferences _sp = await SharedPreferences.getInstance();
+  PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
+  //p.backendUrl = "https://eatthecow.mooo.com:3030";
+  print("Using ${p.backendUrl} to login");
   try{
     var response = await http.post(
       Uri.parse("${p.backendUrl}/auth"),
@@ -43,6 +47,7 @@ Future<int> loginPassword(LoginPasswordRef ref, String username, String password
 @riverpod
 Future<int> loginToken(LoginTokenRef ref, String token) async {
   SharedPreferences _sp = await SharedPreferences.getInstance();
+  PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
   try{
     var response = await http.post(
       Uri.parse("${p.backendUrl}/authtoken"),
@@ -74,4 +79,19 @@ Future<int> loginToken(LoginTokenRef ref, String token) async {
 Future<String> authtoken(AuthtokenRef ref) async {
   SharedPreferences _sp = await SharedPreferences.getInstance();
   return _sp.getString("token") ?? "";
+}
+
+@Riverpod(keepAlive: true)
+Future<List<String>> getRoles(GetRolesRef ref) async {
+  var _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+    Uri.parse("${_p.backendUrl}/info/users/${_p.username}/roles"),
+    headers: Map<String, String>.from({
+      'Content-Type': 'application/json',
+    }),
+    body: jsonEncode(<String, String>{
+      'authtoken': await _sp.getString("token") ?? "",
+    }),
+  );
+  return [];
 }

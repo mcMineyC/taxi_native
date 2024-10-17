@@ -23,6 +23,8 @@ class _AdderPageState extends ConsumerState {
     "foundresults",
     "addresult",
   ];
+  String query = "";
+
 
   int page = 1;
   List<SearchResult> selectedSearchResults = [];
@@ -38,21 +40,32 @@ class _AdderPageState extends ConsumerState {
     if(state.state == "authed"){
       page = 1;
     }else if(state.state == "foundresults" && page == 3) {
+      print("Setting state keys");
       stateKeys = List.generate(state.findResults.length, (index) => GlobalKey<InfoEditorCardState>());
     }else if(state.state == "addresult") {
       print("Adder: Done!");
-      page = 1;
     }
+    print("Adder: Page $page");
+    print("Adder: State ${state.state}");
     return Container(
       margin: EdgeInsets.fromLTRB(14, 10, 14, 10),
       child: Center(
         child: Column(
           children: [
             Expanded(child: switch(state.state){
+              "auth" =>
+                const Center(
+                  child: Column(
+                    children: [
+                      Text("Logging in...", textAlign: TextAlign.center, style: TextStyle(fontSize: 18)),
+                      CircularProgressIndicator()
+                    ]
+                  )
+                ),
               "loading" =>
-                Center(child: CircularProgressIndicator()),
+                const Center(child: CircularProgressIndicator()),
               "findingresults" =>
-                Center(
+                const Center(
                   child: Column(
                     children: [
                       Text("Searching...", textAlign: TextAlign.center, style: TextStyle(fontSize: 18)),
@@ -67,7 +80,7 @@ class _AdderPageState extends ConsumerState {
               "foundresults" =>
                 thirdStep(state.findResults, stateKeys, MediaQuery.of(context).size.width.truncate()),
               "addingresults" =>
-                Center(
+                const Center(
                   child: Column(
                     children: [
                       Text("Adding the new songs...", textAlign: TextAlign.center, style: TextStyle(fontSize: 18)),
@@ -82,9 +95,9 @@ class _AdderPageState extends ConsumerState {
               },
             ),
             // Expanded(child: Container()),
-            Row(
+            if(!state.state.contains("ing")) Row(
               children: [
-                FilledButton.tonal(
+                if(page != 4) FilledButton.tonal(
                   child: Text(page == 1 ? "Cancel" : "Back"),
                   onPressed: () {
                     back();
@@ -99,13 +112,14 @@ class _AdderPageState extends ConsumerState {
                         stepOneToTwo(queryController);
                         break;
                       case 2:
-                        stepTwoToThree(selectedSearchResults);
+                        stepTwoToThree(selectedSearchResults, context);
                         break;
                       case 3:
                         stepThreeToFour(stateKeys);
                         break;
                       case 4:
                         done();
+                        break;
                       default:
                         break;
                     }
@@ -119,7 +133,7 @@ class _AdderPageState extends ConsumerState {
     );
   }
 
-  back(){
+  void back(){
     print("Back $page");
     setState(() {
       if(page > 1) page--;
@@ -128,41 +142,49 @@ class _AdderPageState extends ConsumerState {
     });
   }
 
-  cancel(){
+  void cancel(){
     page = 1;
     ref.read(adderProvider.notifier).cancel();
     Beamer.of(context).beamBack();
   }
 
-  done(){
+  void done(){
     page = 1;
     ref.read(adderProvider.notifier).cancel();
     Beamer.of(context).beamBack();
   }
 
-  stepOneToTwo(TextEditingController queryController) {
+  void stepOneToTwo(TextEditingController queryController) {
     page = 2;
     selectedSearchResults = [];
     ref.read(adderProvider.notifier).search(queryController.text, selectedSearchType);
   }
 
-  stepTwoToThree(List<SearchResult> results) {
+  void stepTwoToThree(List<SearchResult> results, BuildContext context) {
+    print("Step two to 3");
+    if(results.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please select at least one song")));
+      return;
+    }
     setState(() {page = 3;});
-    print("Selected $selectedSearchResults");
-    ref.read(adderProvider.notifier).findVideosFor(selectedSearchResults);
+    print("Selected $results");
+    ref.read(adderProvider.notifier).findVideosFor(results);
   }
 
-  stepThreeToFour(List<GlobalKey<InfoEditorCardState>> stateKeys) {
+  void stepThreeToFour(List<GlobalKey<InfoEditorCardState>> stateKeys) {
     List<FindResult> results = [];
     stateKeys.forEach((key) {
+      if(key.currentState == null) return;
+      print("Adding ${key.currentState!.data.name}");
       results.add(key.currentState!.data);
-      print("Adding ${key.currentState!.data}");
+      //print("Adding ${key.currentState!.data}");
     });
     ref.read(adderProvider.notifier).addFindResults(results);
     setState(() {page = 4;});
   }
 
   Widget firstStep(WidgetRef ref, TextEditingController queryController) {
+    queryController.text = query;
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,18 +195,19 @@ class _AdderPageState extends ConsumerState {
             children: [
               Expanded(
                 child: TextField(
-                    controller: queryController,
-                    onSubmitted: (text) => stepOneToTwo(queryController),
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Enter a search term',
-                    ),
+                  controller: queryController,
+                  onSubmitted: (text) => stepOneToTwo(queryController),
+                  onChanged: (text) => query = text,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Enter a search term',
+                  ),
                 ),
               ),
               Container(
                 margin: EdgeInsets.only(left: 10),
                 child: DropdownMenu<SearchType>(
-                  initialSelection: SearchType.track,
+                  initialSelection: selectedSearchType,
                   label: const Text('Type'),
                   onSelected: (SearchType? value) => setState(() => selectedSearchType = value ?? SearchType.track),
                   dropdownMenuEntries: SearchType.values.map(
@@ -209,19 +232,16 @@ class _AdderPageState extends ConsumerState {
   }
 
   Widget secondStep(List<SearchResult> results) {
-    return Container(
-      child: Stack(
-        // crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
         children: [
           Text("Step 2: Results", textAlign: TextAlign.left, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
           Container(
-            margin: EdgeInsets.only(top: 42),
+            //margin: EdgeInsets.only(top: 42),
             child: Text("Select the song(s) you want to add"),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 72, bottom: 16),
-            child: SingleChildScrollView(
-              child: ListView.builder(
+          Expanded(
+            //margin: EdgeInsets.only(top: 72, bottom: 16),
+            child: ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemCount: results.length,
@@ -284,30 +304,25 @@ class _AdderPageState extends ConsumerState {
             },
           ),
           ),
-          ),
         ]
-      )
     );
   }
 
   Widget thirdStep(List<FindResult> results, List<GlobalKey<InfoEditorCardState>> stateKeys, int viewportWidth) {
     
-    return Container(
-      child: Stack(
-        // crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
         children: [
           Text("Step 3: Check", textAlign: TextAlign.left, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
           Container(
-            margin: EdgeInsets.only(top: 42),
+            //margin: EdgeInsets.only(top: 42),
             child: Text("Check that the info is correct before proceeding"),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 72, bottom: 16),
-            child: SingleChildScrollView(
-              child: GridView.builder(
+          Expanded(child: Container(
+            //margin: EdgeInsets.only(top: 72, bottom: 16),
+            child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   childAspectRatio: (600 / 552),
-                  crossAxisCount: (viewportWidth / 600).truncate()
+                  crossAxisCount: (viewportWidth / 600).truncate() == 0 ? 1 : (viewportWidth / 600).truncate(),
                 ),
                 shrinkWrap: true,
                 itemCount: results.length,
@@ -322,7 +337,6 @@ class _AdderPageState extends ConsumerState {
             ),
           ),
         ]
-      )
     );
   }
 

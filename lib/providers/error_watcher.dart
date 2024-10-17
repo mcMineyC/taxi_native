@@ -11,6 +11,7 @@ void handleError(WidgetRef ref, ProviderBase prov, BeamerDelegate b) {
   ref.listen(prov, (_, state) async {
     if (state.error != null && _.error == null) {
       print("Provider errored out: ${state.error}");
+      print("Stack: ${state.stackTrace}");
       if((state.error as Map<String, dynamic>)["code"] == 401) {
         b.beamToNamed('/login');
       }

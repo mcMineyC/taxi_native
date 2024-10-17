@@ -19,6 +19,7 @@ class SongsPage extends ConsumerWidget {
           "text": e.displayName,
           "image": e.imageUrl,
           "id": e.id,
+          "addedBy": e.addedBy,
           "type": "song"
         }).toList();
         return CardView(cardList: cardList);

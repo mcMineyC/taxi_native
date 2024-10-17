@@ -61,154 +61,156 @@ class _ArtistPane2State extends ConsumerState<ArtistsPane2> {
     }
     print("Current song: ${currentSong.displayName}");
     return Container(
-      child: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            height: 128,
-            width: 128,
-            child: CachedNetworkImage(
-              imageUrl: currentSong.imageUrl,
-              imageBuilder: (context, imageProvider) => Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.contain,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              height: 128,
+              width: 128,
+              child: CachedNetworkImage(
+                imageUrl: currentSong.imageUrl,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
+                placeholder: (context, url) => Container(decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(4))),
+                errorWidget: (context, url, error) => Icon(Icons.error_outline_rounded,color:Colors.pink[700]),
               ),
-              placeholder: (context, url) => Container(decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(4))),
-              errorWidget: (context, url, error) => Icon(Icons.error_outline_rounded,color:Colors.pink[700]),
             ),
-          ),
-          ListTile(
-            title: TextField(
-              controller: nameController,
-              decoration: const InputDecoration(
-                labelText: "Name",
-                filled: true
+            ListTile(
+              title: TextField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: "Name",
+                  filled: true
+                ),
+                onChanged: (value) {
+                  setState(() => mutated = true);
+                  currentSong = currentSong.copyWith(displayName: value);
+                },
               ),
-              onChanged: (value) {
-                setState(() => mutated = true);
-                currentSong = currentSong.copyWith(displayName: value);
-              },
             ),
-          ),
-          ListTile(
-            title: TextField(
-              controller: imageUrlController,
-              decoration: const InputDecoration(
-                labelText: "Image URL",
-                filled: true
-              ),
-              onChanged: (value) {
-                setState(() => mutated = true);
-                currentSong = currentSong.copyWith(imageUrl: value);
-              }
-            ),
-            trailing: IconButton(
-              icon: const Icon(Icons.link_rounded),
-              onPressed: () => showImage(context, imageUrlController.text),
-            ),
-          ),
-          VisibleToField(
-            value: currentSong.visibleTo.toList(),
-            onChanged: (value) => currentSong = currentSong.copyWith(visibleTo: value),
-            onSaved: (v) async => await ref.read(editItemVisibilityProvider("artist", currentSong.id, v).future),
-            id: currentSong.id,
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            child: Row(
-            children: [
-              FilledButton(
-                child: Row(children: [const Icon(Icons.delete_rounded), Container(width: 6), const Text("Delete")]),
-                style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.red), foregroundColor: WidgetStateProperty.all(Colors.white)),
-                onPressed: () {
-                  CheckBox deleteSongsCheck = CheckBox(initialValue: false, callback: (b){});
-                  CheckBox deleteAlbumsCheck = CheckBox(initialValue: false, callback: (b){});
-                  showDialog<bool>(
-                    context: context,
-                    builder: (context) => deleteDialog(
-                      context,
-                      "artist", 
-                      [
-                        Row(children: [deleteSongsCheck, Container(width: 6), const Text("Delete contained songs")]),
-                        Row(children: [deleteAlbumsCheck, Container(width: 6), const Text("Delete contained albums")]),
-                      ]
-                    )
-                  ).then((bool? delete) async {
-                    if(delete != null && delete) {
-                      bool deleted = await ref.read(deleteItemProvider("artist", currentSong.id, "?deleteSongs=${deleteSongsCheck.value}&deleteAlbums=${deleteAlbumsCheck.value}").future);
-                      if(deleted){
-                        refreshChanges();
-                        widget.deselect(null);
-                      }
-                    }
-                  });
+            ListTile(
+              title: TextField(
+                controller: imageUrlController,
+                decoration: const InputDecoration(
+                  labelText: "Image URL",
+                  filled: true
+                ),
+                onChanged: (value) {
+                  setState(() => mutated = true);
+                  currentSong = currentSong.copyWith(imageUrl: value);
                 }
               ),
-              Expanded(child: Container()),
-              Container(
-                child: OutlinedButton(
-                  child: Text("Discard changes", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red)),
-                  onPressed: () => setState(() => mutated = false),
-                ),
+              trailing: IconButton(
+                icon: const Icon(Icons.link_rounded),
+                onPressed: () => showImage(context, imageUrlController.text),
               ),
-              FilledButton.tonal(
-                child: Row(
-                  children: [
-                    const Icon(Icons.save_rounded),
-                    Container(width: 6),
-                    const Text("Save changes")
-                  ],
+            ),
+            VisibleToField(
+              value: currentSong.visibleTo.toList(),
+              onChanged: (value) => currentSong = currentSong.copyWith(visibleTo: value),
+              onSaved: (v) async => await ref.read(editItemVisibilityProvider("artist", currentSong.id, v).future),
+              id: currentSong.id,
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              child: Row(
+              children: [
+                FilledButton(
+                  child: Row(children: [const Icon(Icons.delete_rounded), Container(width: 6), const Text("Delete")]),
+                  style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.red), foregroundColor: WidgetStateProperty.all(Colors.white)),
+                  onPressed: () {
+                    CheckBox deleteSongsCheck = CheckBox(initialValue: false, callback: (b){});
+                    CheckBox deleteAlbumsCheck = CheckBox(initialValue: false, callback: (b){});
+                    showDialog<bool>(
+                      context: context,
+                      builder: (context) => deleteDialog(
+                        context,
+                        "artist", 
+                        [
+                          Row(children: [deleteSongsCheck, Container(width: 6), const Text("Delete contained songs")]),
+                          Row(children: [deleteAlbumsCheck, Container(width: 6), const Text("Delete contained albums")]),
+                        ]
+                      )
+                    ).then((bool? delete) async {
+                      if(delete != null && delete) {
+                        bool deleted = await ref.read(deleteItemProvider("artist", currentSong.id, "?deleteSongs=${deleteSongsCheck.value}&deleteAlbums=${deleteAlbumsCheck.value}").future);
+                        if(deleted){
+                          refreshChanges();
+                          widget.deselect(null);
+                        }
+                      }
+                    });
+                  }
                 ),
-                onPressed: () async {
-                  bool confirm = await showDialog<bool>(context: context, builder: (context) => AlertDialog(
-                    title: const Text("Save changes?"),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text("You have made changes to the current song. Do you want to save them?"),
-                        const Text("The new info is as follows:"),
-                        Text("Name: ${nameController.text}"),
-                        FittedBox(
-                          fit: BoxFit.contain,
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                            height: 512,
-                            width: 512,
-                            child: CachedNetworkImage(
-                              imageUrl: currentSong.imageUrl,
-                              imageBuilder: (context, imageProvider) => Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.contain,
+                Expanded(child: Container()),
+                Container(
+                  child: OutlinedButton(
+                    child: Text("Discard changes", style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red)),
+                    onPressed: () => setState(() => mutated = false),
+                  ),
+                ),
+                FilledButton.tonal(
+                  child: Row(
+                    children: [
+                      const Icon(Icons.save_rounded),
+                      Container(width: 6),
+                      const Text("Save changes")
+                    ],
+                  ),
+                  onPressed: () async {
+                    bool confirm = await showDialog<bool>(context: context, builder: (context) => AlertDialog(
+                      title: const Text("Save changes?"),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text("You have made changes to the current song. Do you want to save them?"),
+                          const Text("The new info is as follows:"),
+                          Text("Name: ${nameController.text}"),
+                          FittedBox(
+                            fit: BoxFit.contain,
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                              height: 512,
+                              width: 512,
+                              child: CachedNetworkImage(
+                                imageUrl: currentSong.imageUrl,
+                                imageBuilder: (context, imageProvider) => Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
                                 ),
+                                placeholder: (context, url) => Container(decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(4))),
+                                errorWidget: (context, url, error) => Icon(Icons.error_outline_rounded,color:Colors.pink[700]),
                               ),
-                              placeholder: (context, url) => Container(decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(4))),
-                              errorWidget: (context, url, error) => Icon(Icons.error_outline_rounded,color:Colors.pink[700]),
                             ),
                           ),
-                        ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text("No")),
+                        TextButton(onPressed: () => Navigator.of(context).pop(true), child: const Text("Yes")),
                       ],
-                    ),
-                    actions: [
-                      TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text("No")),
-                      TextButton(onPressed: () => Navigator.of(context).pop(true), child: const Text("Yes")),
-                    ],
-                  )) ?? false;
-                  if(!confirm) return;
-                  if(await saveChanges()) refreshChanges();
-                }
-              )
-            ],
-          ))
-        ]
+                    )) ?? false;
+                    if(!confirm) return;
+                    if(await saveChanges()) refreshChanges();
+                  }
+                )
+              ],
+            ))
+          ]
+        )
       )
     );
   }

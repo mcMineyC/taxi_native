@@ -33,8 +33,12 @@ mixin _$Song {
   double get duration => throw _privateConstructorUsedError;
   List<String> get visibleTo => throw _privateConstructorUsedError;
 
+  /// Serializes this Song to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Song
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SongCopyWith<Song> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -68,6 +72,8 @@ class _$SongCopyWithImpl<$Res, $Val extends Song>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Song
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -166,6 +172,8 @@ class __$$SongImplCopyWithImpl<$Res>
   __$$SongImplCopyWithImpl(_$SongImpl _value, $Res Function(_$SongImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Song
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -319,7 +327,7 @@ class _$SongImpl extends _Song {
                 .equals(other._visibleTo, _visibleTo));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -336,7 +344,9 @@ class _$SongImpl extends _Song {
       duration,
       const DeepCollectionEquality().hash(_visibleTo));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Song
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SongImplCopyWith<_$SongImpl> get copyWith =>
@@ -392,8 +402,11 @@ abstract class _Song extends Song {
   double get duration;
   @override
   List<String> get visibleTo;
+
+  /// Create a copy of Song
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SongImplCopyWith<_$SongImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

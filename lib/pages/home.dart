@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import "package:rxdart/rxdart.dart";
 import "dart:async";
 import 'dart:convert';
+import 'package:flutter/services.dart';
 
 import '../providers/services/player.dart';
 
@@ -23,6 +24,7 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(playerProvider.notifier).init();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     subject.throttleTime(const Duration(seconds: 1)).listen((value) {
       _persistPlayerInfo(value).then((_) {});
     });
@@ -60,7 +62,7 @@ class DesktopHomePage extends ConsumerWidget {
         preferredSize: const Size.fromHeight(58),
         child: DesktopAppBar(),
       ),
-      body: Column(
+      body: SafeArea(child: Column(
         children: [
           Expanded(
             child: Row(
@@ -74,7 +76,7 @@ class DesktopHomePage extends ConsumerWidget {
           ),
           DesktopBottomBar(persistenceFunction: persistenceFunction),
         ]
-      ),
+      )),
     );
   }
 }
@@ -101,7 +103,8 @@ class MobileHomePage extends ConsumerWidget {
         child: MobileAppBar(),
       ),
       bottomNavigationBar: MobileNav(),
-        body: Container(
+      body: SafeArea(
+        child: Container(
           color: Theme.of(context).colorScheme.surfaceContainer,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -113,6 +116,7 @@ class MobileHomePage extends ConsumerWidget {
             ]
           )
         )
+      ),
     );
   }
 }

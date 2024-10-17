@@ -24,8 +24,12 @@ mixin _$PersistenceOptions {
   bool get persistInfo => throw _privateConstructorUsedError;
   bool get saveLibraryTab => throw _privateConstructorUsedError;
 
+  /// Serializes this PersistenceOptions to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PersistenceOptions
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PersistenceOptionsCopyWith<PersistenceOptions> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,6 +53,8 @@ class _$PersistenceOptionsCopyWithImpl<$Res, $Val extends PersistenceOptions>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PersistenceOptions
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -92,6 +98,8 @@ class __$$PersistenceOptionsImplCopyWithImpl<$Res>
       $Res Function(_$PersistenceOptionsImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PersistenceOptions
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -152,12 +160,14 @@ class _$PersistenceOptionsImpl implements _PersistenceOptions {
                 other.saveLibraryTab == saveLibraryTab));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, autoplaySong, persistInfo, saveLibraryTab);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PersistenceOptions
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PersistenceOptionsImplCopyWith<_$PersistenceOptionsImpl> get copyWith =>
@@ -187,8 +197,11 @@ abstract class _PersistenceOptions implements PersistenceOptions {
   bool get persistInfo;
   @override
   bool get saveLibraryTab;
+
+  /// Create a copy of PersistenceOptions
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PersistenceOptionsImplCopyWith<_$PersistenceOptionsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -205,8 +218,12 @@ mixin _$StorablePrefs {
   String get backendUrl => throw _privateConstructorUsedError; //required String
   bool get debugMode => throw _privateConstructorUsedError;
 
+  /// Serializes this StorablePrefs to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of StorablePrefs
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $StorablePrefsCopyWith<StorablePrefs> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -235,6 +252,8 @@ class _$StorablePrefsCopyWithImpl<$Res, $Val extends StorablePrefs>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of StorablePrefs
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -293,6 +312,8 @@ class __$$StorablePrefsImplCopyWithImpl<$Res>
       _$StorablePrefsImpl _value, $Res Function(_$StorablePrefsImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of StorablePrefs
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -374,12 +395,14 @@ class _$StorablePrefsImpl implements _StorablePrefs {
                 other.debugMode == debugMode));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, shuffleOnLoop, shuffleDefault,
       username, backendUrl, debugMode);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of StorablePrefs
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$StorablePrefsImplCopyWith<_$StorablePrefsImpl> get copyWith =>
@@ -411,11 +434,14 @@ abstract class _StorablePrefs implements StorablePrefs {
   @override
   String get username;
   @override
-  String get backendUrl;
-  @override //required String
-  bool get debugMode;
+  String get backendUrl; //required String
   @override
-  @JsonKey(ignore: true)
+  bool get debugMode;
+
+  /// Create a copy of StorablePrefs
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$StorablePrefsImplCopyWith<_$StorablePrefsImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

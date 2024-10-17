@@ -33,9 +33,14 @@ mixin _$PlayerInfo {
   int get currentIndex => throw _privateConstructorUsedError;
   bool get shuffle => throw _privateConstructorUsedError;
   bool get loop => throw _privateConstructorUsedError;
+  bool get thinking => throw _privateConstructorUsedError;
 
+  /// Serializes this PlayerInfo to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PlayerInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PlayerInfoCopyWith<PlayerInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -59,7 +64,8 @@ abstract class $PlayerInfoCopyWith<$Res> {
       List<QueueItem> queue,
       int currentIndex,
       bool shuffle,
-      bool loop});
+      bool loop,
+      bool thinking});
 }
 
 /// @nodoc
@@ -72,6 +78,8 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PlayerInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -88,6 +96,7 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
     Object? currentIndex = null,
     Object? shuffle = null,
     Object? loop = null,
+    Object? thinking = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -142,6 +151,10 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
           ? _value.loop
           : loop // ignore: cast_nullable_to_non_nullable
               as bool,
+      thinking: null == thinking
+          ? _value.thinking
+          : thinking // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -167,7 +180,8 @@ abstract class _$$PlayerInfoImplCopyWith<$Res>
       List<QueueItem> queue,
       int currentIndex,
       bool shuffle,
-      bool loop});
+      bool loop,
+      bool thinking});
 }
 
 /// @nodoc
@@ -178,6 +192,8 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
       _$PlayerInfoImpl _value, $Res Function(_$PlayerInfoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PlayerInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -194,6 +210,7 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
     Object? currentIndex = null,
     Object? shuffle = null,
     Object? loop = null,
+    Object? thinking = null,
   }) {
     return _then(_$PlayerInfoImpl(
       id: null == id
@@ -248,6 +265,10 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
           ? _value.loop
           : loop // ignore: cast_nullable_to_non_nullable
               as bool,
+      thinking: null == thinking
+          ? _value.thinking
+          : thinking // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -268,7 +289,8 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       required final List<QueueItem> queue,
       required this.currentIndex,
       required this.shuffle,
-      required this.loop})
+      required this.loop,
+      required this.thinking})
       : _queue = queue;
 
   factory _$PlayerInfoImpl.fromJson(Map<String, dynamic> json) =>
@@ -306,10 +328,12 @@ class _$PlayerInfoImpl implements _PlayerInfo {
   final bool shuffle;
   @override
   final bool loop;
+  @override
+  final bool thinking;
 
   @override
   String toString() {
-    return 'PlayerInfo(id: $id, artistId: $artistId, albumId: $albumId, displayName: $displayName, artistDisplayName: $artistDisplayName, albumDisplayName: $albumDisplayName, duration: $duration, position: $position, isPlaying: $isPlaying, queue: $queue, currentIndex: $currentIndex, shuffle: $shuffle, loop: $loop)';
+    return 'PlayerInfo(id: $id, artistId: $artistId, albumId: $albumId, displayName: $displayName, artistDisplayName: $artistDisplayName, albumDisplayName: $albumDisplayName, duration: $duration, position: $position, isPlaying: $isPlaying, queue: $queue, currentIndex: $currentIndex, shuffle: $shuffle, loop: $loop, thinking: $thinking)';
   }
 
   @override
@@ -337,10 +361,12 @@ class _$PlayerInfoImpl implements _PlayerInfo {
             (identical(other.currentIndex, currentIndex) ||
                 other.currentIndex == currentIndex) &&
             (identical(other.shuffle, shuffle) || other.shuffle == shuffle) &&
-            (identical(other.loop, loop) || other.loop == loop));
+            (identical(other.loop, loop) || other.loop == loop) &&
+            (identical(other.thinking, thinking) ||
+                other.thinking == thinking));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -356,9 +382,12 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       const DeepCollectionEquality().hash(_queue),
       currentIndex,
       shuffle,
-      loop);
+      loop,
+      thinking);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PlayerInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PlayerInfoImplCopyWith<_$PlayerInfoImpl> get copyWith =>
@@ -386,7 +415,8 @@ abstract class _PlayerInfo implements PlayerInfo {
       required final List<QueueItem> queue,
       required final int currentIndex,
       required final bool shuffle,
-      required final bool loop}) = _$PlayerInfoImpl;
+      required final bool loop,
+      required final bool thinking}) = _$PlayerInfoImpl;
 
   factory _PlayerInfo.fromJson(Map<String, dynamic> json) =
       _$PlayerInfoImpl.fromJson;
@@ -418,7 +448,12 @@ abstract class _PlayerInfo implements PlayerInfo {
   @override
   bool get loop;
   @override
-  @JsonKey(ignore: true)
+  bool get thinking;
+
+  /// Create a copy of PlayerInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PlayerInfoImplCopyWith<_$PlayerInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

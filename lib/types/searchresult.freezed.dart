@@ -26,8 +26,12 @@ mixin _$SearchResponse {
   List<Song> get singles => throw _privateConstructorUsedError;
   List<String> get relevancy => throw _privateConstructorUsedError;
 
+  /// Serializes this SearchResponse to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SearchResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SearchResponseCopyWith<SearchResponse> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,6 +60,8 @@ class _$SearchResponseCopyWithImpl<$Res, $Val extends SearchResponse>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SearchResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -114,6 +120,8 @@ class __$$SearchResponseImplCopyWithImpl<$Res>
       _$SearchResponseImpl _value, $Res Function(_$SearchResponseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SearchResponse
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -225,7 +233,7 @@ class _$SearchResponseImpl extends _SearchResponse {
                 .equals(other._relevancy, _relevancy));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -235,7 +243,9 @@ class _$SearchResponseImpl extends _SearchResponse {
       const DeepCollectionEquality().hash(_singles),
       const DeepCollectionEquality().hash(_relevancy));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SearchResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SearchResponseImplCopyWith<_$SearchResponseImpl> get copyWith =>
@@ -272,8 +282,11 @@ abstract class _SearchResponse extends SearchResponse {
   List<Song> get singles;
   @override
   List<String> get relevancy;
+
+  /// Create a copy of SearchResponse
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SearchResponseImplCopyWith<_$SearchResponseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -289,8 +302,12 @@ mixin _$LocalSearchResult {
   String get imageUrl => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
 
+  /// Serializes this LocalSearchResult to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of LocalSearchResult
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LocalSearchResultCopyWith<LocalSearchResult> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -314,6 +331,8 @@ class _$LocalSearchResultCopyWithImpl<$Res, $Val extends LocalSearchResult>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of LocalSearchResult
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -362,6 +381,8 @@ class __$$LocalSearchResultImplCopyWithImpl<$Res>
       $Res Function(_$LocalSearchResultImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LocalSearchResult
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -431,11 +452,13 @@ class _$LocalSearchResultImpl extends _LocalSearchResult {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, displayName, imageUrl, type);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LocalSearchResult
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LocalSearchResultImplCopyWith<_$LocalSearchResultImpl> get copyWith =>
@@ -469,8 +492,11 @@ abstract class _LocalSearchResult extends LocalSearchResult {
   String get imageUrl;
   @override
   String get type;
+
+  /// Create a copy of LocalSearchResult
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LocalSearchResultImplCopyWith<_$LocalSearchResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -488,8 +514,12 @@ mixin _$SearchResult {
   String get imageUrl => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
 
+  /// Serializes this SearchResult to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of SearchResult
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SearchResultCopyWith<SearchResult> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -519,6 +549,8 @@ class _$SearchResultCopyWithImpl<$Res, $Val extends SearchResult>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SearchResult
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -583,6 +615,8 @@ class __$$SearchResultImplCopyWithImpl<$Res>
       _$SearchResultImpl _value, $Res Function(_$SearchResultImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SearchResult
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -669,12 +703,14 @@ class _$SearchResultImpl extends _SearchResult {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, id, name, artist, album, imageUrl, type);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SearchResult
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SearchResultImplCopyWith<_$SearchResultImpl> get copyWith =>
@@ -713,8 +749,11 @@ abstract class _SearchResult extends SearchResult {
   String get imageUrl;
   @override
   String get type;
+
+  /// Create a copy of SearchResult
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SearchResultImplCopyWith<_$SearchResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -732,8 +771,12 @@ mixin _$FindResult {
   String get type => throw _privateConstructorUsedError;
   List<FindResultSong> get songs => throw _privateConstructorUsedError;
 
+  /// Serializes this FindResult to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FindResult
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FindResultCopyWith<FindResult> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -763,6 +806,8 @@ class _$FindResultCopyWithImpl<$Res, $Val extends FindResult>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FindResult
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -827,6 +872,8 @@ class __$$FindResultImplCopyWithImpl<$Res>
       _$FindResultImpl _value, $Res Function(_$FindResultImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FindResult
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -919,12 +966,14 @@ class _$FindResultImpl extends _FindResult {
             const DeepCollectionEquality().equals(other._songs, _songs));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, name, artist, album, imageUrl,
       type, const DeepCollectionEquality().hash(_songs));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FindResult
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FindResultImplCopyWith<_$FindResultImpl> get copyWith =>
@@ -963,8 +1012,11 @@ abstract class _FindResult extends FindResult {
   String get type;
   @override
   List<FindResultSong> get songs;
+
+  /// Create a copy of FindResult
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FindResultImplCopyWith<_$FindResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -979,8 +1031,12 @@ mixin _$FindResultSong {
   String get id => throw _privateConstructorUsedError;
   int get trackNumber => throw _privateConstructorUsedError;
 
+  /// Serializes this FindResultSong to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FindResultSong
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FindResultSongCopyWith<FindResultSong> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1004,6 +1060,8 @@ class _$FindResultSongCopyWithImpl<$Res, $Val extends FindResultSong>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FindResultSong
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1047,6 +1105,8 @@ class __$$FindResultSongImplCopyWithImpl<$Res>
       _$FindResultSongImpl _value, $Res Function(_$FindResultSongImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FindResultSong
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1103,11 +1163,13 @@ class _$FindResultSongImpl implements _FindResultSong {
                 other.trackNumber == trackNumber));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, title, id, trackNumber);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FindResultSong
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FindResultSongImplCopyWith<_$FindResultSongImpl> get copyWith =>
@@ -1137,8 +1199,11 @@ abstract class _FindResultSong implements FindResultSong {
   String get id;
   @override
   int get trackNumber;
+
+  /// Create a copy of FindResultSong
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FindResultSongImplCopyWith<_$FindResultSongImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1152,8 +1217,12 @@ mixin _$AddResult {
   bool get success => throw _privateConstructorUsedError;
   AddResultCount get count => throw _privateConstructorUsedError;
 
+  /// Serializes this AddResult to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AddResult
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AddResultCopyWith<AddResult> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1178,6 +1247,8 @@ class _$AddResultCopyWithImpl<$Res, $Val extends AddResult>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AddResult
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1196,6 +1267,8 @@ class _$AddResultCopyWithImpl<$Res, $Val extends AddResult>
     ) as $Val);
   }
 
+  /// Create a copy of AddResult
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $AddResultCountCopyWith<$Res> get count {
@@ -1227,6 +1300,8 @@ class __$$AddResultImplCopyWithImpl<$Res>
       _$AddResultImpl _value, $Res Function(_$AddResultImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AddResult
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1274,11 +1349,13 @@ class _$AddResultImpl extends _AddResult {
             (identical(other.count, count) || other.count == count));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, success, count);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddResult
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddResultImplCopyWith<_$AddResultImpl> get copyWith =>
@@ -1305,8 +1382,11 @@ abstract class _AddResult extends AddResult {
   bool get success;
   @override
   AddResultCount get count;
+
+  /// Create a copy of AddResult
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddResultImplCopyWith<_$AddResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1321,8 +1401,12 @@ mixin _$AddResultCount {
   int get albums => throw _privateConstructorUsedError;
   int get songs => throw _privateConstructorUsedError;
 
+  /// Serializes this AddResultCount to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AddResultCount
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AddResultCountCopyWith<AddResultCount> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1346,6 +1430,8 @@ class _$AddResultCountCopyWithImpl<$Res, $Val extends AddResultCount>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AddResultCount
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1389,6 +1475,8 @@ class __$$AddResultCountImplCopyWithImpl<$Res>
       _$AddResultCountImpl _value, $Res Function(_$AddResultCountImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AddResultCount
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1444,11 +1532,13 @@ class _$AddResultCountImpl implements _AddResultCount {
             (identical(other.songs, songs) || other.songs == songs));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, artists, albums, songs);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddResultCount
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddResultCountImplCopyWith<_$AddResultCountImpl> get copyWith =>
@@ -1478,8 +1568,11 @@ abstract class _AddResultCount implements AddResultCount {
   int get albums;
   @override
   int get songs;
+
+  /// Create a copy of AddResultCount
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddResultCountImplCopyWith<_$AddResultCountImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

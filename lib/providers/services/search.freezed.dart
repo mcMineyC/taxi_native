@@ -25,7 +25,9 @@ mixin _$SearchInfo {
   List<Song> get songs => throw _privateConstructorUsedError;
   List<String> get order => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SearchInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SearchInfoCopyWith<SearchInfo> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -57,6 +59,8 @@ class _$SearchInfoCopyWithImpl<$Res, $Val extends SearchInfo>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SearchInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -133,6 +137,8 @@ class __$$SearchInfoImplCopyWithImpl<$Res>
       _$SearchInfoImpl _value, $Res Function(_$SearchInfoImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SearchInfo
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -273,7 +279,9 @@ class _$SearchInfoImpl implements _SearchInfo {
       const DeepCollectionEquality().hash(_songs),
       const DeepCollectionEquality().hash(_order));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SearchInfo
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SearchInfoImplCopyWith<_$SearchInfoImpl> get copyWith =>
@@ -307,8 +315,11 @@ abstract class _SearchInfo implements SearchInfo {
   List<Song> get songs;
   @override
   List<String> get order;
+
+  /// Create a copy of SearchInfo
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SearchInfoImplCopyWith<_$SearchInfoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

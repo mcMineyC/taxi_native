@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_media_kit/just_audio_media_kit.dart';
+import "package:youtube_explode_dart/youtube_explode_dart.dart";
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../../platform_utils.dart';
@@ -31,21 +32,24 @@ class PlayerInfo with _$PlayerInfo {
     required String displayName,
     required String artistDisplayName,
     required String albumDisplayName,
-    required int    duration,
-    required int    position,
+    required int duration,
+    required int position,
     required bool isPlaying,
     required List<QueueItem> queue,
     required int currentIndex,
     required bool shuffle,
     required bool loop,
+    required bool thinking,
   }) = _PlayerInfo;
 
-  factory PlayerInfo.fromJson(Map<String, dynamic> json) => _$PlayerInfoFromJson(json);
+  factory PlayerInfo.fromJson(Map<String, dynamic> json) =>
+      _$PlayerInfoFromJson(json);
 }
 
 @riverpod
 class Player extends _$Player {
   AudioPlayer player = AudioPlayer();
+  YoutubeExplode yt = YoutubeExplode();
   PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
   late final SharedPreferences _sp;
   bool _isInit = false;
@@ -74,46 +78,67 @@ class Player extends _$Player {
       currentIndex: -1,
       loop: true,
       shuffle: false,
+      thinking: false,
     );
   }
 
   Future<void> init() async {
-    if(_isInit) return;
+    if (_isInit) return;
     _isInit = true;
     _sp = await SharedPreferences.getInstance();
     print("Playerinfo: init");
-    if(!PlatformUtils.isWeb && PlatformUtils.isLinux) JustAudioMediaKit.ensureInitialized();
+    if (!PlatformUtils.isWeb && PlatformUtils.isLinux)
+      JustAudioMediaKit.ensureInitialized();
     player.positionStream.listen((Duration d) {
       state = state.copyWith(position: d.inMilliseconds);
-      if(d.inMilliseconds > 0 && state.duration > 0 && !PlatformUtils.isWeb && (PlatformUtils.isIOS || PlatformUtils.isMacOS) && (d.inMilliseconds > state.duration) && canNext) next();
-      if(d.inMilliseconds > 0 && state.duration > 0 && !PlatformUtils.isWeb && (PlatformUtils.isIOS || PlatformUtils.isMacOS) && (d.inMilliseconds > state.duration) && canNext) print("Hacky darwin workaround");
+      if (d.inMilliseconds > 0 &&
+          state.duration > 0 &&
+          !PlatformUtils.isWeb &&
+          (PlatformUtils.isIOS || PlatformUtils.isMacOS) &&
+          (d.inMilliseconds > state.duration) &&
+          canNext) next();
+      if (d.inMilliseconds > 0 &&
+          state.duration > 0 &&
+          !PlatformUtils.isWeb &&
+          (PlatformUtils.isIOS || PlatformUtils.isMacOS) &&
+          (d.inMilliseconds > state.duration) &&
+          canNext) print("Hacky darwin workaround");
     });
-    player.durationStream.listen((Duration? d) => state = state.copyWith(duration: (d?.inMilliseconds ?? 0) ~/ (!PlatformUtils.isWeb && (PlatformUtils.isIOS || PlatformUtils.isMacOS) ? 2 : 1)));
+    player.durationStream.listen((Duration? d) => state = state.copyWith(
+        duration: (d?.inMilliseconds ?? 0) ~/
+            (!PlatformUtils.isWeb &&
+                    (PlatformUtils.isIOS || PlatformUtils.isMacOS)
+                ? 2
+                : 1)));
     player.playerStateStream.listen((state) {
-      print("New state: $state");
-      if(state.processingState == ProcessingState.completed && canNext && !thinking) {
+      //print("New state: $state");
+      if (state.processingState == ProcessingState.completed &&
+          canNext &&
+          !thinking) {
         print("Skipping");
-        thinking = true;
         paused = false;
         next();
       }
-      if(state.processingState == ProcessingState.ready) this.state = this.state.copyWith(isPlaying: state.playing);
-      if(state.processingState == ProcessingState.ready && !state.playing && needInteraction) {
+      if (state.processingState == ProcessingState.ready)
+        this.state = this.state.copyWith(isPlaying: state.playing);
+      if (state.processingState == ProcessingState.ready &&
+          !state.playing &&
+          needInteraction) {
         needInteraction = false;
         player.seek(Duration(milliseconds: needSeekTo));
         print("Seeked position to ${needSeekTo}");
       }
-    }); 
+    });
     player.playingStream.listen((bool playing) {
       state = state.copyWith(isPlaying: playing);
     });
-    if(_sp.containsKey("playerinfo")) {
+    if (_sp.containsKey("playerinfo")) {
       var i = PlayerInfo.fromJson(jsonDecode(_sp.getString("playerinfo")!));
       print("Loading persisted playerinfo");
       needSeekTo = i.position;
       state = i;
       needInteraction = true;
-      if(!PlatformUtils.isWeb && p.autoResume){
+      if (!PlatformUtils.isWeb && p.autoResume) {
         await playQueueItem(state.queue[state.currentIndex]);
       }
     }
@@ -123,23 +148,25 @@ class Player extends _$Player {
     player.seek(d);
   }
 
-  void seekForward(int milliseconds){
-    player.seek(Duration(milliseconds: state.position) + Duration(milliseconds: milliseconds));
+  void seekForward(int milliseconds) {
+    player.seek(Duration(milliseconds: state.position) +
+        Duration(milliseconds: milliseconds));
   }
 
-  void seekBackward(int milliseconds){
-    Duration computed = Duration(milliseconds: state.position) - Duration(milliseconds: milliseconds);
+  void seekBackward(int milliseconds) {
+    Duration computed = Duration(milliseconds: state.position) -
+        Duration(milliseconds: milliseconds);
     player.seek(computed.isNegative ? Duration.zero : computed);
   }
 
-  void stop(){
+  void stop() {
     player.stop();
     state = state.copyWith(isPlaying: false);
     setQueue([]);
   }
 
   void play() async {
-    if(needInteraction) {
+    if (needInteraction) {
       print("Play called, but need interaction");
       playQueueItem(state.queue[state.currentIndex]);
       await player.play();
@@ -156,9 +183,9 @@ class Player extends _$Player {
   }
 
   void toggle() async {
-    if(state.isPlaying) {
+    if (state.isPlaying) {
       pause();
-    }else{
+    } else {
       play();
     }
     setPlaying(state.isPlaying);
@@ -181,16 +208,16 @@ class Player extends _$Player {
     state = state.copyWith(queue: q);
   }
 
-  void skip(int num){
+  void skip(int num) {
     int newIndex = skipDex(num);
     skipToItem(newIndex);
   }
 
-  int skipDex(int num){
+  int skipDex(int num) {
     int newIndex = state.currentIndex + num;
-    if(newIndex < 0){
+    if (newIndex < 0) {
       return state.queue.length - 1;
-    }else if(newIndex > state.queue.length - 1){
+    } else if (newIndex > state.queue.length - 1) {
       return 0;
     } else {
       return newIndex;
@@ -198,7 +225,7 @@ class Player extends _$Player {
   }
 
   void skipToItem(int i) {
-    if(i >= 0 && i < state.queue.length) {
+    if (i >= 0 && i < state.queue.length) {
       state = state.copyWith(
         currentIndex: i,
         displayName: state.queue[i].displayName,
@@ -212,8 +239,9 @@ class Player extends _$Player {
         position: 0,
       );
       playQueueItem(state.queue[i]);
-    }else{
-      print("Skipping to $i, but queue has max index of ${state.queue.length-1}");
+    } else {
+      print(
+          "Skipping to $i, but queue has max index of ${state.queue.length - 1}");
     }
   }
 
@@ -225,6 +253,7 @@ class Player extends _$Player {
       skipToItem(0);
     });
   }
+
   void setItem(QueueItem i) async {
     state = state.copyWith(
       id: i.id,
@@ -376,9 +405,11 @@ class Player extends _$Player {
   }
 
   Future<void> shuffle() async {
-    List<QueueItem> chew = List<QueueItem>.filled(state.queue.length, QueueItem.empty());
-    for(int i = 0; i < state.queue.length; i++) {
-      chew[i] = state.queue[superShuffle(i, DateTime.now().millisecondsSinceEpoch, state.queue.length)];
+    List<QueueItem> chew =
+        List<QueueItem>.filled(state.queue.length, QueueItem.empty());
+    for (int i = 0; i < state.queue.length; i++) {
+      chew[i] = state.queue[superShuffle(
+          i, DateTime.now().millisecondsSinceEpoch, state.queue.length)];
     }
     _queue = chew;
     state = state.copyWith(shuffle: true);
@@ -391,45 +422,76 @@ class Player extends _$Player {
   }
 
   Future<void> playQueueItem(QueueItem item) async {
+    state = state.copyWith(thinking: true);
     var url = item.audioUrl;
-    if(url == "not_fetched"){
+    if (url == "not_fetched") {
+      if (PlatformUtils.isWeb) return;
+      print("Fetching ${item.displayName}, $url");
       url = await fetchYTVideo(item.youtubeId);
-      if(PlatformUtils.isWeb) url = "$backendUrl/proxy/$url";
+      //if(PlatformUtils.isWeb) url = "$backendUrl/proxy/$url";
+      var nq = state.queue.toList();
+      nq[state.currentIndex] = item.copyWith(audioUrl: url);
+      setQueue(nq);
     }
-    print("Going to play $url");
+    //print("Going to play $url");
     await player.setAudioSource(AudioSource.uri(
       Uri.parse(url),
-      tag: MediaItem(id: DateTime.now().microsecondsSinceEpoch.toString(), title: item.displayName, album: item.albumName, artist: item.artistName, artUri: Uri.parse(item.imageUrl)),
+      tag: MediaItem(
+          id: DateTime.now().microsecondsSinceEpoch.toString(),
+          title: item.displayName,
+          album: item.albumName,
+          artist: item.artistName,
+          artUri: Uri.parse(item.imageUrl)),
     ));
-    await player.play();
-    thinking = false;
-    if(item.type == "song") {
-      if(item.id == "empty") return;
+    player.play();
+    state = state.copyWith(thinking: false);
+    if (item.type == "song") {
+      if (item.id == "empty") return;
       ref.read(addRecentlyPlayedProvider(item.id).future).then((value) {
-        if(value == true) ref.refresh(fetchRecentlyPlayedProvider.future);
+        if (value == true) ref.refresh(fetchRecentlyPlayedProvider.future);
       });
+      if (state.queue.length == 1) {
+        print("Queue is one, returning");
+        return;
+      }
       var nextUrl = await fetchYTVideo(state.queue[skipDex(1)].youtubeId);
-      if(PlatformUtils.isWeb) nextUrl = "$backendUrl/proxy/$nextUrl";
+      if (PlatformUtils.isWeb) nextUrl = "$backendUrl/proxy/$nextUrl";
       var nq = state.queue.toList();
       nq[skipDex(1)] = nq[skipDex(1)].copyWith(audioUrl: nextUrl);
-      nq[state.currentIndex] = state.queue[state.currentIndex].copyWith(audioUrl: "not_fetched");
+      if (state.queue.length > 1) {
+        print("UNPREPPING: ${state.queue[state.currentIndex].displayName}");
+        nq[state.currentIndex] =
+            state.queue[state.currentIndex].copyWith(audioUrl: "not_fetched");
+      }
       print("PREPPED: ${nq[skipDex(1)].displayName}");
       setQueue(nq);
     }
   }
+
   Future<String> fetchYTVideo(String id) async {
+    if (state.queue.length == 1 && state.queue[0].audioUrl != "not_fetched")
+      return state.queue[0].audioUrl;
     print("fetching video $id");
-    var url = await http.get(Uri.parse("https://eatthecow.mooo.com:3030/video/url/ios/$id"));
-    return url.body;
+    var media = await yt.videos.streamsClient.getManifest(id);
+    var streamInfo = media.audioOnly
+        .where((e) =>
+            e.audioCodec != 'opus' && e.container != StreamContainer.webM)
+        .withHighestBitrate();
+    var url = streamInfo.url.toString();
+    return url;
   }
 
   get canNext {
     print("Checking if can next");
-    if(state.currentIndex + 1 >= state.queue.length && state.loop && p.shuffleOnLoop){
+    if (state.currentIndex + 1 >= state.queue.length &&
+        state.loop &&
+        p.shuffleOnLoop) {
       print("Shuffling");
       thinking = true;
       shuffle();
-    } 
-    return (state.currentIndex + 1 >= state.queue.length) ? false || state.loop : true;
+    }
+    return (state.currentIndex + 1 >= state.queue.length)
+        ? false || state.loop
+        : true;
   }
 }

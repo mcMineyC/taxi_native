@@ -23,6 +23,7 @@ _$PlayerInfoImpl _$$PlayerInfoImplFromJson(Map<String, dynamic> json) =>
       currentIndex: (json['currentIndex'] as num).toInt(),
       shuffle: json['shuffle'] as bool,
       loop: json['loop'] as bool,
+      thinking: json['thinking'] as bool,
     );
 
 Map<String, dynamic> _$$PlayerInfoImplToJson(_$PlayerInfoImpl instance) =>
@@ -40,13 +41,14 @@ Map<String, dynamic> _$$PlayerInfoImplToJson(_$PlayerInfoImpl instance) =>
       'currentIndex': instance.currentIndex,
       'shuffle': instance.shuffle,
       'loop': instance.loop,
+      'thinking': instance.thinking,
     };
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$playerHash() => r'a6f5c9a7d5e9961f9f7d040211cfeff1301d2120';
+String _$playerHash() => r'7cc080a36c6d481d5bf5348fbbdfbd9fc7db544b';
 
 /// See also [Player].
 @ProviderFor(Player)

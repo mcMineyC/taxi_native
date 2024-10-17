@@ -35,14 +35,19 @@ jobs:
       - run: flutter build apk
       - run: flutter build linux
       - run: sh -c "cd build/linux/x64/release/bundle && zip -r taxi-native-linux_x64.zip . && cp taxi-native-linux_x64.zip ../../../../../"
+      - run: cp build/app/outputs/apk/release/app-release.apk taxi-native.apk
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/release/app-release.apk,taxi-native-linux_x64.zip"
+          artifacts: "taxi-native.apk,taxi-native-linux_x64.zip"
           tag: ${{ steps.vars.outputs.sha_short }}
           makeLatest: true
           name: ${{ steps.date.outputs.date }}
           body: "## This was autoreleased via github actions"
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3
         with:
           name: release-apk
-          path: build/app/outputs/apk/release/app-release.apk
+          path: ./taxi-native.apk
+      - uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3
+        with:
+          name: release-linux
+          path: ./taxi-native-linux_x64.zip

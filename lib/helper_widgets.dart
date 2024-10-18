@@ -11,8 +11,9 @@ import 'providers/data/playlist_provider.dart';
 import 'providers/data/fetched_data_provider.dart';
 import 'types/playlist.dart';
 import 'types/song.dart';
+import 'platform_utils.dart';
 
-class MediaCard extends ConsumerWidget{
+class MediaCard extends ConsumerWidget {
   static const double height = 198;
   static const double width = 168;
 
@@ -21,88 +22,98 @@ class MediaCard extends ConsumerWidget{
   final String thingType;
   final String image;
   final String addedBy;
-  const MediaCard({
-    super.key, 
-    required this.text, 
-    required this.thingId, 
-    required this.thingType, 
-    required this.image,
-    required this.addedBy
-  });
-  
-  List<ContextMenuButtonConfig> buildMenuButtons(BuildContext context, WidgetRef ref){
+  const MediaCard(
+      {super.key,
+      required this.text,
+      required this.thingId,
+      required this.thingType,
+      required this.image,
+      required this.addedBy});
+
+  List<ContextMenuButtonConfig> buildMenuButtons(
+      BuildContext context, WidgetRef ref) {
     List<ContextMenuButtonConfig> buttons = [];
     switch (thingType) {
       case "song":
-        buttons.add(ContextMenuButtonConfig(
-          "Play",
-          icon: const Icon(Icons.play_arrow_rounded),
-          onPressed: () async {
-            ref.read(playerProvider.notifier).setSong(thingId);
+        buttons.add(ContextMenuButtonConfig("Play",
+            icon: const Icon(Icons.play_arrow_rounded), onPressed: () async {
+          if (PlatformUtils.isWeb) {
+            showWebError(context);
+            return;
           }
-        ));
-        buttons.add(ContextMenuButtonConfig(
-          "Add to queue",
-          icon: const Icon(Icons.queue),
-          onPressed: () {
-            ref.read(playerProvider.notifier).addIdToQueue(thingId);
+          ref.read(playerProvider.notifier).setSong(thingId);
+        }));
+        buttons.add(ContextMenuButtonConfig("Add to queue",
+            icon: const Icon(Icons.queue), onPressed: () {
+          if (PlatformUtils.isWeb) {
+            showWebError(context);
+            return;
           }
-        ));
+          ref.read(playerProvider.notifier).addIdToQueue(thingId);
+        }));
         buttons.add(ContextMenuButtonConfig(
           "Add to playlist",
           icon: const Icon(Icons.playlist_add),
-          onPressed: () async => await playlistLogic(ref, context, thingId, thingType),
+          onPressed: () async =>
+              await playlistLogic(ref, context, thingId, thingType),
         ));
         break;
       case "album":
-        buttons.add(ContextMenuButtonConfig(
-          "Play",
-          icon: const Icon(Icons.play_arrow_rounded),
-          onPressed: () async {
-            ref.read(playerProvider.notifier).setAlbum(thingId);
+        buttons.add(ContextMenuButtonConfig("Play",
+            icon: const Icon(Icons.play_arrow_rounded), onPressed: () async {
+          if (PlatformUtils.isWeb) {
+            showWebError(context);
+            return;
           }
-        ));
-        buttons.add(ContextMenuButtonConfig(
-          "Add to queue",
-          icon: const Icon(Icons.queue),
-          onPressed: () {
-            ref.read(playerProvider.notifier).addAlbumToQueue(thingId);
+          ref.read(playerProvider.notifier).setAlbum(thingId);
+        }));
+        buttons.add(ContextMenuButtonConfig("Add to queue",
+            icon: const Icon(Icons.queue), onPressed: () {
+          if (PlatformUtils.isWeb) {
+            showWebError(context);
+            return;
           }
-        ));
+          ref.read(playerProvider.notifier).addAlbumToQueue(thingId);
+        }));
         buttons.add(ContextMenuButtonConfig(
           "Add to playlist",
           icon: const Icon(Icons.playlist_add),
-          onPressed: () async => await playlistLogic(ref, context, thingId, thingType),
+          onPressed: () async =>
+              await playlistLogic(ref, context, thingId, thingType),
         ));
         break;
       case "artist":
-        buttons.add(ContextMenuButtonConfig(
-          "Play",
-          icon: const Icon(Icons.play_arrow_rounded),
-          onPressed: () async {
-            ref.read(playerProvider.notifier).setArtist(thingId);
+        buttons.add(ContextMenuButtonConfig("Play",
+            icon: const Icon(Icons.play_arrow_rounded), onPressed: () async {
+          if (PlatformUtils.isWeb) {
+            showWebError(context);
+            return;
           }
-        ));
-        buttons.add(ContextMenuButtonConfig(
-          "Add to queue",
-          icon: const Icon(Icons.queue),
-          onPressed: () {
-            ref.read(playerProvider.notifier).addArtistToQueue(thingId);
+          ref.read(playerProvider.notifier).setArtist(thingId);
+        }));
+        buttons.add(ContextMenuButtonConfig("Add to queue",
+            icon: const Icon(Icons.queue), onPressed: () {
+          if (PlatformUtils.isWeb) {
+            showWebError(context);
+            return;
           }
-        ));
+          ref.read(playerProvider.notifier).addArtistToQueue(thingId);
+        }));
         buttons.add(ContextMenuButtonConfig(
           "Add to playlist",
           icon: const Icon(Icons.playlist_add),
-          onPressed: () async => await playlistLogic(ref, context, thingId, thingType),
+          onPressed: () async =>
+              await playlistLogic(ref, context, thingId, thingType),
         ));
         break;
       default:
-        buttons.add(ContextMenuButtonConfig("Placeholder", icon: const Icon(Icons.abc), onPressed: (){}));
+        buttons.add(ContextMenuButtonConfig("Placeholder",
+            icon: const Icon(Icons.abc), onPressed: () {}));
         break;
     }
     buttons.add(ContextMenuButtonConfig(
       "Added by: $addedBy",
-      onPressed: (){},
+      onPressed: () {},
     ));
     return buttons;
   }
@@ -118,12 +129,11 @@ class MediaCard extends ConsumerWidget{
           borderRadius: BorderRadius.circular(12),
           child: BackdropFilter(
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              child: Text(
-                text,
-                style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontSize: 14)
-              )
-            ),
+                margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                child: Text(text,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontSize: 14))),
             filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
           ),
         ),
@@ -133,97 +143,111 @@ class MediaCard extends ConsumerWidget{
           buttonConfigs: buildMenuButtons(context, ref),
         ),
         child: Container(
-          width: width,
-          height: height,
+            width: width,
+            height: height,
             child: Card(
-              clipBehavior: Clip.hardEdge,
-              child: InkWell(
-                onTap: () {
-                  debugPrint("Pressed card with id: $thingId and type: $thingType");
-                  switch (thingType) {
-                    case "song":
-                      print("Setting song");
-                      ref.read(playerProvider.notifier).setSong(thingId);
-                      break;
-                    case "album":
-                      print("Setting album");
-                      // ref.read(playerProvider.notifier).setAlbum(thingId);
-                      Beamer.of(context).beamToNamed("/album/$thingId");
-                      break;
-                    case "artist":
-                      print("Setting artist");
-                      // ref.read(playerProvider.notifier).setArtist(thingId);
-                      Beamer.of(context).beamToNamed("/artist/$thingId");
-                      // Beamer.of(context).update(: BeamState.fromUriString('/artist/$thingId'));
-                      break;
-                    case "placeholder":
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Hmm, nothing here. The real question is why do you just go around randomly clicking loading things? ><")));
-                    default:
-                      debugPrint("No implementation for $thingType");
-                  }
-                },
-                // onSecondaryTap: () {
-                //   print("Secondary tapped");
-                // },
-                // onLongPress: () {
-                //   print("Long press");
-                // },
-              child: Container(
-                child: Column(
-                  children: [
+                clipBehavior: Clip.hardEdge,
+                child: InkWell(
+                    onTap: () {
+                      debugPrint(
+                          "Pressed card with id: $thingId and type: $thingType");
+                      switch (thingType) {
+                        case "song":
+                          if (PlatformUtils.isWeb) {
+                            showWebError(context);
+                            return;
+                          }
+                          print("Setting song");
+                          ref.read(playerProvider.notifier).setSong(thingId);
+                          break;
+                        case "album":
+                          if (PlatformUtils.isWeb) {
+                            showWebError(context);
+                            return;
+                          }
+                          print("Setting album");
+                          // ref.read(playerProvider.notifier).setAlbum(thingId);
+                          Beamer.of(context).beamToNamed("/album/$thingId");
+                          break;
+                        case "artist":
+                          if (PlatformUtils.isWeb) {
+                            showWebError(context);
+                            return;
+                          }
+                          print("Setting artist");
+                          // ref.read(playerProvider.notifier).setArtist(thingId);
+                          Beamer.of(context).beamToNamed("/artist/$thingId");
+                          // Beamer.of(context).update(: BeamState.fromUriString('/artist/$thingId'));
+                          break;
+                        case "placeholder":
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                  "Hmm, nothing here. The real question is why do you just go around randomly clicking loading things? ><")));
+                        default:
+                          debugPrint("No implementation for $thingType");
+                      }
+                    },
+                    // onSecondaryTap: () {
+                    //   print("Secondary tapped");
+                    // },
+                    // onLongPress: () {
+                    //   print("Long press");
+                    // },
+                    child: Container(
+                        child: Column(children: [
                       FittedBox(
                         child: Container(
-                        margin: EdgeInsets.only(top: 12, left: 12, right: 12),
-                        height: 172,
-                        width: 172,
-                        // decoration: BoxDecoration(
-                        //   color: Colors.teal,
-                        //   borderRadius: BorderRadius.circular(12),
-                        // ),
-                        child: CachedNetworkImage(
-                          imageUrl: image,
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.contain,
+                          margin: EdgeInsets.only(top: 12, left: 12, right: 12),
+                          height: 172,
+                          width: 172,
+                          // decoration: BoxDecoration(
+                          //   color: Colors.teal,
+                          //   borderRadius: BorderRadius.circular(12),
+                          // ),
+                          child: CachedNetworkImage(
+                            imageUrl: image,
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             ),
+                            placeholder: (context, url) => Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(12))),
+                            errorWidget: (context, url, error) => Icon(
+                                Icons.error_outline_rounded,
+                                color: Colors.pink[700]),
                           ),
-                          placeholder: (context, url) => Container(decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12))),
-                          errorWidget: (context, url, error) => Icon(Icons.error_outline_rounded,color:Colors.pink[700]),
                         ),
                       ),
-                    ),
-                    Container(
-                      height: 26,
-                      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      child: Text(
-                        text,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      )
-                    ),
-                  ]
-                )
-              
-            )
-          )
-        )
-        // )
-        ),
+                      Container(
+                          height: 26,
+                          margin:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          child: Text(
+                            text,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          )),
+                    ]))))
+            // )
+            ),
       ),
     );
   }
 }
 
-class SpacerWidget extends StatelessWidget{
+class SpacerWidget extends StatelessWidget {
   final double height;
   final double width;
   const SpacerWidget({this.height = 0, this.width = 0});
@@ -236,18 +260,17 @@ class SpacerWidget extends StatelessWidget{
   }
 }
 
-Widget EmptyCardRow(){
-  return Row(
-    children: [
-      for (int i = 0; i < 10; i++) MediaCard(
+Widget EmptyCardRow() {
+  return Row(children: [
+    for (int i = 0; i < 10; i++)
+      MediaCard(
         text: "meh who cares",
         thingId: "idklol",
         thingType: "placeholder",
         image: "https://placehold.co/512x512.png",
         addedBy: "jedi",
       ),
-    ]
-  );
+  ]);
 }
 
 class CheckBox extends StatefulWidget {
@@ -257,8 +280,9 @@ class CheckBox extends StatefulWidget {
   bool get value => _checkbox;
   set value(bool value) => _checkbox = value;
 
-  CheckBox({Key? key, required this.callback, required this.initialValue}) : super(key: key);
-  
+  CheckBox({Key? key, required this.callback, required this.initialValue})
+      : super(key: key);
+
   @override
   _CheckBoxState createState() => _CheckBoxState(initalValue: initialValue);
 }
@@ -273,16 +297,15 @@ class _CheckBoxState extends State<CheckBox> {
   @override
   Widget build(BuildContext context) {
     return Checkbox(
-      value: (clicked ? _checkbox : initalValue),
-      onChanged: (value) {
-        setState(() {
-          clicked = true;
-          _checkbox = value!;
-          widget.callback(value);
-          widget.value = value;
+        value: (clicked ? _checkbox : initalValue),
+        onChanged: (value) {
+          setState(() {
+            clicked = true;
+            _checkbox = value!;
+            widget.callback(value);
+            widget.value = value;
+          });
         });
-      }
-    );
   }
 }
 
@@ -291,13 +314,19 @@ class FancyImage extends StatelessWidget {
   final int width;
   final int height;
   final double radius;
-  const FancyImage({Key? key, required this.url, required this.width, required this.height, this.radius = 12}) : super(key: key);
+  const FancyImage(
+      {Key? key,
+      required this.url,
+      required this.width,
+      required this.height,
+      this.radius = 12})
+      : super(key: key);
 
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(24, 20, 24, 0),
       height: height.toDouble(),
-      width:  width.toDouble(),
+      width: width.toDouble(),
       child: CachedNetworkImage(
         imageUrl: url,
         imageBuilder: (context, imageProvider) => Container(
@@ -309,13 +338,16 @@ class FancyImage extends StatelessWidget {
             ),
           ),
         ),
-        placeholder: (context, url) => Container(decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12))),
-        errorWidget: (context, url, error) => Icon(Icons.error_outline_rounded,color:Colors.pink[700]),
+        placeholder: (context, url) => Container(
+            decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(12))),
+        errorWidget: (context, url, error) =>
+            Icon(Icons.error_outline_rounded, color: Colors.pink[700]),
       ),
     );
   }
 }
-
 
 class AddPlaylistDialog extends StatefulWidget {
   @override
@@ -326,56 +358,69 @@ class AddPlaylistDialog extends StatefulWidget {
 }
 
 class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
-  Playlist selected = Playlist(id: "create", displayName: "Common", songs: [], public: true, added: 0, owner: "testguy");
+  Playlist selected = Playlist(
+      id: "create",
+      displayName: "Common",
+      songs: [],
+      public: true,
+      added: 0,
+      owner: "testguy");
   @override
   void initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text("Add to playlist"),
       content: SingleChildScrollView(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              child: Text("Choose a playlist"),
-            ),
-            FilledButton.tonal(
-              child: Text("Create new playlist"),
-              onPressed: () {
-                setState(() {
-                  selected = Playlist(id: "create", displayName: "Common", songs: [], public: true, added: 0, owner: "testguy");
-                  Navigator.of(context).pop({"selected": true, "value": selected});
-                });
-              },
-            ),
-            ...(List<Widget>.generate(
-              widget.playlists.length,
-              (index) => GestureDetector(
-                onTap: () {
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                child: Text("Choose a playlist"),
+              ),
+              FilledButton.tonal(
+                child: Text("Create new playlist"),
+                onPressed: () {
                   setState(() {
-                    selected = widget.playlists[index];
-                    Navigator.of(context).pop({"selected": true, "value": selected});
+                    selected = Playlist(
+                        id: "create",
+                        displayName: "Common",
+                        songs: [],
+                        public: true,
+                        added: 0,
+                        owner: "testguy");
+                    Navigator.of(context)
+                        .pop({"selected": true, "value": selected});
                   });
                 },
-                child: ListTile(
-                  title: Text(widget.playlists[index].displayName),
-                ),
               ),
-            )),
-          ]
-        ),
+              ...(List<Widget>.generate(
+                widget.playlists.length,
+                (index) => GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selected = widget.playlists[index];
+                      Navigator.of(context)
+                          .pop({"selected": true, "value": selected});
+                    });
+                  },
+                  child: ListTile(
+                    title: Text(widget.playlists[index].displayName),
+                  ),
+                ),
+              )),
+            ]),
       ),
       actions: <Widget>[
         TextButton(
-          child: const Text('Cancel'),
-          onPressed: () {
-            Navigator.of(context).pop({"selected": false, "value": selected});
-          }
-        ),
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop({"selected": false, "value": selected});
+            }),
         // TextButton(
         //   child: const Text('Add'),
         //   onPressed: () {
@@ -386,6 +431,7 @@ class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
     );
   }
 }
+
 class CreatePlaylistDialog extends StatefulWidget {
   @override
   _CreatePlaylistDialogState createState() => _CreatePlaylistDialogState();
@@ -395,7 +441,13 @@ class CreatePlaylistDialog extends StatefulWidget {
 }
 
 class _CreatePlaylistDialogState extends State<CreatePlaylistDialog> {
-  FilledPlaylist current = FilledPlaylist(id: "create", displayName: "Common", songs: [], public: true, added: 0, owner: "testguy");
+  FilledPlaylist current = FilledPlaylist(
+      id: "create",
+      displayName: "Common",
+      songs: [],
+      public: true,
+      added: 0,
+      owner: "testguy");
   late ThemeData theme;
   List<Song> songs = [];
   TextEditingController nameController = TextEditingController();
@@ -406,6 +458,7 @@ class _CreatePlaylistDialogState extends State<CreatePlaylistDialog> {
     current = widget.starter;
     songs = [...current.songs];
   }
+
   @override
   Widget build(BuildContext context) {
     theme = Theme.of(context);
@@ -421,7 +474,8 @@ class _CreatePlaylistDialogState extends State<CreatePlaylistDialog> {
                   child: Container(
                     margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
                     child: GestureDetector(
-                      onTap: () => Navigator.of(context).pop({"created": false, "value": current}),
+                      onTap: () => Navigator.of(context)
+                          .pop({"created": false, "value": current}),
                       child: SizedBox(
                         width: 24,
                         height: 24,
@@ -430,14 +484,15 @@ class _CreatePlaylistDialogState extends State<CreatePlaylistDialog> {
                     ),
                   ),
                 ),
-                Text("Create a new playlist", style: theme.textTheme.titleMedium),
+                Text("Create a new playlist",
+                    style: theme.textTheme.titleMedium),
                 Expanded(child: Container()),
                 Container(
                   margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
                   child: TextButton(
-                    child: const Text('Create'),
-                    onPressed: () => Navigator.of(context).pop({"created": true, "value": current})
-                  ),
+                      child: const Text('Create'),
+                      onPressed: () => Navigator.of(context)
+                          .pop({"created": true, "value": current})),
                 ),
               ],
             ),
@@ -447,70 +502,75 @@ class _CreatePlaylistDialogState extends State<CreatePlaylistDialog> {
           margin: EdgeInsets.fromLTRB(24, 20, 24, 20),
           child: SingleChildScrollView(
             child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TextField(
-                  onChanged: (value) => setState(() => current = current.copyWith(displayName: value)),
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Playlist name',
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextField(
+                    onChanged: (value) => setState(
+                        () => current = current.copyWith(displayName: value)),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Playlist name',
+                    ),
                   ),
-                ),
-                SpacerWidget(height: 10, width: 0),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: imageController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Image URL',
+                  SpacerWidget(height: 10, width: 0),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: imageController,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Image URL',
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                      child: FilledButton(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
+                      Container(
+                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        child: FilledButton(
+                          child: Row(mainAxisSize: MainAxisSize.min, children: [
                             Icon(Icons.auto_fix_high),
                             Container(width: 6),
                             Text("Autogenerate"),
-                          ]
+                          ]),
+                          onPressed: () {},
                         ),
-                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                  SpacerWidget(height: 8, width: 0),
+                  Row(
+                    children: [
+                      Text("Public"),
+                      Expanded(child: Container()),
+                      Switch(
+                          value: current.public,
+                          onChanged: (value) {
+                            setState(() {
+                              current = current.copyWith(public: value);
+                            });
+                          }),
+                    ],
+                  ),
+                  Text("${current.songs.length} songs",
+                      style: theme.textTheme.bodyLarge),
+                  Container(height: 16),
+                  Divider(),
+                  ...(current.songs.map(
+                    (s) => ListTile(
+                      title: Text(s.displayName),
+                      subtitle: Text(
+                          "${s.artistDisplayName} - ${s.albumDisplayName}"),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        onPressed: () => setState(() {
+                          songs.remove(s);
+                          current = current.copyWith(songs: songs);
+                        }),
                       ),
                     ),
-                  ],
-                ),
-                SpacerWidget(height: 8, width: 0),
-                Row(
-                  children: [
-                    Text("Public"),
-                    Expanded(child: Container()),
-                    Switch(value: current.public, onChanged: (value) {setState(() {current = current.copyWith(public: value);});}),
-                  ],
-                ),
-                Text("${current.songs.length} songs", style: theme.textTheme.bodyLarge),
-                Container(height: 16),
-                Divider(),
-                ...(current.songs.map((s) => 
-                  ListTile(
-                    title: Text(s.displayName),
-                    subtitle: Text("${s.artistDisplayName} - ${s.albumDisplayName}"),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete, color: Colors.red),
-                      onPressed: () => setState(() {
-                        songs.remove(s);
-                        current = current.copyWith(songs: songs);
-                      }),
-                    ),
-                  ),
-                )),
-              ]
-            ),
+                  )),
+                ]),
           ),
         ),
       ),
@@ -518,40 +578,56 @@ class _CreatePlaylistDialogState extends State<CreatePlaylistDialog> {
   }
 }
 
-Future playlistLogic(WidgetRef ref, BuildContext context, String thingId, String thingType) async {
-  var dialog = AddPlaylistDialog(playlists: await ref.read(fetchPlaylistsProvider.future));
-  var result = await showDialog<Map<String, dynamic>>(context: context, builder: (context) => dialog);
+Future playlistLogic(WidgetRef ref, BuildContext context, String thingId,
+    String thingType) async {
+  var dialog = AddPlaylistDialog(
+      playlists: await ref.read(fetchPlaylistsProvider.future));
+  var result = await showDialog<Map<String, dynamic>>(
+      context: context, builder: (context) => dialog);
   // print("Dialog result: $result");
-  if(result != null && result["selected"] && (result["value"] as Playlist).id != "create") {
+  if (result != null &&
+      result["selected"] &&
+      (result["value"] as Playlist).id != "create") {
     // print("Adding song to playlist");
     // print("SID $thingId, PID ${result["value"].id}");
     List<String> oldSongs = [];
-    switch(thingType){
+    switch (thingType) {
       case "song":
         oldSongs = [thingId];
         break;
       case "album":
-        oldSongs = (await ref.read(findSongsByAlbumProvider(thingId).future)).map((s) => s.id).toList();
+        oldSongs = (await ref.read(findSongsByAlbumProvider(thingId).future))
+            .map((s) => s.id)
+            .toList();
         print("Adding ${oldSongs.length} songs from album");
         break;
       case "artist":
-        oldSongs = (await ref.read(findSongsByArtistProvider(thingId).future)).map((s) => s.id).toList();
+        oldSongs = (await ref.read(findSongsByArtistProvider(thingId).future))
+            .map((s) => s.id)
+            .toList();
         print("Adding ${oldSongs.length} songs from artist");
         break;
     }
-    await ref.read(addIdsToPlaylistProvider(result["value"].id, oldSongs).future);
-  }else if(result != null && result["selected"] && (result["value"] as Playlist).id == "create"){
+    await ref
+        .read(addIdsToPlaylistProvider(result["value"].id, oldSongs).future);
+  } else if (result != null &&
+      result["selected"] &&
+      (result["value"] as Playlist).id == "create") {
     List<String> oldSongs = [];
-    switch(thingType){
+    switch (thingType) {
       case "song":
         oldSongs = [thingId];
         break;
       case "album":
-        oldSongs = (await ref.read(findSongsByAlbumProvider(thingId).future)).map((s) => s.id).toList();
+        oldSongs = (await ref.read(findSongsByAlbumProvider(thingId).future))
+            .map((s) => s.id)
+            .toList();
         print("Adding ${oldSongs.length} songs from album");
         break;
       case "artist":
-        oldSongs = (await ref.read(findSongsByArtistProvider(thingId).future)).map((s) => s.id).toList();
+        oldSongs = (await ref.read(findSongsByArtistProvider(thingId).future))
+            .map((s) => s.id)
+            .toList();
         print("Adding ${oldSongs.length} songs from artist");
         break;
     }
@@ -560,33 +636,27 @@ Future playlistLogic(WidgetRef ref, BuildContext context, String thingId, String
     newSongs = await ref.read(findBatchSongsProvider(oldSongs).future);
     print("Found ${newSongs.length} songs to add to playlist");
     var fp = FilledPlaylist(
-      id: p.id,
-      displayName: p.displayName,
-      public: p.public,
-      songs: newSongs,
-      added: p.added,
-      owner: p.owner
-    );
+        id: p.id,
+        displayName: p.displayName,
+        public: p.public,
+        songs: newSongs,
+        added: p.added,
+        owner: p.owner);
     var createDialog = CreatePlaylistDialog(starter: (fp as FilledPlaylist));
     var result2 = await showDialog<Map<String, dynamic>>(
-      context: context,
-      builder: (_) => createDialog
-    );
-    if(result2 != null && result2["created"]){
+        context: context, builder: (_) => createDialog);
+    if (result2 != null && result2["created"]) {
       Playlist p = (result2["value"] as FilledPlaylist).toPlaylist();
       // print("Creating playlist with name ${p.displayName}");
       await ref.read(addPlaylistProvider(p).future);
       print("Playlist created");
-    }else if(result2 != null && !result2["created"]){
+    } else if (result2 != null && !result2["created"]) {
       print("User cancelled");
     }
-  }else if(result != null && !result["selected"]){
+  } else if (result != null && !result["selected"]) {
     print("User cancelled");
   }
 }
-
-
-
 
 //const List<String> _users = <String>[
 //  'Jedi',
@@ -601,7 +671,12 @@ Future playlistLogic(WidgetRef ref, BuildContext context, String thingId, String
 //];
 
 class VisibleToField extends ConsumerStatefulWidget {
-  VisibleToField({super.key, required this.onChanged, required this.value, required this.onSaved, required this.id});
+  VisibleToField(
+      {super.key,
+      required this.onChanged,
+      required this.value,
+      required this.onSaved,
+      required this.id});
   Function(List<String> data) onChanged;
   Future<void> Function(List<String> data) onSaved;
   String id;
@@ -611,7 +686,8 @@ class VisibleToField extends ConsumerStatefulWidget {
   @override
   _VisibleToFieldState createState() {
     state = _VisibleToFieldState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => state!.initalValue = value);
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => state!.initalValue = value);
     return state!;
   }
 }
@@ -621,63 +697,77 @@ class _VisibleToFieldState extends ConsumerState<VisibleToField> {
   List<String> _userList = [];
   List<String> get value => _value;
   String id = "";
-  set initalValue(List<String> v) => setState(() {_value = v; id = widget.id;});
+  set initalValue(List<String> v) => setState(() {
+        _value = v;
+        id = widget.id;
+      });
   set value(List<String> v) => setState(() => _value = v);
   bool _loading = true;
   @override
   Widget build(BuildContext context) {
-    if(widget.id != id) initalValue = widget.value;
+    if (widget.id != id) initalValue = widget.value;
     AsyncValue<List<String>> users = ref.watch(fetchUsernamesProvider);
     users.when(
       data: (d) => setState(() {
         _userList = d;
         _loading = false;
-        if(_value.contains("all")) setState(() => _value = _userList.toList());
+        if (_value.contains("all")) setState(() => _value = _userList.toList());
       }),
       loading: () => setState(() => _loading = true),
-      error: (e, stack) => setState(() {_loading = true; print("Error: $e");print("Stack: $stack");}),
+      error: (e, stack) => setState(() {
+        _loading = true;
+        print("Error: $e");
+        print("Stack: $stack");
+      }),
     );
     print("Value: $value, initial: ${widget.value}");
     return Container(
-      child: _loading ? 
-        Center(
-          child: CircularProgressIndicator()
-        ) : Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [..._userList.map((e) => 
-            InputChip(
-              label: Text(e.substring(0, 1).toUpperCase() + e.substring(1)),
-              selected: _value.contains(e),
-              onSelected: (t) {
-                if(_value.contains(e)){
-                  _value.remove(e);
-                }else{
-                  _value.add(e);
-                }
-                setValue(_value);
-              }
-            ),
-          ),
-            FilledButton(
-              child: const Text("Save"),
-              onPressed: () => widget.onSaved(_value).then((_) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Saved")));
-                ref.refresh(fetchSongsProvider(ignore: true));
-                ref.refresh(fetchAlbumsProvider(ignore: true));
-                ref.refresh(fetchArtistsProvider(ignore: true));
-              }),
-            ),
-          ]
-        )
-    );
+        child: _loading
+            ? Center(child: CircularProgressIndicator())
+            : Wrap(spacing: 8, runSpacing: 8, children: [
+                ..._userList.map(
+                  (e) => InputChip(
+                      label: Text(
+                          e.substring(0, 1).toUpperCase() + e.substring(1)),
+                      selected: _value.contains(e),
+                      onSelected: (t) {
+                        if (_value.contains(e)) {
+                          _value.remove(e);
+                        } else {
+                          _value.add(e);
+                        }
+                        setValue(_value);
+                      }),
+                ),
+                FilledButton(
+                  child: const Text("Save"),
+                  onPressed: () => widget.onSaved(_value).then((_) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(content: Text("Saved")));
+                    ref.refresh(fetchSongsProvider(ignore: true));
+                    ref.refresh(fetchAlbumsProvider(ignore: true));
+                    ref.refresh(fetchArtistsProvider(ignore: true));
+                  }),
+                ),
+              ]));
   }
 
-  void setValue(List<String> v){
-    if(v.isEmpty && _userList.isNotEmpty) v = _userList;
-    else if(v.isEmpty && _userList.isEmpty) return;
+  void setValue(List<String> v) {
+    if (v.isEmpty && _userList.isNotEmpty)
+      v = _userList;
+    else if (v.isEmpty && _userList.isEmpty) return;
     setState(() => _value = v);
     //print("\t$value\n\t${widget.value}");
     widget.onChanged(v);
   }
+}
+
+void showWebError(context) {
+  showDialog(
+      context: context,
+      builder: (context) => const AlertDialog(
+            title: Text("Not supported"),
+            content: Text(
+                "Video playback is not supported in web, due to workarounds.  It used to be, but I had to shut the proxy down because it was sending too many requests to YouTube.  Now only the native apps are supported.  Sorry :("),
+          ));
 }

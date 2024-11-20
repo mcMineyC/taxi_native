@@ -3,52 +3,10 @@
 part of 'player.dart';
 
 // **************************************************************************
-// JsonSerializableGenerator
-// **************************************************************************
-
-_$PlayerInfoImpl _$$PlayerInfoImplFromJson(Map<String, dynamic> json) =>
-    _$PlayerInfoImpl(
-      id: json['id'] as String,
-      artistId: json['artistId'] as String,
-      albumId: json['albumId'] as String,
-      displayName: json['displayName'] as String,
-      artistDisplayName: json['artistDisplayName'] as String,
-      albumDisplayName: json['albumDisplayName'] as String,
-      duration: (json['duration'] as num).toInt(),
-      position: (json['position'] as num).toInt(),
-      isPlaying: json['isPlaying'] as bool,
-      queue: (json['queue'] as List<dynamic>)
-          .map((e) => QueueItem.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      currentIndex: (json['currentIndex'] as num).toInt(),
-      shuffle: json['shuffle'] as bool,
-      loop: json['loop'] as bool,
-      thinking: json['thinking'] as bool,
-    );
-
-Map<String, dynamic> _$$PlayerInfoImplToJson(_$PlayerInfoImpl instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'artistId': instance.artistId,
-      'albumId': instance.albumId,
-      'displayName': instance.displayName,
-      'artistDisplayName': instance.artistDisplayName,
-      'albumDisplayName': instance.albumDisplayName,
-      'duration': instance.duration,
-      'position': instance.position,
-      'isPlaying': instance.isPlaying,
-      'queue': instance.queue,
-      'currentIndex': instance.currentIndex,
-      'shuffle': instance.shuffle,
-      'loop': instance.loop,
-      'thinking': instance.thinking,
-    };
-
-// **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$playerHash() => r'7cc080a36c6d481d5bf5348fbbdfbd9fc7db544b';
+String _$playerHash() => r'3100f5d4427153d64f92a882411cb860480fc45b';
 
 /// See also [Player].
 @ProviderFor(Player)

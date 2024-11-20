@@ -43,6 +43,8 @@ class PlayerInfo with _$PlayerInfo {
     required bool loop,
     required bool thinking,
   }) = _PlayerInfo;
+  factory PlayerInfo.fromJson(Map<String, dynamic> json) =>
+      _$PlayerInfoFromJson(json);
 }
 
 // This will generates a Notifier and NotifierProvider.
@@ -79,14 +81,21 @@ class Player extends _$Player {
       thinking: false,
     );
   }
+  void setPlaylist(String id){}
+  void addPlaylistToQueue(String id){}
+  void clear(){}
+  Future<void> shuffle() async {}
+  Future<void> loop(bool enable) async {
+    state = state.copyWith(loop: enable);
+  }
   void seek(Duration position) async {
     audioHandler.seek(position);
   }
-  void seekForward() {
-    audioHandler.seek(audioHandler.playbackState.value.position + Duration(seconds: 10));
+  void seekForward(int millis) {
+    audioHandler.seek(audioHandler.playbackState.value.position + Duration(milliseconds: millis));
   }
-  void seekBackward() {
-    audioHandler.seek(audioHandler.playbackState.value.position - Duration(seconds: 10));
+  void seekBackward(int millis) {
+    audioHandler.seek(audioHandler.playbackState.value.position - Duration(milliseconds: millis));
   }
   void stop(){
     audioHandler.stop();
@@ -458,6 +467,7 @@ class AudioServiceHandler extends BaseAudioHandler
             e.audioCodec != 'opus' && e.container != StreamContainer.webM)
         .withHighestBitrate();
     var url = streamInfo.url.toString();
+    print("Fetched video");
     return url;
     }
     

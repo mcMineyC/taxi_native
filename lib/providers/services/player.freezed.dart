@@ -14,6 +14,10 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
+PlayerInfo _$PlayerInfoFromJson(Map<String, dynamic> json) {
+  return _PlayerInfo.fromJson(json);
+}
+
 /// @nodoc
 mixin _$PlayerInfo {
   String get id => throw _privateConstructorUsedError;
@@ -31,6 +35,9 @@ mixin _$PlayerInfo {
   bool get shuffle => throw _privateConstructorUsedError;
   bool get loop => throw _privateConstructorUsedError;
   bool get thinking => throw _privateConstructorUsedError;
+
+  /// Serializes this PlayerInfo to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of PlayerInfo
   /// with the given fields replaced by the non-null parameter values.
@@ -268,7 +275,7 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$PlayerInfoImpl implements _PlayerInfo {
   _$PlayerInfoImpl(
       {required this.id,
@@ -286,6 +293,9 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       required this.loop,
       required this.thinking})
       : _queue = queue;
+
+  factory _$PlayerInfoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PlayerInfoImplFromJson(json);
 
   @override
   final String id;
@@ -358,6 +368,7 @@ class _$PlayerInfoImpl implements _PlayerInfo {
                 other.thinking == thinking));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -383,6 +394,13 @@ class _$PlayerInfoImpl implements _PlayerInfo {
   @pragma('vm:prefer-inline')
   _$$PlayerInfoImplCopyWith<_$PlayerInfoImpl> get copyWith =>
       __$$PlayerInfoImplCopyWithImpl<_$PlayerInfoImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$PlayerInfoImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _PlayerInfo implements PlayerInfo {
@@ -401,6 +419,9 @@ abstract class _PlayerInfo implements PlayerInfo {
       required final bool shuffle,
       required final bool loop,
       required final bool thinking}) = _$PlayerInfoImpl;
+
+  factory _PlayerInfo.fromJson(Map<String, dynamic> json) =
+      _$PlayerInfoImpl.fromJson;
 
   @override
   String get id;

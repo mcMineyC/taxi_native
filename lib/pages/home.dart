@@ -28,22 +28,32 @@ class HomePage extends ConsumerWidget {
     subject.throttleTime(const Duration(seconds: 1)).listen((value) {
       _persistPlayerInfo(value).then((_) {});
     });
-    
+
     bool useMobile = MediaQuery.of(context).size.width <= 840;
-    return useMobile ? MobileHomePage(homeJunk: homeJunk, persistenceFunction: persistPlayerInfo) : DesktopHomePage(homeJunk: homeJunk, persistenceFunction: persistPlayerInfo);
+    return useMobile
+        ? MobileHomePage(
+            homeJunk: homeJunk, persistenceFunction: persistPlayerInfo)
+        : DesktopHomePage(
+            homeJunk: homeJunk, persistenceFunction: persistPlayerInfo);
   }
+
   void persistPlayerInfo(PlayerInfo info) {
-    subject.add(info.copyWith(queue: info.queue.map((e) => e.copyWith(audioUrl: "not_fetched")).toList()));
+    subject.add(info.copyWith(
+        queue: info.queue
+            .map((e) => e.copyWith(audioUrl: "not_fetched"))
+            .toList()));
   }
 
   Future<void> _persistPlayerInfo(PlayerInfo info) async {
-    if(info.position == 0) return;
-    (await SharedPreferences.getInstance()).setString("playerinfo", jsonEncode(info.toJson()));
+    if (info.position == 0) return;
+    (await SharedPreferences.getInstance())
+        .setString("playerinfo", jsonEncode(info.toJson()));
   }
 }
 
 class DesktopHomePage extends ConsumerWidget {
-  const DesktopHomePage({super.key, required this.homeJunk, required this.persistenceFunction});
+  const DesktopHomePage(
+      {super.key, required this.homeJunk, required this.persistenceFunction});
   final Widget homeJunk;
   final Function(PlayerInfo info) persistenceFunction;
 
@@ -62,27 +72,25 @@ class DesktopHomePage extends ConsumerWidget {
         preferredSize: const Size.fromHeight(58),
         child: DesktopAppBar(),
       ),
-      body: SafeArea(child: Column(
-        children: [
-          Expanded(
-            child: Row(
-              children: [
-                DesktopNav(),
-                Expanded(
-                  child: GenericViewport(homeJunk: homeJunk)
-                ),
-              ],
-            ),
+      body: SafeArea(
+          child: Column(children: [
+        Expanded(
+          child: Row(
+            children: [
+              DesktopNav(),
+              Expanded(child: GenericViewport(homeJunk: homeJunk)),
+            ],
           ),
-          DesktopBottomBar(persistenceFunction: persistenceFunction),
-        ]
-      )),
+        ),
+        DesktopBottomBar(persistenceFunction: persistenceFunction),
+      ])),
     );
   }
 }
 
 class MobileHomePage extends ConsumerWidget {
-  const MobileHomePage({super.key, required this.homeJunk, required this.persistenceFunction});
+  const MobileHomePage(
+      {super.key, required this.homeJunk, required this.persistenceFunction});
   final Widget homeJunk;
   final Function(PlayerInfo info) persistenceFunction;
 
@@ -104,19 +112,17 @@ class MobileHomePage extends ConsumerWidget {
       ),
       bottomNavigationBar: MobileNav(),
       body: SafeArea(
-        child: Container(
-          color: Theme.of(context).colorScheme.surfaceContainer,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: GenericViewport(homeJunk: homeJunk),
-              ),
-              MobilePlayerControls(persistenceFunction: persistenceFunction),
-            ]
-          )
-        )
-      ),
+          child: Container(
+              color: Theme.of(context).colorScheme.surfaceContainer,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: GenericViewport(homeJunk: homeJunk),
+                    ),
+                    MobilePlayerControls(
+                        persistenceFunction: persistenceFunction),
+                  ]))),
     );
   }
 }
@@ -127,26 +133,23 @@ class GenericViewport extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      color: Theme.of(context).colorScheme.surfaceContainer,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                // color: Colors.teal,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Container(
-                // color: Colors.green,
-                margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
-                child: homeJunk,
-              )
-            )
-          ),
-        ],
-      )
-    ); 
+        color: Theme.of(context).colorScheme.surfaceContainer,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+                child: Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      // color: Colors.teal,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Container(
+                      // color: Colors.green,
+                      margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+                      child: homeJunk,
+                    ))),
+          ],
+        ));
   }
 }

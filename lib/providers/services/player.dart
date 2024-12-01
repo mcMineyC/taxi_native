@@ -57,7 +57,6 @@ class Player extends _$Player {
   List<QueueItem> queue = [];
   final String backendUrl = "https://eatthecow.mooo.com:3030";
   bool paused = false;
-  bool thinking = false;
   bool needInteraction = false;
   int needSeekTo = 0;
 
@@ -87,7 +86,8 @@ class Player extends _$Player {
     _isInit = true;
     _sp = await SharedPreferences.getInstance();
     print("Playerinfo: init");
-    if (!PlatformUtils.isWeb && PlatformUtils.isLinux)
+    if (!PlatformUtils.isWeb &&
+        (PlatformUtils.isLinux || PlatformUtils.isWindows))
       JustAudioMediaKit.ensureInitialized();
     player.positionStream.listen((Duration d) {
       state = state.copyWith(position: d.inMilliseconds);
@@ -114,7 +114,7 @@ class Player extends _$Player {
       //print("New state: $state");
       if (state.processingState == ProcessingState.completed &&
           canNext &&
-          !thinking) {
+          !this.state.thinking) {
         print("Skipping");
         paused = false;
         next();
@@ -423,6 +423,7 @@ class Player extends _$Player {
 
   Future<void> playQueueItem(QueueItem item) async {
     state = state.copyWith(thinking: true);
+    player.pause();
     var url = item.audioUrl;
     if (url == "not_fetched") {
       if (PlatformUtils.isWeb) return;
@@ -487,7 +488,6 @@ class Player extends _$Player {
         state.loop &&
         p.shuffleOnLoop) {
       print("Shuffling");
-      thinking = true;
       shuffle();
     }
     return (state.currentIndex + 1 >= state.queue.length)

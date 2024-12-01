@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.example.taxi_native_test"
+    namespace "com.example.taxi_native"
     compileSdk 34
     ndkVersion "26.1.10909125"
 

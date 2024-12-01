@@ -60,6 +60,7 @@ dependencies:
   rxdart: ^0.27.7
   just_audio_web: ^0.4.11
   squiggly_slider: ^1.0.5
+  dynamic_color: ^0.0.1
   # media_kit_libs_windows_audio: any
   # just_audio_handlers:
   #   # git:

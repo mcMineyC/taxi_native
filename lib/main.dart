@@ -34,10 +34,14 @@ import 'pages/admin/dashboard.dart';
 
 import 'login.dart';
 
-void main() async{
+void main() async {
   // print("Current commit: ${String.fromEnvironment("GIT_REV")}");
+  print("Ensuring widget binding is initialized");
   WidgetsFlutterBinding.ensureInitialized();
-  ServiceLocator().register<SharedPreferences>(await SharedPreferences.getInstance());
+  ServiceLocator()
+      .register<SharedPreferences>(await SharedPreferences.getInstance());
+  print("Found shared preferences");
+  print("Initing justaudio");
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
     androidNotificationChannelName: 'Audio playback',
@@ -50,193 +54,216 @@ void main() async{
   await themeProvider.init();
   var scheme = ColorScheme.fromSeed(
     seedColor: HexColor.fromHex(themeProvider.seedColor),
-    brightness: themeProvider.dark ? Brightness.dark : Brightness.light, 
+    brightness: themeProvider.dark ? Brightness.dark : Brightness.light,
   );
   print("Starting app");
   runApp(
     prov.MultiProvider(
-      providers: [
-        prov.ChangeNotifierProvider(create: (_) => themeProvider),
-        prov.ChangeNotifierProvider(create: (_) => prefsProvider),
-      ],
-      child: ProviderScope(
-        child: ContextMenuOverlay(
-          cardBuilder: (context, children) => Container(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            decoration: BoxDecoration(
-              color: scheme.surfaceContainerHigh,
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
-            ),
-            child: Column(children: children)
-          ),
-          buttonBuilder: (context, config, [__]) => TextButton(
-            onPressed: config.onPressed,
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              child: Row(
-                children: [
-                  IconTheme(
-                    data: IconThemeData(color: scheme.onSurface),
-                    child: config.icon ?? Container(),
-                  ) ,
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
+        providers: [
+          prov.ChangeNotifierProvider(create: (_) => themeProvider),
+          prov.ChangeNotifierProvider(create: (_) => prefsProvider),
+        ],
+        child: ProviderScope(
+          child: ContextMenuOverlay(
+            cardBuilder: (context, children) => Container(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: scheme.surfaceContainerHigh,
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                ),
+                child: Column(children: children)),
+            buttonBuilder: (context, config, [__]) => TextButton(
+              onPressed: config.onPressed,
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  children: [
+                    IconTheme(
+                      data: IconThemeData(color: scheme.onSurface),
+                      child: config.icon ?? Container(),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                        child: Text(
                       config.label,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.poppins().apply(
                         color: scheme.onSurface,
                       ),
-                    )
-                  ),
-                ],
+                    )),
+                  ],
+                ),
               ),
-            ) ,
+            ),
+            child: App(),
           ),
-          child: App(),
-        ),
-      )
-    ),
+        )),
   );
 }
 
 class App extends ConsumerWidget {
   final routerDelegate = BeamerDelegate(
     initialPath: '/login',
-    locationBuilder: RoutesLocationBuilder(
-      routes: {
-        '/*':  (context, state, data) => BeamPage(
-          key: ValueKey('how'),
-          title: 'Error',
-          popToNamed: '/home',
-          child: HomePage(homeJunk: ErrorPage()), //ErrorPage(),
-        ),
-        '/':   (context, state, data) => BeamPage(
-          key: const ValueKey('slash'),
-          title: 'Slash (The Root)',
-          popToNamed: '/home',
-          child: HomePage(homeJunk: ErrorPage()),
-        ),
-        '/how': (context, state, data) => BeamPage(
-          key: const ValueKey('how'),
-          title: 'How. Just How?',
-          child: HomePage(homeJunk: ErrorPage()),
-        ),
-        '/login': (context, state, data) => BeamPage(
-          key: const ValueKey('login'),
-          title: 'Login',
-          child: LoginPage(),
-        ),
-        '/home': (context, state, data) => BeamPage(
-          key: const ValueKey('home'),
-          title: 'Home',
-          child: HomePage(homeJunk: LandingPage()),
-        ),
-        '/library': (context, state, data) => BeamPage(
-          key: const ValueKey('library'),
-          title: 'Library',
-          popToNamed: '/home',
-          child: HomePage(homeJunk: LibraryPage()),
-        ),
-        '/artist/:artistId': (context, state, data) {
-          final artistId = state.uri.toString().split("/artist/").last.split("/").first.split("?").first;
-          return BeamPage(
-            key: ValueKey("artist-view-$artistId"),
-            title: "Artist",
+    locationBuilder: RoutesLocationBuilder(routes: {
+      '/*': (context, state, data) => BeamPage(
+            key: ValueKey('how'),
+            title: 'Error',
             popToNamed: '/home',
-            child: HomePage(homeJunk: ArtistPage(id: artistId)),
-          );
-        },
-        '/album/:albumId': (context, state, data) {
-          final albumId = state.uri.toString().split("/album/").last.split("/").first.split("?").first;
-          return BeamPage(
-            key: ValueKey("album-view-$albumId"),
-            title: "Album",
+            child: HomePage(homeJunk: ErrorPage()), //ErrorPage(),
+          ),
+      '/': (context, state, data) => BeamPage(
+            key: const ValueKey('slash'),
+            title: 'Slash (The Root)',
             popToNamed: '/home',
-            child: HomePage(homeJunk: AlbumPage(id: albumId)),
-          );
-        },
-        '/artists': (context, state, data) => BeamPage(
-          key: const ValueKey('artists'),
-          title: 'Artists',
-          popToNamed: '/home',
-          child: HomePage(homeJunk: ArtistsPage()),
-        ),
-        '/albums': (context, state, data) => BeamPage(
-          key: const ValueKey('albums'),
-          title: 'Albums',
-          popToNamed: '/home',
-          child: HomePage(homeJunk: AlbumsPage()),
-        ),
-        '/songs': (context, state, data) => BeamPage(
-          key: const ValueKey('songs'),
-          title: 'Songs',
-          popToNamed: '/home',
-          child: HomePage(homeJunk: SongsPage()),
-        ),
-        '/queue': (context, state, data) => BeamPage(
-          key: const ValueKey('queue'),
-          title: 'Queue',
-          popToNamed: '/home',
-          child: HomePage(homeJunk: QueuePage()),
-        ),
-        '/adder': (context, state, data) => BeamPage(
-          key: const ValueKey('adder'),
-          title: 'Adder',
-          popToNamed: '/home',
-          child: HomePage(homeJunk: AdderPage()),
-        ),
-        '/search': (context, state, data) => BeamPage(
-          key: const ValueKey('search'),
-          title: 'Search',
-          popToNamed: '/home',
-          child: HomePage(homeJunk: SearchPage()),
-        ),
-        '/playlists': (context, state, data) => BeamPage(
-          key: const ValueKey('playlists'),
-          title: 'Playlists',
-          popToNamed: '/home',
-          child: HomePage(homeJunk: PlaylistsPage()),
-        ),
-        '/playlist/:playlistId': (context, state, data) {
-          final playlistId = state.uri.toString().split("/playlist/").last.split("/").first.split("?").first;
-          return BeamPage(
-            key: ValueKey("playlist-view-$playlistId"),
-            title: "Playlist",
+            child: HomePage(homeJunk: ErrorPage()),
+          ),
+      '/how': (context, state, data) => BeamPage(
+            key: const ValueKey('how'),
+            title: 'How. Just How?',
+            child: HomePage(homeJunk: ErrorPage()),
+          ),
+      '/login': (context, state, data) => BeamPage(
+            key: const ValueKey('login'),
+            title: 'Login',
+            child: LoginPage(),
+          ),
+      '/home': (context, state, data) => BeamPage(
+            key: const ValueKey('home'),
+            title: 'Home',
+            child: HomePage(homeJunk: LandingPage()),
+          ),
+      '/library': (context, state, data) => BeamPage(
+            key: const ValueKey('library'),
+            title: 'Library',
             popToNamed: '/home',
-            child: HomePage(homeJunk: PlaylistPage(id: playlistId)),
-          );
-        },
-        '/settings': (context, state, data) => BeamPage(
-          key: const ValueKey('settings'),
-          title: 'Settings',
+            child: HomePage(homeJunk: LibraryPage()),
+          ),
+      '/artist/:artistId': (context, state, data) {
+        final artistId = state.uri
+            .toString()
+            .split("/artist/")
+            .last
+            .split("/")
+            .first
+            .split("?")
+            .first;
+        return BeamPage(
+          key: ValueKey("artist-view-$artistId"),
+          title: "Artist",
           popToNamed: '/home',
-          child: HomePage(homeJunk: SettingsPage()),
-        ),
-        '/checklist': (context, state, data) => BeamPage(
-          key: const ValueKey('checklist'),
-          title: 'Roadmap',
+          child: HomePage(homeJunk: ArtistPage(id: artistId)),
+        );
+      },
+      '/album/:albumId': (context, state, data) {
+        final albumId = state.uri
+            .toString()
+            .split("/album/")
+            .last
+            .split("/")
+            .first
+            .split("?")
+            .first;
+        return BeamPage(
+          key: ValueKey("album-view-$albumId"),
+          title: "Album",
           popToNamed: '/home',
-          child: HomePage(homeJunk: ChecklistPage()),
-        ),
-        '/admin': (context, state, data) => BeamPage(
-          key: const ValueKey('admin'),
-          title: 'Admin Dashboard',
-          child: AdminDashboardPage(""),
-        ),
-        '/admin/:route': (context, state, data) {
-          final route = state.uri.toString().split("/admin/").last.split("/").first.split("?").first;
-          print("Admin route: $route");
-          return BeamPage(
-            key: ValueKey("admin-$route"),
-            title: "Admin: ${route.capitalize()}",
-            popToNamed: '/admin',
-            child: AdminDashboardPage(route),
-          );
-        },
-      }
-    ),
+          child: HomePage(homeJunk: AlbumPage(id: albumId)),
+        );
+      },
+      '/artists': (context, state, data) => BeamPage(
+            key: const ValueKey('artists'),
+            title: 'Artists',
+            popToNamed: '/home',
+            child: HomePage(homeJunk: ArtistsPage()),
+          ),
+      '/albums': (context, state, data) => BeamPage(
+            key: const ValueKey('albums'),
+            title: 'Albums',
+            popToNamed: '/home',
+            child: HomePage(homeJunk: AlbumsPage()),
+          ),
+      '/songs': (context, state, data) => BeamPage(
+            key: const ValueKey('songs'),
+            title: 'Songs',
+            popToNamed: '/home',
+            child: HomePage(homeJunk: SongsPage()),
+          ),
+      '/queue': (context, state, data) => BeamPage(
+            key: const ValueKey('queue'),
+            title: 'Queue',
+            popToNamed: '/home',
+            child: HomePage(homeJunk: QueuePage()),
+          ),
+      '/adder': (context, state, data) => BeamPage(
+            key: const ValueKey('adder'),
+            title: 'Adder',
+            popToNamed: '/home',
+            child: HomePage(homeJunk: AdderPage()),
+          ),
+      '/search': (context, state, data) => BeamPage(
+            key: const ValueKey('search'),
+            title: 'Search',
+            popToNamed: '/home',
+            child: HomePage(homeJunk: SearchPage()),
+          ),
+      '/playlists': (context, state, data) => BeamPage(
+            key: const ValueKey('playlists'),
+            title: 'Playlists',
+            popToNamed: '/home',
+            child: HomePage(homeJunk: PlaylistsPage()),
+          ),
+      '/playlist/:playlistId': (context, state, data) {
+        final playlistId = state.uri
+            .toString()
+            .split("/playlist/")
+            .last
+            .split("/")
+            .first
+            .split("?")
+            .first;
+        return BeamPage(
+          key: ValueKey("playlist-view-$playlistId"),
+          title: "Playlist",
+          popToNamed: '/home',
+          child: HomePage(homeJunk: PlaylistPage(id: playlistId)),
+        );
+      },
+      '/settings': (context, state, data) => BeamPage(
+            key: const ValueKey('settings'),
+            title: 'Settings',
+            popToNamed: '/home',
+            child: HomePage(homeJunk: SettingsPage()),
+          ),
+      '/checklist': (context, state, data) => BeamPage(
+            key: const ValueKey('checklist'),
+            title: 'Roadmap',
+            popToNamed: '/home',
+            child: HomePage(homeJunk: ChecklistPage()),
+          ),
+      '/admin': (context, state, data) => BeamPage(
+            key: const ValueKey('admin'),
+            title: 'Admin Dashboard',
+            child: AdminDashboardPage(""),
+          ),
+      '/admin/:route': (context, state, data) {
+        final route = state.uri
+            .toString()
+            .split("/admin/")
+            .last
+            .split("/")
+            .first
+            .split("?")
+            .first;
+        print("Admin route: $route");
+        return BeamPage(
+          key: ValueKey("admin-$route"),
+          title: "Admin: ${route.capitalize()}",
+          popToNamed: '/admin',
+          child: AdminDashboardPage(route),
+        );
+      },
+    }),
     // buildListener: (p0, p1) {
     //   print("BeamerDelegate buildListener");
     //   p1.currentPages.forEach((element) {
@@ -250,15 +277,16 @@ class App extends ConsumerWidget {
     final theme = prov.Provider.of<ThemeChanger>(context);
     var scheme = ColorScheme.fromSeed(
       seedColor: HexColor.fromHex(theme.seedColor),
-      brightness: theme.dark ? Brightness.dark : Brightness.light, 
+      brightness: theme.dark ? Brightness.dark : Brightness.light,
     );
-    theme.textTheme = GoogleFonts.poppinsTextTheme().apply(bodyColor: scheme.onSurface, displayColor: scheme.onSurface);
+    theme.textTheme = GoogleFonts.poppinsTextTheme()
+        .apply(bodyColor: scheme.onSurface, displayColor: scheme.onSurface);
     theme.colorScheme = scheme;
     return MaterialApp.router(
       // debugShowCheckedModeBanner: false,
       title: 'Taxi - Native',
       theme: ThemeData(
-        colorScheme: scheme, 
+        colorScheme: scheme,
         textTheme: theme.textTheme,
         useMaterial3: true,
       ),
@@ -267,4 +295,3 @@ class App extends ConsumerWidget {
     );
   }
 }
-

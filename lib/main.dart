@@ -30,23 +30,43 @@ import 'pages/settings.dart';
 import 'pages/checklist.dart';
 import 'pages/library.dart';
 
+import 'package:audio_service/audio_service.dart';
 import 'pages/admin/dashboard.dart';
+import 'providers/services/player.dart';
+import "platform_utils.dart";
 
 import 'login.dart';
 
-void main() async {
+late AudioHandler audioHandler;
+void main() async{
+
   // print("Current commit: ${String.fromEnvironment("GIT_REV")}");
   print("Ensuring widget binding is initialized");
   WidgetsFlutterBinding.ensureInitialized();
-  ServiceLocator()
-      .register<SharedPreferences>(await SharedPreferences.getInstance());
-  print("Found shared preferences");
-  print("Initing justaudio");
-  await JustAudioBackground.init(
-    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
-    androidNotificationChannelName: 'Audio playback',
-    androidNotificationOngoing: true,
-  );
+
+  ServiceLocator().register<SharedPreferences>(await SharedPreferences.getInstance());
+  if(!PlatformUtils.isWindows){
+    await JustAudioBackground.init(
+      androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+      androidNotificationChannelName: 'Audio playback',
+      androidNotificationOngoing: true,
+    );
+  }
+  if(PlatformUtils.isWindows){
+    WidgetsFlutterBinding.ensureInitialized();
+    var handy = AudioServiceHandler();
+    handy.init();
+    audioHandler = await AudioService.init(
+      builder: () => handy,
+      config: const AudioServiceConfig(
+        androidNotificationChannelId: 'com.example.taxi-native',
+        androidNotificationChannelName: 'Media Player',
+        androidNotificationOngoing: true,
+      )
+    );
+    // await audioHandler.playMediaItem(MediaItem(id: 'https://download.samplelib.com/mp3/sample-3s.mp3', title: 'Music', album: 'Album', artist: 'Artist', duration: const Duration(milliseconds: 20000)));
+    ServiceLocator().register<AudioHandler>(audioHandler);
+  }
   PreferencesProvider prefsProvider = PreferencesProvider();
   await prefsProvider.init();
   ServiceLocator().register<PreferencesProvider>(prefsProvider);

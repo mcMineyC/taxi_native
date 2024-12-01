@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'player.dart';
+part of 'broken_player.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -14,7 +14,7 @@ _$PlayerInfoImpl _$$PlayerInfoImplFromJson(Map<String, dynamic> json) =>
       displayName: json['displayName'] as String,
       artistDisplayName: json['artistDisplayName'] as String,
       albumDisplayName: json['albumDisplayName'] as String,
-      duration: (json['duration'] as num).toDouble(),
+      duration: (json['duration'] as num).toInt(),
       position: (json['position'] as num).toInt(),
       isPlaying: json['isPlaying'] as bool,
       queue: (json['queue'] as List<dynamic>)
@@ -48,7 +48,7 @@ Map<String, dynamic> _$$PlayerInfoImplToJson(_$PlayerInfoImpl instance) =>
 // RiverpodGenerator
 // **************************************************************************
 
-String _$playerHash() => r'99c588bd5d59b55f6e29539100e769b392b62dd1';
+String _$playerHash() => r'7cc080a36c6d481d5bf5348fbbdfbd9fc7db544b';
 
 /// See also [Player].
 @ProviderFor(Player)

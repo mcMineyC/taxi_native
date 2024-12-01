@@ -58,10 +58,12 @@ dependencies:
   just_audio_background: any
   media_kit_native_event_loop: ^1.0.8
   rxdart: ^0.27.7
-  just_audio_web: ^0.4.11
   squiggly_slider: ^1.0.5
   dynamic_color: ^0.0.1
-  # media_kit_libs_windows_audio: any
+  smtc_windows: ^1.0.0
+  audioplayers: ^6.1.0
+  audio_service: ^0.18.15
+  media_kit_libs_windows_audio: any
   # just_audio_handlers:
   #   # git:
   #   #   url: https://github.com/mcMineyC/just_audio_handlers.git

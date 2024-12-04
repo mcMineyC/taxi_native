@@ -145,6 +145,11 @@ jobs:
         with:
           name: taxi-native-linux_x64.zip
           path: .
+      - uses: actions/download-artifact@v3
+        with:
+          name: taxi.app.zip
+          path: .
+
       - run: echo $sha_short
       - uses: ncipollo/release-action@v1
         if: env.file_exists == 'true'

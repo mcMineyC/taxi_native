@@ -94,15 +94,6 @@ jobs:
     needs: setup
     runs-on: ubuntu-22.04
     steps:
-      - name: Check if taxi.exe exists
-        id: check_file
-        run: |
-          if [ -f Installers/taxi.exe ]; then
-            echo "file_exists=true" >> $GITHUB_ENV
-          else
-            echo "file_exists=false" >> $GITHUB_ENV
-          fi
-      - run: echo $file_exists
       - uses: actions/upload-artifact@v3
         with:
           name: taxi.exe
@@ -151,6 +142,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: taxi.exe
+          path: .
 
       - run: echo $sha_short
       - uses: ncipollo/release-action@v1

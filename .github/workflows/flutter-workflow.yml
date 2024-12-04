@@ -126,7 +126,7 @@ jobs:
           path: taxi.app.zip
   release:
     runs-on: ubuntu-22.04
-    needs: [build-windows] 
+    needs: [build-linux, build-android, build-windows, build-macos] 
     steps:
       - name: Get current date
         id: date

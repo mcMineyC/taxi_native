@@ -149,25 +149,18 @@ jobs:
         with:
           name: taxi.app.zip
           path: .
+      - uses: actions/download-artifact@v3
+        with:
+          name: taxi.exe
 
       - run: echo $sha_short
       - uses: ncipollo/release-action@v1
-        if: env.file_exists == 'true'
         with:
-          artifacts: "taxi-native.apk,taxi-native-linux_x64.zip,Installers/taxi.exe,taxi.app.zip"
+          artifacts: "taxi-native.apk,taxi-native-linux_x64.zip,taxi.exe,taxi.app.zip"
           tag: ${{ steps.vars.outputs.sha_short }}
           makeLatest: true
           name: ${{ steps.date.outputs.date }}
           body: "## This was autoreleased via github actions"
-      - uses: ncipollo/release-action@v1
-        if: env.file_exists == 'false'
-        with:
-          artifacts: "taxi-native.apk,taxi-native-linux_x64.zip,taxi.app.zip"
-          tag: ${{ steps.vars.outputs.sha_short }}
-          makeLatest: true
-          name: ${{ steps.date.outputs.date }}
-          body: "## This was autoreleased via github actions"
-
       - uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3
         with:
           name: release-apk.apk

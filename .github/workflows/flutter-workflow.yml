@@ -104,7 +104,6 @@ jobs:
           fi
       - run: echo $file_exists
       - uses: actions/upload-artifact@v3
-        if: env.file_exists == 'true'
         with:
           name: taxi.exe
           path: Installers/taxi.exe

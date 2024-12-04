@@ -10,7 +10,10 @@ permissions:
 jobs:
   setup:
     runs-on: ubuntu-22.04
+    outputs:
+     RUNNER: ${{ runner.name }}
     steps:
+      - run: echo "selected runner = ${{ runner.name }}"
       - uses: actions/checkout@v4
       - name: Get current date
         id: date
@@ -40,7 +43,7 @@ jobs:
       - name: Set default value for windows build
         run: echo "file_exists=false" >> $GITHUB_ENV
   build-android:
-    runs-on: ubuntu-22.04
+    runs-on: ${{needs.setup.outputs.RUNNER}}
     needs: setup
     steps:
       - uses: actions/checkout@v4
@@ -51,7 +54,7 @@ jobs:
           name: taxi-native.apk
           path: taxi-native.apk
   build-linux:
-    runs-on: ubuntu-22.04
+    runs-on: ${{needs.setup.outputs.RUNNER}}
     needs: setup
     steps:
       - uses: actions/checkout@v4
@@ -66,13 +69,18 @@ jobs:
   #   needs: setup
   #   steps:
   #     - uses: actions/checkout@v4
+  #     - name: Set up Flutter
+  #        uses: subosito/flutter-action@v2
+  #        with:
+  #          channel: stable
   #     - run: flutter build windows
   #     - run: cp build/windows/runner/Release/taxi.exe Installers/taxi.exe
   #     - uses: actions/upload-artifact@v3
   #       with:
   #         name: taxi.exe
   build-windows:
-    runs-on: ubuntu-22.04
+    needs: setup
+    runs-on: ${{needs.setup.outputs.RUNNER}}
     steps:
       - name: Check if taxi.exe exists
         id: check_file

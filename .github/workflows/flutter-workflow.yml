@@ -1,4 +1,4 @@
-I do plan name: Flutter CI
+name: Flutter CI
 
 on:
   push:

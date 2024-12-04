@@ -75,4 +75,3 @@ flutter:
         - asset: fonts/Poppins-Regular.ttf
           style: normal
 dev_dependencies:
-  msix: ^3.16.7

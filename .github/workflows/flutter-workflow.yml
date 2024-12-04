@@ -22,11 +22,11 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable # or: beta, master (or main)
-      - name: Prep project
-        run: |
-          flutter clean
-          flutter pub get
-          dart run build_runner build --delete-conflicting-outputs
+      # - name: Prep project
+      #   run: |
+      #     flutter clean
+      #     flutter pub get
+      #     dart run build_runner build --delete-conflicting-outputs
       - name: Set default value for windows build
         run: echo "file_exists=false" >> $GITHUB_ENV
   build-android:
@@ -38,7 +38,8 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable # or: beta, master (or main)
-      - uses: actions/setup-java@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: '21'
@@ -94,6 +95,7 @@ jobs:
           else
             echo "file_exists=false" >> $GITHUB_ENV
           fi
+      # - run: echo $file_exists
       - uses: actions/upload-artifact@v3
         if: env.file_exists == 'true'
         with:

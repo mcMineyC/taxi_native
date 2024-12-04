@@ -1,4 +1,4 @@
-name: Flutter CI
+I do plan name: Flutter CI
 
 on:
   push:
@@ -118,7 +118,7 @@ jobs:
           path: taxi.app.zip
   release:
     runs-on: ubuntu-22.04
-    needs: [build-windows] 
+    needs: [build-windows, build-macos, build-linux, build-android] 
     steps:
       - uses: actions/checkout@v4
       - name: Get current date

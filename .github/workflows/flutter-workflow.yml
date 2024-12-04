@@ -127,7 +127,6 @@ jobs:
       - name: Set outputs
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-      - uses: ncipollo/release-action@v1
       - name: Download Artifacts
         uses: actions/download-artifact@v3
         with:
@@ -145,9 +144,6 @@ jobs:
         with:
           name: taxi.exe
           path: .
-
-      - run: echo $sha_short
-      - run: echo ${{ steps.vars.outputs.sha_short }}
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "taxi-native.apk,taxi-native-linux_x64.zip,taxi.exe,taxi.app.zip"

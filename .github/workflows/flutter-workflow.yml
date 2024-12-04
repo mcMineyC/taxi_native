@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-permissions:
-  contents: write
 
 jobs:
   build:
@@ -33,7 +31,6 @@ jobs:
       - run: sudo apt install libmpv-dev mpv
       - run: flutter clean
       - run: flutter pub get
-#      - run: flutter format --set-exit-if-changed .
       - run: dart run build_runner build --delete-conflicting-outputs
       - run: flutter build apk
       - run: flutter build linux

@@ -153,7 +153,7 @@ jobs:
           tag: ${{ steps.vars.outputs.sha_short }}
           makeLatest: true
           name: ${{ steps.date.outputs.date }}
-          body: "## This was autoreleased via github actions!"
+          body: "## This was autoreleased via github actions"
       - uses: ncipollo/release-action@v1
         if: env.file_exists == 'false'
         with:

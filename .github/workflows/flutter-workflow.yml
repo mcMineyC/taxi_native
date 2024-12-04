@@ -18,10 +18,6 @@ jobs:
       - name: Set outputs
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu' # See 'Supported distributions' for available options
-          java-version: '21'
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -42,6 +38,10 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable # or: beta, master (or main)
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu' # See 'Supported distributions' for available options
+          java-version: '21'
       - run: flutter build apk
       - run: cp build/app/outputs/apk/release/app-release.apk taxi-native.apk
       - uses: actions/upload-artifact@v3

@@ -130,7 +130,7 @@ jobs:
     steps:
       - name: Get current date
         id: date
-        run: echo "date=$(date +'%Y-%m-%d %I:%M')">> $GITHUB_ENV
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d %I:%M')"
       - name: Set outputs
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
@@ -149,19 +149,20 @@ jobs:
       - uses: ncipollo/release-action@v1
         if: env.file_exists == 'true'
         with:
-          artifacts: "taxi-native.apk,taxi-native-linux_x64.zip,Installers/taxi.exe"
+          artifacts: "taxi-native.apk,taxi-native-linux_x64.zip,Installers/taxi.exe,taxi.app.zip"
           tag: ${{ steps.vars.outputs.sha_short }}
           makeLatest: true
           name: ${{ steps.date.outputs.date }}
-          body: "## This was autoreleased via github actions"
+          body: "## This was autoreleased via github actions!"
       - uses: ncipollo/release-action@v1
         if: env.file_exists == 'false'
         with:
-          artifacts: "taxi-native.apk,taxi-native-linux_x64.zip"
+          artifacts: "taxi-native.apk,taxi-native-linux_x64.zip,taxi.app.zip"
           tag: ${{ steps.vars.outputs.sha_short }}
           makeLatest: true
           name: ${{ steps.date.outputs.date }}
           body: "## This was autoreleased via github actions"
+
       - uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3
         with:
           name: release-apk.apk

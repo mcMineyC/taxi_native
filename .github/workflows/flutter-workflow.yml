@@ -127,6 +127,12 @@ jobs:
     runs-on: ubuntu-22.04
     needs: [build-android, build-linux, build-windows] 
     steps:
+      - name: Get current date
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d %I:%M')">> $GITHUB_ENV
+      - name: Set outputs
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       - uses: actions/checkout@v4
       - uses: ncipollo/release-action@v1
       - name: Download Artifacts
@@ -138,6 +144,7 @@ jobs:
         with:
           name: taxi-native-linux_x64.zip
           path: .
+      - run: echo $sha_short
       - uses: ncipollo/release-action@v1
         if: env.file_exists == 'true'
         with:

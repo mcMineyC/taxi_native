@@ -118,14 +118,15 @@ jobs:
         with:
           channel: stable
       - run: flutter build macos
-      - run: cp build/macos/Build/Products/Release/taxi.app taxi.app
+      - run: cp -rf build/macos/Build/Products/Release/taxi.app taxi.app
+      - run: zip -r taxi.app.zip taxi.app
       - uses: actions/upload-artifact@v3
         with:
-          name: taxi.app
-          path: taxi.app
+          name: taxi.app.zip
+          path: taxi.app.zip
   release:
     runs-on: ubuntu-22.04
-    needs: [build-android, build-linux, build-windows] 
+    needs: [build-windows] 
     steps:
       - name: Get current date
         id: date

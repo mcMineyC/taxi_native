@@ -94,10 +94,12 @@ jobs:
     needs: setup
     runs-on: ubuntu-22.04
     steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
       - uses: actions/upload-artifact@v3
         with:
           name: taxi.exe
-          path: Installers/taxi.exe
+          path: ./Installers/taxi.exe
   build-macos:
     runs-on: macos-latest
     steps:

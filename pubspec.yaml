@@ -51,8 +51,8 @@ dependencies:
       url: https://github.com/mcMineyC/just_audio.git
       path: just_audio
       ref: minor
-  just_audio_windows: any
   just_audio_media_kit: 2.0.3
+  just_audio_windows: any
   media_kit_libs_linux: any
   # media_kit_libs_windows: any
   just_audio_background: any
@@ -61,7 +61,7 @@ dependencies:
   just_audio_web: ^0.4.11
   squiggly_slider: ^1.0.5
   dynamic_color: ^0.0.1
-  # media_kit_libs_windows_audio: any
+  media_kit_libs_windows_audio: any
   # just_audio_handlers:
   #   # git:
   #   #   url: https://github.com/mcMineyC/just_audio_handlers.git
@@ -75,4 +75,3 @@ flutter:
         - asset: fonts/Poppins-Regular.ttf
           style: normal
 dev_dependencies:
-  msix: ^3.16.7

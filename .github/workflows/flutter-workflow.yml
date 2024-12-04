@@ -133,7 +133,7 @@ jobs:
         run: echo "date=$(date +'%Y-%m-%d %I:%M')">> $GITHUB_ENV
       - name: Set outputs
         id: vars
-        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v4
       - uses: ncipollo/release-action@v1
       - name: Download Artifacts

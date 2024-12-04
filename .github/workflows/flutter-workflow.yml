@@ -69,27 +69,27 @@ jobs:
         with:
           name: taxi-native-linux_x64.zip
           path: taxi-native-linux_x64.zip
-  build-windows-test:
-    runs-on: windows-latest
-    needs: setup
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-      - run: flutter build windows
-      - name: Compile .ISS to .EXE Installer
-        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
-        with:
-          path: Installers/innoSetupScript.iss
-          options: /O+
-      - run: cp build/windows/runner/Release/taxi.exe Installers/taxi.exe
-      - uses: actions/upload-artifact@v3
-        with:
-          name: taxi.exe
-          path: Installers/taxi.exe
-      - run: echo "file_exists=true" >> $GITHUB_ENV
+  # build-windows-test:
+  #   runs-on: windows-latest
+  #   needs: setup
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Set up Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: stable
+  #     - run: flutter build windows
+  #     - name: Compile .ISS to .EXE Installer
+  #       uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+  #       with:
+  #         path: Installers/innoSetupScript.iss
+  #         options: /O+
+  #     - run: cp build/windows/runner/Release/taxi.exe Installers/taxi.exe
+  #     - uses: actions/upload-artifact@v3
+  #       with:
+  #         name: taxi.exe
+  #         path: Installers/taxi.exe
+  #     - run: echo "file_exists=true" >> $GITHUB_ENV
   build-windows:
     needs: setup
     runs-on: ubuntu-22.04

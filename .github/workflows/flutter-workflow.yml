@@ -44,7 +44,7 @@ jobs:
           else
             echo "file_exists=false" >> $GITHUB_ENV
           fi
-       - uses: ncipollo/release-action@v1
+      - uses: ncipollo/release-action@v1
         if: env.file_exists == 'true'
         with:
           artifacts: "taxi-native.apk,taxi-native-linux_x64.zip,Installers/taxi.exe"

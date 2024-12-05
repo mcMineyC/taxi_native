@@ -20,7 +20,7 @@ import 'pages/artist.dart';
 import 'pages/albums.dart';
 import 'pages/album.dart';
 import 'pages/songs.dart';
-import 'pages/adder.dart';
+import 'pages/new_adder.dart';
 import 'pages/queue.dart';
 import 'pages/landing.dart';
 import 'pages/search.dart';

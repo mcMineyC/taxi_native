@@ -2,8 +2,8 @@ name: Flutter CI
 
 on:
   push:
-    tags:        
-      - '**'
+    branches:
+    - main
 permissions:
   contents: write 
 
@@ -118,16 +118,15 @@ jobs:
           path: taxi.app.zip
   release:
     runs-on: ubuntu-22.04
-    needs: [build-linux, build-android, build-windows, build-macos] 
+    needs: [build-windows, build-macos, build-linux, build-android] 
     steps:
+      - uses: actions/checkout@v4
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d %I:%M')"
       - name: Set outputs
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-      - uses: actions/checkout@v4
-      - uses: ncipollo/release-action@v1
       - name: Download Artifacts
         uses: actions/download-artifact@v3
         with:
@@ -145,8 +144,6 @@ jobs:
         with:
           name: taxi.exe
           path: .
-
-      - run: echo $sha_short
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "taxi-native.apk,taxi-native-linux_x64.zip,taxi.exe,taxi.app.zip"

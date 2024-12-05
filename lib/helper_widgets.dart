@@ -106,14 +106,38 @@ class MediaCard extends ConsumerWidget {
               await playlistLogic(ref, context, thingId, thingType),
         ));
         break;
+      case "playlist":
+        buttons.add(ContextMenuButtonConfig("Play",
+            icon: const Icon(Icons.play_arrow_rounded), onPressed: () async {
+          if (PlatformUtils.isWeb) {
+            showWebError(context);
+            return;
+          }
+          ref.read(playerProvider.notifier).setPlaylist(thingId);
+        }));
+        buttons.add(ContextMenuButtonConfig("Add to queue",
+            icon: const Icon(Icons.queue), onPressed: () {
+          if (PlatformUtils.isWeb) {
+            showWebError(context);
+            return;
+          }
+          ref.read(playerProvider.notifier).addPlaylistToQueue(thingId);
+        }));
+        buttons.add(ContextMenuButtonConfig(
+          "Add to playlist",
+          icon: const Icon(Icons.playlist_add),
+          onPressed: () async =>
+              await playlistLogic(ref, context, thingId, thingType),
+        ));
+        break;
       default:
         buttons.add(ContextMenuButtonConfig("Placeholder",
             icon: const Icon(Icons.abc), onPressed: () {}));
         break;
     }
     buttons.add(ContextMenuButtonConfig(
-      "Added by: $addedBy",
-      onPressed: () {},
+      thingType == "playlist" ? "Owner: $addedBy" : "Added by: $addedBy",
+      onPressed: null,
     ));
     return buttons;
   }
@@ -161,24 +185,29 @@ class MediaCard extends ConsumerWidget {
                           ref.read(playerProvider.notifier).setSong(thingId);
                           break;
                         case "album":
-                          if (PlatformUtils.isWeb) {
-                            showWebError(context);
-                            return;
-                          }
+                          // if (PlatformUtils.isWeb) {
+                          //   showWebError(context);
+                          //   return;
+                          // }
                           print("Setting album");
                           // ref.read(playerProvider.notifier).setAlbum(thingId);
                           Beamer.of(context).beamToNamed("/album/$thingId");
                           break;
                         case "artist":
-                          if (PlatformUtils.isWeb) {
-                            showWebError(context);
-                            return;
-                          }
+                          // if (PlatformUtils.isWeb) {
+                          //   showWebError(context);
+                          //   return;
+                          // }
                           print("Setting artist");
                           // ref.read(playerProvider.notifier).setArtist(thingId);
                           Beamer.of(context).beamToNamed("/artist/$thingId");
                           // Beamer.of(context).update(: BeamState.fromUriString('/artist/$thingId'));
                           break;
+                        case "playlist":
+                          print("Setting playlist");
+                          // ref.read(playerProvider.notifier).setPlaylist(thingId);
+                          Beamer.of(context).beamToNamed("/playlist/$thingId");
+                        break;
                         case "placeholder":
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
@@ -204,7 +233,7 @@ class MediaCard extends ConsumerWidget {
                           //   color: Colors.teal,
                           //   borderRadius: BorderRadius.circular(12),
                           // ),
-                          child: CachedNetworkImage(
+                          child: thingType == "playlist" ? PlaylistImage(playlistId: thingId) : CachedNetworkImage(
                             imageUrl: image,
                             imageBuilder: (context, imageProvider) => Container(
                               decoration: BoxDecoration(
@@ -889,5 +918,93 @@ ColorSourceMode getColorSourceModeFromString(String mode) {
       return ColorSourceMode.manual;
     default:
       return ColorSourceMode.dynamic;
+  }
+}
+
+class PlaylistImage extends ConsumerWidget{
+  final String playlistId;
+  PlaylistImage({required this.playlistId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final width = 200;
+    final height = 200;
+    final playlistAsyncValue = ref.watch(findPlaylistProvider(playlistId));
+
+    return playlistAsyncValue.when(
+      data: (playlist) {
+        final songs = playlist.songs.take(4).toList();
+        if(songs.length == 0){
+          return Container(width: 200, height: 200, child: Center(child: Text("¯\\_(ツ)_/¯", style: Theme.of(context).textTheme.headlineMedium)));
+          }else if(songs.length < 4){
+          Song song = songs[0];
+         return           CachedNetworkImage(
+                      imageUrl: song.imageUrl,
+                      imageBuilder: (context, imageProvider) => Container(
+                        width: width.toDouble(),
+                        height: height.toDouble(),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      placeholder: (context, url) => Container(
+                        width: width.toDouble(),
+                        height: height.toDouble(),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Icon(
+                        Icons.error_outline_rounded,
+                        color: Colors.pink[700],
+                      ),
+                    );
+
+        }
+        return GridView.count(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          crossAxisCount: 2,
+          crossAxisSpacing: 0,
+          mainAxisSpacing: 0,
+          primary: false,
+          children: songs.map((song) =>
+                   CachedNetworkImage(
+                      imageUrl: song.imageUrl,
+                      imageBuilder: (context, imageProvider) => Container(
+                        width: width/4,
+                        height: width/4,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      placeholder: (context, url) => Container(
+                        width: width/4,
+                        height: width/4,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Icon(
+                        Icons.error_outline_rounded,
+                        color: Colors.pink[700],
+                      ),
+                    ),
+                ).toList(),
+        );
+      },
+      loading: () => Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(child: Text('Error: $error')),
+    );
   }
 }

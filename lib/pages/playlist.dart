@@ -4,6 +4,7 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taxi_native/helper_widgets.dart';
 
 import '../providers/error_watcher.dart';
 import '../providers/data/playlist_provider.dart';
@@ -65,7 +66,8 @@ class PlaylistPageState extends ConsumerState<PlaylistPage> {
       children: [
         Row(
           children: [
-            if(!loading && init) Container(width: 200, height: 200, child: Center(child: Text("¯\\_(ツ)_/¯", style: Theme.of(context).textTheme.headlineMedium))),
+            // if(!loading && init) Container(width: 200, height: 200, child: Center(child: Text("¯\\_(ツ)_/¯", style: Theme.of(context).textTheme.headlineMedium))),
+            if(!loading && init) Container(width: 200, height: 200, child: PlaylistImage(playlistId: id)),
             if(loading) Skeletonizer(enabled: true, child: Container(width: 200, height: 200)),
             Expanded(
               child: Container(

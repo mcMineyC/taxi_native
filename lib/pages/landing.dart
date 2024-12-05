@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import "package:provider/provider.dart" as prov;
 import '../helper_widgets.dart';
 import '../types/song.dart';
+import '../types/playlist.dart';
 import '../providers/error_watcher.dart';
+import '../providers/data/playlist_provider.dart';
 import '../providers/data/new_provider.dart';
 import '../providers/data/info_provider.dart';
 import '../providers/data/preferences_provider.dart';
@@ -16,6 +18,7 @@ class LandingPage extends ConsumerWidget {
     PreferencesProvider p = prov.Provider.of<PreferencesProvider>(context);
     final AsyncValue<List<Song>> newSongs = ref.watch(fetchNewSongsProvider);
     final AsyncValue<List<Song>> recentlyPlayed = ref.watch(fetchRecentlyPlayedProvider);
+    final AsyncValue<List<Playlist>> newPlaylists = ref.watch(fetchNewPlaylistsProvider);
     // Handle unauth errors
     BeamerDelegate bd = Beamer.of(context);
     handleError(ref, fetchNewSongsProvider, bd);
@@ -156,17 +159,31 @@ class LandingPage extends ConsumerWidget {
                 height: MediaCard.height,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      MediaCard(
-                        text: "HYPE",
-                        thingId: "idklol",
-                        thingType: "playlist",
-                        image: "https://placehold.co/512x512.png",
-                        addedBy: "jedi",
+                  child: newPlaylists.when(
+                    data: (data) {
+                      return Row(
+                        children: data.take(10).map((playlist) => MediaCard(
+                          text: playlist.displayName,
+                          image: "https://placehold.co/512x512.png",
+                          thingId: playlist.id,
+                          thingType: "playlist",
+                          addedBy: playlist.owner,
+                        )).toList(),
+                      );
+                    },
+                    loading: () => SingleChildScrollView(
+                      child: Skeletonizer(
+                        enabled: true,
+                        child: EmptyCardRow()
+                      )
+                    ),
+                    error: (err, stack) => SingleChildScrollView(
+                      child: Skeletonizer(
+                        enabled: true,
+                        child: EmptyCardRow()
                       ),
-                    ],
-                  ),
+                    ),
+                  )
                 ),
               )
             ]

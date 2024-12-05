@@ -7,7 +7,7 @@ import "../../providers/data/info_provider.dart";
 import "../../providers/data/playlist_provider.dart";
 import "../../providers/services/search.dart";
 import "../../providers/services/player.dart";
-import "../../types/artists.dart";
+import "../../types/album.dart";
 import "../../helper_widgets.dart";
 import "../../info_card.dart";
 import "generics.dart";
@@ -192,14 +192,17 @@ class _AlbumPane2State extends ConsumerState<AlbumsPane2> {
   }
 
   Future<bool> saveChanges() async {
-    return await ref.read(updateAlbumProvider(selected).future);
+    return await ref.read(updateAlbumProvider(selected, (await ref.read(findSongsByAlbumProvider(selected.id).future))).future);
   }
 
   void refreshChanges() {
     ref.read(playerProvider.notifier).clear();
-    ref.refresh(fetchSongsProvider);
-    ref.refresh(fetchAlbumsProvider);
-    ref.refresh(fetchAlbumsProvider);
+    ref.refresh(fetchSongsProvider(ignore: true));
+    ref.refresh(fetchAlbumsProvider(ignore: true));
+    ref.refresh(fetchAlbumsProvider(ignore: true));
+    ref.refresh(fetchSongsProvider(ignore: false));
+    ref.refresh(fetchAlbumsProvider(ignore: false));
+    ref.refresh(fetchAlbumsProvider(ignore: false));
     ref.refresh(fetchPlaylistsProvider);
     ref.refresh(fetchRecentlyPlayedProvider);
     setState(() => mutated = false);

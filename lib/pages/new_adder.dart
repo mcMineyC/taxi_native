@@ -10,6 +10,8 @@ import '../providers/services/player.dart';
 import '../providers/data/fetched_data_provider.dart';
 import '../tone_extension.dart';
 
+// NEW ADDER
+
 class AdderPage extends ConsumerStatefulWidget {
   const AdderPage({Key? key}) : super(key: key);
 
@@ -17,19 +19,12 @@ class AdderPage extends ConsumerStatefulWidget {
 }
 
 class _AdderPageState extends ConsumerState {
-  List<String> steps = [
-    "authed",
-    "searchresults",
-    "foundresults",
-    "addresult",
-  ];
+  String page = "auth";
+  bool nextable = false;
+  bool backable = false;
   String query = "";
-
-  int page = 1;
-  List<SearchResult> selectedSearchResults = [];
+  TextEditingController queryController = TextEditingController();
   SearchType selectedSearchType = SearchType.track;
-  List<GlobalKey<InfoEditorCardState>> stateKeys = [];
-  List<FindResult> correctedFindResults = [];
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +32,13 @@ class _AdderPageState extends ConsumerState {
     ref.read(adderProvider.notifier).init();
     final state = ref.watch(adderProvider);
     if (state.state == "authed") {
-      page = 1;
-    } else if (state.state == "foundresults" && page == 3) {
-      print("Setting state keys");
-      stateKeys = List.generate(state.findResults.length,
-          (index) => GlobalKey<InfoEditorCardState>());
-    } else if (state.state == "addresult") {
-      print("Adder: Done!");
+      backable = true;
+      page = "search";
+    } else if (state.state == "findingresults") {
+      nextable = false;
+      backable = false;
     }
+    print("Adder: query: $query");
     print("Adder: Page $page");
     print("Adder: State ${state.state}");
     return Container(
@@ -62,128 +56,56 @@ class _AdderPageState extends ConsumerState {
                     CircularProgressIndicator()
                   ])),
                 "loading" => const Center(child: CircularProgressIndicator()),
-                "findingresults" => const Center(
-                      child: Column(children: [
-                    Text("Searching...",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 18)),
-                    CircularProgressIndicator()
-                  ])),
-                "authed" => firstStep(ref, queryController),
-                "searchresults" => secondStep(state.searchResults),
-                "foundresults" => thirdStep(state.findResults, stateKeys,
-                    MediaQuery.of(context).size.width.truncate()),
-                "addingresults" => const Center(
-                      child: Column(children: [
-                    Text("Adding the new songs...",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 18)),
-                    CircularProgressIndicator()
-                  ])),
-                "addresult" => fourthStep(state.addResult),
-                _ => Text("Unknown state: ${state.state}")
+                _ => switch (page) {
+                    "search" => searchPage(context),
+                    _ => Center(
+                          child: Column(children: [
+                        Text("Unknown state: ${state.state}",
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 18)),
+                      ])),
+                  }
               },
             ),
             // Expanded(child: Container()),
-            if (!state.state.contains("ing"))
-              Row(
-                children: [
-                  if (page != 4)
-                    FilledButton.tonal(
-                      child: Text(page == 1 ? "Cancel" : "Back"),
-                      onPressed: () {
-                        back();
-                      },
-                    ),
-                  Expanded(child: Container(color: Colors.pink)),
-                  FilledButton.tonal(
-                    child: Text(page == 4 ? "Done" : "Next"),
-                    onPressed: () {
-                      switch (page) {
-                        case 1:
-                          stepOneToTwo(queryController);
-                          break;
-                        case 2:
-                          stepTwoToThree(selectedSearchResults, context);
-                          break;
-                        case 3:
-                          stepThreeToFour(stateKeys);
-                          break;
-                        case 4:
-                          done();
-                          break;
-                        default:
-                          break;
-                      }
-                    },
-                  ),
-                ],
-              ),
+            Row(
+              children: [
+                FilledButton.tonal(
+                  child: const Text("Cancel"),
+                  onPressed: !backable
+                      ? null
+                      : () {
+                          if (page == "search") cancel();
+                        },
+                ),
+                Expanded(child: Container(color: Colors.pink)),
+                FilledButton.tonal(
+                  child: Text("Next"),
+                  onPressed: !nextable
+                      ? null
+                      : () {
+                          if (page == "search") {
+                            searchPageSubmitted(context);
+                          }
+                        },
+                ),
+              ],
+            ),
           ],
         )));
   }
 
-  void back() {
-    print("Back $page");
-    setState(() {
-      if (page > 1)
-        page--;
-      else
-        cancel();
-      ref.read(adderProvider.notifier).setStep(steps[page - 1]);
-    });
-  }
-
   void cancel() {
-    page = 1;
     ref.read(adderProvider.notifier).cancel();
     Beamer.of(context).beamBack();
   }
 
-  void done() {
-    page = 1;
-    ref.read(adderProvider.notifier).cancel();
-    Beamer.of(context).beamBack();
+  void searchPageSubmitted(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("\"$query\" - ${selectedSearchType.label}")));
   }
 
-  void stepOneToTwo(TextEditingController queryController) {
-    page = 2;
-    selectedSearchResults = [];
-    ref
-        .read(adderProvider.notifier)
-        .search(queryController.text, selectedSearchType);
-  }
-
-  void stepTwoToThree(List<SearchResult> results, BuildContext context) {
-    print("Step two to 3");
-    if (results.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Please select at least one song")));
-      return;
-    }
-    setState(() {
-      page = 3;
-    });
-    print("Selected $results");
-    ref.read(adderProvider.notifier).findVideosFor(results);
-  }
-
-  void stepThreeToFour(List<GlobalKey<InfoEditorCardState>> stateKeys) {
-    List<FindResult> results = [];
-    stateKeys.forEach((key) {
-      if (key.currentState == null) return;
-      print("Adding ${key.currentState!.data.name}");
-      results.add(key.currentState!.data);
-      //print("Adding ${key.currentState!.data}");
-    });
-    ref.read(adderProvider.notifier).addFindResults(results);
-    setState(() {
-      page = 4;
-    });
-  }
-
-  Widget firstStep(WidgetRef ref, TextEditingController queryController) {
-    queryController.text = query;
+  Widget searchPage(BuildContext context) {
     return Container(
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,9 +117,20 @@ class _AdderPageState extends ConsumerState {
         Row(children: [
           Expanded(
             child: TextField(
-              controller: queryController,
-              onSubmitted: (text) => stepOneToTwo(queryController),
-              onChanged: (text) => query = text,
+              onSubmitted: (_) {
+                searchPageSubmitted(context);
+              },
+              onChanged: (text) {
+                setState(() {
+                  query = text;
+                  if (query != "" && !nextable) {
+                    nextable = true;
+                  }
+                  if (query == "" && nextable) {
+                    nextable = false;
+                  }
+                });
+              },
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Enter a search term',
@@ -227,157 +160,6 @@ class _AdderPageState extends ConsumerState {
           ),
         ]),
       ],
-    ));
-  }
-
-  Widget secondStep(List<SearchResult> results) {
-    return Column(children: [
-      Text("Step 2: Results",
-          textAlign: TextAlign.left,
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-      Container(
-        //margin: EdgeInsets.only(top: 42),
-        child: Text("Select the song(s) you want to add"),
-      ),
-      Expanded(
-        //margin: EdgeInsets.only(top: 72, bottom: 16),
-        child: ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: results.length,
-          itemBuilder: (context, index) {
-            return Container(
-              // margin: EdgeInsets.symmetric(horizontal: 8),
-              // padding: EdgeInsets.all(8),
-              // margin: EdgeInsets.only(bottom: 16),
-              decoration: <Decoration>() {
-                if (index == 0)
-                  return BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(8),
-                          topRight: Radius.circular(8)),
-                      color: Theme.of(context).colorScheme.surfaceContainer);
-                else if (index == results.length - 1)
-                  return BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(8),
-                          bottomRight: Radius.circular(8)),
-                      color: Theme.of(context).colorScheme.surfaceContainer);
-                else
-                  return BoxDecoration(
-                      color: Theme.of(context).colorScheme.surfaceContainer);
-              }(),
-              // color: Theme.of(context).colorScheme.surface.tone(20),
-              height: 56,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                      height: 56 - 16,
-                      width: 56 - 16,
-                      child: CachedNetworkImage(
-                        imageUrl: results[index].imageUrl,
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                        placeholder: (context, url) => Container(
-                            decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(4))),
-                        errorWidget: (context, url, error) => Icon(
-                            Icons.error_outline_rounded,
-                            color: Colors.pink[700]),
-                      ),
-                    ),
-                    Expanded(
-                        child: Text(
-                      results[index].cardString,
-                      overflow: TextOverflow.ellipsis,
-                    )),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                      child: CheckBox(
-                          initialValue: false,
-                          callback: (value) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(
-                                    '${value ? "Selected" : "Deselected"} ${results[index].cardString}'),
-                                duration: Duration(seconds: 1)));
-                            if (value)
-                              selectedSearchResults.add(results[index]);
-                            else
-                              selectedSearchResults.remove(results[index]);
-                            print("Checkbox $index: $value");
-                          }),
-                    ),
-                  ]),
-            );
-          },
-        ),
-      ),
-    ]);
-  }
-
-  Widget thirdStep(List<FindResult> results,
-      List<GlobalKey<InfoEditorCardState>> stateKeys, int viewportWidth) {
-    return Column(children: [
-      Text("Step 3: Check",
-          textAlign: TextAlign.left,
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-      Container(
-        //margin: EdgeInsets.only(top: 42),
-        child: Text("Check that the info is correct before proceeding"),
-      ),
-      Expanded(
-        child: Container(
-          //margin: EdgeInsets.only(top: 72, bottom: 16),
-          child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: (600 / 552),
-              crossAxisCount: (viewportWidth / 600).truncate() == 0
-                  ? 1
-                  : (viewportWidth / 600).truncate(),
-            ),
-            shrinkWrap: true,
-            itemCount: results.length,
-            itemBuilder: (context, index) {
-              return InfoEditorCard(
-                  key: stateKeys[index], data: results[index], ref: ref);
-            },
-          ),
-        ),
-      ),
-    ]);
-  }
-
-  Widget fourthStep(AddResult data) {
-    return Container(
-        child: Center(
-      child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text("Successfully added:",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-            Text("${data.count.artists} artists",
-                style: TextStyle(fontSize: 20)),
-            Text("${data.count.albums} albums,",
-                style: TextStyle(fontSize: 20)),
-            Text("and ${data.count.songs} songs,",
-                style: TextStyle(fontSize: 20)),
-            Text(
-              "Click Done to finish",
-              style: TextStyle(fontSize: 20),
-            ),
-          ]),
     ));
   }
 }

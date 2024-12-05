@@ -68,9 +68,11 @@ Future<int> loginToken(LoginTokenRef ref, String token) async {
         return 1;
       }
     }else{
+      print("LoginProvider: error logging in with token: status code was not 200: ${response.statusCode};");
       return -1;
     }
   }catch(e) {
+    print("LoginProvider: error logging in with token: $e");
     return -1;
   }
 }

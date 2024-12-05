@@ -12,6 +12,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'providers/data/preferences_provider.dart';
 import 'providers/theme_provider.dart';
 import 'uppercase_extension.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 
 import 'pages/error.dart';
 import 'pages/home.dart';
@@ -20,7 +21,7 @@ import 'pages/artist.dart';
 import 'pages/albums.dart';
 import 'pages/album.dart';
 import 'pages/songs.dart';
-import 'pages/adder.dart';
+import 'pages/new_adder.dart';
 import 'pages/queue.dart';
 import 'pages/landing.dart';
 import 'pages/search.dart';
@@ -57,49 +58,47 @@ void main() async {
     brightness: themeProvider.dark ? Brightness.dark : Brightness.light,
   );
   print("Starting app");
-  runApp(
-    prov.MultiProvider(
-        providers: [
-          prov.ChangeNotifierProvider(create: (_) => themeProvider),
-          prov.ChangeNotifierProvider(create: (_) => prefsProvider),
-        ],
-        child: ProviderScope(
-          child: ContextMenuOverlay(
-            cardBuilder: (context, children) => Container(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                decoration: BoxDecoration(
-                  color: scheme.surfaceContainerHigh,
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
-                ),
-                child: Column(children: children)),
-            buttonBuilder: (context, config, [__]) => TextButton(
-              onPressed: config.onPressed,
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                child: Row(
-                  children: [
-                    IconTheme(
-                      data: IconThemeData(color: scheme.onSurface),
-                      child: config.icon ?? Container(),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                        child: Text(
-                      config.label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins().apply(
-                        color: scheme.onSurface,
-                      ),
-                    )),
-                  ],
-                ),
-              ),
-            ),
-            child: App(),
+  runApp(prov.MultiProvider(
+    providers: [
+      prov.ChangeNotifierProvider(create: (_) => themeProvider),
+      prov.ChangeNotifierProvider(create: (_) => prefsProvider),
+    ],
+    child: ProviderScope(
+        child: ContextMenuOverlay(
+      cardBuilder: (context, children) => Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: scheme.surfaceContainerHigh,
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
           ),
-        )),
-  );
+          child: Column(children: children)),
+      buttonBuilder: (context, config, [__]) => TextButton(
+        onPressed: config.onPressed,
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          child: Row(
+            children: [
+              IconTheme(
+                data: IconThemeData(color: scheme.onSurface),
+                child: config.icon ?? Container(),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                  child: Text(
+                config.label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.poppins().apply(
+                  color: scheme.onSurface,
+                ),
+              )),
+            ],
+          ),
+        ),
+      ),
+      child: App(),
+    )),
+  ));
 }
 
 class App extends ConsumerWidget {
@@ -282,16 +281,33 @@ class App extends ConsumerWidget {
     theme.textTheme = GoogleFonts.poppinsTextTheme()
         .apply(bodyColor: scheme.onSurface, displayColor: scheme.onSurface);
     theme.colorScheme = scheme;
-    return MaterialApp.router(
-      // debugShowCheckedModeBanner: false,
-      title: 'Taxi - Native',
-      theme: ThemeData(
-        colorScheme: scheme,
-        textTheme: theme.textTheme,
-        useMaterial3: true,
-      ),
-      routerDelegate: routerDelegate,
-      routeInformationParser: BeamerParser(),
-    );
+    return DynamicColorBuilder(
+        builder: (ColorScheme? light, ColorScheme? dark) {
+      if (theme.auto) {
+        print("Using dynamic colors");
+        if (theme.isDark) {
+          scheme = dark ?? scheme;
+          theme.textTheme = GoogleFonts.poppinsTextTheme().apply(
+              bodyColor: scheme.onSurface, displayColor: scheme.onSurface);
+          print("Using dark dynamic colors");
+        } else {
+          scheme = light ?? scheme;
+          theme.textTheme = GoogleFonts.poppinsTextTheme().apply(
+              bodyColor: scheme.onSurface, displayColor: scheme.onSurface);
+          print("Using light dynamic colors");
+        }
+      }
+      return MaterialApp.router(
+        // debugShowCheckedModeBanner: false,
+        title: 'Taxi - Native',
+        theme: ThemeData(
+          colorScheme: scheme,
+          textTheme: theme.textTheme,
+          useMaterial3: true,
+        ),
+        routerDelegate: routerDelegate,
+        routeInformationParser: BeamerParser(),
+      );
+    });
   }
 }

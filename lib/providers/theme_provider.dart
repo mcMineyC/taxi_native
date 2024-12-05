@@ -6,35 +6,95 @@ class ThemeChanger extends ChangeNotifier {
   late SharedPreferences sp;
 
   static String defaultSeed = "#1E88E5";
-  static bool   defaultDark = false;
-  static bool   defaultAuto = false;
+  static bool defaultDark = false;
+  static bool defaultAuto = false;
+  static bool defaultAutoBrightness = true;
 
   bool spInit = false;
   String seedHex = "";
   bool dark = false;
-  bool auto = true;
+  bool auto = false;
+  bool autoBrightness = true;
   TextTheme textTheme = TextTheme();
   ColorScheme? colorScheme;
   bool get isDark => dark;
+  bool get isAuto => auto;
+  bool get isAutoBrightness => autoBrightness;
+  String get mode => autoBrightness
+      ? "auto"
+      : dark
+          ? "dark"
+          : "light";
   String get seedColor => seedHex;
-  final platformDark = WidgetsBinding.instance.platformDispatcher.platformBrightness == Brightness.dark;
+  final platformDark =
+      WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+          Brightness.dark;
 
-  set isDark(bool val) {dark = val; notifyListeners(); persist().then((_) {print("Persisted theme data");});}
-  set seedColor(String val) {seedHex = val; notifyListeners(); persist().then((_) {print("Persisted theme data");});}
-  set useAuto(bool val) {auto = val; if(platformDark) dark = true; notifyListeners(); persist().then((_) {print("Persisted theme data");});}
+  set isDark(bool val) {
+    dark = val;
+    notifyListeners();
+    persist().then((_) {
+      print("Persisted theme data");
+    });
+  }
 
-  void toggleTheme(){
+  set seedColor(String val) {
+    seedHex = val;
+    notifyListeners();
+    persist().then((_) {
+      print("Persisted theme data");
+    });
+  }
+
+  set mode(String val) {
+    if (val == "auto") {
+      autoBrightness = true;
+      dark = platformDark;
+    } else if (val == "dark") {
+      autoBrightness = false;
+      dark = true;
+    } else if (val == "light") {
+      autoBrightness = false;
+      dark = false;
+    }
+    notifyListeners();
+    persist().then((_) {
+      print("Persisted theme data");
+    });
+  }
+
+  set isAuto(bool val) {
+    print("Saving auto mode $val");
+    auto = val;
+    notifyListeners();
+    persist().then((_) {
+      print("Persisted theme data");
+    });
+  }
+
+  set isAutoBrightness(bool val) {
+    auto = val;
+    if (platformDark) dark = true;
+    notifyListeners();
+    persist().then((_) {
+      print("Persisted theme data");
+    });
+  }
+
+  void toggleTheme() {
     isDark = !isDark;
   }
 
   Future<void> reset() async {
-    if(!spInit) return;
+    if (!spInit) return;
     sp.remove("seed");
     seedColor = defaultSeed;
     sp.remove("dark");
     isDark = defaultDark;
     sp.remove("auto");
     auto = defaultAuto;
+    sp.remove("brightnessMode");
+    mode = "auto";
   }
 
   Future<void> persist() async {
@@ -42,14 +102,18 @@ class ThemeChanger extends ChangeNotifier {
     sp.setString("seed", seedHex);
     sp.setBool("dark", dark);
     sp.setBool("auto", auto);
+    sp.setString("brightnessMode", mode);
   }
 
   Future<void> init() async {
     if (spInit) return;
     sp = await SharedPreferences.getInstance();
     seedHex = sp.getString("seed") ?? defaultSeed;
-    dark = sp.getBool("dark") ?? defaultDark;
-    auto = sp.getBool("auto") ?? defaultAuto;
+    dark = (sp.getBool("dark") ?? defaultDark) && !isAuto;
+    isAuto = sp.getBool("auto") ?? defaultAuto;
+    print("Loaded auto $isAuto ${sp.getBool("auto")}");
+    if (isAuto) dark = platformDark;
+    mode = sp.getString("brightnessMode") ?? "auto";
     notifyListeners();
     print("Loaded theme data");
     spInit = true;

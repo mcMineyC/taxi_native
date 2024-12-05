@@ -6,6 +6,7 @@ import '../providers/theme_provider.dart';
 import '../providers/data/preferences_provider.dart';
 import '../providers/services/player.dart';
 import '../platform_utils.dart';
+import '../helper_widgets.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -22,9 +23,10 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    PreferencesProvider prefProvider = prov.Provider.of<PreferencesProvider>(context);
+    PreferencesProvider prefProvider =
+        prov.Provider.of<PreferencesProvider>(context);
     ThemeChanger themeChanger = prov.Provider.of<ThemeChanger>(context);
-    if(!init) {
+    if (!init) {
       schemeColor = HexColor.fromHex(themeChanger.seedColor);
       _serverUrlController.text = prefProvider.backendUrl;
       init = true;
@@ -32,130 +34,138 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
     List<(String header, Widget content)> _settings = [
       (
         'Theme',
-        Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Row(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  child: const Text("Dark mode"),
-                ),
-                Switch(
-                  value: themeChanger.isDark,
-                  onChanged: (value) {
-                    themeChanger.isDark = value;
-                  }
-                ),
-              ],
+        Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+          Row(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(right: 8),
+                child: const Text("Brightness mode"),
+              ),
+              BrightnessModeSwitch(
+                mode: getBrightnessModeFromString(themeChanger.mode),
+                onSelected: (BrightnessModes mode) {
+                  print(
+                      "Selected brightness mode: ${mode.toString().split('.').last}");
+                  themeChanger.mode = mode.toString().split('.').last;
+                },
+              )
+            ],
+          ),
+          Container(height: 6),
+          Row(children: <Widget>[
+            Container(
+              margin: const EdgeInsets.only(right: 8),
+              child: const Text("Color source mode"),
             ),
-            Container(height: 6),
-            FilledButton(
-              child: Text("Change theme color"),
-              onPressed: () => colorPickerDialog(themeChanger),
+            ColorSourceModeSwitch(
+              mode: themeChanger.isAuto
+                  ? ColorSourceMode.dynamic
+                  : ColorSourceMode.manual,
+              onSelected: (ColorSourceMode mode) {
+                print(
+                    "Selected color source mode: ${mode.toString().split('.').last}");
+                themeChanger.isAuto =
+                    mode.toString().split('.').last == "dynamic";
+              },
             ),
-          ]
-        )
+            if (!themeChanger.isAuto)
+              Container(
+                margin: const EdgeInsets.only(left: 8),
+                child: FilledButton(
+                  child: Text("Change theme color"),
+                  onPressed: () => colorPickerDialog(themeChanger),
+                ),
+              )
+          ]),
+        ])
       ),
       (
         "Shuffle",
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  child: const Text("On loop"),
-                ),
-                Switch(
-                  value: prefProvider.shuffleOnLoop,
-                  onChanged: (value) => prefProvider.shuffleOnLoop = value,
-                ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  child: const Text("By default"),
-                ),
-                Switch(
-                  value: prefProvider.shuffleDefault,
-                  onChanged: (value) => prefProvider.shuffleDefault = value,
-                ),
-              ],
-            ),
-          ]
-        ),
+        Column(crossAxisAlignment: CrossAxisAlignment.end, children: <Widget>[
+          Row(
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(right: 8),
+                child: const Text("On loop"),
+              ),
+              Switch(
+                value: prefProvider.shuffleOnLoop,
+                onChanged: (value) => prefProvider.shuffleOnLoop = value,
+              ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(right: 8),
+                child: const Text("By default"),
+              ),
+              Switch(
+                value: prefProvider.shuffleDefault,
+                onChanged: (value) => prefProvider.shuffleDefault = value,
+              ),
+            ],
+          ),
+        ]),
       ),
       (
         "Persistence",
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  child: const Text("Save current song"),
-                ),
-                Switch(
-                  value: prefProvider.persistInfo,
-                  onChanged: (value) => prefProvider.persistInfo = value,
-                ),
-              ]
+        Column(crossAxisAlignment: CrossAxisAlignment.end, children: <Widget>[
+          Row(children: <Widget>[
+            Container(
+              margin: const EdgeInsets.only(right: 8),
+              child: const Text("Save current song"),
             ),
-            Row(
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  child: const Text("Auto-resume song"),
-                ),
-                Switch(
-                  value: PlatformUtils.isWeb ? false : prefProvider.autoResume,
-                  onChanged: PlatformUtils.isWeb ? null : (value) => prefProvider.autoResume = value,
-                ),
-              ]
+            Switch(
+              value: prefProvider.persistInfo,
+              onChanged: (value) => prefProvider.persistInfo = value,
             ),
-            Row(
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  child: const Text("Save library tab"),
-                ),
-                Switch(
-                  value: prefProvider.saveLibraryTab,
-                  onChanged: (value) => prefProvider.saveLibraryTab = value,
-                ),
-              ]
+          ]),
+          Row(children: <Widget>[
+            Container(
+              margin: const EdgeInsets.only(right: 8),
+              child: const Text("Auto-resume song"),
             ),
-          ]
-        ),
+            Switch(
+              value: PlatformUtils.isWeb ? false : prefProvider.autoResume,
+              onChanged: PlatformUtils.isWeb
+                  ? null
+                  : (value) => prefProvider.autoResume = value,
+            ),
+          ]),
+          Row(children: <Widget>[
+            Container(
+              margin: const EdgeInsets.only(right: 8),
+              child: const Text("Save library tab"),
+            ),
+            Switch(
+              value: prefProvider.saveLibraryTab,
+              onChanged: (value) => prefProvider.saveLibraryTab = value,
+            ),
+          ]),
+        ]),
       ),
       (
         "Development",
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(right: 8),
-                  child: const Text("Debug mode"),
-                ),
-                Switch(
-                  value: prefProvider.debugMode,
-                  onChanged: (value) => prefProvider.debugMode = value,
-                ),
-              ]
-            ),
+            Row(children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(right: 8),
+                child: const Text("Debug mode"),
+              ),
+              Switch(
+                value: prefProvider.debugMode,
+                onChanged: (value) => prefProvider.debugMode = value,
+              ),
+            ]),
             Row(
               children: <Widget>[
                 Container(
                   width: 372,
                   child: TextField(
-                  controller: _serverUrlController,
+                    controller: _serverUrlController,
                     decoration: const InputDecoration(
                       labelText: "Server URL",
                       border: OutlineInputBorder(),
@@ -179,27 +189,28 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
         Row(
           children: <Widget>[
             OutlinedButton(
-              style: ButtonStyle(foregroundColor: WidgetStateProperty.all(Colors.red)),
+              style: ButtonStyle(
+                  foregroundColor: WidgetStateProperty.all(Colors.red)),
               child: const Text("Reset"),
               onPressed: () async {
                 var result = await showDialog<bool>(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text("Reset all settings?"),
-                    content: const Text("This will reset all settings to their defaults. This action cannot be undone."),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text("No"),
-                        onPressed: () => Navigator.of(context).pop(false),
-                      ),
-                      TextButton(
-                        child: const Text("Yes"),
-                        onPressed: () => Navigator.of(context).pop(true),
-                      ),
-                    ],
-                  )
-                );
-                if(result == true) {
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: const Text("Reset all settings?"),
+                          content: const Text(
+                              "This will reset all settings to their defaults. This action cannot be undone."),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text("No"),
+                              onPressed: () => Navigator.of(context).pop(false),
+                            ),
+                            TextButton(
+                              child: const Text("Yes"),
+                              onPressed: () => Navigator.of(context).pop(true),
+                            ),
+                          ],
+                        ));
+                if (result == true) {
                   prefProvider.reset();
                   themeChanger.reset();
                 }
@@ -207,27 +218,29 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
             ),
             Container(width: 12),
             ElevatedButton(
-              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.red), foregroundColor: WidgetStateProperty.all(Colors.white)),
+              style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all(Colors.red),
+                  foregroundColor: WidgetStateProperty.all(Colors.white)),
               child: const Text("Logout"),
               onPressed: () async {
                 var result = await showDialog<bool>(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text("Logout?"),
-                    content: const Text("You will be logged out and all settings will reset to their defaults. This action cannot be undone."),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text("No"),
-                        onPressed: () => Navigator.of(context).pop(false),
-                      ),
-                      TextButton(
-                        child: const Text("Yes"),
-                        onPressed: () => Navigator.of(context).pop(true),
-                      ),
-                    ],
-                  )
-                );
-                if(result == true) {
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: const Text("Logout?"),
+                          content: const Text(
+                              "You will be logged out and all settings will reset to their defaults. This action cannot be undone."),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text("No"),
+                              onPressed: () => Navigator.of(context).pop(false),
+                            ),
+                            TextButton(
+                              child: const Text("Yes"),
+                              onPressed: () => Navigator.of(context).pop(true),
+                            ),
+                          ],
+                        ));
+                if (result == true) {
                   ref.read(playerProvider.notifier).stop();
                   await themeChanger.reset();
                   await prefProvider.reset();
@@ -245,24 +258,25 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
       child: ListView.separated(
         itemCount: _settings.length,
         separatorBuilder: (context, index) => const Divider(),
-        itemBuilder: (context, index) => Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(_settings[index].$1, style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: themeChanger.colorScheme?.onSurface)),
-            Expanded(child: Container()),
-            _settings[index].$2,
-          ]
-        ),
+        itemBuilder: (context, index) =>
+            Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+          Text(_settings[index].$1,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge
+                  ?.copyWith(color: themeChanger.colorScheme?.onSurface)),
+          Expanded(child: Container()),
+          _settings[index].$2,
+        ]),
       ),
     );
   }
-
 
   Future<bool> colorPickerDialog(ThemeChanger themeChanger) async {
     return ColorPicker(
       color: schemeColor,
       onColorChanged: (Color color) {
-        if(color == Colors.black) return;
+        if (color == Colors.black) return;
         setState(() {
           themeChanger.seedColor = color.toHex();
         });

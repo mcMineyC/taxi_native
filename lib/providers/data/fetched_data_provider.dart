@@ -13,6 +13,7 @@ import '../../types/album.dart';
 import '../../types/artists.dart';
 
 part 'fetched_data_provider.g.dart';
+
 PreferencesProvider _p = ServiceLocator().get<PreferencesProvider>();
 
 @Riverpod(keepAlive: true)
@@ -21,15 +22,11 @@ Future<List<Song>> fetchSongs(FetchSongsRef ref, {bool? ignore = false}) async {
   print("IGNORING: $ignore");
   var response = await http.post(
       Uri.parse("${_p.backendUrl}/info/songs${ignore! ? "?ignore=true" : ""}"),
-      headers: Map<String, String>.from({
-        'Content-Type': 'application/json'
-      }),
-      body: jsonEncode(<String, String>{
-        'authtoken': _sp.getString("token") ?? ""
-      })
-  );
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          <String, String>{'authtoken': _sp.getString("token") ?? ""}));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   // print(desponse);
@@ -39,25 +36,25 @@ Future<List<Song>> fetchSongs(FetchSongsRef ref, {bool? ignore = false}) async {
     // print(element);
     var outStr = jsonEncode(element);
     var song = Song.fromJson(jsonDecode(outStr));
+    if (song.artistDisplayName == "Megadeth") {
+      print("Well, has megadeth: ${song.displayName} ignoring = $ignore");
+    }
     listThings.add(song);
   });
   return listThings;
 }
 
 @Riverpod(keepAlive: true)
-Future<List<Album>> fetchAlbums(FetchAlbumsRef ref, {bool ignore = false}) async {
+Future<List<Album>> fetchAlbums(FetchAlbumsRef ref,
+    {bool ignore = false}) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse("${_p.backendUrl}/info/albums${ignore ? "?ignore=true" : ""}"),
-      headers: Map<String, String>.from({
-        'Content-Type': 'application/json'
-      }),
-      body: jsonEncode(<String, String>{
-        'authtoken': _sp.getString("token") ?? ""
-      })
-  );
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          <String, String>{'authtoken': _sp.getString("token") ?? ""}));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   desponse = desponse["albums"];
@@ -70,22 +67,18 @@ Future<List<Album>> fetchAlbums(FetchAlbumsRef ref, {bool ignore = false}) async
   return listThings;
 }
 
-
 @Riverpod(keepAlive: true)
-Future<List<Artist>> fetchArtists(FetchArtistsRef ref, {bool ignore = false}) async {
+Future<List<Artist>> fetchArtists(FetchArtistsRef ref,
+    {bool ignore = false}) async {
   final _sp = await SharedPreferences.getInstance();
   print("IGNORING: $ignore");
   var response = await http.post(
       Uri.parse("${_p.backendUrl}/info/artists${ignore ? "?ignore=true" : ""}"),
-      headers: Map<String, String>.from({
-        'Content-Type': 'application/json'
-      }),
-      body: jsonEncode(<String, String>{
-        'authtoken': _sp.getString("token") ?? "" 
-      })
-  );
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          <String, String>{'authtoken': _sp.getString("token") ?? ""}));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   desponse = desponse["artists"];
@@ -100,111 +93,101 @@ Future<List<Artist>> fetchArtists(FetchArtistsRef ref, {bool ignore = false}) as
 }
 
 @Riverpod(keepAlive: false)
-Future<List<Song>> findBatchSongs(FindBatchSongsRef ref, List<String> ids, {bool ignore = false}) async {
+Future<List<Song>> findBatchSongs(FindBatchSongsRef ref, List<String> ids,
+    {bool ignore = false}) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("${_p.backendUrl}/info/songs/batch${ignore ? "?ignore=true" : ""}"),
-      headers: Map<String, String>.from({
-        'Content-Type': 'application/json'
-      }),
-      body: jsonEncode({
-        'authtoken': (_sp.getString("token") ?? ""),
-        'ids': ids
-      })
-  );
+      Uri.parse(
+          "${_p.backendUrl}/info/songs/batch${ignore ? "?ignore=true" : ""}"),
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          {'authtoken': (_sp.getString("token") ?? ""), 'ids': ids}));
   var desponse = jsonDecode(response.body);
   // print("Response: $desponse");
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   desponse = desponse["results"];
   List<Song> returning = [];
-  for(var i = ids.length - 1; i >= 0; i--) {
-    if(desponse.containsKey(ids[i])) {
-      if(desponse[ids[i]] == null) {
+  for (var i = ids.length - 1; i >= 0; i--) {
+    if (desponse.containsKey(ids[i])) {
+      if (desponse[ids[i]] == null) {
         continue;
       }
       returning.add(Song.fromJson(desponse[ids[i]]));
-    }else{
+    } else {
       continue;
     }
   }
   return returning;
 }
-@riverpod
 
+@riverpod
 Future<Song> findSong(FindSongRef ref, String id, {bool ignore = false}) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-    Uri.parse("${_p.backendUrl}/info/songs/$id${ignore ? "?ignore=true" : ""}"),
-    headers: Map<String, String>.from({
-      'Content-Type': 'application/json'
-    }),
-    body: jsonEncode(<String, String>{
-      'authtoken': (_sp.getString("token") ?? "")
-    })
-  );
+      Uri.parse(
+          "${_p.backendUrl}/info/songs/$id${ignore ? "?ignore=true" : ""}"),
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          <String, String>{'authtoken': (_sp.getString("token") ?? "")}));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   return Song.fromJson(desponse["song"]);
 }
 
 @riverpod
-Future<List<Song>> findSongsByAlbum(FindSongsByAlbumRef ref, String id, {bool ignore = false}) async {
+Future<List<Song>> findSongsByAlbum(FindSongsByAlbumRef ref, String id,
+    {bool ignore = false}) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-    Uri.parse("${_p.backendUrl}/info/songs/by/album/$id${ignore ? "?ignore=true" : ""}"),
-    headers: Map<String, String>.from({
-      'Content-Type': 'application/json'
-    }),
-    body: jsonEncode(<String, String>{
-      'authtoken': (_sp.getString("token") ?? "")
-    })
-  );
+      Uri.parse(
+          "${_p.backendUrl}/info/songs/by/album/$id${ignore ? "?ignore=true" : ""}"),
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          <String, String>{'authtoken': (_sp.getString("token") ?? "")}));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
-  List<Song> songs = desponse["songs"].map<Song>((e) => Song.fromJson(e)).toList();
+  List<Song> songs =
+      desponse["songs"].map<Song>((e) => Song.fromJson(e)).toList();
   return songs;
 }
 
 @riverpod
-Future<List<Song>> findSongsByArtist(FindSongsByArtistRef ref, String id, {bool ignore = false}) async {
+Future<List<Song>> findSongsByArtist(FindSongsByArtistRef ref, String id,
+    {bool ignore = false}) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-    Uri.parse("${_p.backendUrl}/info/songs/by/artist/$id${ignore ? "?ignore=true" : ""}"),
-    headers: Map<String, String>.from({
-      'Content-Type': 'application/json'
-    }),
-    body: jsonEncode(<String, String>{
-      'authtoken': (_sp.getString("token") ?? "")
-    })
-  );
+      Uri.parse(
+          "${_p.backendUrl}/info/songs/by/artist/$id${ignore ? "?ignore=true" : ""}"),
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          <String, String>{'authtoken': (_sp.getString("token") ?? "")}));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
-  List<Song> songs = desponse["songs"].map<Song>((e) => Song.fromJson(e)).toList();
+  List<Song> songs =
+      desponse["songs"].map<Song>((e) => Song.fromJson(e)).toList();
   return songs;
 }
 
 @riverpod
-Future<List<Album>> findAlbumsByArtist(FindAlbumsByArtistRef ref, String id, {bool ignore = false}) async {
+Future<List<Album>> findAlbumsByArtist(FindAlbumsByArtistRef ref, String id,
+    {bool ignore = false}) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("${_p.backendUrl}/info/albums/by/artist/$id${ignore ? "?ignore=true" : ""}"),
-      headers: Map<String, String>.from({
-        'Content-Type': 'application/json'
-      }),
-      body: jsonEncode(<String, String>{
-        'authtoken': _sp.getString("token") ?? ""
-      })
-  );
+      Uri.parse(
+          "${_p.backendUrl}/info/albums/by/artist/$id${ignore ? "?ignore=true" : ""}"),
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          <String, String>{'authtoken': _sp.getString("token") ?? ""}));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   desponse = desponse["albums"];
@@ -218,19 +201,18 @@ Future<List<Album>> findAlbumsByArtist(FindAlbumsByArtistRef ref, String id, {bo
 }
 
 @riverpod
-Future<List<Album>> findNoSinglesByArtist(FindNoSinglesByArtistRef ref, String id, {bool ignore = false}) async {
+Future<List<Album>> findNoSinglesByArtist(
+    FindNoSinglesByArtistRef ref, String id,
+    {bool ignore = false}) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("${_p.backendUrl}/info/albums/by/artist/$id?excludeSingles=true${ignore ? "&ignore=true" : ""}"),
-      headers: Map<String, String>.from({
-        'Content-Type': 'application/json'
-      }),
-      body: jsonEncode(<String, String>{
-        'authtoken': _sp.getString("token") ?? ""
-      })
-  );
+      Uri.parse(
+          "${_p.backendUrl}/info/albums/by/artist/$id?excludeSingles=true${ignore ? "&ignore=true" : ""}"),
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          <String, String>{'authtoken': _sp.getString("token") ?? ""}));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   desponse = desponse["albums"];
@@ -244,19 +226,17 @@ Future<List<Album>> findNoSinglesByArtist(FindNoSinglesByArtistRef ref, String i
 }
 
 @riverpod
-Future<List<Song>> findSinglesByArtist(FindSinglesByArtistRef ref, String id, {bool ignore = false}) async {
+Future<List<Song>> findSinglesByArtist(FindSinglesByArtistRef ref, String id,
+    {bool ignore = false}) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("${_p.backendUrl}/info/singles/by/artist/$id${ignore ? "?ignore=true" : ""}"),
-      headers: Map<String, String>.from({
-        'Content-Type': 'application/json'
-      }),
-      body: jsonEncode(<String, String>{
-        'authtoken': _sp.getString("token") ?? ""
-      })
-  );
+      Uri.parse(
+          "${_p.backendUrl}/info/singles/by/artist/$id${ignore ? "?ignore=true" : ""}"),
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          <String, String>{'authtoken': _sp.getString("token") ?? ""}));
   var desponse = jsonDecode(response.body);
-  if(desponse["songs"] == false) {
+  if (desponse["songs"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   desponse = desponse["songs"];
@@ -269,21 +249,18 @@ Future<List<Song>> findSinglesByArtist(FindSinglesByArtistRef ref, String id, {b
   return listThings;
 }
 
-
 @riverpod
-Future<Album> findAlbum(FindAlbumRef ref, String id, {bool ignore = false}) async {
+Future<Album> findAlbum(FindAlbumRef ref, String id,
+    {bool ignore = false}) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-    Uri.parse("${_p.backendUrl}/info/album/$id${ignore ? "?ignore=true" : ""}"),
-    headers: Map<String, String>.from({
-      'Content-Type': 'application/json'
-    }),
-    body: jsonEncode(<String, String>{
-      'authtoken': _sp.getString("token") ?? ""
-    })
-  );
+      Uri.parse(
+          "${_p.backendUrl}/info/album/$id${ignore ? "?ignore=true" : ""}"),
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          <String, String>{'authtoken': _sp.getString("token") ?? ""}));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   print(desponse["album"]);
@@ -291,19 +268,17 @@ Future<Album> findAlbum(FindAlbumRef ref, String id, {bool ignore = false}) asyn
 }
 
 @riverpod
-Future<Artist> findArtist(FindArtistRef ref, String id, {bool ignore = false}) async {
+Future<Artist> findArtist(FindArtistRef ref, String id,
+    {bool ignore = false}) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-    Uri.parse("${_p.backendUrl}/info/artist/$id${ignore ? "?ignore=true" : ""}"),
-    headers: Map<String, String>.from({
-      'Content-Type': 'application/json'
-    }),
-    body: jsonEncode(<String, String>{
-      'authtoken': _sp.getString("token") ?? ""
-    })
-  );
+      Uri.parse(
+          "${_p.backendUrl}/info/artist/$id${ignore ? "?ignore=true" : ""}"),
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          <String, String>{'authtoken': _sp.getString("token") ?? ""}));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   return Artist.fromJson(desponse["artist"]);
@@ -314,9 +289,7 @@ Future<bool> updateSong(UpdateSongRef ref, Song s) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse("${_p.backendUrl}/edit/song/${s.id}"),
-      headers: Map<String, String>.from({
-        'Content-Type': 'application/json'
-      }),
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(<String, String>{
         'authtoken': _sp.getString("token") ?? "",
         'displayName': s.displayName,
@@ -324,14 +297,14 @@ Future<bool> updateSong(UpdateSongRef ref, Song s) async {
         'artistDisplayName': s.artistDisplayName,
         'youtubeId': s.youtubeId,
         'imageUrl': s.imageUrl,
-      })
-  );
+      }));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     print("Not authenticated");
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
-  print((desponse?["success"] ? "succeded" : "failed") + " to update song ${s.displayName}");
+  print((desponse?["success"] ? "succeded" : "failed") +
+      " to update song ${s.displayName}");
   return desponse?["success"] ?? false;
 }
 
@@ -340,19 +313,16 @@ Future<bool> updateAlbum(UpdateAlbumRef ref, Album a, List<Song> songs) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse("${_p.backendUrl}/edit/album/${a.id}"),
-      headers: Map<String, String>.from({
-        'Content-Type': 'application/json'
-      }),
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode({
         'authtoken': _sp.getString("token") ?? "",
         'displayName': a.displayName,
         'artistDisplayName': a.artistDisplayName,
         'imageUrl': a.imageUrl,
         'songs': songs.map((e) => e.id).toList(),
-      })
-  );
+      }));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     print("Not authenticated");
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
@@ -364,17 +334,14 @@ Future<bool> updateArtist(UpdateArtistRef ref, Artist a) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse("${_p.backendUrl}/edit/artist/${a.id}"),
-      headers: Map<String, String>.from({
-        'Content-Type': 'application/json'
-      }),
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(<String, String>{
         'authtoken': _sp.getString("token") ?? "",
         'displayName': a.displayName,
         'imageUrl': a.imageUrl
-      })
-  );
+      }));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     print("Not authenticated");
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
@@ -382,19 +349,16 @@ Future<bool> updateArtist(UpdateArtistRef ref, Artist a) async {
 }
 
 @Riverpod(keepAlive: false)
-Future<bool> deleteItem(DeleteItemRef ref, String type, String id, String extraParams) async {
+Future<bool> deleteItem(
+    DeleteItemRef ref, String type, String id, String extraParams) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse("${_p.backendUrl}/edit/$type/$id/delete$extraParams"),
-      headers: Map<String, String>.from({
-        'Content-Type': 'application/json'
-      }),
-      body: jsonEncode(<String, String>{
-        'authtoken': _sp.getString("token") ?? ""
-      })
-  );
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          <String, String>{'authtoken': _sp.getString("token") ?? ""}));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     print("Not authenticated");
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
@@ -404,53 +368,42 @@ Future<bool> deleteItem(DeleteItemRef ref, String type, String id, String extraP
 @Riverpod(keepAlive: true)
 Future<List<String>> fetchUsernames(FetchUsernamesRef ref) async {
   final _sp = await SharedPreferences.getInstance();
-  var response = await http.post(
-      Uri.parse("${_p.backendUrl}/info/usernames"),
-      headers: Map<String, String>.from({
-        'Content-Type': 'application/json'
-      }),
-      body: jsonEncode(<String, String>{
-        'authtoken': _sp.getString("token") ?? ""
-      })
-  );
+  var response = await http.post(Uri.parse("${_p.backendUrl}/info/usernames"),
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          <String, String>{'authtoken': _sp.getString("token") ?? ""}));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   List<String> listThings = [];
-  desponse["usernames"].forEach((element) => listThings.add(element.toString()));
+  desponse["usernames"]
+      .forEach((element) => listThings.add(element.toString()));
   return listThings;
 }
 
 @Riverpod(keepAlive: false)
-Future<bool> editItemVisibility(EditItemVisibilityRef ref, String type, String id, List<String> users) async {
+Future<bool> editItemVisibility(EditItemVisibilityRef ref, String type,
+    String id, List<String> users) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-    Uri.parse("${_p.backendUrl}/edit/$type/$id/visibility"),
-    headers: Map<String, String>.from({
-      'Content-Type': 'application/json'
-    }),
-    body: jsonEncode({
-      'authtoken': _sp.getString("token") ?? "",
-      'visibleTo': users
-    })
-  );
+      Uri.parse("${_p.backendUrl}/edit/$type/$id/visibility"),
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          {'authtoken': _sp.getString("token") ?? "", 'visibleTo': users}));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     //print("Not authenticated");
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
-  bool clearCondition = (desponse["success"] ?? false) && desponse["data"]["visibleTo"] == users;
-  if(clearCondition) switch(type) {
-    case "song":
-      ref.refresh(fetchSongsProvider());
-      break;
-    case "album":
-      ref.refresh(fetchAlbumsProvider());
-      break;
-    case "artist":
-      ref.refresh(fetchArtistsProvider());
-      break;
-  };
+  bool clearCondition =
+      (desponse["success"] ?? false) && desponse["data"]["visibleTo"] == users;
+  if (clearCondition) {
+    if (type == "song" || type == "album" || type == "artist")
+      ref.refresh(fetchSongsProvider(ignore: false));
+    if (type == "album" || type == "artist")
+      ref.refresh(fetchAlbumsProvider(ignore: false));
+    if (type == "artist") ref.refresh(fetchArtistsProvider(ignore: false));
+  }
   return clearCondition;
 }

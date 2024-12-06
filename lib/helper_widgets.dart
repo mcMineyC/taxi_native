@@ -207,7 +207,7 @@ class MediaCard extends ConsumerWidget {
                           print("Setting playlist");
                           // ref.read(playerProvider.notifier).setPlaylist(thingId);
                           Beamer.of(context).beamToNamed("/playlist/$thingId");
-                        break;
+                          break;
                         case "placeholder":
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
@@ -233,25 +233,29 @@ class MediaCard extends ConsumerWidget {
                           //   color: Colors.teal,
                           //   borderRadius: BorderRadius.circular(12),
                           // ),
-                          child: thingType == "playlist" ? PlaylistImage(playlistId: thingId) : CachedNetworkImage(
-                            imageUrl: image,
-                            imageBuilder: (context, imageProvider) => Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.contain,
+                          child: thingType == "playlist"
+                              ? PlaylistImage(playlistId: thingId)
+                              : CachedNetworkImage(
+                                  imageUrl: image,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
+                                  placeholder: (context, url) => Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius:
+                                              BorderRadius.circular(12))),
+                                  errorWidget: (context, url, error) => Icon(
+                                      Icons.error_outline_rounded,
+                                      color: Colors.pink[700]),
                                 ),
-                              ),
-                            ),
-                            placeholder: (context, url) => Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(12))),
-                            errorWidget: (context, url, error) => Icon(
-                                Icons.error_outline_rounded,
-                                color: Colors.pink[700]),
-                          ),
                         ),
                       ),
                       Container(
@@ -353,7 +357,7 @@ class FancyImage extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(24, 20, 24, 0),
+      //margin: EdgeInsets.fromLTRB(24, 20, 24, 0),
       height: height.toDouble(),
       width: width.toDouble(),
       child: CachedNetworkImage(
@@ -921,7 +925,7 @@ ColorSourceMode getColorSourceModeFromString(String mode) {
   }
 }
 
-class PlaylistImage extends ConsumerWidget{
+class PlaylistImage extends ConsumerWidget {
   final String playlistId;
   PlaylistImage({required this.playlistId});
 
@@ -934,37 +938,41 @@ class PlaylistImage extends ConsumerWidget{
     return playlistAsyncValue.when(
       data: (playlist) {
         final songs = playlist.songs.take(4).toList();
-        if(songs.length == 0){
-          return Container(width: 200, height: 200, child: Center(child: Text("¯\\_(ツ)_/¯", style: Theme.of(context).textTheme.headlineMedium)));
-          }else if(songs.length < 4){
+        if (songs.length == 0) {
+          return Container(
+              width: 200,
+              height: 200,
+              child: Center(
+                  child: Text("¯\\_(ツ)_/¯",
+                      style: Theme.of(context).textTheme.headlineMedium)));
+        } else if (songs.length < 4) {
           Song song = songs[0];
-         return           CachedNetworkImage(
-                      imageUrl: song.imageUrl,
-                      imageBuilder: (context, imageProvider) => Container(
-                        width: width.toDouble(),
-                        height: height.toDouble(),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      placeholder: (context, url) => Container(
-                        width: width.toDouble(),
-                        height: height.toDouble(),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => Icon(
-                        Icons.error_outline_rounded,
-                        color: Colors.pink[700],
-                      ),
-                    );
-
+          return CachedNetworkImage(
+            imageUrl: song.imageUrl,
+            imageBuilder: (context, imageProvider) => Container(
+              width: width.toDouble(),
+              height: height.toDouble(),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(
+                  image: imageProvider,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            placeholder: (context, url) => Container(
+              width: width.toDouble(),
+              height: height.toDouble(),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            errorWidget: (context, url, error) => Icon(
+              Icons.error_outline_rounded,
+              color: Colors.pink[700],
+            ),
+          );
         }
         return GridView.count(
           physics: const NeverScrollableScrollPhysics(),
@@ -973,34 +981,36 @@ class PlaylistImage extends ConsumerWidget{
           crossAxisSpacing: 0,
           mainAxisSpacing: 0,
           primary: false,
-          children: songs.map((song) =>
-                   CachedNetworkImage(
-                      imageUrl: song.imageUrl,
-                      imageBuilder: (context, imageProvider) => Container(
-                        width: width/4,
-                        height: width/4,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      placeholder: (context, url) => Container(
-                        width: width/4,
-                        height: width/4,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => Icon(
-                        Icons.error_outline_rounded,
-                        color: Colors.pink[700],
+          children: songs
+              .map(
+                (song) => CachedNetworkImage(
+                  imageUrl: song.imageUrl,
+                  imageBuilder: (context, imageProvider) => Container(
+                    width: width / 4,
+                    height: width / 4,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
                       ),
                     ),
-                ).toList(),
+                  ),
+                  placeholder: (context, url) => Container(
+                    width: width / 4,
+                    height: width / 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Icon(
+                    Icons.error_outline_rounded,
+                    color: Colors.pink[700],
+                  ),
+                ),
+              )
+              .toList(),
         );
       },
       loading: () => Center(child: CircularProgressIndicator()),

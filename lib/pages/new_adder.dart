@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:beamer/beamer.dart';
+import 'dart:ui';
 
 import '../helper_widgets.dart';
 import '../types/searchresult.dart';
@@ -25,6 +26,8 @@ class _AdderPageState extends ConsumerState {
   String query = "";
   TextEditingController queryController = TextEditingController();
   SearchType selectedSearchType = SearchType.track;
+  List<SearchResult> searchResults = [];
+  List<SearchResult> selectedSearchResults = [];
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +40,11 @@ class _AdderPageState extends ConsumerState {
     } else if (state.state == "findingresults") {
       nextable = false;
       backable = false;
+    } else if (state.state == "searchresults") {
+      searchResults = state.searchResults.toList();
+      page = "searchresults";
+      print(state.searchResults);
+      queryController.text = query;
     }
     print("Adder: query: $query");
     print("Adder: Page $page");
@@ -57,7 +65,8 @@ class _AdderPageState extends ConsumerState {
                   ])),
                 "loading" => const Center(child: CircularProgressIndicator()),
                 _ => switch (page) {
-                    "search" => searchPage(context),
+                    "search" => searchPage(context, null),
+                    "searchresults" => searchPage(context, searchResults),
                     _ => Center(
                           child: Column(children: [
                         Text("Unknown state: ${state.state}",
@@ -101,11 +110,16 @@ class _AdderPageState extends ConsumerState {
   }
 
   void searchPageSubmitted(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("\"$query\" - ${selectedSearchType.label}")));
+    page = "results";
+    ref.read(adderProvider.notifier).search(query, selectedSearchType);
+    //ScaffoldMessenger.of(context).showSnackBar(
+    //SnackBar(content: Text("\"$query\" - ${selectedSearchType.label}")));
   }
 
-  Widget searchPage(BuildContext context) {
+  Widget searchPage(BuildContext context, List<SearchResult>? searchResults) {
+    int cardWidth = 200;
+    int cardPadding = 10;
+    int crossAxisNum = ((MediaQuery.of(context).size.width - 110) / 200).ceil();
     return Container(
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +131,9 @@ class _AdderPageState extends ConsumerState {
         Row(children: [
           Expanded(
             child: TextField(
+              controller: queryController,
               onSubmitted: (_) {
+                if (query == "") return;
                 searchPageSubmitted(context);
               },
               onChanged: (text) {
@@ -159,9 +175,113 @@ class _AdderPageState extends ConsumerState {
             ),
           ),
         ]),
+        Expanded(
+            child: Container(
+                //color: Colors.teal,
+                margin: EdgeInsets.symmetric(vertical: 16, horizontal: 10)
+                    .copyWith(right: 20),
+                child: GridView.count(
+                  crossAxisCount: crossAxisNum,
+                  mainAxisSpacing: 4,
+                  crossAxisSpacing: 4,
+                  childAspectRatio: 200 / (200 + (cardPadding * 2) + 28),
+                  children: (searchResults ?? [])
+                      .map((e) => LayoutBuilder(
+                          builder: (BuildContext context,
+                                  BoxConstraints constraints) =>
+                              ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Card(
+                                      clipBehavior: Clip.hardEdge,
+                                      child: InkWell(
+                                          onTap: () {
+                                            print(e.name);
+                                          },
+                                          child: Container(
+                                              //color: Colors.pink,
+                                              child: Tooltip(
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.transparent,
+                                                  ),
+                                                  richMessage: WidgetSpan(
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                      child: BackdropFilter(
+                                                        child: Container(
+                                                            //margin: EdgeInsets.symmetric(
+                                                            //    horizontal: 12, vertical: 6),
+                                                            child: Text(e.name,
+                                                                style: TextStyle(
+                                                                    color: Theme.of(
+                                                                            context)
+                                                                        .colorScheme
+                                                                        .onSurface,
+                                                                    fontSize:
+                                                                        14))),
+                                                        filter:
+                                                            ImageFilter.blur(
+                                                                sigmaX: 8,
+                                                                sigmaY: 8),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Container(
+                                                            margin: EdgeInsets.only(
+                                                                top: cardPadding
+                                                                        .toDouble() /
+                                                                    2),
+                                                            //color: Colors.yellow,
+                                                            child: FancyImage(
+                                                              url: e.imageUrl,
+                                                              height: constraints
+                                                                      .maxWidth
+                                                                      .floor() -
+                                                                  (cardPadding *
+                                                                      2),
+                                                              width: constraints
+                                                                      .maxWidth
+                                                                      .floor() -
+                                                                  (cardPadding *
+                                                                      2),
+                                                            )),
+                                                        Container(
+                                                            margin: EdgeInsets
+                                                                .symmetric(
+                                                                    horizontal:
+                                                                        cardPadding
+                                                                            .toDouble()),
+                                                            child: Text(
+                                                              e.name,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              maxLines: 1,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            )),
+                                                        Container(
+                                                          margin: EdgeInsets.only(
+                                                              bottom: cardPadding
+                                                                      .toDouble() /
+                                                                  2),
+                                                          child: Text(e.type),
+                                                        ),
+                                                      ]))))))))
+                      .toList(),
+                ))),
       ],
     ));
   }
+
+  //
 }
 
 class InfoEditorCard extends StatefulWidget {

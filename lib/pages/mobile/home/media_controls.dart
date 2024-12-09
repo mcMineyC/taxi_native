@@ -61,6 +61,12 @@ class MobilePlayerControls extends ConsumerWidget {
                     if (width >= 324)
                       IconButton(
                         onPressed: () {
+                          if (player.thinking) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Currently thinking...")));
+                            return;
+                          }
                           ref.read(playerProvider.notifier).shuffle();
                         },
                         icon: const Icon(Icons.shuffle_rounded),
@@ -71,6 +77,12 @@ class MobilePlayerControls extends ConsumerWidget {
                     IconButton(
                         icon: const Icon(Icons.skip_previous_rounded),
                         onPressed: () {
+                          if (player.thinking) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Currently thinking...")));
+                            return;
+                          }
                           ref.read(playerProvider.notifier).previous();
                         }),
                     (player.thinking)
@@ -83,16 +95,35 @@ class MobilePlayerControls extends ConsumerWidget {
                                 : const Icon(
                                     Icons.pause_circle_outline_rounded),
                             onPressed: () {
+                              if (player.thinking) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                            Text("Currently thinking...")));
+                                return;
+                              }
                               ref.read(playerProvider.notifier).toggle();
                             }),
                     IconButton(
                         icon: const Icon(Icons.skip_next_rounded),
                         onPressed: () {
+                          if (player.thinking) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Currently thinking...")));
+                            return;
+                          }
                           ref.read(playerProvider.notifier).next();
                         }),
                     if (width >= 352)
                       IconButton(
                         onPressed: () {
+                          if (player.thinking) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Currently thinking...")));
+                            return;
+                          }
                           ref.read(playerProvider.notifier).loop(!player.loop);
                         },
                         icon: const Icon(Icons.loop_rounded),
@@ -108,6 +139,11 @@ class MobilePlayerControls extends ConsumerWidget {
           if (height >= 560)
             Listener(
               onPointerSignal: (event) {
+                if (player.thinking) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Currently thinking...")));
+                  return;
+                }
                 if (event is PointerScrollEvent) {
                   if (event.scrollDelta.dy < 0) {
                     ref.read(playerProvider.notifier).seekForward(3000);

@@ -154,7 +154,7 @@ class _AdderPageState extends ConsumerState {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(left: 10),
+            margin: EdgeInsets.symmetric(horizontal: 10),
             child: DropdownMenu<SearchType>(
               initialSelection: selectedSearchType,
               label: const Text('Type'),
@@ -174,6 +174,14 @@ class _AdderPageState extends ConsumerState {
               ),
             ),
           ),
+          FilledButton(
+              child:
+                  Row(children: [Icon(Icons.search_rounded), Text("Search")]),
+              onPressed: query == ""
+                  ? null
+                  : () {
+                      searchPageSubmitted(context);
+                    })
         ]),
         Expanded(
             child: Container(
@@ -186,95 +194,7 @@ class _AdderPageState extends ConsumerState {
                   crossAxisSpacing: 4,
                   childAspectRatio: 200 / (200 + (cardPadding * 2) + 28),
                   children: (searchResults ?? [])
-                      .map((e) => LayoutBuilder(
-                          builder: (BuildContext context,
-                                  BoxConstraints constraints) =>
-                              ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Card(
-                                      clipBehavior: Clip.hardEdge,
-                                      child: InkWell(
-                                          onTap: () {
-                                            print(e.name);
-                                          },
-                                          child: Container(
-                                              //color: Colors.pink,
-                                              child: Tooltip(
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    color: Colors.transparent,
-                                                  ),
-                                                  richMessage: WidgetSpan(
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                      child: BackdropFilter(
-                                                        child: Container(
-                                                            //margin: EdgeInsets.symmetric(
-                                                            //    horizontal: 12, vertical: 6),
-                                                            child: Text(e.name,
-                                                                style: TextStyle(
-                                                                    color: Theme.of(
-                                                                            context)
-                                                                        .colorScheme
-                                                                        .onSurface,
-                                                                    fontSize:
-                                                                        14))),
-                                                        filter:
-                                                            ImageFilter.blur(
-                                                                sigmaX: 8,
-                                                                sigmaY: 8),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        Container(
-                                                            margin: EdgeInsets.only(
-                                                                top: cardPadding
-                                                                        .toDouble() /
-                                                                    2),
-                                                            //color: Colors.yellow,
-                                                            child: FancyImage(
-                                                              url: e.imageUrl,
-                                                              height: constraints
-                                                                      .maxWidth
-                                                                      .floor() -
-                                                                  (cardPadding *
-                                                                      2),
-                                                              width: constraints
-                                                                      .maxWidth
-                                                                      .floor() -
-                                                                  (cardPadding *
-                                                                      2),
-                                                            )),
-                                                        Container(
-                                                            margin: EdgeInsets
-                                                                .symmetric(
-                                                                    horizontal:
-                                                                        cardPadding
-                                                                            .toDouble()),
-                                                            child: Text(
-                                                              e.name,
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              maxLines: 1,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                            )),
-                                                        Container(
-                                                          margin: EdgeInsets.only(
-                                                              bottom: cardPadding
-                                                                      .toDouble() /
-                                                                  2),
-                                                          child: Text(e.type),
-                                                        ),
-                                                      ]))))))))
+                      .map((e) => AdderCard(searchResult: e))
                       .toList(),
                 ))),
       ],

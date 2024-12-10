@@ -11,6 +11,7 @@ import 'providers/data/playlist_provider.dart';
 import 'providers/data/fetched_data_provider.dart';
 import 'types/playlist.dart';
 import 'types/song.dart';
+import 'types/searchresult.dart';
 import 'platform_utils.dart';
 
 class MediaCard extends ConsumerWidget {
@@ -1016,5 +1017,81 @@ class PlaylistImage extends ConsumerWidget {
       loading: () => Center(child: CircularProgressIndicator()),
       error: (error, stack) => Center(child: Text('Error: $error')),
     );
+  }
+}
+
+class AdderCard extends StatelessWidget {
+  SearchResult searchResult;
+  int cardWidth = 200;
+  int cardPadding = 10;
+  AdderCard({required this.searchResult});
+  Widget build(BuildContext context) {
+    int crossAxisNum = ((MediaQuery.of(context).size.width - 110) / 200).ceil();
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) =>
+            ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Card(
+                    clipBehavior: Clip.hardEdge,
+                    child: InkWell(
+                        onTap: () {
+                          print(searchResult.name);
+                        },
+                        child: Container(
+                            //color: Colors.pink,
+                            child: Tooltip(
+                                decoration: const BoxDecoration(
+                                  color: Colors.transparent,
+                                ),
+                                richMessage: WidgetSpan(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: BackdropFilter(
+                                      child: Container(
+                                          //margin: EdgeInsets.symmetric(
+                                          //    horizontal: 12, vertical: 6),
+                                          child: Text(searchResult.name,
+                                              style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface,
+                                                  fontSize: 14))),
+                                      filter: ImageFilter.blur(
+                                          sigmaX: 8, sigmaY: 8),
+                                    ),
+                                  ),
+                                ),
+                                child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                          margin: EdgeInsets.only(
+                                              top: cardPadding.toDouble() / 2),
+                                          //color: Colors.yellow,
+                                          child: FancyImage(
+                                            url: searchResult.imageUrl,
+                                            height:
+                                                constraints.maxWidth.floor() -
+                                                    (cardPadding * 2),
+                                            width:
+                                                constraints.maxWidth.floor() -
+                                                    (cardPadding * 2),
+                                          )),
+                                      Container(
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal:
+                                                  cardPadding.toDouble()),
+                                          child: Text(
+                                            searchResult.name,
+                                            textAlign: TextAlign.center,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          )),
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                            bottom: cardPadding.toDouble() / 2),
+                                        child: Text(searchResult.type),
+                                      ),
+                                    ])))))));
   }
 }

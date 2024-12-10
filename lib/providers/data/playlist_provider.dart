@@ -12,6 +12,7 @@ import '../../types/playlist.dart';
 import '../../types/song.dart';
 
 part 'playlist_provider.g.dart';
+
 PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
 
 @Riverpod(keepAlive: true)
@@ -19,15 +20,11 @@ Future<List<Playlist>> fetchPlaylists(FetchPlaylistsRef ref) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse("${p.backendUrl}/playlists?sort=none"),
-      headers: Map<String, String>.from({
-        'Content-Type': 'application/json'
-      }),
-      body: jsonEncode(<String, String>{
-        'authtoken': _sp.getString("token") ?? ""
-      })
-  );
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          <String, String>{'authtoken': _sp.getString("token") ?? ""}));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   desponse = desponse["playlists"] ?? [];
@@ -48,15 +45,11 @@ Future<List<Playlist>> fetchNewPlaylists(FetchNewPlaylistsRef ref) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse("${p.backendUrl}/playlists?sort=new"),
-      headers: Map<String, String>.from({
-        'Content-Type': 'application/json'
-      }),
-      body: jsonEncode(<String, String>{
-        'authtoken': _sp.getString("token") ?? ""
-      })
-  );
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          <String, String>{'authtoken': _sp.getString("token") ?? ""}));
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   desponse = desponse["playlists"] ?? [];
@@ -90,19 +83,21 @@ Future<bool> addPlaylist(AddPlaylistRef ref, Playlist playlist) async {
     }),
   );
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
-  if(desponse["success"] == true) {
+  if (desponse["success"] == true) {
     ref.refresh(fetchPlaylistsProvider);
   }
   return true;
 }
 
 @Riverpod(keepAlive: false)
-Future<bool> addIdToPlaylist(AddIdToPlaylistRef ref, String playlistId, String id) async {
+Future<bool> addIdToPlaylist(
+    AddIdToPlaylistRef ref, String playlistId, String id) async {
   final _sp = await SharedPreferences.getInstance();
-  Playlist playlist = (await ref.read(findPlaylistProvider(playlistId).future)).toPlaylist();
+  Playlist playlist =
+      (await ref.read(findPlaylistProvider(playlistId).future)).toPlaylist();
   List<String> newSongs = [];
   playlist.songs.forEach((el) => newSongs.add(el));
   newSongs.add(id);
@@ -121,19 +116,21 @@ Future<bool> addIdToPlaylist(AddIdToPlaylistRef ref, String playlistId, String i
     }),
   );
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
-  if(desponse["success"] == true) {
+  if (desponse["success"] == true) {
     ref.refresh(fetchPlaylistsProvider);
   }
   return true;
 }
 
 @Riverpod(keepAlive: false)
-Future<bool> addIdsToPlaylist(AddIdsToPlaylistRef ref, String playlistId, List<String> ids) async {
+Future<bool> addIdsToPlaylist(
+    AddIdsToPlaylistRef ref, String playlistId, List<String> ids) async {
   final _sp = await SharedPreferences.getInstance();
-  Playlist playlist = (await ref.read(findPlaylistProvider(playlistId).future)).toPlaylist();
+  Playlist playlist =
+      (await ref.read(findPlaylistProvider(playlistId).future)).toPlaylist();
   List<String> newSongs = [];
   playlist.songs.forEach((el) => newSongs.add(el));
   newSongs.addAll(ids);
@@ -152,19 +149,21 @@ Future<bool> addIdsToPlaylist(AddIdsToPlaylistRef ref, String playlistId, List<S
     }),
   );
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
-  if(desponse["success"] == true) {
+  if (desponse["success"] == true) {
     ref.refresh(fetchPlaylistsProvider);
   }
   return true;
 }
 
 @Riverpod(keepAlive: false)
-Future<bool> deleteIndexFromPlaylist(DeleteIndexFromPlaylistRef ref, String playlistId, int index) async {
+Future<bool> deleteIndexFromPlaylist(
+    DeleteIndexFromPlaylistRef ref, String playlistId, int index) async {
   final _sp = await SharedPreferences.getInstance();
-  Playlist playlist = (await ref.read(findPlaylistProvider(playlistId).future)).toPlaylist();
+  Playlist playlist =
+      (await ref.read(findPlaylistProvider(playlistId).future)).toPlaylist();
   List<String> newSongs = [];
   playlist.songs.forEach((el) => newSongs.add(el));
   newSongs.removeAt(index);
@@ -183,10 +182,10 @@ Future<bool> deleteIndexFromPlaylist(DeleteIndexFromPlaylistRef ref, String play
     }),
   );
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
-  if(desponse["success"] == true) {
+  if (desponse["success"] == true) {
     print("Refreshing playlists");
     ref.refresh(fetchPlaylistsProvider);
   }
@@ -206,13 +205,13 @@ Future<bool> deletePlaylist(DeletePlaylistRef ref, String playlistId) async {
     }),
   );
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
-  if(desponse["success"] == true) {
+  if (desponse["success"] == true) {
     ref.refresh(fetchPlaylistsProvider);
     return true;
-  }else{
+  } else {
     return false;
   }
 }
@@ -230,7 +229,7 @@ Future<FilledPlaylist> findPlaylist(FindPlaylistRef ref, String id) async {
     }),
   );
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   Playlist playlist = Playlist.fromJson(desponse["playlists"][0]);
@@ -243,11 +242,13 @@ Future<FilledPlaylist> findPlaylist(FindPlaylistRef ref, String id) async {
     added: playlist.added,
     songs: newSongs.reversed.toList(),
   );
+  //print("Returning playlist: ${out.displayName}");
   return out;
 }
 
 @Riverpod(keepAlive: false)
-Future<List<Song>> findSongsByPlaylist(FindSongsByPlaylistRef ref, String id) async {
+Future<List<Song>> findSongsByPlaylist(
+    FindSongsByPlaylistRef ref, String id) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
     Uri.parse("${p.backendUrl}/playlists/$id"),
@@ -259,13 +260,14 @@ Future<List<Song>> findSongsByPlaylist(FindSongsByPlaylistRef ref, String id) as
     }),
   );
   var desponse = jsonDecode(response.body);
-  if(desponse["authed"] == false) {
+  if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   List<String> songss = [];
   desponse["playlists"][0]["songs"].forEach((element) {
     songss.add(element);
   });
-  var songs = await ref.read(findBatchSongsProvider(songss.reversed.toList()).future);
+  var songs =
+      await ref.read(findBatchSongsProvider(songss.reversed.toList()).future);
   return songs;
 }

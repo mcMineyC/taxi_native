@@ -96,6 +96,7 @@ Future<List<Artist>> fetchArtists(FetchArtistsRef ref,
 Future<List<Song>> findBatchSongs(FindBatchSongsRef ref, List<String> ids,
     {bool ignore = false}) async {
   final _sp = await SharedPreferences.getInstance();
+  //print("REQUESTING: ${ids.map((e) => e.substring(e.length - 8))}");
   var response = await http.post(
       Uri.parse(
           "${_p.backendUrl}/info/songs/batch${ignore ? "?ignore=true" : ""}"),
@@ -103,7 +104,7 @@ Future<List<Song>> findBatchSongs(FindBatchSongsRef ref, List<String> ids,
       body: jsonEncode(
           {'authtoken': (_sp.getString("token") ?? ""), 'ids': ids}));
   var desponse = jsonDecode(response.body);
-  // print("Response: $desponse");
+  //print("Response: $desponse");
   if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
@@ -119,6 +120,8 @@ Future<List<Song>> findBatchSongs(FindBatchSongsRef ref, List<String> ids,
       continue;
     }
   }
+  //print("Returning: ${returning.map((e) => e.id.substring(e.id.length - 8))}");
+  //print("Got ${returning.length} out of ${ids.length}");
   return returning;
 }
 

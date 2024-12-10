@@ -9,6 +9,7 @@ import '../providers/services/adder.dart';
 import '../providers/services/player.dart';
 import '../providers/data/fetched_data_provider.dart';
 import '../tone_extension.dart';
+import 'dart:convert';
 
 class AdderPage extends ConsumerStatefulWidget {
   const AdderPage({Key? key}) : super(key: key);
@@ -328,6 +329,9 @@ class _AdderPageState extends ConsumerState {
 
   Widget thirdStep(List<FindResult> results,
       List<GlobalKey<InfoEditorCardState>> stateKeys, int viewportWidth) {
+    print("\n\n\n");
+    print(jsonEncode(results));
+    print("\n\n\n");
     return Column(children: [
       Text("Step 3: Check",
           textAlign: TextAlign.left,

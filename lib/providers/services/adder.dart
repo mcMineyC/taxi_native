@@ -20,6 +20,8 @@ class AddState with _$AddState {
 
   factory AddState({
     required String id,
+    required String query,
+    required SearchType searchType,
     required String state,
     required List<SearchResult> searchResults,
     required List<SearchResult> selectedSearchResults,
@@ -42,6 +44,8 @@ class Adder extends _$Adder {
     print("Adder: Build");
     return AddState(
       id: "",
+      query: "",
+      searchType: SearchType.track,
       state: "loading",
       searchResults: [],
       selectedSearchResults: [],
@@ -94,7 +98,7 @@ class Adder extends _$Adder {
       data["results"].forEach((element) {
         found.add(FindResult.fromJson(element));
       });
-      state = state.copyWith(state: "foundresults", findResults: found);
+      state = state.copyWith(state: "findresults", findResults: found);
     });
 
     socket.on('addresult', (data) {
@@ -111,38 +115,44 @@ class Adder extends _$Adder {
     print("Adder: Init");
   }
 
-  void search(String query, SearchType type) async {
+  void search(String query, SearchType type) {
     print("Searcher: Searching ${query}");
-    state = state.copyWith(state: "loadingsearch");
+    state = state.copyWith(state: "loadingsearch", query: query, searchType: type);
     socket.emit('search', {"query": query, "source": "spotify", "mediaType": type.type});
   }
 
-  void findVideosFor(List<SearchResult> results) async {
+  void findVideosFor(List<SearchResult> results) {
     state = state.copyWith(state: "loadingfind");
     print("Adder: Find videos for ${results.length} results");
     socket.emit('find', {'selected': results, 'source': "spotify"});
   }
 
-  void addFindResults(List<FindResult> results) async {
+  void addFindResults(List<FindResult> results) {
     state = state.copyWith(state: "loadingadd");
     print("Adder: Add ${results.length} results");
     socket.emit('add', {"items": results});
   }
 
-  void setStep(String step) async {
+  void setStep(String step) {
     state = state.copyWith(state: step);
   }
   
-  void cancel() async {
-    state = state.copyWith(state: "authed");
+  void cancel() {
+    state = state.copyWith(state: "authed", searchResults: [], selectedSearchResults: [], findResults: []);
   }
-  void addSearchResult(SearchResult result) {
+  void selectSearchResult(SearchResult result) {
     state = state.copyWith(selectedSearchResults: [...state.selectedSearchResults, result]);
   }
-  void removeSearchResult(SearchResult result) {
+  void deselectSearchResult(SearchResult result) {
     state = state.copyWith(selectedSearchResults: state.selectedSearchResults.where((element) => element != result).toList());
+  }
+  void clearSelectedSearchResults(){
+    state = state.copyWith(selectedSearchResults: []);
   }
   List<SearchResult> getSelectedSearchResults(){
     return state.selectedSearchResults;
+  }
+  void findVideosForSelectedSearchResults() {
+    findVideosFor(state.selectedSearchResults);
   }
 }

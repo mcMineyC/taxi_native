@@ -187,10 +187,21 @@ List<HLVArtist> findResultsToHLVContent(List<FindResult> results) {
     if (result.type == "song") {
       int artistListIndex = artistIndices[result.artist]!;
       HLVArtist workingArtist = artists[artistListIndex];
-      HLVAlbum workingAlbum = workingArtist.albums[workingArtist.albums
-          .indexWhere((album) => album.name == result.album)];
-      workingAlbum.songs.add(HLVSong(
+      print("RESULT ALBUM: "+result.album);
+      int albumIndex = workingArtist.albums.indexWhere((album) => album.name == result.album);
+      if(albumIndex != -1){
+        HLVAlbum workingAlbum = workingArtist.albums[albumIndex];
+        workingAlbum.songs.add(HLVSong(
           result.songs[0].title, result.songs[0].id, workingAlbum.imageUrl));
+      }else{
+        workingArtist.albums.add(HLVAlbum(result.album, result.imageUrl, [
+          HLVSong(
+            result.songs[0].title,
+            result.songs[0].id,
+            result.imageUrl
+          ),
+        ]));
+      }
     }
   }
   return artists;

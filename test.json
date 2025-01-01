@@ -1,249 +1,29 @@
 [
   {
-    "name": "Year 7",
-    "artist": "Qumu",
-    "album": "Year 7",
-    "imageUrl": "https://i.scdn.co/image/ab67616d0000b2734366c48ae7d8dce239c62c47",
-    "type": "album",
-    "songs": [
+    "name":"E. Gadd's Lab (From \"Luigi's Mansion\")",
+    "artist":"Qumu",
+    "album":"E. Gadd's Lab (From \"Luigi's Mansion\")",
+    "imageUrl":"https://i.scdn.co/image/ab67616d0000b27369df8e1ad28bca63d6e785e0",
+    "type":"song",
+    "songs":[
       {
-        "title": "Train Rush (From \"A Hat in Time\")",
-        "id": "RBuZFJKquh0",
-        "trackNumber": 0
-      },
-      {
-        "title": "Zelda's Lullaby (From \"The Legend of Zelda: Ocarina of Time\")",
-        "id": "SOOHlZ2v_cU",
-        "trackNumber": 1
-      },
-      {
-        "title": "Athletic Theme (From \"Super Mario World\")",
-        "id": "W9urNCVWnh8",
-        "trackNumber": 2
-      },
-      {
-        "title": "Ecruteak City / Cianwood City (From \"Pokemon Gold and Silver\")",
-        "id": "r6z-ZfEDl9k",
-        "trackNumber": 3
-      },
-      {
-        "title": "Awake Now",
-        "id": "H_L74R5UPc4",
-        "trackNumber": 4
-      },
-      {
-        "title": "Bubblegum K.K. (From \"Animal Crossing: New Leaf\")",
-        "id": "9XMHcltjjC4",
-        "trackNumber": 5
-      },
-      {
-        "title": "Overworld (From \"Super Mario World 2: Yoshi's Island\")",
-        "id": "cRMDZfSQFj4",
-        "trackNumber": 6
-      },
-      {
-        "title": "Gourmet Race (From \"Kirby Super Star\")",
-        "id": "OjPx9sogY9M",
-        "trackNumber": 7
-      },
-      {
-        "title": "Brinstar - Red Soil (From \"Super Metroid\")",
-        "id": "VKYComF206o",
-        "trackNumber": 8
-      },
-      {
-        "title": "Dire, Dire Docks (From \"Super Mario 64\")",
-        "id": "j7YG5ojRDFM",
-        "trackNumber": 9
-      },
-      {
-        "title": "Sootopolis City (From \"Pokemon Ruby and Sapphire\")",
-        "id": "gLgeYoDgAjo",
-        "trackNumber": 10
-      },
-      {
-        "title": "Need to Find a Way",
-        "id": "VTcgQRFeJtk",
-        "trackNumber": 11
-      },
-      {
-        "title": "Ghost Gulping (From \"Paper Mario\")",
-        "id": "yNoQKOSVCx8",
-        "trackNumber": 12
-      },
-      {
-        "title": "Piranha Plant's Lullaby (From \"Super Mario 64\")",
-        "id": "vwfQSJMkoUk",
-        "trackNumber": 13
-      },
-      {
-        "title": "Mute City (From \"F-Zero\")",
-        "id": "XqFtfRyCwi4",
-        "trackNumber": 14
-      },
-      {
-        "title": "Mad Monster Mansion (From \"Banjo-Kazooie\")",
-        "id": "N3Ytitq9BjQ",
-        "trackNumber": 15
-      },
-      {
-        "title": "Ghost House (From \"Super Mario World\")",
-        "id": "jgeSS0fjJoo",
-        "trackNumber": 16
-      },
-      {
-        "title": "Pigstep (From \"Minecraft\")",
-        "id": "u-CCZ9whk9M",
-        "trackNumber": 17
-      },
-      {
-        "title": "Lost Woods (From \"The Legend of Zelda: Ocarina of Time\")",
-        "id": "o8BDB92Esk4",
-        "trackNumber": 18
-      },
-      {
-        "title": "Song of Healing (From \"The Legend of Zelda: Majora's Mask\")",
-        "id": "mAFSBpPxkok",
-        "trackNumber": 19
-      },
-      {
-        "title": "Freezy Flake Galaxy (From \"Super Mario Galaxy 2\")",
-        "id": "NpC9BRVx-Oc",
-        "trackNumber": 20
+        "title":"E. Gadd's Lab (From \"Luigi's Mansion\")",
+        "id":"4f8RhA4Ftfw",
+        "trackNumber":1
       }
     ]
   },
   {
-    "name": "Year 4",
-    "artist": "Qumu",
-    "album": "Year 4",
-    "imageUrl": "https://i.scdn.co/image/ab67616d0000b2733f83a4a752cf4c9345994752",
-    "type": "album",
-    "songs": [
+    "name":"Luigi's Mansion",
+    "artist":"Qumu",
+    "album":"Luigi's Mansion",
+    "imageUrl":"https://i.scdn.co/image/ab67616d0000b2731eb09c4ba0f24bd81c5d7ca2",
+    "type":"song",
+    "songs":[
       {
-        "title": "Overworld (From \"Super Mario World\")",
-        "id": "usSyRuh8TAs",
-        "trackNumber": 0
-      },
-      {
-        "title": "Calamari Inkantation (From \"Splatoon\")",
-        "id": "s11qj-hzWjo",
-        "trackNumber": 1
-      },
-      {
-        "title": "Kass' Theme (From \"The Legend of Zelda: Breath of the Wild\")",
-        "id": "mY_AhrCfK7g",
-        "trackNumber": 2
-      },
-      {
-        "title": "Mr. Resetti's Theme (From \"Animal Crossing\")",
-        "id": "fSOCGrsY2Us",
-        "trackNumber": 3
-      },
-      {
-        "title": "Overworld (From \"Super Mario Bros. 3\")",
-        "id": "mS9isgwVBrM",
-        "trackNumber": 4
-      },
-      {
-        "title": "Darkmoon Caverns (From \"Diddy Kong Racing\")",
-        "id": "euesv9LEdwo",
-        "trackNumber": 5
-      },
-      {
-        "title": "Grunty's Furnace Fun (From \"Banjo-Kazooie\")",
-        "id": "fzvx46e3ZDQ",
-        "trackNumber": 6
-      },
-      {
-        "title": "Inside the Castle Walls (From \"Super Mario 64\")",
-        "id": "77PW1gc4G2Q",
-        "trackNumber": 7
-      },
-      {
-        "title": "King Dedede's Theme (From \"Kirby Super Star\")",
-        "id": "VaUX4GWNex0",
-        "trackNumber": 8
-      },
-      {
-        "title": "Click Clock Wood (Spring) [From \"Banjo-Kazooie\"]",
-        "id": "9tt1ywm06bM",
-        "trackNumber": 9
-      },
-      {
-        "title": "Gerudo Valley (From \"The Legend of Zelda: Ocarina of Time\")",
-        "id": "HdkIP-07Ue0",
-        "trackNumber": 10
-      },
-      {
-        "title": "Overworld (From \"Super Mario Bros. 2\")",
-        "id": "ZyX0C-zRVZU",
-        "trackNumber": 11
-      },
-      {
-        "title": "Jump Up, Super Star! (From \"Super Mario Odyssey\")",
-        "id": "MTxMh6qu6Mw",
-        "trackNumber": 12
-      },
-      {
-        "title": "Sweden (From \"Minecraft\")",
-        "id": "ye3v3R07pCk",
-        "trackNumber": 13
-      },
-      {
-        "title": "Escape from the City (From \"Sonic Adventure 2\")",
-        "id": "pZ11_Iv9a-Y",
-        "trackNumber": 14
-      },
-      {
-        "title": "Slider (From \"Super Mario 64\")",
-        "id": "iYm6pknZLiQ",
-        "trackNumber": 15
-      },
-      {
-        "title": "National Park (From \"Pokemon Gold and Silver\")",
-        "id": "GtxZJnDZZg0",
-        "trackNumber": 16
-      },
-      {
-        "title": "Prince Sidon (From \"The Legend of Zelda: Breath of the Wild\")",
-        "id": "gMklK5Eh13U",
-        "trackNumber": 17
-      },
-      {
-        "title": "Library Piano (From \"Luigi's Mansion: Dark Moon\")",
-        "id": "Xokx96yxEws",
-        "trackNumber": 18
-      },
-      {
-        "title": "Die House (From \"Cuphead\")",
-        "id": "qJmxrnioSrE",
-        "trackNumber": 19
-      },
-      {
-        "title": "Luma (From \"Super Mario Galaxy\")",
-        "id": "5Y_-G4NDi-g",
-        "trackNumber": 20
-      },
-      {
-        "title": "Realm Overworld (From \"The Legend of Zelda: Spirit Tracks\")",
-        "id": "BVK-x0Gnbog",
-        "trackNumber": 21
-      },
-      {
-        "title": "Overworld Day (From \"Terraria\")",
-        "id": "rHxHqhTcAys",
-        "trackNumber": 22
-      },
-      {
-        "title": "Frappe Snowland / Sherbet Land (From \"Mario Kart 64\")",
-        "id": "sKtaEp0gOVw",
-        "trackNumber": 23
-      },
-      {
-        "title": "Snow Mountain (From \"Super Mario 64\")",
-        "id": "4_hoscdtefI",
-        "trackNumber": 24
+        "title":"Luigi's Mansion",
+        "id":"F5m0YqkZneU",
+        "trackNumber":1
       }
     ]
   }

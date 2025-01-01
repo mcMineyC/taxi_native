@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:beamer/beamer.dart';
-import 'dart:ui';
+import 'dart:convert';
 
 import '../helper_widgets.dart';
 import '../types/searchresult.dart';
@@ -10,6 +10,7 @@ import '../providers/services/adder.dart';
 import '../providers/services/player.dart';
 import '../providers/data/fetched_data_provider.dart';
 import '../tone_extension.dart';
+import '../hierarchicalListView.dart';
 
 // NEW ADDER
 
@@ -27,7 +28,12 @@ class _AdderPageState extends ConsumerState {
   TextEditingController queryController = TextEditingController();
   SearchType selectedSearchType = SearchType.track;
   List<SearchResult> searchResults = [];
+  bool pulledSearchResults = false;
   List<SearchResult> selectedSearchResults = [];
+  bool restoredSelectedSearchResults = false;
+  List<FindResult> findResults = [];
+  bool findResultsProcessed = false;
+  List<HLVArtist> hlvArtists = [];
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +43,37 @@ class _AdderPageState extends ConsumerState {
     if (state.state == "authed") {
       backable = true;
       page = "search";
+      if(query == ""){
+        query = ref.read(adderProvider).query;
+        queryController.text = query;
+        selectedSearchType = ref.read(adderProvider).searchType;
+      }
     } else if (state.state == "findingresults") {
       nextable = false;
       backable = false;
     } else if (state.state == "searchresults") {
-      searchResults = state.searchResults.toList();
+      if(!pulledSearchResults) {
+        searchResults = state.searchResults.toList();
+        pulledSearchResults = true;
+      }
+      if(!restoredSelectedSearchResults && state.selectedSearchResults.isNotEmpty){
+        print("Restoring selected search results");
+        selectedSearchResults = state.selectedSearchResults.toList();
+        restoredSelectedSearchResults = true;
+      }
+
       page = "searchresults";
-      print(state.searchResults);
+      //print(state.searchResults);
+      print("Search returned ${searchResults.length} items");
       queryController.text = query;
+    } else if(state.state == "findresults"){
+      if(!findResultsProcessed){
+        findResults = state.findResults.toList();
+        print("Find results: ${jsonEncode(findResults)}");
+        hlvArtists = findResultsToHLVContent(findResults);
+        findResultsProcessed = true;
+      }
+      page = "findresults";
     }
     print("Adder: query: $query");
     print("Adder: Page $page");
@@ -64,10 +93,12 @@ class _AdderPageState extends ConsumerState {
                     CircularProgressIndicator()
                   ])),
                 "loading" => const Center(child: CircularProgressIndicator()),
+                "loadingfind" => const Center(child: CircularProgressIndicator()),
                 "loadingsearch" => searchPage(context, null, true),
                 _ => switch (page) {
                     "search" => searchPage(context, null, false),
                     "searchresults" => searchPage(context, searchResults, false),
+                    "findresults" => findPage(context, findResults),
                     _ => Center(
                           child: Column(children: [
                         Text("Unknown state: ${state.state}",
@@ -81,23 +112,29 @@ class _AdderPageState extends ConsumerState {
             Row(
               children: [
                 FilledButton.tonal(
-                  child: const Text("Cancel"),
+                  child: Text(page.length >= 6 && page.substring(0,6) == "search" ? "Cancel" : "Back"),
                   onPressed: !backable
                       ? null
                       : () {
-                          if (page == "search") cancel();
+                          if (page.length >= 6 && page.substring(0, 6) == "search") cancel();
+                          else if(page == "findresults"){
+                            page = "searchresults";
+                            findResultsProcessed = false;
+                            //ref.read(adderProvider.notifier).clearSelectedSearchResults();
+                            setState(() => ref.read(adderProvider.notifier).setStep("searchresults"));
+                          }
                         },
                 ),
                 Expanded(child: Container(color: Colors.pink)),
                 FilledButton.tonal(
                   child: Text("Next"),
-                  onPressed: !nextable
-                      ? null
-                      : () {
-                          if (page == "search") {
-                            searchPageSubmitted(context);
-                          }
-                        },
+                  onPressed: !nextable ? null : () {
+                    if (page == "search") {
+                      searchQuerySubmitted(context);
+                    }else if(page == "searchresults"){
+                      searchPageSubmitted(context);
+                    }
+                  },
                 ),
               ],
             ),
@@ -106,15 +143,29 @@ class _AdderPageState extends ConsumerState {
   }
 
   void cancel() {
+    //restoredSelectedSearchResults = false;
+    pulledSearchResults = false;
     ref.read(adderProvider.notifier).cancel();
     Beamer.of(context).beamBack();
   }
 
-  void searchPageSubmitted(BuildContext context) {
-    page = "results";
+  void searchQuerySubmitted(BuildContext context) {
+    pulledSearchResults = false;
+    page = "searchresults";
     ref.read(adderProvider.notifier).search(query, selectedSearchType);
     //ScaffoldMessenger.of(context).showSnackBar(
     //SnackBar(content: Text("\"$query\" - ${selectedSearchType.label}")));
+  }
+  void searchPageSubmitted(BuildContext context) {
+    page = "loadingfind";
+    restoredSelectedSearchResults = false;
+    ref.read(adderProvider.notifier).findVideosForSelectedSearchResults();
+  }
+
+  Widget findPage(BuildContext context, List<FindResult> findResults) {
+    return Container(
+      child: HierarchicalListView(data:hlvArtists),
+    );
   }
 
   Widget searchPage(BuildContext context, List<SearchResult>? searchResults, bool? loading) {
@@ -136,7 +187,7 @@ class _AdderPageState extends ConsumerState {
               controller: queryController,
               onSubmitted: (_) {
                 if (query == "") return;
-                searchPageSubmitted(context);
+                searchQuerySubmitted(context);
               },
               onChanged: (text) {
                 setState(() {
@@ -160,8 +211,10 @@ class _AdderPageState extends ConsumerState {
             child: DropdownMenu<SearchType>(
               initialSelection: selectedSearchType,
               label: const Text('Type'),
-              onSelected: (SearchType? value) => setState(
-                  () => selectedSearchType = value ?? SearchType.track),
+              onSelected: (SearchType? value) {
+                setState(() => selectedSearchType = value ?? SearchType.track);
+                if(query != "") searchQuerySubmitted(context);
+              },
               dropdownMenuEntries: SearchType.values
                   .map((SearchType value) => DropdownMenuEntry<SearchType>(
                         value: value,
@@ -182,7 +235,7 @@ class _AdderPageState extends ConsumerState {
               onPressed: query == ""
                   ? null
                   : () {
-                      searchPageSubmitted(context);
+                      searchQuerySubmitted(context);
                     })
         ]),
         Expanded(
@@ -196,7 +249,17 @@ class _AdderPageState extends ConsumerState {
                   crossAxisSpacing: 4,
                   childAspectRatio: 200 / (200 + (cardPadding * 2) + 28),
                   children: (searchResults ?? [])
-                      .map((e) => AdderCard(searchResult: e, selectedCallback: (bool selected, SearchResult _) {print((selected ? "Selected" : "Unselected")+" "+e.name);}))
+                      .map((e) => AdderCard(
+                        selected: selectedSearchResults.contains(e),
+                        searchResult: e,
+                        selectedCallback: (bool selected, SearchResult _) {
+                          if (selected)
+                            ref.read(adderProvider.notifier).selectSearchResult(e);
+                          else
+                            ref.read(adderProvider.notifier).deselectSearchResult(e);
+                          print((selected ? "Selected" : "Deselected")+" "+e.name);
+                        }
+                      ))
                       .toList(),
                 ))),
       ],

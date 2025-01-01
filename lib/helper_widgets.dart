@@ -1023,9 +1023,10 @@ class PlaylistImage extends ConsumerWidget {
 class AdderCard extends StatefulWidget {
   Function(bool selected, SearchResult searchResult) selectedCallback;
   SearchResult searchResult;
-  AdderCard({required this.selectedCallback, required this.searchResult});
+  bool selected;
+  AdderCard({required this.selectedCallback, required this.searchResult, required this.selected});
   @override
-  _AdderCardState createState() => _AdderCardState(searchResult: searchResult);
+  _AdderCardState createState() => _AdderCardState(searchResult: searchResult, selected: selected);
 }
 
 class _AdderCardState extends State<AdderCard> {
@@ -1033,8 +1034,9 @@ class _AdderCardState extends State<AdderCard> {
   bool selected = false;
   int cardWidth = 200;
   int cardPadding = 10;
-  _AdderCardState({required this.searchResult});
+  _AdderCardState({required this.searchResult, required this.selected});
   Widget build(BuildContext context) {
+
     int crossAxisNum = ((MediaQuery.of(context).size.width - 110) / 200).ceil();
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) =>

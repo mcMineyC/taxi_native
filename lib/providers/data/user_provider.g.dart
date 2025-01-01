@@ -6,7 +6,7 @@ part of 'user_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$loginPasswordHash() => r'5ab98728508fac08aa73ea19b570394242285e56';
+String _$loginPasswordHash() => r'a2591ab13f89a34e80474ba7d0f37132b05f170f';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -154,6 +154,8 @@ class LoginPasswordProvider extends AutoDisposeFutureProvider<int> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin LoginPasswordRef on AutoDisposeFutureProviderRef<int> {
   /// The parameter `username` of this provider.
   String get username;
@@ -172,7 +174,7 @@ class _LoginPasswordProviderElement
   String get password => (origin as LoginPasswordProvider).password;
 }
 
-String _$loginTokenHash() => r'c0f1a8ac8768934a55c257af100634c34559eefc';
+String _$loginTokenHash() => r'4eba2659db4801bc45770606ca291bc6bbfd008f';
 
 /// See also [loginToken].
 @ProviderFor(loginToken)
@@ -287,6 +289,8 @@ class LoginTokenProvider extends AutoDisposeFutureProvider<int> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin LoginTokenRef on AutoDisposeFutureProviderRef<int> {
   /// The parameter `token` of this provider.
   String get token;
@@ -313,6 +317,8 @@ final authtokenProvider = AutoDisposeFutureProvider<String>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef AuthtokenRef = AutoDisposeFutureProviderRef<String>;
 String _$getRolesHash() => r'0c870d051c6afd96af5546dddb97cc4a2bc61fab';
 
@@ -327,6 +333,8 @@ final getRolesProvider = FutureProvider<List<String>>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetRolesRef = FutureProviderRef<List<String>>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

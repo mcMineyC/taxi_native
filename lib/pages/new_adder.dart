@@ -64,9 +64,10 @@ class _AdderPageState extends ConsumerState {
                     CircularProgressIndicator()
                   ])),
                 "loading" => const Center(child: CircularProgressIndicator()),
+                "loadingsearch" => searchPage(context, null, true),
                 _ => switch (page) {
-                    "search" => searchPage(context, null),
-                    "searchresults" => searchPage(context, searchResults),
+                    "search" => searchPage(context, null, false),
+                    "searchresults" => searchPage(context, searchResults, false),
                     _ => Center(
                           child: Column(children: [
                         Text("Unknown state: ${state.state}",
@@ -116,10 +117,11 @@ class _AdderPageState extends ConsumerState {
     //SnackBar(content: Text("\"$query\" - ${selectedSearchType.label}")));
   }
 
-  Widget searchPage(BuildContext context, List<SearchResult>? searchResults) {
+  Widget searchPage(BuildContext context, List<SearchResult>? searchResults, bool? loading) {
     int cardWidth = 200;
     int cardPadding = 10;
     int crossAxisNum = ((MediaQuery.of(context).size.width - 110) / 200).ceil();
+    loading = loading ?? false;
     return Container(
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,13 +190,13 @@ class _AdderPageState extends ConsumerState {
                 //color: Colors.teal,
                 margin: EdgeInsets.symmetric(vertical: 16, horizontal: 10)
                     .copyWith(right: 20),
-                child: GridView.count(
+                child: loading == true ? const Center(child: CircularProgressIndicator(value: null)) : GridView.count(
                   crossAxisCount: crossAxisNum,
                   mainAxisSpacing: 4,
                   crossAxisSpacing: 4,
                   childAspectRatio: 200 / (200 + (cardPadding * 2) + 28),
                   children: (searchResults ?? [])
-                      .map((e) => AdderCard(searchResult: e))
+                      .map((e) => AdderCard(searchResult: e, selectedCallback: (bool selected, SearchResult _) {print((selected ? "Selected" : "Unselected")+" "+e.name);}))
                       .toList(),
                 ))),
       ],

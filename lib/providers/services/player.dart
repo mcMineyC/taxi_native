@@ -371,19 +371,21 @@ class Player extends _$Player {
     needInteraction = false;
     state = state.copyWith(position: 0);
     print("Playing youtube $id");
-    playQueueItem(QueueItem(
-      type: "youtube-song",
-      id: DateTime.now().microsecondsSinceEpoch.toString(),
-      artistId: "youtube",
-      albumId: "youtube",
-      displayName: "Youtube",
-      artistName: "Youtube",
-      albumName: "Youtube",
-      youtubeId: id,
-      duration: 0,
-      imageUrl: "https://i.imgur.com/0fU7kZG.jpg",
-      audioUrl: "not_fetched",
+    state = state.copyWith(thinking: true);
+    player.pause();
+    var url = await fetchYTVideo(id);
+    await player.setAudioSource(AudioSource.uri(
+      Uri.parse(url),
+      //tag: MediaItem(
+      //    id: DateTime.now().microsecondsSinceEpoch.toString(),
+      //    title: item.displayName,
+      //    album: item.albumName,
+      //    artist: item.artistName,
+      //    artUri: Uri.parse(item.imageUrl)),
+      // We probably don't need to update the metadata for a temporary playback
     ));
+    player.play();
+    state = state.copyWith(thinking: false);
   }
 
   void playFindResult(FindResult result) async {
@@ -429,8 +431,8 @@ class Player extends _$Player {
       if (PlatformUtils.isWeb) return;
       print("Fetching ${item.displayName}, $url");
       url = await fetchYTVideo(item.youtubeId);
-      //if(PlatformUtils.isWeb) url = "$backendUrl/proxy/$url";
       var nq = state.queue.toList();
+      print("NQ Length ${nq.length}");
       nq[state.currentIndex] = item.copyWith(audioUrl: url);
       setQueue(nq);
     }

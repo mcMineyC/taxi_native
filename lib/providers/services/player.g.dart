@@ -48,7 +48,7 @@ Map<String, dynamic> _$$PlayerInfoImplToJson(_$PlayerInfoImpl instance) =>
 // RiverpodGenerator
 // **************************************************************************
 
-String _$playerHash() => r'7cc080a36c6d481d5bf5348fbbdfbd9fc7db544b';
+String _$playerHash() => r'eee80d19c15339d8b9bc13a17e85e0f7df5e5d94';
 
 /// See also [Player].
 @ProviderFor(Player)
@@ -63,4 +63,4 @@ final playerProvider = AutoDisposeNotifierProvider<Player, PlayerInfo>.internal(
 
 typedef _$Player = AutoDisposeNotifier<PlayerInfo>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

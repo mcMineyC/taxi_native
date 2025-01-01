@@ -89,7 +89,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
               TextButton(
                 child: const Text("Retry"),
-                onPressed: () => login(username, password)
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  login(username, password);
+                },
               ),
               TextButton(
                 child: const Text("Ok"),

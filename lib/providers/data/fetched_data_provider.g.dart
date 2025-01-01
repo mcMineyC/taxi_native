@@ -6,7 +6,7 @@ part of 'fetched_data_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchSongsHash() => r'ee898abf6003221575acbff9cb340963c1f00018';
+String _$fetchSongsHash() => r'c3a2f60495056213d1518824693640466774b309';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -142,6 +142,8 @@ class FetchSongsProvider extends FutureProvider<List<Song>> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FetchSongsRef on FutureProviderRef<List<Song>> {
   /// The parameter `ignore` of this provider.
   bool? get ignore;
@@ -270,6 +272,8 @@ class FetchAlbumsProvider extends FutureProvider<List<Album>> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FetchAlbumsRef on FutureProviderRef<List<Album>> {
   /// The parameter `ignore` of this provider.
   bool get ignore;
@@ -398,6 +402,8 @@ class FetchArtistsProvider extends FutureProvider<List<Artist>> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FetchArtistsRef on FutureProviderRef<List<Artist>> {
   /// The parameter `ignore` of this provider.
   bool get ignore;
@@ -538,6 +544,8 @@ class FindBatchSongsProvider extends AutoDisposeFutureProvider<List<Song>> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FindBatchSongsRef on AutoDisposeFutureProviderRef<List<Song>> {
   /// The parameter `ids` of this provider.
   List<String> get ids;
@@ -683,6 +691,8 @@ class FindSongProvider extends AutoDisposeFutureProvider<Song> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FindSongRef on AutoDisposeFutureProviderRef<Song> {
   /// The parameter `id` of this provider.
   String get id;
@@ -828,6 +838,8 @@ class FindSongsByAlbumProvider extends AutoDisposeFutureProvider<List<Song>> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FindSongsByAlbumRef on AutoDisposeFutureProviderRef<List<Song>> {
   /// The parameter `id` of this provider.
   String get id;
@@ -974,6 +986,8 @@ class FindSongsByArtistProvider extends AutoDisposeFutureProvider<List<Song>> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FindSongsByArtistRef on AutoDisposeFutureProviderRef<List<Song>> {
   /// The parameter `id` of this provider.
   String get id;
@@ -1122,6 +1136,8 @@ class FindAlbumsByArtistProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FindAlbumsByArtistRef on AutoDisposeFutureProviderRef<List<Album>> {
   /// The parameter `id` of this provider.
   String get id;
@@ -1270,6 +1286,8 @@ class FindNoSinglesByArtistProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FindNoSinglesByArtistRef on AutoDisposeFutureProviderRef<List<Album>> {
   /// The parameter `id` of this provider.
   String get id;
@@ -1418,6 +1436,8 @@ class FindSinglesByArtistProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FindSinglesByArtistRef on AutoDisposeFutureProviderRef<List<Song>> {
   /// The parameter `id` of this provider.
   String get id;
@@ -1563,6 +1583,8 @@ class FindAlbumProvider extends AutoDisposeFutureProvider<Album> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FindAlbumRef on AutoDisposeFutureProviderRef<Album> {
   /// The parameter `id` of this provider.
   String get id;
@@ -1708,6 +1730,8 @@ class FindArtistProvider extends AutoDisposeFutureProvider<Artist> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FindArtistRef on AutoDisposeFutureProviderRef<Artist> {
   /// The parameter `id` of this provider.
   String get id;
@@ -1841,6 +1865,8 @@ class UpdateSongProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin UpdateSongRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `s` of this provider.
   Song get s;
@@ -1979,6 +2005,8 @@ class UpdateAlbumProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin UpdateAlbumRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `a` of this provider.
   Album get a;
@@ -2112,6 +2140,8 @@ class UpdateArtistProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin UpdateArtistRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `a` of this provider.
   Artist get a;
@@ -2263,6 +2293,8 @@ class DeleteItemProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin DeleteItemRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `type` of this provider.
   String get type;
@@ -2300,9 +2332,11 @@ final fetchUsernamesProvider = FutureProvider<List<String>>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef FetchUsernamesRef = FutureProviderRef<List<String>>;
 String _$editItemVisibilityHash() =>
-    r'8e6c24301024684ee8cb131db2bb8cdab35dfca6';
+    r'cd096030698449d316a050c0861bde221570f8d6';
 
 /// See also [editItemVisibility].
 @ProviderFor(editItemVisibility)
@@ -2440,6 +2474,8 @@ class EditItemVisibilityProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin EditItemVisibilityRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `type` of this provider.
   String get type;
@@ -2463,4 +2499,4 @@ class _EditItemVisibilityProviderElement
   List<String> get users => (origin as EditItemVisibilityProvider).users;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -20,6 +20,8 @@ final fetchPlaylistsProvider = FutureProvider<List<Playlist>>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef FetchPlaylistsRef = FutureProviderRef<List<Playlist>>;
 String _$fetchNewPlaylistsHash() => r'425d704bec4ea4374e6e748b550987300cb9d844';
 
@@ -35,6 +37,8 @@ final fetchNewPlaylistsProvider = FutureProvider<List<Playlist>>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef FetchNewPlaylistsRef = FutureProviderRef<List<Playlist>>;
 String _$addPlaylistHash() => r'af50dc3d7ab7bb7a206547ff999b119965ad4286';
 
@@ -172,6 +176,8 @@ class AddPlaylistProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin AddPlaylistRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `playlist` of this provider.
   Playlist get playlist;
@@ -312,6 +318,8 @@ class AddIdToPlaylistProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin AddIdToPlaylistRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `playlistId` of this provider.
   String get playlistId;
@@ -457,6 +465,8 @@ class AddIdsToPlaylistProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin AddIdsToPlaylistRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `playlistId` of this provider.
   String get playlistId;
@@ -603,6 +613,8 @@ class DeleteIndexFromPlaylistProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin DeleteIndexFromPlaylistRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `playlistId` of this provider.
   String get playlistId;
@@ -738,6 +750,8 @@ class DeletePlaylistProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin DeletePlaylistRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `playlistId` of this provider.
   String get playlistId;
@@ -866,6 +880,8 @@ class FindPlaylistProvider extends AutoDisposeFutureProvider<FilledPlaylist> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FindPlaylistRef on AutoDisposeFutureProviderRef<FilledPlaylist> {
   /// The parameter `id` of this provider.
   String get id;
@@ -997,6 +1013,8 @@ class FindSongsByPlaylistProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FindSongsByPlaylistRef on AutoDisposeFutureProviderRef<List<Song>> {
   /// The parameter `id` of this provider.
   String get id;
@@ -1011,4 +1029,4 @@ class _FindSongsByPlaylistProviderElement
   String get id => (origin as FindSongsByPlaylistProvider).id;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

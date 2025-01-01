@@ -21,6 +21,8 @@ final getChecklistItemsProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetChecklistItemsRef
     = AutoDisposeFutureProviderRef<List<ChecklistItem>>;
 String _$addChecklistItemHash() => r'd6ef2ee6dc593aa5ecea8141c4c34eae9e033adf';
@@ -159,6 +161,8 @@ class AddChecklistItemProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin AddChecklistItemRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `data` of this provider.
   List<String> get data;
@@ -172,4 +176,4 @@ class _AddChecklistItemProviderElement
   List<String> get data => (origin as AddChecklistItemProvider).data;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

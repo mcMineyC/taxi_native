@@ -22,6 +22,7 @@ class AddState with _$AddState {
     required String id,
     required String state,
     required List<SearchResult> searchResults,
+    required List<SearchResult> selectedSearchResults,
     required List<FindResult> findResults,
     required AddResult addResult,
     required bool done,
@@ -43,6 +44,7 @@ class Adder extends _$Adder {
       id: "",
       state: "loading",
       searchResults: [],
+      selectedSearchResults: [],
       findResults: [],
       addResult: AddResult(success: false, count: AddResultCount(artists: 0, albums: 0, songs: 0)),
       done: false,
@@ -111,20 +113,20 @@ class Adder extends _$Adder {
 
   void search(String query, SearchType type) async {
     print("Searcher: Searching ${query}");
-    state = state.copyWith(state: "loading");
+    state = state.copyWith(state: "loadingsearch");
     socket.emit('search', {"query": query, "source": "spotify", "mediaType": type.type});
   }
 
   void findVideosFor(List<SearchResult> results) async {
+    state = state.copyWith(state: "loadingfind");
     print("Adder: Find videos for ${results.length} results");
     socket.emit('find', {'selected': results, 'source': "spotify"});
-    state = state.copyWith(state: "findingresults");
   }
 
   void addFindResults(List<FindResult> results) async {
+    state = state.copyWith(state: "loadingadd");
     print("Adder: Add ${results.length} results");
     socket.emit('add', {"items": results});
-    state = state.copyWith(state: "addingresults");
   }
 
   void setStep(String step) async {
@@ -133,5 +135,14 @@ class Adder extends _$Adder {
   
   void cancel() async {
     state = state.copyWith(state: "authed");
+  }
+  void addSearchResult(SearchResult result) {
+    state = state.copyWith(selectedSearchResults: [...state.selectedSearchResults, result]);
+  }
+  void removeSearchResult(SearchResult result) {
+    state = state.copyWith(selectedSearchResults: state.selectedSearchResults.where((element) => element != result).toList());
+  }
+  List<SearchResult> getSelectedSearchResults(){
+    return state.selectedSearchResults;
   }
 }

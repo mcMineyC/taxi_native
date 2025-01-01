@@ -1020,78 +1020,154 @@ class PlaylistImage extends ConsumerWidget {
   }
 }
 
-class AdderCard extends StatelessWidget {
+class AdderCard extends StatefulWidget {
+  Function(bool selected, SearchResult searchResult) selectedCallback;
   SearchResult searchResult;
+  AdderCard({required this.selectedCallback, required this.searchResult});
+  @override
+  _AdderCardState createState() => _AdderCardState(searchResult: searchResult);
+}
+
+class _AdderCardState extends State<AdderCard> {
+  SearchResult searchResult;
+  bool selected = false;
   int cardWidth = 200;
   int cardPadding = 10;
-  AdderCard({required this.searchResult});
+  _AdderCardState({required this.searchResult});
   Widget build(BuildContext context) {
     int crossAxisNum = ((MediaQuery.of(context).size.width - 110) / 200).ceil();
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) =>
-            ClipRRect(
+            ContextMenuRegion(
+              contextMenu: GenericContextMenu(
+                buttonConfigs: buildMenuButtons(searchResult),
+              ),
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Card(
                     clipBehavior: Clip.hardEdge,
                     child: InkWell(
                         onTap: () {
-                          print(searchResult.name);
+                          setState((){selected = !selected;});
+                          widget.selectedCallback(selected, searchResult);
+                          //print(searchResult.name);
+                        },
+                        onLongPress: () {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("\"${searchResult.name}\" - \"${searchResult.artist}\"")));
                         },
                         child: Container(
-                            //color: Colors.pink,
-                            child: Tooltip(
-                                decoration: const BoxDecoration(
-                                  color: Colors.transparent,
-                                ),
-                                richMessage: WidgetSpan(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: BackdropFilter(
-                                      child: Container(
-                                          //margin: EdgeInsets.symmetric(
-                                          //    horizontal: 12, vertical: 6),
-                                          child: Text(searchResult.name,
-                                              style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .onSurface,
-                                                  fontSize: 14))),
-                                      filter: ImageFilter.blur(
-                                          sigmaX: 8, sigmaY: 8),
-                                    ),
+                          //color: Colors.pink,
+                          child: Tooltip(
+                            decoration: const BoxDecoration(
+                              color: Colors.transparent,
+                            ),
+                            richMessage: WidgetSpan(
+                                child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: BackdropFilter(
+                                  child: Container(
+                                    //margin: EdgeInsets.symmetric(
+                                    //    horizontal: 12, vertical: 6),
+                                    child: Text(searchResult.name,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                          fontSize: 14)
+                                    )
+                                  ),
+                                  filter: ImageFilter.blur(
+                                    sigmaX: 8, sigmaY: 8),
                                   ),
                                 ),
-                                child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                          margin: EdgeInsets.only(
-                                              top: cardPadding.toDouble() / 2),
-                                          //color: Colors.yellow,
-                                          child: FancyImage(
-                                            url: searchResult.imageUrl,
-                                            height:
-                                                constraints.maxWidth.floor() -
-                                                    (cardPadding * 2),
-                                            width:
-                                                constraints.maxWidth.floor() -
-                                                    (cardPadding * 2),
-                                          )),
-                                      Container(
-                                          margin: EdgeInsets.symmetric(
-                                              horizontal:
-                                                  cardPadding.toDouble()),
-                                          child: Text(
-                                            searchResult.name,
-                                            textAlign: TextAlign.center,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          )),
-                                      Container(
-                                        margin: EdgeInsets.only(
-                                            bottom: cardPadding.toDouble() / 2),
-                                        child: Text(searchResult.type),
+                              ),
+                              child: Stack(
+                                children: <Widget>[
+                                  if(!selected) cardBody(constraints),
+                                  if(selected) ColorFiltered(
+                                    colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                                    child: cardBody(constraints),
+                                  ), 
+                                  if(selected) Center(
+                                    child: Container(
+                                      width: 52,
+                                      height: 52,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        //color: Theme.of(context).colorScheme.brightness == Brightness.dark ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.primary,
+                                        color: Theme.of(context).colorScheme.inversePrimary
                                       ),
-                                    ])))))));
+                                      child: Icon(Icons.check_rounded, color: Theme.of(context).colorScheme.primary, size: 30),
+                                    ),
+                                  ),
+                                ]
+                              )
+                            )
+                          )
+                        )
+                    )
+                )
+              ),
+            );
+ }
+ List<ContextMenuButtonConfig> buildMenuButtons(SearchResult searchResult) {
+   List<ContextMenuButtonConfig> buttons = [];
+   if(searchResult.type == "song"){
+     buttons = [
+       unclickableTextButton(text: "Type: song"),
+       unclickableTextButton(text: "Artist: ${searchResult.artist}", icon: const Icon(Icons.person)),
+       unclickableTextButton(text: "Album: ${searchResult.album}", icon: const Icon(Icons.album)),
+       unclickableTextButton(text: "Name: \"${searchResult.name}\"", icon: const Icon(Icons.music_note)),
+     ];
+   }else if(searchResult.type == "album"){
+     buttons = [
+       unclickableTextButton(text: "Type: album"),
+       unclickableTextButton(text: "Artist: ${searchResult.artist}", icon: const Icon(Icons.person)),
+       unclickableTextButton(text: "Name: \"${searchResult.name}\"", icon: const Icon(Icons.music_note)),
+     ];
+   }else if(searchResult.type == "artist"){
+     buttons = [
+       unclickableTextButton(text: "Type: artist"),
+       unclickableTextButton(text: "Name: \"${searchResult.name}\"", icon: const Icon(Icons.music_note)),
+     ];
+   }
+
+   return buttons;
   }
+  ContextMenuButtonConfig unclickableTextButton({String text = "", Widget? icon}){
+    return ContextMenuButtonConfig(text, icon: icon, onPressed: null);
+  }
+ Widget cardBody(BoxConstraints constraints) {
+   // TODO BUG: Some cards (1st and 3rd) have no left padding
+   return Column(
+     mainAxisSize: MainAxisSize.min,
+     crossAxisAlignment: CrossAxisAlignment.center,
+       children: [
+         Container(
+         //color: Colors.red,
+           margin: EdgeInsets.only(top: cardPadding.toDouble() / 2),
+           //color: Colors.yellow,
+           child: FancyImage(
+             url: searchResult.imageUrl,
+             height: constraints.maxWidth.floor() - (cardPadding * 2),
+             width: constraints.maxWidth.floor() - (cardPadding * 2),
+           )
+         ),
+         Container(
+           margin: EdgeInsets.symmetric(horizontal: cardPadding.toDouble()),
+           child: Text(
+             searchResult.name,
+             textAlign: TextAlign.center,
+             maxLines: 1,
+             overflow: TextOverflow.ellipsis,
+         )
+       ),
+       Container(
+        margin: EdgeInsets.only(bottom: cardPadding.toDouble() / 2),
+         child: Text(searchResult.type),
+       ),
+     ]
+   );
+ }
 }
+

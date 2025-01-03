@@ -19,9 +19,12 @@ mixin _$AddState {
   String get id => throw _privateConstructorUsedError;
   String get query => throw _privateConstructorUsedError;
   SearchType get searchType => throw _privateConstructorUsedError;
+  SearchSource get searchSource => throw _privateConstructorUsedError;
   String get state => throw _privateConstructorUsedError;
   List<SearchResult> get searchResults => throw _privateConstructorUsedError;
   List<SearchResult> get selectedSearchResults =>
+      throw _privateConstructorUsedError;
+  List<String> get selectedSearchResultIds =>
       throw _privateConstructorUsedError;
   List<FindResult> get findResults => throw _privateConstructorUsedError;
   AddResult get addResult => throw _privateConstructorUsedError;
@@ -44,9 +47,11 @@ abstract class $AddStateCopyWith<$Res> {
       {String id,
       String query,
       SearchType searchType,
+      SearchSource searchSource,
       String state,
       List<SearchResult> searchResults,
       List<SearchResult> selectedSearchResults,
+      List<String> selectedSearchResultIds,
       List<FindResult> findResults,
       AddResult addResult,
       bool done,
@@ -73,9 +78,11 @@ class _$AddStateCopyWithImpl<$Res, $Val extends AddState>
     Object? id = null,
     Object? query = null,
     Object? searchType = null,
+    Object? searchSource = null,
     Object? state = null,
     Object? searchResults = null,
     Object? selectedSearchResults = null,
+    Object? selectedSearchResultIds = null,
     Object? findResults = null,
     Object? addResult = null,
     Object? done = null,
@@ -94,6 +101,10 @@ class _$AddStateCopyWithImpl<$Res, $Val extends AddState>
           ? _value.searchType
           : searchType // ignore: cast_nullable_to_non_nullable
               as SearchType,
+      searchSource: null == searchSource
+          ? _value.searchSource
+          : searchSource // ignore: cast_nullable_to_non_nullable
+              as SearchSource,
       state: null == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
@@ -106,6 +117,10 @@ class _$AddStateCopyWithImpl<$Res, $Val extends AddState>
           ? _value.selectedSearchResults
           : selectedSearchResults // ignore: cast_nullable_to_non_nullable
               as List<SearchResult>,
+      selectedSearchResultIds: null == selectedSearchResultIds
+          ? _value.selectedSearchResultIds
+          : selectedSearchResultIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       findResults: null == findResults
           ? _value.findResults
           : findResults // ignore: cast_nullable_to_non_nullable
@@ -148,9 +163,11 @@ abstract class _$$AddStateImplCopyWith<$Res>
       {String id,
       String query,
       SearchType searchType,
+      SearchSource searchSource,
       String state,
       List<SearchResult> searchResults,
       List<SearchResult> selectedSearchResults,
+      List<String> selectedSearchResultIds,
       List<FindResult> findResults,
       AddResult addResult,
       bool done,
@@ -176,9 +193,11 @@ class __$$AddStateImplCopyWithImpl<$Res>
     Object? id = null,
     Object? query = null,
     Object? searchType = null,
+    Object? searchSource = null,
     Object? state = null,
     Object? searchResults = null,
     Object? selectedSearchResults = null,
+    Object? selectedSearchResultIds = null,
     Object? findResults = null,
     Object? addResult = null,
     Object? done = null,
@@ -197,6 +216,10 @@ class __$$AddStateImplCopyWithImpl<$Res>
           ? _value.searchType
           : searchType // ignore: cast_nullable_to_non_nullable
               as SearchType,
+      searchSource: null == searchSource
+          ? _value.searchSource
+          : searchSource // ignore: cast_nullable_to_non_nullable
+              as SearchSource,
       state: null == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
@@ -209,6 +232,10 @@ class __$$AddStateImplCopyWithImpl<$Res>
           ? _value._selectedSearchResults
           : selectedSearchResults // ignore: cast_nullable_to_non_nullable
               as List<SearchResult>,
+      selectedSearchResultIds: null == selectedSearchResultIds
+          ? _value._selectedSearchResultIds
+          : selectedSearchResultIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       findResults: null == findResults
           ? _value._findResults
           : findResults // ignore: cast_nullable_to_non_nullable
@@ -236,15 +263,18 @@ class _$AddStateImpl extends _AddState {
       {required this.id,
       required this.query,
       required this.searchType,
+      required this.searchSource,
       required this.state,
       required final List<SearchResult> searchResults,
       required final List<SearchResult> selectedSearchResults,
+      required final List<String> selectedSearchResultIds,
       required final List<FindResult> findResults,
       required this.addResult,
       required this.done,
       required this.authed})
       : _searchResults = searchResults,
         _selectedSearchResults = selectedSearchResults,
+        _selectedSearchResultIds = selectedSearchResultIds,
         _findResults = findResults,
         super._();
 
@@ -254,6 +284,8 @@ class _$AddStateImpl extends _AddState {
   final String query;
   @override
   final SearchType searchType;
+  @override
+  final SearchSource searchSource;
   @override
   final String state;
   final List<SearchResult> _searchResults;
@@ -273,6 +305,15 @@ class _$AddStateImpl extends _AddState {
     return EqualUnmodifiableListView(_selectedSearchResults);
   }
 
+  final List<String> _selectedSearchResultIds;
+  @override
+  List<String> get selectedSearchResultIds {
+    if (_selectedSearchResultIds is EqualUnmodifiableListView)
+      return _selectedSearchResultIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_selectedSearchResultIds);
+  }
+
   final List<FindResult> _findResults;
   @override
   List<FindResult> get findResults {
@@ -290,7 +331,7 @@ class _$AddStateImpl extends _AddState {
 
   @override
   String toString() {
-    return 'AddState(id: $id, query: $query, searchType: $searchType, state: $state, searchResults: $searchResults, selectedSearchResults: $selectedSearchResults, findResults: $findResults, addResult: $addResult, done: $done, authed: $authed)';
+    return 'AddState(id: $id, query: $query, searchType: $searchType, searchSource: $searchSource, state: $state, searchResults: $searchResults, selectedSearchResults: $selectedSearchResults, selectedSearchResultIds: $selectedSearchResultIds, findResults: $findResults, addResult: $addResult, done: $done, authed: $authed)';
   }
 
   @override
@@ -302,11 +343,15 @@ class _$AddStateImpl extends _AddState {
             (identical(other.query, query) || other.query == query) &&
             (identical(other.searchType, searchType) ||
                 other.searchType == searchType) &&
+            (identical(other.searchSource, searchSource) ||
+                other.searchSource == searchSource) &&
             (identical(other.state, state) || other.state == state) &&
             const DeepCollectionEquality()
                 .equals(other._searchResults, _searchResults) &&
             const DeepCollectionEquality()
                 .equals(other._selectedSearchResults, _selectedSearchResults) &&
+            const DeepCollectionEquality().equals(
+                other._selectedSearchResultIds, _selectedSearchResultIds) &&
             const DeepCollectionEquality()
                 .equals(other._findResults, _findResults) &&
             (identical(other.addResult, addResult) ||
@@ -321,9 +366,11 @@ class _$AddStateImpl extends _AddState {
       id,
       query,
       searchType,
+      searchSource,
       state,
       const DeepCollectionEquality().hash(_searchResults),
       const DeepCollectionEquality().hash(_selectedSearchResults),
+      const DeepCollectionEquality().hash(_selectedSearchResultIds),
       const DeepCollectionEquality().hash(_findResults),
       addResult,
       done,
@@ -343,9 +390,11 @@ abstract class _AddState extends AddState {
       {required final String id,
       required final String query,
       required final SearchType searchType,
+      required final SearchSource searchSource,
       required final String state,
       required final List<SearchResult> searchResults,
       required final List<SearchResult> selectedSearchResults,
+      required final List<String> selectedSearchResultIds,
       required final List<FindResult> findResults,
       required final AddResult addResult,
       required final bool done,
@@ -359,11 +408,15 @@ abstract class _AddState extends AddState {
   @override
   SearchType get searchType;
   @override
+  SearchSource get searchSource;
+  @override
   String get state;
   @override
   List<SearchResult> get searchResults;
   @override
   List<SearchResult> get selectedSearchResults;
+  @override
+  List<String> get selectedSearchResultIds;
   @override
   List<FindResult> get findResults;
   @override

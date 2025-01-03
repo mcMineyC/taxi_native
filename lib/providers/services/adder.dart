@@ -22,9 +22,11 @@ class AddState with _$AddState {
     required String id,
     required String query,
     required SearchType searchType,
+    required SearchSource searchSource,
     required String state,
     required List<SearchResult> searchResults,
     required List<SearchResult> selectedSearchResults,
+    required List<String> selectedSearchResultIds,
     required List<FindResult> findResults,
     required AddResult addResult,
     required bool done,
@@ -46,9 +48,11 @@ class Adder extends _$Adder {
       id: "",
       query: "",
       searchType: SearchType.track,
+      searchSource: SearchSource.spotify,
       state: "loading",
       searchResults: [],
       selectedSearchResults: [],
+      selectedSearchResultIds: [],
       findResults: [],
       addResult: AddResult(success: false, count: AddResultCount(artists: 0, albums: 0, songs: 0)),
       done: false,
@@ -115,10 +119,10 @@ class Adder extends _$Adder {
     print("Adder: Init");
   }
 
-  void search(String query, SearchType type) {
+  void search(String query, SearchType type, SearchSource source) {
     print("Searcher: Searching ${query}");
     state = state.copyWith(state: "loadingsearch", query: query, searchType: type);
-    socket.emit('search', {"query": query, "source": "spotify", "mediaType": type.type});
+    socket.emit('search', {"query": query, "source": source.type, "mediaType": type.type});
   }
 
   void findVideosFor(List<SearchResult> results) {
@@ -141,16 +145,20 @@ class Adder extends _$Adder {
     state = state.copyWith(state: "authed", searchResults: [], selectedSearchResults: [], findResults: []);
   }
   void selectSearchResult(SearchResult result) {
-    state = state.copyWith(selectedSearchResults: [...state.selectedSearchResults, result]);
+    state = state.copyWith(selectedSearchResults: [...state.selectedSearchResults, result], selectedSearchResultIds: [...state.selectedSearchResultIds, "${result.type}:${result.id}"]);
   }
   void deselectSearchResult(SearchResult result) {
-    state = state.copyWith(selectedSearchResults: state.selectedSearchResults.where((element) => element != result).toList());
+    state = state.copyWith(
+      selectedSearchResults: state.selectedSearchResults.where(
+        (element) => element != result
+      ).toList(),
+      selectedSearchResultIds: state.selectedSearchResultIds.where(
+        (element) => element != "${result.type}:${result.id}"
+      ).toList()
+    );
   }
   void clearSelectedSearchResults(){
-    state = state.copyWith(selectedSearchResults: []);
-  }
-  List<SearchResult> getSelectedSearchResults(){
-    return state.selectedSearchResults;
+    state = state.copyWith(selectedSearchResults: [], selectedSearchResultIds: []);
   }
   void findVideosForSelectedSearchResults() {
     findVideosFor(state.selectedSearchResults);

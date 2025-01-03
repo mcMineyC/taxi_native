@@ -27,6 +27,7 @@ class _AdderPageState extends ConsumerState {
   String query = "";
   TextEditingController queryController = TextEditingController();
   SearchType selectedSearchType = SearchType.track;
+  SearchSource selectedSearchSource = SearchSource.spotify;
   List<SearchResult> searchResults = [];
   bool pulledSearchResults = false;
   List<SearchResult> selectedSearchResults = [];
@@ -46,7 +47,8 @@ class _AdderPageState extends ConsumerState {
       if(query == ""){
         query = ref.read(adderProvider).query;
         queryController.text = query;
-        selectedSearchType = ref.read(adderProvider).searchType;
+        selectedSearchType = state.searchType;
+        selectedSearchSource = state.searchSource;
       }
     } else if (state.state == "findingresults") {
       nextable = false;
@@ -152,7 +154,7 @@ class _AdderPageState extends ConsumerState {
   void searchQuerySubmitted(BuildContext context) {
     pulledSearchResults = false;
     page = "searchresults";
-    ref.read(adderProvider.notifier).search(query, selectedSearchType);
+    ref.read(adderProvider.notifier).search(query, selectedSearchType, selectedSearchSource);
     //ScaffoldMessenger.of(context).showSnackBar(
     //SnackBar(content: Text("\"$query\" - ${selectedSearchType.label}")));
   }
@@ -177,9 +179,43 @@ class _AdderPageState extends ConsumerState {
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Step 1: Search",
-            textAlign: TextAlign.left,
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+        Row(
+          children:[
+            Text("Step 1: Search",
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold
+              )
+            ),
+            Expanded(child: Container()),
+
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              child: DropdownMenu<SearchSource>(
+                initialSelection: selectedSearchSource,
+                label: const Text('Source'),
+                onSelected: (SearchSource? value) {
+                  ref.read(adderProvider.notifier).clearSelectedSearchResults(); // Make sure that only one source is sent
+                  setState(() => selectedSearchSource = value ?? SearchSource.spotify);
+                  if(query != "") searchQuerySubmitted(context);
+                },
+                dropdownMenuEntries: SearchSource.values
+                    .map((SearchSource value) => DropdownMenuEntry<SearchSource>(
+                          value: value,
+                          label: value.label,
+                        ))
+                    .toList(),
+                hintText: 'Select a source',
+                enableSearch: false,
+                requestFocusOnTap: false,
+                inputDecorationTheme: InputDecorationTheme(
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+          ]
+        ),
         Container(height: 10),
         Row(children: [
           Expanded(

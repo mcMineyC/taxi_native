@@ -90,6 +90,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               TextButton(
                 child: const Text("Retry"),
                 onPressed: () {
+                  _triedToken = false;
                   Navigator.of(context).pop();
                   login(username, password);
                 },
@@ -153,7 +154,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ),
               TextButton(
                 child: const Text("Retry"),
-                onPressed: () =>loginToken(), 
+                onPressed: () {
+                  _triedToken = false;
+                  Navigator.of(context).pop();
+                  loginToken();
+                }
               ),
               TextButton(
                 child: const Text("Ok"),

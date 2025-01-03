@@ -142,9 +142,22 @@ enum SearchType {
   track('Song', 'track'),
   album('Album', 'album'),
   artist('Artist', 'artist'),
+  //playlist('Playlist', 'playlist'),
   all('All', 'all');
 
   const SearchType(this.label, this.type);
+  final String label;
+  final String type;
+}
+
+enum SearchSource {
+  spotify('Spotify', 'spotify');
+  //spotify('Spotify', 'spotify'),
+  //youtube('YouTube', 'youtube'),
+  //scratch('Scratch', 'scratch'),
+  //custom('Custom (MP3)', 'custom');
+
+  const SearchSource(this.label, this.type);
   final String label;
   final String type;
 }

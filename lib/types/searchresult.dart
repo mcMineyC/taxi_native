@@ -143,6 +143,7 @@ enum SearchType {
   album('Album', 'album'),
   artist('Artist', 'artist'),
   //playlist('Playlist', 'playlist'),
+  url("URL", "url"),
   all('All', 'all');
 
   const SearchType(this.label, this.type);
@@ -161,3 +162,4 @@ enum SearchSource {
   final String label;
   final String type;
 }
+final spotifyUrlRegex = RegExp(r'https:\/\/open\.spotify\.com\/(track|album|artist|playlist)\/([^?]*)(\?si=.*)?');

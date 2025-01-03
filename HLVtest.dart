@@ -7,11 +7,13 @@ import "lib/types/searchresult.dart";
 
 void main() async {
   String json = await File('test.json').readAsString();
+  JsonEncoder indentedEncoder = new JsonEncoder.withIndent("  ");
   List<dynamic> jsonList = jsonDecode(json);
   List<FindResult> results =
       jsonList.map((e) => FindResult.fromJson(e)).toList();
+  await File("test.json").writeAsString(indentedEncoder.convert(results));
   List<HLVArtist> artists = findResultsToHLVContent(results);
-  await File("out.json").writeAsString(jsonEncode(artists));
+  await File("out.json").writeAsString(indentedEncoder.convert(artists));
   printHLVContent(artists);
   runApp(MyApp(artists: artists));
 }

@@ -50,9 +50,6 @@ class _AdderPageState extends ConsumerState {
         selectedSearchType = state.searchType;
         selectedSearchSource = state.searchSource;
       }
-    } else if (state.state == "finding:results") {
-      nextable = false;
-      backable = false;
     } else if (state.state == "search:results") {
       if(!pulledSearchResults) {
         print("Pulling search results");
@@ -79,7 +76,7 @@ class _AdderPageState extends ConsumerState {
     } else if(state.state == "find:results"){
       if(!findResultsProcessed){
         findResults = state.findResults.toList();
-        //print("Find results: ${jsonEncode(findResults)}");
+        print("Find results: ${jsonEncode(findResults)}");
         hlvArtists = findResultsToHLVContent(findResults);
         findResultsProcessed = true;
       }
@@ -190,6 +187,10 @@ class _AdderPageState extends ConsumerState {
   }
 
   void searchQuerySubmitted(BuildContext context) {
+    if(selectedSearchType == SearchType.url && spotifyUrlRegex.firstMatch(query) == null){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Column(children:[Text("Not a valid Spotify URL.  It should be in the format \"https://open.spotify.com/[type]/[id]?si=[shareKey]\""),Text("The share key is optional.")])));
+      return;
+    }
     pulledSearchResults = false;
     page = "search:results";
     ref.read(adderProvider.notifier).search(query, selectedSearchType, selectedSearchSource);
@@ -287,7 +288,9 @@ class _AdderPageState extends ConsumerState {
               initialSelection: selectedSearchType,
               label: const Text('Type'),
               onSelected: (SearchType? value) {
+                if (value == null) return;
                 restoredSelectedSearchResults = false;
+                ref.read(adderProvider.notifier).setSelectedSearchType(value);
                 setState(() => selectedSearchType = value ?? SearchType.track);
                 if(query != "") searchQuerySubmitted(context);
               },

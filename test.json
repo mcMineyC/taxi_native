@@ -1,29 +1,35 @@
 [
   {
-    "name":"E. Gadd's Lab (From \"Luigi's Mansion\")",
-    "artist":"Qumu",
-    "album":"E. Gadd's Lab (From \"Luigi's Mansion\")",
-    "imageUrl":"https://i.scdn.co/image/ab67616d0000b27369df8e1ad28bca63d6e785e0",
-    "type":"song",
-    "songs":[
+    "name": "Minecraft Remix EP (Dawphin Remix)",
+    "artist": "Dawphin",
+    "album": "Minecraft Remix EP (Dawphin Remix)",
+    "imageUrl": "https://i.scdn.co/image/ab67616d0000b2739204f2979760fcee07dd5ea3",
+    "type": "album",
+    "songs": [
       {
-        "title":"E. Gadd's Lab (From \"Luigi's Mansion\")",
-        "id":"4f8RhA4Ftfw",
-        "trackNumber":1
-      }
-    ]
-  },
-  {
-    "name":"Luigi's Mansion",
-    "artist":"Qumu",
-    "album":"Luigi's Mansion",
-    "imageUrl":"https://i.scdn.co/image/ab67616d0000b2731eb09c4ba0f24bd81c5d7ca2",
-    "type":"song",
-    "songs":[
+        "title": "Sweden (Dawphin Remix)",
+        "id": "lXl7BxYJmU8",
+        "trackNumber": 0
+      },
       {
-        "title":"Luigi's Mansion",
-        "id":"F5m0YqkZneU",
-        "trackNumber":1
+        "title": "Living Mice (Dawphin Remix)",
+        "id": "eoLkZWBqdeQ",
+        "trackNumber": 1
+      },
+      {
+        "title": "Subwoofer Lullaby (Dawphin Remix)",
+        "id": "zthzumHJKDk",
+        "trackNumber": 2
+      },
+      {
+        "title": "Clark (Dawphin Remix)",
+        "id": "pNzTOT9XFeE",
+        "trackNumber": 3
+      },
+      {
+        "title": "Wet Hands (Dawphin Remix)",
+        "id": "WCXaDM2bycI",
+        "trackNumber": 4
       }
     ]
   }

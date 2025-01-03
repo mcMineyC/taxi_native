@@ -143,6 +143,16 @@ class Adder extends _$Adder {
   void cancel() {
     state = state.copyWith(state: "authed", searchResults: [], selectedSearchResults: [], findResults: []);
   }
+
+
+  void setSelectedSearchType(SearchType type) {
+    state = state.copyWith(searchType: type);
+  }
+  void setSelectedSearchSource(SearchSource source) {
+    state = state.copyWith(searchSource: source);
+  }
+
+
   void selectSearchResult(SearchResult result) {
     state = state.copyWith(
       selectedSearchResults: [...state.selectedSearchResults, result],
@@ -158,6 +168,8 @@ class Adder extends _$Adder {
   void clearSelectedSearchResults(){
     state = state.copyWith(selectedSearchResults: [], selectedSearchResultIds: []);
   }
+
+
   void findVideosForSelectedSearchResults() {
     findVideosFor(state.selectedSearchResults, state.searchSource);
   }

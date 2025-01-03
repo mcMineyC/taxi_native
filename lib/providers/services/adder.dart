@@ -69,7 +69,7 @@ class Adder extends _$Adder {
     socket = IO.io(backendUrl, options);
     socket.onConnect((_) {
       print("Adder: Connected to backend");
-      state = state.copyWith(state: "auth");
+      state = state.copyWith(state: "loading:auth");
     });
     socket.onDisconnect((_) {
       print("Adder: Disconnected from backend");
@@ -82,16 +82,16 @@ class Adder extends _$Adder {
       authed = data["success"];
       if(!authed){
         print("Adder: Auth failed: ${data["error"]}");
-        state = state.copyWith(state: "authfail", authed: false);
+        state = state.copyWith(state: "auth:fail", authed: false);
         return;
       }
-      state = state.copyWith(state: "authed", authed: true);
+      state = state.copyWith(state: "auth:success", authed: true);
     });
     socket.on('searchresults', (data) {
       print("Adder: Search results");
       List<SearchResult> results = [];
       results = data["results"].whereType<Map<String, dynamic>>().toList().map<SearchResult>((element) => SearchResult.fromJson(element)).toList();
-      state = state.copyWith(state: "searchresults", searchResults: results);
+      state = state.copyWith(state: "search:results", searchResults: results);
       print("Adder: Search results: ${results.length}");
     });
 
@@ -102,17 +102,16 @@ class Adder extends _$Adder {
       data["results"].forEach((element) {
         found.add(FindResult.fromJson(element));
       });
-      state = state.copyWith(state: "findresults", findResults: found);
+      state = state.copyWith(state: "find:results", findResults: found);
     });
 
     socket.on('addresult', (data) {
       var result = AddResult.fromJson(data);
-      state = state.copyWith(state: "addresult", addResult: result);
+      state = state.copyWith(state: "add:results", addResult: result);
       print("Got success message!!");
       ref.refresh(fetchSongsProvider(ignore: false));
       ref.refresh(fetchAlbumsProvider(ignore: false));
       ref.refresh(fetchArtistsProvider(ignore: false));
-      
     });
     _isInit = true;
 
@@ -121,18 +120,18 @@ class Adder extends _$Adder {
 
   void search(String query, SearchType type, SearchSource source) {
     print("Searcher: Searching ${query}");
-    state = state.copyWith(state: "loadingsearch", query: query, searchType: type);
+    state = state.copyWith(state: "loading:search", query: query, searchType: type);
     socket.emit('search', {"query": query, "source": source.type, "mediaType": type.type});
   }
 
-  void findVideosFor(List<SearchResult> results) {
-    state = state.copyWith(state: "loadingfind");
+  void findVideosFor(List<SearchResult> results, SearchSource source) {
+    state = state.copyWith(state: "loading:find");
     print("Adder: Find videos for ${results.length} results");
-    socket.emit('find', {'selected': results, 'source': "spotify"});
+    socket.emit('find', {'selected': results, 'source': source.type});
   }
 
   void addFindResults(List<FindResult> results) {
-    state = state.copyWith(state: "loadingadd");
+    state = state.copyWith(state: "loading:add");
     print("Adder: Add ${results.length} results");
     socket.emit('add', {"items": results});
   }
@@ -147,7 +146,6 @@ class Adder extends _$Adder {
   void selectSearchResult(SearchResult result) {
     state = state.copyWith(
       selectedSearchResults: [...state.selectedSearchResults, result],
-      //selectedSearchResultIds: [...state.selectedSearchResultIds, "${result.type}:${result.id}"]
     );
   }
   void deselectSearchResult(SearchResult result) {
@@ -155,15 +153,12 @@ class Adder extends _$Adder {
       selectedSearchResults: state.selectedSearchResults.where(
         (element) => element != result
       ).toList(),
-      //selectedSearchResultIds: state.selectedSearchResultIds.where(
-      //  (element) => element != "${result.type}:${result.id}"
-      //).toList()
     );
   }
   void clearSelectedSearchResults(){
     state = state.copyWith(selectedSearchResults: [], selectedSearchResultIds: []);
   }
   void findVideosForSelectedSearchResults() {
-    findVideosFor(state.selectedSearchResults);
+    findVideosFor(state.selectedSearchResults, state.searchSource);
   }
 }

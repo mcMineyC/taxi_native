@@ -41,7 +41,7 @@ class _AdderPageState extends ConsumerState {
     TextEditingController queryController = TextEditingController();
     ref.read(adderProvider.notifier).init();
     final state = ref.watch(adderProvider);
-    if (state.state == "authed") {
+    if (state.state == "auth:success") {
       backable = true;
       page = "search";
       if(query == ""){
@@ -50,11 +50,12 @@ class _AdderPageState extends ConsumerState {
         selectedSearchType = state.searchType;
         selectedSearchSource = state.searchSource;
       }
-    } else if (state.state == "findingresults") {
+    } else if (state.state == "finding:results") {
       nextable = false;
       backable = false;
-    } else if (state.state == "searchresults") {
+    } else if (state.state == "search:results") {
       if(!pulledSearchResults) {
+        print("Pulling search results");
         restoredSelectedSearchResults = false;
         searchResults = state.searchResults.toList();
         pulledSearchResults = true;
@@ -71,22 +72,22 @@ class _AdderPageState extends ConsumerState {
         restoredSelectedSearchResults = true;
       }
 
-      page = "searchresults";
+      page = "search:results";
       //print(state.searchResults);
       print("Search returned ${searchResults.length} items");
       queryController.text = query;
-    } else if(state.state == "findresults"){
+    } else if(state.state == "find:results"){
       if(!findResultsProcessed){
         findResults = state.findResults.toList();
         //print("Find results: ${jsonEncode(findResults)}");
         hlvArtists = findResultsToHLVContent(findResults);
         findResultsProcessed = true;
       }
-      page = "findresults";
+      page = "find:results";
     }
     print("Adder: query: $query");
-    //print("Adder: Page $page");
-    //print("Adder: State ${state.state}");
+    print("Adder: Page $page");
+    print("Adder: State ${state.state}");
     return Container(
         margin: EdgeInsets.fromLTRB(14, 10, 14, 10),
         child: Center(
@@ -94,20 +95,36 @@ class _AdderPageState extends ConsumerState {
           children: [
             Expanded(
               child: switch (state.state) {
-                "auth" => const Center(
-                      child: Column(children: [
-                    Text("Logging in...",
+                "auth:failed" => Center(
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Login failed",
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 18)),
-                    CircularProgressIndicator()
-                  ])),
+                        style: TextStyle(fontSize: 18)
+                      ),
+                      Icon(Icons.error, size: 64, color: Colors.red[350]),
+                    ],
+                  ),
+                ),
                 "loading" => const Center(child: CircularProgressIndicator()),
-                "loadingfind" => const Center(child: CircularProgressIndicator()),
-                "loadingsearch" => searchPage(context, null, true),
+                "loading:auth" => const Center(
+                  child: Column(
+                    children: [
+                      Text("Logging in...",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 18)
+                      ),
+                      CircularProgressIndicator()
+                    ]
+                  )
+                ),
+                "loading:find" => const Center(child: CircularProgressIndicator()),
+                "loading:search" => searchPage(context, null, true),
                 _ => switch (page) {
                     "search" => searchPage(context, null, false),
-                    "searchresults" => searchPage(context, searchResults, false),
-                    "findresults" => findPage(context, findResults),
+                    "search:results" => searchPage(context, searchResults, false),
+                    "find:results" => findPage(context, findResults),
                     _ => Center(
                           child: Column(children: [
                         Text("Unknown state: ${state.state}",
@@ -122,28 +139,42 @@ class _AdderPageState extends ConsumerState {
               children: [
                 FilledButton.tonal(
                   child: Text(page.length >= 6 && page.substring(0,6) == "search" ? "Cancel" : "Back"),
-                  onPressed: !backable
-                      ? null
-                      : () {
-                          if (page.length >= 6 && page.substring(0, 6) == "search") cancel();
-                          else if(page == "findresults"){
-                            page = "searchresults";
-                            findResultsProcessed = false;
-                            //ref.read(adderProvider.notifier).clearSelectedSearchResults();
-                            setState(() => ref.read(adderProvider.notifier).setStep("searchresults"));
-                          }
-                        },
+                  onPressed: (){
+                    List<String> parts = state.state.split(":");
+                    if(parts[0] == "loading" && parts.length > 1 && (parts[1] != "search")){
+                      return null;
+                    }else{
+                      return () {
+                        if (parts[0] == "search") cancel();
+                        else if(page == "find:results"){
+                          page = "search:results";
+                          findResultsProcessed = false;
+                          //ref.read(adderProvider.notifier).clearSelectedSearchResults();
+                          setState(() => ref.read(adderProvider.notifier).setStep("search:results"));
+                        }
+                      };
+                    }
+                  }(),
                 ),
                 Expanded(child: Container(color: Colors.pink)),
                 FilledButton.tonal(
                   child: Text("Next"),
-                  onPressed: !nextable ? null : () {
-                    if (page == "search") {
-                      searchQuerySubmitted(context);
-                    }else if(page == "searchresults"){
-                      searchPageSubmitted(context);
+                  onPressed: (){
+                    List<String> parts = state.state.split(":"); 
+                    if(parts[0] == "loading" && parts.length > 1 && (parts[1] != "search")){
+                      return null;
+                    }else{
+                      return () {
+                        if (page == "search") {
+                          searchQuerySubmitted(context);
+                        }else if(page == "search:results"){
+                          searchPageSubmitted(context);
+                        }else if(page == "find:results"){
+                          print("Find page submitted, now we convert and just gotta send it to the backend");
+                        }
+                      };
                     }
-                  },
+                  }(),
                 ),
               ],
             ),
@@ -160,13 +191,13 @@ class _AdderPageState extends ConsumerState {
 
   void searchQuerySubmitted(BuildContext context) {
     pulledSearchResults = false;
-    page = "searchresults";
+    page = "search:results";
     ref.read(adderProvider.notifier).search(query, selectedSearchType, selectedSearchSource);
     //ScaffoldMessenger.of(context).showSnackBar(
     //SnackBar(content: Text("\"$query\" - ${selectedSearchType.label}")));
   }
   void searchPageSubmitted(BuildContext context) {
-    page = "loadingfind";
+    page = "loading:find";
     restoredSelectedSearchResults = false;
     ref.read(adderProvider.notifier).findVideosForSelectedSearchResults();
   }

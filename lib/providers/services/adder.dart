@@ -145,16 +145,19 @@ class Adder extends _$Adder {
     state = state.copyWith(state: "authed", searchResults: [], selectedSearchResults: [], findResults: []);
   }
   void selectSearchResult(SearchResult result) {
-    state = state.copyWith(selectedSearchResults: [...state.selectedSearchResults, result], selectedSearchResultIds: [...state.selectedSearchResultIds, "${result.type}:${result.id}"]);
+    state = state.copyWith(
+      selectedSearchResults: [...state.selectedSearchResults, result],
+      //selectedSearchResultIds: [...state.selectedSearchResultIds, "${result.type}:${result.id}"]
+    );
   }
   void deselectSearchResult(SearchResult result) {
     state = state.copyWith(
       selectedSearchResults: state.selectedSearchResults.where(
         (element) => element != result
       ).toList(),
-      selectedSearchResultIds: state.selectedSearchResultIds.where(
-        (element) => element != "${result.type}:${result.id}"
-      ).toList()
+      //selectedSearchResultIds: state.selectedSearchResultIds.where(
+      //  (element) => element != "${result.type}:${result.id}"
+      //).toList()
     );
   }
   void clearSelectedSearchResults(){

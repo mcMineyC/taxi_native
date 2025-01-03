@@ -55,12 +55,19 @@ class _AdderPageState extends ConsumerState {
       backable = false;
     } else if (state.state == "searchresults") {
       if(!pulledSearchResults) {
+        restoredSelectedSearchResults = false;
         searchResults = state.searchResults.toList();
         pulledSearchResults = true;
       }
       if(!restoredSelectedSearchResults && state.selectedSearchResults.isNotEmpty){
         print("Restoring selected search results");
         selectedSearchResults = state.selectedSearchResults.toList();
+        List<String> searchResultIds = searchResults.map((result) => "${result.type}:${result.id}").toList();
+        selectedSearchResults.forEach((result) {
+          if(!searchResultIds.contains("${result.type}:${result.id}")){
+            searchResults = [result, ...searchResults];
+          }
+        });
         restoredSelectedSearchResults = true;
       }
 
@@ -71,15 +78,15 @@ class _AdderPageState extends ConsumerState {
     } else if(state.state == "findresults"){
       if(!findResultsProcessed){
         findResults = state.findResults.toList();
-        print("Find results: ${jsonEncode(findResults)}");
+        //print("Find results: ${jsonEncode(findResults)}");
         hlvArtists = findResultsToHLVContent(findResults);
         findResultsProcessed = true;
       }
       page = "findresults";
     }
     print("Adder: query: $query");
-    print("Adder: Page $page");
-    print("Adder: State ${state.state}");
+    //print("Adder: Page $page");
+    //print("Adder: State ${state.state}");
     return Container(
         margin: EdgeInsets.fromLTRB(14, 10, 14, 10),
         child: Center(
@@ -171,6 +178,7 @@ class _AdderPageState extends ConsumerState {
   }
 
   Widget searchPage(BuildContext context, List<SearchResult>? searchResults, bool? loading) {
+    // TODO Deal with responsive layout, eg on a phone
     int cardWidth = 200;
     int cardPadding = 10;
     int crossAxisNum = ((MediaQuery.of(context).size.width - 110) / 200).ceil();
@@ -248,6 +256,7 @@ class _AdderPageState extends ConsumerState {
               initialSelection: selectedSearchType,
               label: const Text('Type'),
               onSelected: (SearchType? value) {
+                restoredSelectedSearchResults = false;
                 setState(() => selectedSearchType = value ?? SearchType.track);
                 if(query != "") searchQuerySubmitted(context);
               },

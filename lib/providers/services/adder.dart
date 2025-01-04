@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'dart:convert';
 import '../../platform_utils.dart';
 import '../../service_locator.dart';
 
@@ -10,6 +11,7 @@ import '../data/preferences_provider.dart';
 import '../data/fetched_data_provider.dart';
 
 import '../../types/searchresult.dart';
+import '../../types/hierarchicalListView.dart';
 
 part 'adder.g.dart';
 part 'adder.freezed.dart';
@@ -90,14 +92,19 @@ class Adder extends _$Adder {
     socket.on('searchresults', (data) {
       print("Adder: Search results");
       List<SearchResult> results = [];
-      results = data["results"].whereType<Map<String, dynamic>>().toList().map<SearchResult>((element) => SearchResult.fromJson(element)).toList();
+      results = data["results"].whereType<Map<String, dynamic>>()
+      .toList().
+      map<SearchResult>(
+        (element) => SearchResult.fromJson(element)
+      )
+      .toList();
       state = state.copyWith(state: "search:results", searchResults: results);
       print("Adder: Search results: ${results.length}");
     });
 
     socket.on('findresults', (data) {
       print("Adder: Find results");
-      print(data["results"][0].toString());
+      //print(data["results"][0].toString());
       var found = List<FindResult>.empty(growable: true);
       data["results"].forEach((element) {
         found.add(FindResult.fromJson(element));
@@ -131,6 +138,12 @@ class Adder extends _$Adder {
   }
 
   void addFindResults(List<FindResult> results) {
+    throw("This function is deprecated");
+    state = state.copyWith(state: "loading:add");
+    print("Adder: Add ${results.length} results");
+    socket.emit('add', {"items": results});
+  }
+  void addHLVResults(List<HLVArtist> results) {
     state = state.copyWith(state: "loading:add");
     print("Adder: Add ${results.length} results");
     socket.emit('add', {"items": results});

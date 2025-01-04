@@ -6,10 +6,9 @@ import 'dart:convert';
 
 import '../helper_widgets.dart';
 import '../types/searchresult.dart';
+import '../types/hierarchicalListView.dart';
 import '../providers/services/adder.dart';
 import '../providers/services/player.dart';
-import '../providers/data/fetched_data_provider.dart';
-import '../tone_extension.dart';
 import '../hierarchicalListView.dart';
 
 // NEW ADDER
@@ -35,6 +34,25 @@ class _AdderPageState extends ConsumerState {
   List<FindResult> findResults = [];
   bool findResultsProcessed = false;
   List<HLVArtist> hlvArtists = [];
+  void pullSearchResults(state) {
+    print("Pulling search results");
+    restoredSelectedSearchResults = false;
+    searchResults = state.searchResults.toList();
+    pulledSearchResults = true;
+  }
+  void restoreSelectedSearchResults(state) {
+    print("Restoring selected search results");
+    selectedSearchResults = state.selectedSearchResults.toList();
+    print("Restoring search results: ${selectedSearchResults.length}");
+    List<String> searchResultIds = searchResults.map((result) => "${result.type}:${result.id}").toList();
+    selectedSearchResults.forEach((result) {
+      print("Restoring search result ${result.type}:${result.id}");
+      if(!searchResultIds.contains("${result.type}:${result.id}")){
+        searchResults = [result, ...searchResults];
+      }
+    });
+    restoredSelectedSearchResults = true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,21 +70,10 @@ class _AdderPageState extends ConsumerState {
       }
     } else if (state.state == "search:results") {
       if(!pulledSearchResults) {
-        print("Pulling search results");
-        restoredSelectedSearchResults = false;
-        searchResults = state.searchResults.toList();
-        pulledSearchResults = true;
+        pullSearchResults(state);
       }
       if(!restoredSelectedSearchResults && state.selectedSearchResults.isNotEmpty){
-        print("Restoring selected search results");
-        selectedSearchResults = state.selectedSearchResults.toList();
-        List<String> searchResultIds = searchResults.map((result) => "${result.type}:${result.id}").toList();
-        selectedSearchResults.forEach((result) {
-          if(!searchResultIds.contains("${result.type}:${result.id}")){
-            searchResults = [result, ...searchResults];
-          }
-        });
-        restoredSelectedSearchResults = true;
+        restoreSelectedSearchResults(state);
       }
 
       page = "search:results";
@@ -167,7 +174,7 @@ class _AdderPageState extends ConsumerState {
                         }else if(page == "search:results"){
                           searchPageSubmitted(context);
                         }else if(page == "find:results"){
-                          print("Find page submitted, now we convert and just gotta send it to the backend");
+                          findPageSubmitted(context);
                         }
                       };
                     }
@@ -201,6 +208,11 @@ class _AdderPageState extends ConsumerState {
     page = "loading:find";
     restoredSelectedSearchResults = false;
     ref.read(adderProvider.notifier).findVideosForSelectedSearchResults();
+  }
+  void findPageSubmitted(BuildContext context) {
+    page = "loading:add";
+    ref.read(adderProvider.notifier).addHLVResults(hlvArtists);
+    print("Find page submitted");
   }
 
   Widget findPage(BuildContext context, List<FindResult> findResults) {
@@ -236,9 +248,15 @@ class _AdderPageState extends ConsumerState {
                 initialSelection: selectedSearchSource,
                 label: const Text('Source'),
                 onSelected: (SearchSource? value) {
-                  ref.read(adderProvider.notifier).clearSelectedSearchResults(); // Make sure that only one source is sent
-                  setState(() => selectedSearchSource = value ?? SearchSource.spotify);
-                  if(query != "") searchQuerySubmitted(context);
+                  print("Clearing selected search results");
+                  setState(() {
+                    ref.read(adderProvider.notifier).clearSelectedSearchResults(); // Make sure that only one source is sent
+                    AddState state = ref.read(adderProvider);
+                    pullSearchResults(state);
+                    restoreSelectedSearchResults(state);
+                    selectedSearchSource = value ?? SearchSource.spotify;
+                    if(query != "") searchQuerySubmitted(context);
+                  });
                 },
                 dropdownMenuEntries: SearchSource.values
                     .map((SearchSource value) => DropdownMenuEntry<SearchSource>(

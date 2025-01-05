@@ -125,6 +125,18 @@ class _AdderPageState extends ConsumerState {
                 ),
                 "loading:find" => const Center(child: CircularProgressIndicator()),
                 "loading:search" => searchPage(context, null, true),
+                "loading:add" => const Center(
+                  child: Column(
+                    children: [
+                      Text("Adding...",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 18)
+                      ),
+                      CircularProgressIndicator()
+                    ]
+                  )
+                ),
+                "add:results" => adderResultsPage(context, state.addResult),
                 _ => switch (page) {
                     "search" => searchPage(context, null, false),
                     "search:results" => searchPage(context, searchResults, false),
@@ -218,6 +230,22 @@ class _AdderPageState extends ConsumerState {
   Widget findPage(BuildContext context, List<FindResult> findResults) {
     return Container(
       child: HierarchicalListView(data:hlvArtists),
+    );
+  }
+
+  Widget adderResultsPage(BuildContext context, AddResult addResults) {
+    return Container(
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.check_circle, size: 100, color: Theme.of(context).colorScheme.inversePrimary),
+            Text("Done!"),
+            Text("Added ${addResults.count.songs} song${(addResults.count.songs > 1) ? "s" : ""} and ${addResults.count.albums} album${(addResults.count.albums > 1) ? "s" : ""} to your library."),
+          ],
+        ),
+      ),
     );
   }
 
@@ -355,6 +383,8 @@ class _AdderPageState extends ConsumerState {
                           else
                             ref.read(adderProvider.notifier).deselectSearchResult(e);
                           print((selected ? "Selected" : "Deselected")+" "+e.name);
+                          pullSearchResults(ref.read(adderProvider));
+                          restoreSelectedSearchResults(ref.read(adderProvider));
                         }
                       ))
                       .toList(),

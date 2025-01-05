@@ -146,7 +146,7 @@ class Adder extends _$Adder {
   void addHLVResults(List<HLVArtist> results) {
     state = state.copyWith(state: "loading:add");
     print("Adder: Add ${results.length} results");
-    socket.emit('add', {"items": results});
+    socket.emit('add', {"hierarchy": results});
   }
 
   void setStep(String step) {

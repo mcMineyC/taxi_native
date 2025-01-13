@@ -108,6 +108,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   void loginToken() async {
     var token = _sp.getString("token");
+    debugPrint("Trying authtoken");
     debugPrint(token.toString());
     if(_triedToken == true || token == null) {
       debugPrint("No token found");

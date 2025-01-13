@@ -173,7 +173,7 @@ class _AdderPageState extends ConsumerState {
                   }(),
                 ),
                 Expanded(child: Container(color: Colors.pink)),
-                FilledButton.tonal(
+                if(state.state != "add:results") FilledButton.tonal(
                   child: Text("Next"),
                   onPressed: (){
                     List<String> parts = state.state.split(":"); 
@@ -191,6 +191,20 @@ class _AdderPageState extends ConsumerState {
                       };
                     }
                   }(),
+                ),
+                if(state.state == "add:results") OutlinedButton(
+                  child: Text("Add more"),
+                  onPressed: () {
+                    dutiesDone(context);
+                  }
+                ),
+                if(state.state == "add:results") SpacerWidget(width:8),
+                if(state.state == "add:results") FilledButton.tonal(
+                  child: Text("Done"),
+                  onPressed: () {
+                    dutiesDone(context);
+                    cancel();
+                  }
                 ),
               ],
             ),
@@ -225,6 +239,9 @@ class _AdderPageState extends ConsumerState {
     page = "loading:add";
     ref.read(adderProvider.notifier).addHLVResults(hlvArtists);
     print("Find page submitted");
+  }
+  void dutiesDone(BuildContext context){
+    ref.read(adderProvider.notifier).done();
   }
 
   Widget findPage(BuildContext context, List<FindResult> findResults) {

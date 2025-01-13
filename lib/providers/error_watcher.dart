@@ -5,6 +5,7 @@ void handleError(WidgetRef ref, ProviderBase prov, BeamerDelegate b) {
   var state = ref.read(prov);
   if(state.error != null){
     print("Refreshing provider cause it errored out before startup");
+    print(prov);
     print("Provider errored out: ${state.error}");
     ref.refresh(prov);
   }

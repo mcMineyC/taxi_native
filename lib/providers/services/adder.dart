@@ -154,7 +154,10 @@ class Adder extends _$Adder {
   }
   
   void cancel() {
-    state = state.copyWith(state: "authed", searchResults: [], selectedSearchResults: [], findResults: []);
+    state = state.copyWith(state: "auth:success", searchResults: [], selectedSearchResults: [], findResults: []);
+  }
+  void done() {
+    state = state.copyWith(state: "auth:success", searchResults: [], selectedSearchResults: [], findResults: []);
   }
 
 

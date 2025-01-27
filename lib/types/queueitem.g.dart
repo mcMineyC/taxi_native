@@ -16,7 +16,6 @@ _$QueueItemImpl _$$QueueItemImplFromJson(Map<String, dynamic> json) =>
       albumName: json['albumName'] as String,
       artistName: json['artistName'] as String,
       imageUrl: json['imageUrl'] as String,
-      youtubeId: json['youtubeId'] as String,
       duration: (json['duration'] as num).toDouble(),
       audioUrl: json['audioUrl'] as String,
     );
@@ -31,7 +30,6 @@ Map<String, dynamic> _$$QueueItemImplToJson(_$QueueItemImpl instance) =>
       'albumName': instance.albumName,
       'artistName': instance.artistName,
       'imageUrl': instance.imageUrl,
-      'youtubeId': instance.youtubeId,
       'duration': instance.duration,
       'audioUrl': instance.audioUrl,
     };

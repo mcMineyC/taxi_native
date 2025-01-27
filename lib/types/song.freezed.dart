@@ -27,7 +27,7 @@ mixin _$Song {
   String get albumDisplayName => throw _privateConstructorUsedError;
   String get artistDisplayName => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
-  String get youtubeId => throw _privateConstructorUsedError;
+  String get audioUrl => throw _privateConstructorUsedError;
   int get added => throw _privateConstructorUsedError;
   String get addedBy => throw _privateConstructorUsedError;
   double get duration => throw _privateConstructorUsedError;
@@ -55,7 +55,7 @@ abstract class $SongCopyWith<$Res> {
       String albumDisplayName,
       String artistDisplayName,
       String imageUrl,
-      String youtubeId,
+      String audioUrl,
       int added,
       String addedBy,
       double duration,
@@ -84,7 +84,7 @@ class _$SongCopyWithImpl<$Res, $Val extends Song>
     Object? albumDisplayName = null,
     Object? artistDisplayName = null,
     Object? imageUrl = null,
-    Object? youtubeId = null,
+    Object? audioUrl = null,
     Object? added = null,
     Object? addedBy = null,
     Object? duration = null,
@@ -119,9 +119,9 @@ class _$SongCopyWithImpl<$Res, $Val extends Song>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      youtubeId: null == youtubeId
-          ? _value.youtubeId
-          : youtubeId // ignore: cast_nullable_to_non_nullable
+      audioUrl: null == audioUrl
+          ? _value.audioUrl
+          : audioUrl // ignore: cast_nullable_to_non_nullable
               as String,
       added: null == added
           ? _value.added
@@ -158,7 +158,7 @@ abstract class _$$SongImplCopyWith<$Res> implements $SongCopyWith<$Res> {
       String albumDisplayName,
       String artistDisplayName,
       String imageUrl,
-      String youtubeId,
+      String audioUrl,
       int added,
       String addedBy,
       double duration,
@@ -184,7 +184,7 @@ class __$$SongImplCopyWithImpl<$Res>
     Object? albumDisplayName = null,
     Object? artistDisplayName = null,
     Object? imageUrl = null,
-    Object? youtubeId = null,
+    Object? audioUrl = null,
     Object? added = null,
     Object? addedBy = null,
     Object? duration = null,
@@ -219,9 +219,9 @@ class __$$SongImplCopyWithImpl<$Res>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      youtubeId: null == youtubeId
-          ? _value.youtubeId
-          : youtubeId // ignore: cast_nullable_to_non_nullable
+      audioUrl: null == audioUrl
+          ? _value.audioUrl
+          : audioUrl // ignore: cast_nullable_to_non_nullable
               as String,
       added: null == added
           ? _value.added
@@ -254,7 +254,7 @@ class _$SongImpl extends _Song {
       required this.albumDisplayName,
       required this.artistDisplayName,
       required this.imageUrl,
-      required this.youtubeId,
+      required this.audioUrl,
       required this.added,
       required this.addedBy,
       required this.duration,
@@ -280,7 +280,7 @@ class _$SongImpl extends _Song {
   @override
   final String imageUrl;
   @override
-  final String youtubeId;
+  final String audioUrl;
   @override
   final int added;
   @override
@@ -297,7 +297,7 @@ class _$SongImpl extends _Song {
 
   @override
   String toString() {
-    return 'Song(id: $id, albumId: $albumId, artistId: $artistId, displayName: $displayName, albumDisplayName: $albumDisplayName, artistDisplayName: $artistDisplayName, imageUrl: $imageUrl, youtubeId: $youtubeId, added: $added, addedBy: $addedBy, duration: $duration, visibleTo: $visibleTo)';
+    return 'Song(id: $id, albumId: $albumId, artistId: $artistId, displayName: $displayName, albumDisplayName: $albumDisplayName, artistDisplayName: $artistDisplayName, imageUrl: $imageUrl, audioUrl: $audioUrl, added: $added, addedBy: $addedBy, duration: $duration, visibleTo: $visibleTo)';
   }
 
   @override
@@ -317,8 +317,8 @@ class _$SongImpl extends _Song {
                 other.artistDisplayName == artistDisplayName) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
-            (identical(other.youtubeId, youtubeId) ||
-                other.youtubeId == youtubeId) &&
+            (identical(other.audioUrl, audioUrl) ||
+                other.audioUrl == audioUrl) &&
             (identical(other.added, added) || other.added == added) &&
             (identical(other.addedBy, addedBy) || other.addedBy == addedBy) &&
             (identical(other.duration, duration) ||
@@ -338,7 +338,7 @@ class _$SongImpl extends _Song {
       albumDisplayName,
       artistDisplayName,
       imageUrl,
-      youtubeId,
+      audioUrl,
       added,
       addedBy,
       duration,
@@ -369,7 +369,7 @@ abstract class _Song extends Song {
       required final String albumDisplayName,
       required final String artistDisplayName,
       required final String imageUrl,
-      required final String youtubeId,
+      required final String audioUrl,
       required final int added,
       required final String addedBy,
       required final double duration,
@@ -393,7 +393,7 @@ abstract class _Song extends Song {
   @override
   String get imageUrl;
   @override
-  String get youtubeId;
+  String get audioUrl;
   @override
   int get added;
   @override

@@ -1750,7 +1750,7 @@ class _FindArtistProviderElement
   bool get ignore => (origin as FindArtistProvider).ignore;
 }
 
-String _$updateSongHash() => r'07e386ccdb690ffe9bf85d6f17e1af5055afea25';
+String _$updateSongHash() => r'ef5463f3fa7e79c37d2bd1a9d121047fb7ab1fe8';
 
 /// See also [updateSong].
 @ProviderFor(updateSong)

@@ -97,7 +97,7 @@ Map<String, dynamic> _$$FindResultImplToJson(_$FindResultImpl instance) =>
 _$FindResultSongImpl _$$FindResultSongImplFromJson(Map<String, dynamic> json) =>
     _$FindResultSongImpl(
       title: json['title'] as String,
-      id: json['id'] as String,
+      url: json['url'] as String,
       trackNumber: (json['trackNumber'] as num).toInt(),
     );
 
@@ -105,7 +105,7 @@ Map<String, dynamic> _$$FindResultSongImplToJson(
         _$FindResultSongImpl instance) =>
     <String, dynamic>{
       'title': instance.title,
-      'id': instance.id,
+      'url': instance.url,
       'trackNumber': instance.trackNumber,
     };
 

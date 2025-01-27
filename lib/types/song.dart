@@ -16,7 +16,7 @@ class Song with _$Song {
     required String albumDisplayName,
     required String artistDisplayName,
     required String imageUrl,
-    required String youtubeId,
+    required String audioUrl,
     required int    added,
     required String addedBy,
     required double duration,
@@ -29,7 +29,7 @@ class Song with _$Song {
   
   MediaItem toMediaItem() {
     return MediaItem(
-      id: youtubeId,
+      id: audioUrl,
       title: displayName,
       album: albumDisplayName,
       artist: artistDisplayName,
@@ -50,9 +50,8 @@ class Song with _$Song {
     albumName: albumDisplayName,
     artistName: artistDisplayName,
     imageUrl: imageUrl,
-    youtubeId: youtubeId,
     duration: duration,
-    audioUrl: "not_fetched",
+    audioUrl: audioUrl,
   );
 }
 
@@ -66,9 +65,8 @@ extension ConvertToQueueItem on MediaItem {
     albumName: extras!["song"]?.albumDisplayName ?? "",
     artistName: extras!["song"]?.artistDisplayName ?? "",
     imageUrl: extras!["song"]?.imageUrl ?? "",
-    youtubeId: extras!["song"]?.youtubeId ?? "",
     duration: extras!["song"]?.duration ?? 0,
-    audioUrl: "not_fetched",
+    audioUrl: id,
   );
 }    
 
@@ -83,7 +81,7 @@ Song EmptySong(){
     added: 0,
     duration: 0.1,
     imageUrl: '',
-    youtubeId: '000000',
+    audioUrl: 'blank:',
     visibleTo: [],
     addedBy: 'testguy'
   );

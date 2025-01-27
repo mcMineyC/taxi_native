@@ -427,8 +427,8 @@ class InfoEditorCardState extends State<InfoEditorCard> {
   TextEditingController albumController = TextEditingController();
   bool artistCorrect = true;
   TextEditingController artistController = TextEditingController();
-  bool videoIdCorrect = true;
-  TextEditingController videoIdController = TextEditingController();
+  bool urlCorrect = true;
+  TextEditingController urlController = TextEditingController();
   bool imageUrlCorrect = true;
   TextEditingController imageUrlController = TextEditingController();
   late FindResult modifiedData;
@@ -456,7 +456,7 @@ class InfoEditorCardState extends State<InfoEditorCard> {
             ? modifiedData.album
             : "This isn't going to actually be used";
     artistController.text = modifiedData.artist;
-    videoIdController.text = modifiedData.songs[0].id;
+    urlController.text = modifiedData.songs[0].url;
     imageUrlController.text = modifiedData.imageUrl;
 
     return Card(
@@ -578,14 +578,14 @@ class InfoEditorCardState extends State<InfoEditorCard> {
             },
           ),
           title: TextField(
-            controller: videoIdController,
+            controller: urlController,
             decoration: InputDecoration(
               labelText: 'Video ID',
               filled: true,
             ),
             onChanged: (_) {
               var song = modifiedData.songs.toList();
-              song[0] = song[0].copyWith(id: videoIdController.text);
+              song[0] = song[0].copyWith(url: urlController.text);
               modifiedData = modifiedData.copyWith(songs: song);
             },
           )),

@@ -298,7 +298,7 @@ Future<bool> updateSong(UpdateSongRef ref, Song s) async {
         'displayName': s.displayName,
         'albumDisplayName': s.albumDisplayName,
         'artistDisplayName': s.artistDisplayName,
-        'youtubeId': s.youtubeId,
+        'audioUrl': s.audioUrl,
         'imageUrl': s.imageUrl,
       }));
   var desponse = jsonDecode(response.body);

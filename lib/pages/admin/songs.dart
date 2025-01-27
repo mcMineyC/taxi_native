@@ -35,7 +35,7 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
   TextEditingController nameController = TextEditingController();
   TextEditingController artistController = TextEditingController();
   TextEditingController albumController = TextEditingController();
-  TextEditingController youtubeIdController = TextEditingController();
+  TextEditingController urlController = TextEditingController();
   TextEditingController imageUrlController = TextEditingController();
 
   @override
@@ -63,7 +63,7 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
       nameController.text = currentSong.displayName;
       artistController.text = currentSong.artistDisplayName;
       albumController.text = currentSong.albumDisplayName;
-      youtubeIdController.text = currentSong.youtubeId;
+      urlController.text = currentSong.audioUrl;
       imageUrlController.text = currentSong.imageUrl;
     }
     print("Current song: ${currentSong.displayName}");
@@ -131,19 +131,19 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
             ),
             ListTile(
               title: TextField(
-                controller: youtubeIdController,
+                controller: urlController,
                 decoration: const InputDecoration(
                   labelText: "Video ID",
                   filled: true
                 ),
                 onChanged: (value) {
                   setState(() => mutated = true);
-                  currentSong = currentSong.copyWith(youtubeId: value);
+                  currentSong = currentSong.copyWith(audioUrl: value);
                 }
               ),
               trailing: IconButton(
                 icon: const Icon(Icons.play_arrow_rounded),
-                onPressed: () => ref.read(playerProvider.notifier).playYoutubeId(youtubeIdController.text),
+                onPressed: () => ref.read(playerProvider.notifier).playYoutubeId(urlController.text),
               ),
             ),
             ListTile(

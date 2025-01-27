@@ -95,7 +95,7 @@ class FindResult with _$FindResult {
     album: song.albumDisplayName,
     artist: song.artistDisplayName,
     imageUrl: song.imageUrl,
-    songs: [FindResultSong(title: song.displayName, id: song.youtubeId, trackNumber: 0)],
+    songs: [FindResultSong(title: song.displayName, url: song.audioUrl, trackNumber: 0)],
     );
 
 }
@@ -104,7 +104,7 @@ class FindResult with _$FindResult {
 class FindResultSong with _$FindResultSong {
   const factory FindResultSong({
     required String title,
-    required String id, 
+    required String url, 
     required int trackNumber,
   }) = _FindResultSong;
 

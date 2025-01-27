@@ -35,6 +35,7 @@ Future<List<Song>> fetchNewSongs(FetchNewSongsRef ref) async {
   //   listThings.add(song);
   // });
   for(var x = 0; x < (desponse.length >= 10 ? 10 : desponse.length); x++){
+    print(desponse[x]);
     var song = Song.fromJson(desponse[x]);
     listThings.add(song);
   }

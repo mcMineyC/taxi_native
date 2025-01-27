@@ -7,7 +7,9 @@ void handleError(WidgetRef ref, ProviderBase prov, BeamerDelegate b) {
     print("Refreshing provider cause it errored out before startup");
     print(prov);
     print("Provider errored out: ${state.error}");
-    ref.refresh(prov);
+    Future.delayed(const Duration(seconds: 2), () {
+      ref.refresh(prov);
+    });
   }
   ref.listen(prov, (_, state) async {
     if (state.error != null && _.error == null) {

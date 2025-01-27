@@ -400,9 +400,8 @@ class Player extends _$Player {
       artistName: result.artist,
       albumName: result.album,
       duration: 0,
-      youtubeId: result.songs[0].id,
       imageUrl: "https://i.imgur.com/0fU7kZG.jpg",
-      audioUrl: "not_fetched",
+      audioUrl: result.songs[0].url,
     ));
   }
 
@@ -427,18 +426,20 @@ class Player extends _$Player {
     state = state.copyWith(thinking: true);
     player.pause();
     var url = item.audioUrl;
-    if (url == "not_fetched") {
+    if (url.split(":").first != "prefetched") {
       if (PlatformUtils.isWeb) return;
-      print("Fetching ${item.displayName}, $url");
-      url = await fetchYTVideo(item.youtubeId);
-      var nq = state.queue.toList();
-      print("NQ Length ${nq.length}");
-      nq[state.currentIndex] = item.copyWith(audioUrl: url);
-      setQueue(nq);
+      url = await getAudioUrl(url);
+      //var nq = state.queue.toList();
+      //print("NQ Length ${nq.length}");
+      //nq[state.currentIndex] = item.copyWith(audioUrl: url);
+      //setQueue(nq);
+    }else{
+      url = RegExp(r'\${{%(.*)%}}\$(.*)').firstMatch(url)?.group(2) ?? "";
+      if (url.isEmpty) throw Exception("Audio url fetch failed: ${item.audioUrl}");
     }
     //print("Going to play $url");
     await player.setAudioSource(AudioSource.uri(
-      Uri.parse(url),
+      Uri.parse(await getAudioUrl(url)),
       tag: MediaItem(
           id: DateTime.now().microsecondsSinceEpoch.toString(),
           title: item.displayName,
@@ -453,18 +454,24 @@ class Player extends _$Player {
       ref.read(addRecentlyPlayedProvider(item.id).future).then((value) {
         if (value == true) ref.refresh(fetchRecentlyPlayedProvider.future);
       });
-      if (state.queue.length == 1) {
+      if (state.queue.length == 1 && state.queue[skipDex(1)].audioUrl.split(":").first == "prefetched") {
         print("Queue is one, returning");
         return;
       }
-      var nextUrl = await fetchYTVideo(state.queue[skipDex(1)].youtubeId);
-      if (PlatformUtils.isWeb) nextUrl = "$backendUrl/proxy/$nextUrl";
+      var nextUrl = await getAudioUrl(item.audioUrl);
+      //if (PlatformUtils.isWeb) nextUrl = "$backendUrl/proxy/$nextUrl";
       var nq = state.queue.toList();
       nq[skipDex(1)] = nq[skipDex(1)].copyWith(audioUrl: nextUrl);
       if (state.queue.length > 1) {
+        String originalUrl = "";
+        if (state.queue[state.currentIndex].audioUrl.split(":").first == "prefetched") {
+          originalUrl = RegExp(r'\${{%(.*)%}}\$(.*)').firstMatch(state.queue[state.currentIndex].audioUrl)?.group(1) ?? "";
+        }else {
+          return;
+        }
         print("UNPREPPING: ${state.queue[state.currentIndex].displayName}");
         nq[state.currentIndex] =
-            state.queue[state.currentIndex].copyWith(audioUrl: "not_fetched");
+            state.queue[state.currentIndex].copyWith(audioUrl: originalUrl);
       }
       print("PREPPED: ${nq[skipDex(1)].displayName}");
       setQueue(nq);
@@ -472,9 +479,9 @@ class Player extends _$Player {
   }
 
   Future<String> fetchYTVideo(String id) async {
-    if (state.queue.length == 1 && state.queue[0].audioUrl != "not_fetched")
+    if (state.queue.length == 1 && state.queue[0].audioUrl.split(":").first == "prefetched" )
       return state.queue[0].audioUrl;
-    print("fetching video $id");
+    print("Youtube: fetching video $id");
     var media = await yt.videos.streamsClient.getManifest(id);
     var streamInfo = media.audioOnly
         .where((e) =>
@@ -484,6 +491,30 @@ class Player extends _$Player {
     return url;
   }
 
+  Future<String> getAudioUrl(String audioUrl) async {
+    var audioUrlParts = audioUrl.split(":");
+    var type = audioUrlParts.first;
+    var data = audioUrlParts.sublist(1).join(":");
+    switch (type) {
+      case "http":
+      case "https":
+        return audioUrl;
+      case "youtube":
+        return "prefetched:\${{%$audioUrl%}}\$${await fetchYTVideo(data)}";
+      case "blank":
+        return "";
+      case "scratch":
+        return "";
+      case "custom":
+        return "";
+      case "prefetched":
+        return RegExp(r'\${{%(.*)%}}\$(.*)').firstMatch(audioUrl)?.group(2) ?? "";
+      default:
+        return "";
+    }
+  }
+        
+      
   get canNext {
     print("Checking if can next");
     if (state.currentIndex + 1 >= state.queue.length &&

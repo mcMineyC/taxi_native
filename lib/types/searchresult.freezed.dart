@@ -1028,7 +1028,7 @@ FindResultSong _$FindResultSongFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$FindResultSong {
   String get title => throw _privateConstructorUsedError;
-  String get id => throw _privateConstructorUsedError;
+  String get url => throw _privateConstructorUsedError;
   int get trackNumber => throw _privateConstructorUsedError;
 
   /// Serializes this FindResultSong to a JSON map.
@@ -1047,7 +1047,7 @@ abstract class $FindResultSongCopyWith<$Res> {
           FindResultSong value, $Res Function(FindResultSong) then) =
       _$FindResultSongCopyWithImpl<$Res, FindResultSong>;
   @useResult
-  $Res call({String title, String id, int trackNumber});
+  $Res call({String title, String url, int trackNumber});
 }
 
 /// @nodoc
@@ -1066,7 +1066,7 @@ class _$FindResultSongCopyWithImpl<$Res, $Val extends FindResultSong>
   @override
   $Res call({
     Object? title = null,
-    Object? id = null,
+    Object? url = null,
     Object? trackNumber = null,
   }) {
     return _then(_value.copyWith(
@@ -1074,9 +1074,9 @@ class _$FindResultSongCopyWithImpl<$Res, $Val extends FindResultSong>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
               as String,
       trackNumber: null == trackNumber
           ? _value.trackNumber
@@ -1094,7 +1094,7 @@ abstract class _$$FindResultSongImplCopyWith<$Res>
       __$$FindResultSongImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String title, String id, int trackNumber});
+  $Res call({String title, String url, int trackNumber});
 }
 
 /// @nodoc
@@ -1111,7 +1111,7 @@ class __$$FindResultSongImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? title = null,
-    Object? id = null,
+    Object? url = null,
     Object? trackNumber = null,
   }) {
     return _then(_$FindResultSongImpl(
@@ -1119,9 +1119,9 @@ class __$$FindResultSongImplCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
               as String,
       trackNumber: null == trackNumber
           ? _value.trackNumber
@@ -1135,7 +1135,7 @@ class __$$FindResultSongImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$FindResultSongImpl implements _FindResultSong {
   const _$FindResultSongImpl(
-      {required this.title, required this.id, required this.trackNumber});
+      {required this.title, required this.url, required this.trackNumber});
 
   factory _$FindResultSongImpl.fromJson(Map<String, dynamic> json) =>
       _$$FindResultSongImplFromJson(json);
@@ -1143,13 +1143,13 @@ class _$FindResultSongImpl implements _FindResultSong {
   @override
   final String title;
   @override
-  final String id;
+  final String url;
   @override
   final int trackNumber;
 
   @override
   String toString() {
-    return 'FindResultSong(title: $title, id: $id, trackNumber: $trackNumber)';
+    return 'FindResultSong(title: $title, url: $url, trackNumber: $trackNumber)';
   }
 
   @override
@@ -1158,14 +1158,14 @@ class _$FindResultSongImpl implements _FindResultSong {
         (other.runtimeType == runtimeType &&
             other is _$FindResultSongImpl &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.id, id) || other.id == id) &&
+            (identical(other.url, url) || other.url == url) &&
             (identical(other.trackNumber, trackNumber) ||
                 other.trackNumber == trackNumber));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, title, id, trackNumber);
+  int get hashCode => Object.hash(runtimeType, title, url, trackNumber);
 
   /// Create a copy of FindResultSong
   /// with the given fields replaced by the non-null parameter values.
@@ -1187,7 +1187,7 @@ class _$FindResultSongImpl implements _FindResultSong {
 abstract class _FindResultSong implements FindResultSong {
   const factory _FindResultSong(
       {required final String title,
-      required final String id,
+      required final String url,
       required final int trackNumber}) = _$FindResultSongImpl;
 
   factory _FindResultSong.fromJson(Map<String, dynamic> json) =
@@ -1196,7 +1196,7 @@ abstract class _FindResultSong implements FindResultSong {
   @override
   String get title;
   @override
-  String get id;
+  String get url;
   @override
   int get trackNumber;
 

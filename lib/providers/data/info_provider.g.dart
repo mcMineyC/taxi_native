@@ -6,7 +6,7 @@ part of 'info_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$addRecentlyPlayedHash() => r'9c942570a769eb85ef31d3d23a137119a5d933a7';
+String _$addRecentlyPlayedHash() => r'c980030092321411bb183b613e8d5bbfb2fa3f5f';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -158,7 +158,7 @@ class _AddRecentlyPlayedProviderElement
 }
 
 String _$fetchRecentlyPlayedHash() =>
-    r'8f7a10cc430bb08e3734518b704be5cf55be2b94';
+    r'd10a7208573324ccae7dafb4852ed47934720c7d';
 
 /// See also [fetchRecentlyPlayed].
 @ProviderFor(fetchRecentlyPlayed)

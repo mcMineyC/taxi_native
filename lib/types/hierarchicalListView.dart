@@ -37,16 +37,16 @@ class HLVAlbum {
 
 class HLVSong {
   final String name;
-  final String videoId;
+  final String url;
   final String imageUrl;
 
-  HLVSong(this.name, this.videoId, [this.imageUrl = "changemeplz"]);
+  HLVSong(this.name, this.url, [this.imageUrl = "changemeplz"]);
 
   // Convert an HLVSong to JSON
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'videoId': videoId,
+      'url': url,
       'imageUrl': imageUrl,
     };
   }
@@ -70,7 +70,7 @@ List<HLVArtist> findResultsToHLVContent(List<FindResult> results) {
         var albumIndex = workingArtist.albums.length - 1;
         workingArtist.albums[albumIndex].songs = result.songs
             .map((s) => HLVSong(
-                s.title, s.id, workingArtist.albums[albumIndex].imageUrl))
+                s.title, s.url, workingArtist.albums[albumIndex].imageUrl))
             .toList();
       }
     }
@@ -82,12 +82,12 @@ List<HLVArtist> findResultsToHLVContent(List<FindResult> results) {
       if(albumIndex != -1){
         HLVAlbum workingAlbum = workingArtist.albums[albumIndex];
         workingAlbum.songs.add(HLVSong(
-          result.songs[0].title, result.songs[0].id, workingAlbum.imageUrl));
+          result.songs[0].title, result.songs[0].url, workingAlbum.imageUrl));
       }else{
         workingArtist.albums.add(HLVAlbum(result.album, result.imageUrl, [
           HLVSong(
             result.songs[0].title,
-            result.songs[0].id,
+            result.songs[0].url,
             result.imageUrl
           ),
         ]));
@@ -105,7 +105,7 @@ void printHLVContent(List<HLVArtist> artists) {
       print("  - Image: ${album.imageUrl}");
       for (var song in album.songs) {
         print("    Song: ${song.name}");
-        print("    - Video: ${song.videoId}");
+        print("    - URL: ${song.url}");
         print("    - Image: ${song.imageUrl}");
       }
     }

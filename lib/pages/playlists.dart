@@ -10,8 +10,9 @@ import '../types/playlist.dart';
 class PlaylistsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<Playlist>> playlists = ref.watch(fetchPlaylistsProvider);
-    handleError(ref, fetchPlaylistsProvider, Beamer.of(context));
+    var playlistProvider = fetchPlaylistsProvider(editable: false);
+    final AsyncValue<List<Playlist>> playlists = ref.watch(playlistProvider);
+    handleError(ref, playlistProvider, Beamer.of(context));
     return Container(
       margin: EdgeInsets.all(24),
       child: playlists.when(

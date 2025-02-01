@@ -16,10 +16,10 @@ part 'playlist_provider.g.dart';
 PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
 
 @Riverpod(keepAlive: true)
-Future<List<Playlist>> fetchPlaylists(FetchPlaylistsRef ref) async {
+Future<List<Playlist>> fetchPlaylists(FetchPlaylistsRef ref, {bool editable = false}) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("${p.backendUrl}/playlists?sort=none"),
+      Uri.parse("${p.backendUrl}/playlists?sort=none&editable=$editable"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -68,6 +68,8 @@ Future<List<Playlist>> fetchNewPlaylists(FetchNewPlaylistsRef ref) async {
 @Riverpod(keepAlive: false)
 Future<bool> addPlaylist(AddPlaylistRef ref, Playlist playlist) async {
   final _sp = await SharedPreferences.getInstance();
+  print("AddPlayListProvider: Adding playlist: ${playlist.displayName}");
+  print("AddPlaylistProvider: Playlist: ${playlist}");
   var response = await http.post(
     Uri.parse("${p.backendUrl}/playlists/modify/create"),
     headers: Map<String, String>.from({
@@ -88,7 +90,8 @@ Future<bool> addPlaylist(AddPlaylistRef ref, Playlist playlist) async {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   if (desponse["success"] == true) {
-    ref.refresh(fetchPlaylistsProvider);
+    ref.refresh(fetchPlaylistsProvider(editable: false));
+    ref.refresh(fetchPlaylistsProvider(editable: true));
   }
   return true;
 }
@@ -122,7 +125,8 @@ Future<bool> addIdToPlaylist(
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   if (desponse["success"] == true) {
-    ref.refresh(fetchPlaylistsProvider);
+    ref.refresh(fetchPlaylistsProvider(editable: false));
+    ref.refresh(fetchPlaylistsProvider(editable: true));
   }
   return true;
 }
@@ -156,7 +160,8 @@ Future<bool> addIdsToPlaylist(
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   if (desponse["success"] == true) {
-    ref.refresh(fetchPlaylistsProvider);
+    ref.refresh(fetchPlaylistsProvider(editable: false));
+    ref.refresh(fetchPlaylistsProvider(editable: true));
   }
   return true;
 }
@@ -191,7 +196,8 @@ Future<bool> deleteIndexFromPlaylist(
   }
   if (desponse["success"] == true) {
     print("Refreshing playlists");
-    ref.refresh(fetchPlaylistsProvider);
+    ref.refresh(fetchPlaylistsProvider(editable: false));
+    ref.refresh(fetchPlaylistsProvider(editable: true));
   }
   return true;
 }
@@ -213,7 +219,8 @@ Future<bool> deletePlaylist(DeletePlaylistRef ref, String playlistId) async {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   if (desponse["success"] == true) {
-    ref.refresh(fetchPlaylistsProvider);
+    ref.refresh(fetchPlaylistsProvider(editable: false));
+    ref.refresh(fetchPlaylistsProvider(editable: true));
     return true;
   } else {
     return false;

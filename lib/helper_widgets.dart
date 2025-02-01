@@ -462,15 +462,15 @@ class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
   }
 }
 
-class CreatePlaylistDialog extends StatefulWidget {
+class EditPlaylistDialog extends StatefulWidget {
   @override
-  _CreatePlaylistDialogState createState() => _CreatePlaylistDialogState();
+  _EditPlaylistDialogState createState() => _EditPlaylistDialogState();
 
   FilledPlaylist starter;
-  CreatePlaylistDialog({required this.starter});
+  EditPlaylistDialog({required this.starter});
 }
 
-class _CreatePlaylistDialogState extends State<CreatePlaylistDialog> {
+class _EditPlaylistDialogState extends State<EditPlaylistDialog> {
   FilledPlaylist current = FilledPlaylist.empty(); // this gets replaced by the starter (passed in by the caller)
   late ThemeData theme;
   List<Song> songs = [];
@@ -643,7 +643,7 @@ Future playlistLogic(WidgetRef ref, BuildContext context, String thingId,
     String thingType) async {
   //Okay, so first we show a choose dialog. TODO: only show allowedCollaborator playlists
   var dialog = AddPlaylistDialog(
-      playlists: await ref.read(fetchPlaylistsProvider.future));
+      playlists: await ref.read(fetchPlaylistsProvider(editable: true).future));
   var result = await showDialog<Map<String, dynamic>>(
       context: context, builder: (context) => dialog);
   // print("Dialog result: $result");
@@ -678,27 +678,27 @@ Future playlistLogic(WidgetRef ref, BuildContext context, String thingId,
       result["selected"] &&
       (result["value"] as Playlist).id == "create") {  // okay, awesome, we're creating a playlist
     // fetch the songs ids!
-    List<String> oldSongs = [];
+    List<Song> newSongs = [];
     switch (thingType) {
       case "song":
-        oldSongs = [thingId];
+        newSongs = [await ref.read(findSongProvider(thingId).future)];
         break;
       case "album":
-        oldSongs = (await ref.read(findSongsByAlbumProvider(thingId).future))
-            .map((s) => s.id)
+        newSongs = (await ref.read(findSongsByAlbumProvider(thingId).future))
             .toList();
-        print("Adding ${oldSongs.length} songs from album");
+        print("Adding ${newSongs.length} songs from album");
         break;
       case "artist":
-        oldSongs = (await ref.read(findSongsByArtistProvider(thingId).future))
-            .map((s) => s.id)
+        newSongs = (await ref.read(findSongsByArtistProvider(thingId).future))
             .toList();
-        print("Adding ${oldSongs.length} songs from artist");
+        print("Adding ${newSongs.length} songs from artist");
+        break;
+      case "playlist":
+        newSongs = (await ref.read(findSongsByPlaylistProvider(thingId).future)).toList();
+        print("Adding ${newSongs.length} songs from playlist");
         break;
     }
     var p = result["value"] as Playlist;
-    List<Song> newSongs = [];
-    newSongs = await ref.read(findBatchSongsProvider(oldSongs).future); // grab the song objects
     print("Found ${newSongs.length} songs to add to playlist");
     var currentUser = (await SharedPreferences.getInstance()).getString("username")!;
     var fp = FilledPlaylist(
@@ -710,7 +710,7 @@ Future playlistLogic(WidgetRef ref, BuildContext context, String thingId,
         added: DateTime.now().millisecondsSinceEpoch,
         owner: currentUser
     );  // okay, this is the magic
-    var createDialog = CreatePlaylistDialog(starter: fp); // then we pass the started playlist to the edit dialog
+    var createDialog = EditPlaylistDialog(starter: fp); // then we pass the started playlist to the edit dialog
     var result2 = await showDialog<Map<String, dynamic>>(
         context: context, builder: (_) => createDialog);
     if (result2 != null && result2["created"]) {
@@ -758,6 +758,8 @@ Future<List<String>> getVisibleToFieldDialog(List<String> value, String title, B
   print("Result ${jsonEncode(result)}");
   return result != null ? result : value;
 }
+
+
 
 
 

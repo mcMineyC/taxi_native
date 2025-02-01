@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:beamer/beamer.dart';
 
 import '../../../providers/services/search.dart';
+import '../../../utilities.dart';
 
 class DesktopAppBar extends ConsumerWidget {
   final TextEditingController _searchController = TextEditingController();
@@ -24,7 +25,7 @@ class DesktopAppBar extends ConsumerWidget {
       child: Row(
         children: [
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 38),
+            margin: const EdgeInsets.symmetric(horizontal: 22),
             child: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () => Beamer.of(context).beamBack(),
@@ -71,12 +72,20 @@ class DesktopAppBar extends ConsumerWidget {
               ),
             ),
             Container(
-              width: 96,
-              child: Center(
-                child: IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () => Beamer.of(context).beamToNamed('/settings'),
-                ),
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              child: IconButton(
+                icon: const Icon(Icons.refresh_rounded),
+                onPressed: () {
+                  refreshChanges(ref);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Refreshed")));
+                }
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4).copyWith(right: 22),
+              child: IconButton(
+                icon: const Icon(Icons.settings),
+                onPressed: () => Beamer.of(context).beamToNamed('/settings'),
               ),
             ),
         ]

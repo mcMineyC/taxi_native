@@ -11,6 +11,7 @@ import "../../types/song.dart";
 import "../../info_card.dart";
 import "generics.dart";
 import "../../helper_widgets.dart";
+import '../../utilities.dart';
 
 class SongsPane2 extends ConsumerStatefulWidget {
   final Song selected;
@@ -184,7 +185,7 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
                       if(deleted) {
                         print("Song deleted");
                         widget.deselect(null);
-                        refreshChanges();
+                        _refreshChanges();
                       }
                     }
                   }),
@@ -246,7 +247,7 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
                       ],
                     )) ?? false;
                     if(!confirm) return;
-                    if(await saveChanges()) refreshChanges();
+                    if(await saveChanges()) _refreshChanges();
                   }
                 )
               ],
@@ -261,21 +262,9 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
     return await ref.read(updateSongProvider(currentSong).future);
   }
 
-  void refreshChanges() {
-    ref.read(playerProvider.notifier).clear();
-    ref.refresh(fetchSongsProvider(ignore: false));
-    ref.refresh(fetchAlbumsProvider(ignore: false));
-    ref.refresh(fetchArtistsProvider(ignore: false));
-    ref.refresh(fetchSongsProvider(ignore: true));
-    ref.refresh(fetchAlbumsProvider(ignore: true));
-    ref.refresh(fetchArtistsProvider(ignore: true));
-    ref.read(searchProvider.notifier).search(ref.read(searchProvider.notifier).query, "song", ignore: true);
-    ref.refresh(fetchPlaylistsProvider);
-    ref.refresh(fetchRecentlyPlayedProvider);
-    setState(() {
-      selected = currentSong;
-      mutated = false;
-    });
+  void _refreshChanges() {
+    refreshChanges(ref);
+    setState(() => mutated = false);
   }
 
   AlertDialog discardDialog(BuildContext context, Song current) {

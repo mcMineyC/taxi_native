@@ -74,6 +74,7 @@ class FindResult with _$FindResult {
     required String artist,
     required String album,
     required String imageUrl,
+    required List<String> visibleTo,
     required String type,
     required List<FindResultSong> songs,
   }) = _FindResult;
@@ -95,6 +96,7 @@ class FindResult with _$FindResult {
     album: song.albumDisplayName,
     artist: song.artistDisplayName,
     imageUrl: song.imageUrl,
+    visibleTo: song.visibleTo,
     songs: [FindResultSong(title: song.displayName, url: song.audioUrl, trackNumber: 0)],
     );
 

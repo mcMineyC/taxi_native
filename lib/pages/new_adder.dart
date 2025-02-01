@@ -246,7 +246,7 @@ class _AdderPageState extends ConsumerState {
 
   Widget findPage(BuildContext context, List<FindResult> findResults) {
     return Container(
-      child: HierarchicalListView(data:hlvArtists),
+      child: HierarchicalListView(data: hlvArtists, onChange: (data) => setState(() => hlvArtists = data)),
     );
   }
 

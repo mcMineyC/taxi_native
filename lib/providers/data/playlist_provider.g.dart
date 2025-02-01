@@ -40,7 +40,7 @@ final fetchNewPlaylistsProvider = FutureProvider<List<Playlist>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FetchNewPlaylistsRef = FutureProviderRef<List<Playlist>>;
-String _$addPlaylistHash() => r'af50dc3d7ab7bb7a206547ff999b119965ad4286';
+String _$addPlaylistHash() => r'5eda0a44b587bab6f6fb9dfe3264695810f59c5e';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -191,7 +191,7 @@ class _AddPlaylistProviderElement extends AutoDisposeFutureProviderElement<bool>
   Playlist get playlist => (origin as AddPlaylistProvider).playlist;
 }
 
-String _$addIdToPlaylistHash() => r'4cd2ab830e8c0c787329a32ef6b7755d115c3f00';
+String _$addIdToPlaylistHash() => r'db042a17c2926c3d33b0fa4151e8bc4d5189169f';
 
 /// See also [addIdToPlaylist].
 @ProviderFor(addIdToPlaylist)
@@ -338,7 +338,7 @@ class _AddIdToPlaylistProviderElement
   String get id => (origin as AddIdToPlaylistProvider).id;
 }
 
-String _$addIdsToPlaylistHash() => r'd41069ac61b1462628e34b4a5e3076839ce095d9';
+String _$addIdsToPlaylistHash() => r'd5beb6150db6cec07f4d27fa205947ad34598d61';
 
 /// See also [addIdsToPlaylist].
 @ProviderFor(addIdsToPlaylist)
@@ -486,7 +486,7 @@ class _AddIdsToPlaylistProviderElement
 }
 
 String _$deleteIndexFromPlaylistHash() =>
-    r'3e7c10b158c98399a5136ded78b345470bfe8e45';
+    r'0e5a90b286381d688d77864ddb9ae833d1743814';
 
 /// See also [deleteIndexFromPlaylist].
 @ProviderFor(deleteIndexFromPlaylist)
@@ -765,7 +765,7 @@ class _DeletePlaylistProviderElement
   String get playlistId => (origin as DeletePlaylistProvider).playlistId;
 }
 
-String _$findPlaylistHash() => r'c09804457752fe153dd623d014da056b538e76ef';
+String _$findPlaylistHash() => r'492aef4e96b658740258e85dff2b1605962ae0d5';
 
 /// See also [findPlaylist].
 @ProviderFor(findPlaylist)

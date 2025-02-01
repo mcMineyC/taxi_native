@@ -9,12 +9,22 @@ class Playlist with _$Playlist {
     required String id,
     required String owner,
     required String displayName,
-    required bool public,
+    required List<String> visibleTo,
+    required List<String> allowedCollaborators,
     required List<String> songs,
     required int added,
   }) = _Playlist;
 
   factory Playlist.fromJson(Map<String, dynamic> json) => _$PlaylistFromJson(json);
+  factory Playlist.empty() => Playlist(
+    id: "create",
+    displayName: "Common",
+    songs: [],
+    visibleTo: ["all"],
+    allowedCollaborators: ["testguy"],
+    added: 0,
+    owner: "testguy"
+  );
 }
 
 @freezed
@@ -24,7 +34,8 @@ class FilledPlaylist with _$FilledPlaylist {
     required String id,
     required String owner,
     required String displayName,
-    required bool public,
+    required List<String> visibleTo,
+    required List<String> allowedCollaborators,
     required List<Song> songs,
     required int added,
   }) = _FilledPlaylist;
@@ -34,7 +45,8 @@ class FilledPlaylist with _$FilledPlaylist {
       id: id,
       owner: owner,
       displayName: displayName,
-      public: public,
+      visibleTo: visibleTo,
+      allowedCollaborators: allowedCollaborators,
       songs: songs.map((e) => e.id).toList(),
       added: added,
     );
@@ -44,7 +56,8 @@ class FilledPlaylist with _$FilledPlaylist {
     id: "",
     owner: "nobody (:",
     displayName: "",
-    public: true,
+    visibleTo: ["all"],
+    allowedCollaborators: ["testguy"],
     songs: [],
     added: 0
   );

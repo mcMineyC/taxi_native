@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:convert';
 import 'dart:async';
 
 import 'package:beamer/beamer.dart';
@@ -9,6 +10,9 @@ import 'package:context_menus/context_menus.dart';
 import 'providers/services/player.dart';
 import 'providers/data/playlist_provider.dart';
 import 'providers/data/fetched_data_provider.dart';
+import 'service_locator.dart';
+import 'providers/data/preferences_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'types/playlist.dart';
 import 'types/song.dart';
 import 'types/searchresult.dart';
@@ -392,15 +396,13 @@ class AddPlaylistDialog extends StatefulWidget {
 }
 
 class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
-  Playlist selected = Playlist(
-      id: "create",
-      displayName: "Common",
-      songs: [],
-      public: true,
-      added: 0,
-      owner: "testguy");
+  Playlist selected = Playlist.empty(); // also not used
+  String currentUser = "";
+  PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
   @override
   void initState() {
+    currentUser = p.loginName;
+    print("current user is $currentUser");
     super.initState();
   }
 
@@ -420,13 +422,7 @@ class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
                 child: Text("Create new playlist"),
                 onPressed: () {
                   setState(() {
-                    selected = Playlist(
-                        id: "create",
-                        displayName: "Common",
-                        songs: [],
-                        public: true,
-                        added: 0,
-                        owner: "testguy");
+                    selected = Playlist.empty().copyWith(id: "create"); // this basically only uses the "create" id
                     Navigator.of(context)
                         .pop({"selected": true, "value": selected});
                   });
@@ -475,13 +471,7 @@ class CreatePlaylistDialog extends StatefulWidget {
 }
 
 class _CreatePlaylistDialogState extends State<CreatePlaylistDialog> {
-  FilledPlaylist current = FilledPlaylist(
-      id: "create",
-      displayName: "Common",
-      songs: [],
-      public: true,
-      added: 0,
-      owner: "testguy");
+  FilledPlaylist current = FilledPlaylist.empty(); // this gets replaced by the starter (passed in by the caller)
   late ThemeData theme;
   List<Song> songs = [];
   TextEditingController nameController = TextEditingController();
@@ -547,43 +537,80 @@ class _CreatePlaylistDialogState extends State<CreatePlaylistDialog> {
                       labelText: 'Playlist name',
                     ),
                   ),
-                  SpacerWidget(height: 10, width: 0),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: imageController,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Image URL',
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: FilledButton(
-                          child: Row(mainAxisSize: MainAxisSize.min, children: [
-                            Icon(Icons.auto_fix_high),
-                            Container(width: 6),
-                            Text("Autogenerate"),
-                          ]),
-                          onPressed: () {},
-                        ),
-                      ),
-                    ],
-                  ),
+                  //SpacerWidget(height: 10, width: 0),
+                  //Row(
+                  //  children: [
+                  //    Expanded(
+                  //      child: TextField(
+                  //        controller: imageController,
+                  //        decoration: const InputDecoration(
+                  //          border: OutlineInputBorder(),
+                  //          labelText: 'Image URL',
+                  //        ),
+                  //      ),
+                  //    ),
+                  //    Container(
+                  //      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  //      child: FilledButton(
+                  //        child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  //          Icon(Icons.auto_fix_high),
+                  //          Container(width: 6),
+                  //          Text("Autogenerate"),
+                  //        ]),
+                  //        onPressed: () {},
+                  //      ),
+                  //    ),
+                  //  ],
+                  //),
+                  // Playlist image support not done yet, currently just tiles first four songs
                   SpacerWidget(height: 8, width: 0),
                   Row(
                     children: [
-                      Text("Public"),
+                      Text("Visible to"),
                       Expanded(child: Container()),
-                      Switch(
-                          value: current.public,
-                          onChanged: (value) {
-                            setState(() {
-                              current = current.copyWith(public: value);
+                      TextButton(
+                        child: Text("Edit..."),
+                        onPressed: () async {
+                          var result = await getVisibleToFieldDialog(current.visibleTo, "Visible to", context);
+                          setState(() {
+                            current = current.copyWith(visibleTo: result);
+                          });
+                        },
+                      ),
+                      //Switch(
+                      //    value: current.visible,
+                      //    onChanged: (value) {
+                      //      setState(() {
+                      //        current = current.copyWith(public: value);
+                      //      });
+                      //    }),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text("Allowed collaborators"),
+                      Expanded(child: Container()),
+                      TextButton(
+                        child: Text("Edit..."),
+                        onPressed: () async {
+                          var result = await getVisibleToFieldDialog(current.allowedCollaborators, "Allowed collaborators", context);
+                          setState(() {
+                            current = current.copyWith(allowedCollaborators: result);
+                            result.forEach((c) {
+                              if (!current.visibleTo.contains(c) && current.visibleTo != ["all"]) {
+                                current = current.copyWith(visibleTo: [...current.visibleTo, c]);
+                              }
                             });
-                          }),
+                          });
+                        },
+                      ),
+                      //Switch(
+                      //    value: current.visible,
+                      //    onChanged: (value) {
+                      //      setState(() {
+                      //        current = current.copyWith(public: value);
+                      //      });
+                      //    }),
                     ],
                   ),
                   Text("${current.songs.length} songs",
@@ -614,14 +641,17 @@ class _CreatePlaylistDialogState extends State<CreatePlaylistDialog> {
 
 Future playlistLogic(WidgetRef ref, BuildContext context, String thingId,
     String thingType) async {
+  //Okay, so first we show a choose dialog. TODO: only show allowedCollaborator playlists
   var dialog = AddPlaylistDialog(
       playlists: await ref.read(fetchPlaylistsProvider.future));
   var result = await showDialog<Map<String, dynamic>>(
       context: context, builder: (context) => dialog);
   // print("Dialog result: $result");
+  //Then, we check if the id is create or not
+  // If/else used for checking if user cancelled
   if (result != null &&
       result["selected"] &&
-      (result["value"] as Playlist).id != "create") {
+      (result["value"] as Playlist).id != "create") { // they chose an existing playlist
     // print("Adding song to playlist");
     // print("SID $thingId, PID ${result["value"].id}");
     List<String> oldSongs = [];
@@ -646,7 +676,8 @@ Future playlistLogic(WidgetRef ref, BuildContext context, String thingId,
         .read(addIdsToPlaylistProvider(result["value"].id, oldSongs).future);
   } else if (result != null &&
       result["selected"] &&
-      (result["value"] as Playlist).id == "create") {
+      (result["value"] as Playlist).id == "create") {  // okay, awesome, we're creating a playlist
+    // fetch the songs ids!
     List<String> oldSongs = [];
     switch (thingType) {
       case "song":
@@ -667,28 +698,33 @@ Future playlistLogic(WidgetRef ref, BuildContext context, String thingId,
     }
     var p = result["value"] as Playlist;
     List<Song> newSongs = [];
-    newSongs = await ref.read(findBatchSongsProvider(oldSongs).future);
+    newSongs = await ref.read(findBatchSongsProvider(oldSongs).future); // grab the song objects
     print("Found ${newSongs.length} songs to add to playlist");
+    var currentUser = (await SharedPreferences.getInstance()).getString("username")!;
     var fp = FilledPlaylist(
         id: p.id,
-        displayName: p.displayName,
-        public: p.public,
+        displayName: "",
+        visibleTo: [currentUser],
+        allowedCollaborators: [currentUser],
         songs: newSongs,
-        added: p.added,
-        owner: p.owner);
-    var createDialog = CreatePlaylistDialog(starter: (fp as FilledPlaylist));
+        added: DateTime.now().millisecondsSinceEpoch,
+        owner: currentUser
+    );  // okay, this is the magic
+    var createDialog = CreatePlaylistDialog(starter: fp); // then we pass the started playlist to the edit dialog
     var result2 = await showDialog<Map<String, dynamic>>(
         context: context, builder: (_) => createDialog);
     if (result2 != null && result2["created"]) {
-      Playlist p = (result2["value"] as FilledPlaylist).toPlaylist();
-      // print("Creating playlist with name ${p.displayName}");
+      Playlist p = (result2["value"] as FilledPlaylist).toPlaylist(); // shenanagins because of type safety
+      print("AddPlaylistFlow: Creating playlist with name ${p.displayName}");
+      print(p);
       await ref.read(addPlaylistProvider(p).future);
-      print("Playlist created");
+      print("AddPlaylistFlow: Playlist created");
     } else if (result2 != null && !result2["created"]) {
-      print("User cancelled");
+      print("AddPlaylistFlow: User cancelled, dialog2");
     }
+
   } else if (result != null && !result["selected"]) {
-    print("User cancelled");
+    print("AddPlaylistFlow: User cancelled, dialog1");
   }
 }
 
@@ -703,6 +739,27 @@ Future playlistLogic(WidgetRef ref, BuildContext context, String thingId,
 //  'Luke',
 //  'James',
 //];
+Future<List<String>> getVisibleToFieldDialog(List<String> value, String title, BuildContext context) async {
+  var result = await showDialog<List<String>>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(title),
+      content: Container(
+        child: VisibleToField(
+          shouldRefresh: false,
+          id: "visibleToFieldDialog",
+          value: value,
+          onChanged: (v) => {},
+          onSaved: (v) async {Navigator.pop(context, v.toList());},
+        ),
+      ),
+    ),
+  );
+  print("Result ${jsonEncode(result)}");
+  return result != null ? result : value;
+}
+
+
 
 class VisibleToField extends ConsumerStatefulWidget {
   VisibleToField(
@@ -710,12 +767,15 @@ class VisibleToField extends ConsumerStatefulWidget {
       required this.onChanged,
       required this.value,
       required this.onSaved,
-      required this.id});
+      required this.id,
+      required this.shouldRefresh
+      });
   Function(List<String> data) onChanged;
   Future<void> Function(List<String> data) onSaved;
   String id;
   List<String> value = [];
   _VisibleToFieldState? state;
+  bool shouldRefresh;
 
   @override
   _VisibleToFieldState createState() {
@@ -732,10 +792,10 @@ class _VisibleToFieldState extends ConsumerState<VisibleToField> {
   List<String> get value => _value;
   String id = "";
   set initalValue(List<String> v) => setState(() {
-        _value = v;
+        _value = v.toList();
         id = widget.id;
       });
-  set value(List<String> v) => setState(() => _value = v);
+  set value(List<String> v) => setState(() => _value = v.toList());
   bool _loading = true;
   @override
   Widget build(BuildContext context) {
@@ -743,7 +803,7 @@ class _VisibleToFieldState extends ConsumerState<VisibleToField> {
     AsyncValue<List<String>> users = ref.watch(fetchUsernamesProvider);
     users.when(
       data: (d) => setState(() {
-        _userList = d;
+        _userList = d.where((element) => element != "testguy").toList();
         _loading = false;
         if (_value.contains("all")) setState(() => _value = _userList.toList());
       }),
@@ -778,6 +838,7 @@ class _VisibleToFieldState extends ConsumerState<VisibleToField> {
                   onPressed: () => widget.onSaved(_value).then((_) {
                     ScaffoldMessenger.of(context)
                         .showSnackBar(const SnackBar(content: Text("Saved")));
+                    if (!widget.shouldRefresh) return;
                     ref.refresh(fetchSongsProvider(ignore: true));
                     ref.refresh(fetchAlbumsProvider(ignore: true));
                     ref.refresh(fetchArtistsProvider(ignore: true));

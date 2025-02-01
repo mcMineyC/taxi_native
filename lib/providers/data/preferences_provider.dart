@@ -30,6 +30,7 @@ class PreferencesProvider extends ChangeNotifier {
   bool get debugMode => prefs.debugMode;
   String get backendUrl => prefs.backendUrl;
   String get username => prefs.username.substring(0, 1).toUpperCase() + prefs.username.substring(1);
+  String get loginName => prefs.username;
   bool get shuffleOnLoop => prefs.shuffleOnLoop;
   bool get shuffleDefault => prefs.shuffleDefault;
   bool get autoResume => _persistence.autoplaySong;

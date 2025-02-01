@@ -152,6 +152,7 @@ class _AlbumPane2State extends ConsumerState<AlbumsPane2> {
             ),
           ),
           VisibleToField(
+            shouldRefresh: true,
             value: currentSong.visibleTo.toList(),
             onChanged: (value) => currentSong = currentSong.copyWith(visibleTo: value),
             onSaved: (v) async => await ref.read(editItemVisibilityProvider("album", currentSong.id, v).future),

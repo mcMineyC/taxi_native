@@ -26,14 +26,14 @@ class DesktopNav extends ConsumerWidget {
           icon: Icon(Icons.download_rounded),
           label: Text("Adder"),
         ),
-        NavigationRailDestination(
-          icon: Icon(Icons.checklist_rounded),
-          label: Text("Roadmap"),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.bug_report_rounded),
-          label: Text("Report an issue"),
-        ),
+        //NavigationRailDestination(
+        //  icon: Icon(Icons.checklist_rounded),
+        //  label: Text("Roadmap"),
+        //),
+        //NavigationRailDestination(
+        //  icon: Icon(Icons.bug_report_rounded),
+        //  label: Text("Report an issue"),
+        //),
       ],
       selectedIndex: () {
         switch (Beamer.of(context).currentPages.last.key) {
@@ -47,10 +47,10 @@ class DesktopNav extends ConsumerWidget {
           //   return 3;
           case ValueKey(value: 'adder'):
            return 3;
-          case ValueKey(value: 'roadmap'):
-            return 4;
-          case ValueKey(value: 'issues'):
-            return 5;
+          //case ValueKey(value: 'roadmap'):
+          //  return 4;
+          //case ValueKey(value: 'issues'):
+          //  return 5;
           default:
             return null;
       }}(),
@@ -72,11 +72,11 @@ class DesktopNav extends ConsumerWidget {
             Beamer.of(context).beamToNamed('/adder');
             break;
           case 4:
-            Beamer.of(context).beamToNamed('/checklist');
-            break;
-          case 5:
-            Beamer.of(context).beamToNamed('/admin');
-            break;
+          //  Beamer.of(context).beamToNamed('/checklist');
+          //  break;
+          //case 5:
+          //  Beamer.of(context).beamToNamed('/admin');
+          //  break;
           default:
             var snacky = SnackBar(
               content: Text("This feature isn't done yet :(${MediaQuery.of(context).size.width}x${MediaQuery.of(context).size.height})"),

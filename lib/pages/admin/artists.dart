@@ -114,6 +114,7 @@ class _ArtistPane2State extends ConsumerState<ArtistsPane2> {
               ),
             ),
             VisibleToField(
+              shouldRefresh: true,
               value: currentSong.visibleTo.toList(),
               onChanged: (value) => currentSong = currentSong.copyWith(visibleTo: value),
               onSaved: (v) async => await ref.read(editItemVisibilityProvider("artist", currentSong.id, v).future),

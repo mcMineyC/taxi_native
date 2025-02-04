@@ -819,7 +819,7 @@ class _VisibleToFieldState extends ConsumerState<VisibleToField> {
     print("Value: $value, initial: ${widget.value}");
     return Container(
         child: _loading
-            ? Center(child: CircularProgressIndicator())
+            ? CircularProgressIndicator()
             : Wrap(spacing: 8, runSpacing: 8, children: [
                 ..._userList.map(
                   (e) => InputChip(
@@ -1236,3 +1236,15 @@ class _AdderCardState extends State<AdderCard> {
  }
 }
 
+String? specialUrlToPlain(String url){
+  List<String> parts = url.split(":");
+  switch(parts.first){
+    case "http":
+    case "https":
+      return url;
+    case "youtube":
+      return "https://www.youtube.com/watch?v=${parts[1]}";
+    default:
+      return null;
+  }
+}

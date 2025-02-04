@@ -17,6 +17,18 @@ class HLVArtist {
       'albums': albums.map((album) => album.toJson()).toList(),
     };
   }
+
+  HLVArtist copyWith({
+    String? name,
+    List<String>? visibleTo,
+    List<HLVAlbum>? albums,
+  }) {
+    return HLVArtist(
+      name ?? this.name,
+      visibleTo ?? this.visibleTo,
+      albums ?? this.albums,
+    );
+  }
 }
 
 class HLVAlbum {
@@ -34,6 +46,20 @@ class HLVAlbum {
       'imageUrl': imageUrl,
       'songs': songs.map((song) => song.toJson()).toList(),
     };
+  }
+
+  HLVAlbum copyWith({
+    String? name,
+    String? imageUrl,
+    List<String>? visibleTo,
+    List<HLVSong>? songs,
+  }) {
+    return HLVAlbum(
+      name ?? this.name,
+      imageUrl ?? this.imageUrl,
+      visibleTo ?? this.visibleTo,
+      songs ?? this.songs,
+    );
   }
 }
 
@@ -53,6 +79,20 @@ class HLVSong {
       'imageUrl': imageUrl,
     };
   }
+
+  HLVSong copyWith({
+    String? name,
+    String? url,
+    String? imageUrl,
+    List<String>? visibleTo,
+  }) {
+    return HLVSong(
+      name ?? this.name,
+      url ?? this.url,
+      visibleTo ?? this.visibleTo,
+      imageUrl ?? this.imageUrl,
+    );
+  }
 }
 
 List<HLVArtist> findResultsToHLVContent(List<FindResult> results) {
@@ -69,31 +109,30 @@ List<HLVArtist> findResultsToHLVContent(List<FindResult> results) {
       if (workingArtist.albums.isEmpty ||
           !workingArtist.albums
               .contains((album) => album.name == result.album)) {
-        workingArtist.albums.add(HLVAlbum(result.album, result.imageUrl, result.visibleTo, []));
+        workingArtist.albums
+            .add(HLVAlbum(result.album, result.imageUrl, result.visibleTo, []));
         var albumIndex = workingArtist.albums.length - 1;
         workingArtist.albums[albumIndex].songs = result.songs
-            .map((s) => HLVSong(
-                s.title, s.url, result.visibleTo, workingArtist.albums[albumIndex].imageUrl))
+            .map((s) => HLVSong(s.title, s.url, result.visibleTo,
+                workingArtist.albums[albumIndex].imageUrl))
             .toList();
       }
     }
     if (result.type == "song") {
       int artistListIndex = artistIndices[result.artist]!;
       HLVArtist workingArtist = artists[artistListIndex];
-      print("RESULT ALBUM: "+result.album);
-      int albumIndex = workingArtist.albums.indexWhere((album) => album.name == result.album);
-      if(albumIndex != -1){
+      print("RESULT ALBUM: " + result.album);
+      int albumIndex = workingArtist.albums
+          .indexWhere((album) => album.name == result.album);
+      if (albumIndex != -1) {
         HLVAlbum workingAlbum = workingArtist.albums[albumIndex];
-        workingAlbum.songs.add(HLVSong(
-          result.songs[0].title, result.songs[0].url, result.visibleTo, workingAlbum.imageUrl));
-      }else{
-        workingArtist.albums.add(HLVAlbum(result.album, result.imageUrl, result.visibleTo, [
-          HLVSong(
-            result.songs[0].title,
-            result.songs[0].url,
-            result.visibleTo,
-            result.imageUrl
-          ),
+        workingAlbum.songs.add(HLVSong(result.songs[0].title,
+            result.songs[0].url, result.visibleTo, workingAlbum.imageUrl));
+      } else {
+        workingArtist.albums
+            .add(HLVAlbum(result.album, result.imageUrl, result.visibleTo, [
+          HLVSong(result.songs[0].title, result.songs[0].url, result.visibleTo,
+              result.imageUrl),
         ]));
       }
     }

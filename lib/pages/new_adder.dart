@@ -179,6 +179,8 @@ class _AdderPageState extends ConsumerState {
                     List<String> parts = state.state.split(":"); 
                     if(parts[0] == "loading" && parts.length > 1 && (parts[1] != "search")){
                       return null;
+                    }else if(page == "find:results" && hlvArtists.isEmpty){
+                      return null;
                     }else{
                       return () {
                         if (page == "search") {

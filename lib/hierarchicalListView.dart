@@ -4,6 +4,7 @@ import 'types/hierarchicalListView.dart';
 import 'helper_widgets.dart';
 import 'package:context_menus/context_menus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class HierarchicalListView extends StatelessWidget {
   List<HLVArtist> data;
@@ -30,8 +31,9 @@ class HierarchicalListView extends StatelessWidget {
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onSecondaryTap: () {
-        print("Long press on artist: ${artist.name}");
+      onSecondaryTap: () async {
+        HLVArtist newArtist = await showHLVArtistEditDialog(context, artist);
+        onChange(changeHLVArtist(artist, newArtist, data));
       },
       child: Padding(
       padding: EdgeInsets.only(left: indentation),
@@ -55,8 +57,10 @@ class HierarchicalListView extends StatelessWidget {
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onSecondaryTap: () {
+      onSecondaryTap: () async {
         print("Long press on album: ${album.name}");
+        HLVAlbum newAlbum = await showHLVAlbumEditDialog(context, album);
+        onChange(changeHLVAlbum(album, artist, newAlbum, data));
       },
       child: Padding(
       padding: EdgeInsets.only(left: indentation),
@@ -333,6 +337,312 @@ class _HLVSongEditDialogState extends State<HLVSongEditDialog> {
 Future<HLVSong> showHLVSongEditDialog(BuildContext context, HLVSong song) async {
   HLVSongEditDialog dialog = HLVSongEditDialog(song: song, onSaved: (HLVSong s) => Navigator.of(context).pop(s));
   HLVSong result = await showDialog<HLVSong>(context: context, builder: (context) => dialog) ?? song;
+  return result;
+}
+
+class HLVAlbumEditDialog extends StatefulWidget {
+  final HLVAlbum album;
+  final Function(HLVAlbum) onSaved;
+  const HLVAlbumEditDialog({required this.album, required this.onSaved});
+  _HLVAlbumEditDialogState createState() => _HLVAlbumEditDialogState();
+}
+
+class _HLVAlbumEditDialogState extends State<HLVAlbumEditDialog> {
+  late HLVAlbum album;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController imageUrlController = TextEditingController();
+  @override
+  void initState() {
+    this.album = widget.album;
+    nameController.text = this.album.name;
+    imageUrlController.text = this.album.imageUrl;
+    print(this.album.imageUrl);
+    this.album = this.album.copyWith(visibleTo: ["all"]);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(56),
+        child: Row(
+          children: [
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                child: GestureDetector(
+                  onTap: () => widget.onSaved(this.album),
+                  child: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: Center(child: Icon(Icons.close)),
+                  ),
+                ),
+              ),
+            ),
+            Text("Edit Album - Adder Step 3",
+                style: theme.textTheme.titleMedium),
+            Expanded(child: Container()),
+            Container(
+              margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+              child: TextButton(
+                child: const Text('Save'),
+                onPressed: () {
+                  saveChanges();
+                  widget.onSaved(this.album);
+                }
+              )
+            ),
+          ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+              child: TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: "Album name",
+                  labelText: "Album name"
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: imageUrlController,
+                      onChanged: (value) {
+                        setState(() => album = album.copyWith(imageUrl: value));
+                      },
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        hintText: "Image URL",
+                        labelText: "Image URL"
+                      ),
+                    ),
+                  ),
+                  //SpacerWidget(width: 8),
+                  //FilledButton(
+                  //  onPressed: ,
+                  //  child: Row(
+                  //    children: [
+                  //      Icon(Icons.link),
+                  //      SpacerWidget(width: 4),
+                  //      Text("Open"),
+                  //    ],
+                  //  ),
+                  //)
+                ]
+              )
+            ),
+            CustomListTile(
+              leading: Text("Visible to"),
+              trailing: TextButton(
+                child: Text("Edit..."),
+                onPressed: () async {
+                  var result = await getVisibleToFieldDialog(album.visibleTo, "Visible to", context);
+                  setState(() => album = album.copyWith(visibleTo: result));
+                }
+              ),
+            ),
+            //Flexible(child: Container()),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+              constraints: BoxConstraints(maxHeight: 512, maxWidth: 512),
+              child: FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: album.imageUrl,
+                imageErrorBuilder: (context, error, stackTrace) => Row(children: [Icon(Icons.error, color: Colors.red[500]), SpacerWidget(width: 8), Text("Failed to load image")]),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Wrap(
+                  children: [
+                    Icon(Icons.info_outlined),
+                    SpacerWidget(width: 4),
+                    Text("To edit the artist name, edit the corresponding entry on the previous page", softWrap: true),
+                  ]
+                )
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+  void saveChanges(){
+    this.album = album.copyWith(name: nameController.text, imageUrl: imageUrlController.text);
+  }
+}
+
+Future<HLVAlbum> showHLVAlbumEditDialog(BuildContext context, HLVAlbum album) async {
+  HLVAlbumEditDialog dialog = HLVAlbumEditDialog(album: album, onSaved: (HLVAlbum s) => Navigator.of(context).pop(s));
+  HLVAlbum result = await showDialog<HLVAlbum>(context: context, builder: (context) => dialog) ?? album;
+  return result;
+}
+
+class HLVArtistEditDialog extends StatefulWidget {
+  final HLVArtist artist;
+  final Function(HLVArtist) onSaved;
+  const HLVArtistEditDialog({required this.artist, required this.onSaved});
+  _HLVArtistEditDialogState createState() => _HLVArtistEditDialogState();
+}
+
+class _HLVArtistEditDialogState extends State<HLVArtistEditDialog> {
+  late HLVArtist artist;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController imageUrlController = TextEditingController();
+  @override
+  void initState() {
+    this.artist = widget.artist;
+    nameController.text = this.artist.name;
+    imageUrlController.text = this.artist.imageUrl;
+    print(this.artist.imageUrl);
+    this.artist = this.artist.copyWith(visibleTo: ["all"]);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(56),
+        child: Row(
+          children: [
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                child: GestureDetector(
+                  onTap: () => widget.onSaved(this.artist),
+                  child: SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: Center(child: Icon(Icons.close)),
+                  ),
+                ),
+              ),
+            ),
+            Text("Edit Artist - Adder Step 3",
+                style: theme.textTheme.titleMedium),
+            Expanded(child: Container()),
+            Container(
+              margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
+              child: TextButton(
+                child: const Text('Save'),
+                onPressed: () {
+                  saveChanges();
+                  widget.onSaved(this.artist);
+                }
+              )
+            ),
+          ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+              child: TextField(
+                controller: nameController,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: "Artist name",
+                  labelText: "Artist name"
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: imageUrlController,
+                      onChanged: (value) {
+                        setState(() => artist = artist.copyWith(imageUrl: value));
+                      },
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        hintText: "Image URL",
+                        labelText: "Image URL"
+                      ),
+                    ),
+                  ),
+                  //SpacerWidget(width: 8),
+                  //FilledButton(
+                  //  onPressed: ,
+                  //  child: Row(
+                  //    children: [
+                  //      Icon(Icons.link),
+                  //      SpacerWidget(width: 4),
+                  //      Text("Open"),
+                  //    ],
+                  //  ),
+                  //)
+                ]
+              )
+            ),
+            CustomListTile(
+              leading: Text("Visible to"),
+              trailing: TextButton(
+                child: Text("Edit..."),
+                onPressed: () async {
+                  var result = await getVisibleToFieldDialog(artist.visibleTo, "Visible to", context);
+                  setState(() => artist = artist.copyWith(visibleTo: result));
+                }
+              ),
+            ),
+            //Flexible(child: Container()),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+              constraints: BoxConstraints(maxHeight: 512, maxWidth: 512),
+              child: FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: artist.imageUrl,
+                imageErrorBuilder: (context, error, stackTrace) => Row(children: [Icon(Icons.error, color: Colors.red[500]), SpacerWidget(width: 8), Text("Failed to load image")]),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Wrap(
+                  children: [
+                    Icon(Icons.info_outlined),
+                    SpacerWidget(width: 4),
+                    Text("To edit the artist name, edit the corresponding entry on the previous page", softWrap: true),
+                  ]
+                )
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+  void saveChanges(){
+    this.artist = artist.copyWith(name: nameController.text, imageUrl: imageUrlController.text);
+  }
+}
+
+Future<HLVArtist> showHLVArtistEditDialog(BuildContext context, HLVArtist artist) async {
+  HLVArtistEditDialog dialog = HLVArtistEditDialog(artist: artist, onSaved: (HLVArtist s) => Navigator.of(context).pop(s));
+  HLVArtist result = await showDialog<HLVArtist>(context: context, builder: (context) => dialog) ?? artist;
   return result;
 }
 

@@ -59,6 +59,7 @@ _$SearchResultImpl _$$SearchResultImplFromJson(Map<String, dynamic> json) =>
       artist: json['artist'] as String,
       album: json['album'] as String,
       imageUrl: json['imageUrl'] as String,
+      artistImageUrl: json['artistImageUrl'] as String,
       type: json['type'] as String,
     );
 
@@ -69,6 +70,7 @@ Map<String, dynamic> _$$SearchResultImplToJson(_$SearchResultImpl instance) =>
       'artist': instance.artist,
       'album': instance.album,
       'imageUrl': instance.imageUrl,
+      'artistImageUrl': instance.artistImageUrl,
       'type': instance.type,
     };
 
@@ -78,6 +80,7 @@ _$FindResultImpl _$$FindResultImplFromJson(Map<String, dynamic> json) =>
       artist: json['artist'] as String,
       album: json['album'] as String,
       imageUrl: json['imageUrl'] as String,
+      artistImageUrl: json['artistImageUrl'] as String,
       visibleTo:
           (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
       type: json['type'] as String,
@@ -92,6 +95,7 @@ Map<String, dynamic> _$$FindResultImplToJson(_$FindResultImpl instance) =>
       'artist': instance.artist,
       'album': instance.album,
       'imageUrl': instance.imageUrl,
+      'artistImageUrl': instance.artistImageUrl,
       'visibleTo': instance.visibleTo,
       'type': instance.type,
       'songs': instance.songs,

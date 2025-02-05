@@ -6,14 +6,15 @@ import 'dart:io';
 class HLVArtist {
   final String name;
   final List<String> visibleTo;
+  final String imageUrl;
   List<HLVAlbum> albums;
 
-  HLVArtist(this.name, this.visibleTo, this.albums);
+  HLVArtist(this.name, this.visibleTo, this.albums, this.imageUrl);
 
-  // Convert an HLVArtist to JSON
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      'imageUrl': imageUrl,
       'albums': albums.map((album) => album.toJson()).toList(),
     };
   }
@@ -21,12 +22,14 @@ class HLVArtist {
   HLVArtist copyWith({
     String? name,
     List<String>? visibleTo,
+    String? imageUrl,
     List<HLVAlbum>? albums,
   }) {
     return HLVArtist(
       name ?? this.name,
       visibleTo ?? this.visibleTo,
       albums ?? this.albums,
+      imageUrl ?? this.imageUrl,
     );
   }
 }
@@ -34,16 +37,18 @@ class HLVArtist {
 class HLVAlbum {
   final String name;
   final String imageUrl;
+  final String artistImageUrl;
   final List<String> visibleTo;
   List<HLVSong> songs;
 
-  HLVAlbum(this.name, this.imageUrl, this.visibleTo, this.songs);
+  HLVAlbum(this.name, this.imageUrl, this.visibleTo, this.songs,
+      this.artistImageUrl);
 
-  // Convert an HLVAlbum to JSON
   Map<String, dynamic> toJson() {
     return {
       'name': name,
       'imageUrl': imageUrl,
+      'artistImageUrl': artistImageUrl,
       'songs': songs.map((song) => song.toJson()).toList(),
     };
   }
@@ -51,6 +56,7 @@ class HLVAlbum {
   HLVAlbum copyWith({
     String? name,
     String? imageUrl,
+    String? artistImageUrl,
     List<String>? visibleTo,
     List<HLVSong>? songs,
   }) {
@@ -59,6 +65,7 @@ class HLVAlbum {
       imageUrl ?? this.imageUrl,
       visibleTo ?? this.visibleTo,
       songs ?? this.songs,
+      artistImageUrl ?? this.artistImageUrl,
     );
   }
 }
@@ -67,16 +74,18 @@ class HLVSong {
   final String name;
   final String url;
   final String imageUrl;
+  final String artistImageUrl;
   final List<String> visibleTo;
 
-  HLVSong(this.name, this.url, this.visibleTo, [this.imageUrl = "changemeplz"]);
+  HLVSong(
+      this.name, this.url, this.visibleTo, this.imageUrl, this.artistImageUrl);
 
-  // Convert an HLVSong to JSON
   Map<String, dynamic> toJson() {
     return {
       'name': name,
       'url': url,
       'imageUrl': imageUrl,
+      'artistImageUrl': artistImageUrl,
     };
   }
 
@@ -84,6 +93,7 @@ class HLVSong {
     String? name,
     String? url,
     String? imageUrl,
+    String? artistImageUrl,
     List<String>? visibleTo,
   }) {
     return HLVSong(
@@ -91,6 +101,7 @@ class HLVSong {
       url ?? this.url,
       visibleTo ?? this.visibleTo,
       imageUrl ?? this.imageUrl,
+      artistImageUrl ?? this.artistImageUrl,
     );
   }
 }
@@ -101,7 +112,8 @@ List<HLVArtist> findResultsToHLVContent(List<FindResult> results) {
   int artistIndex = 0;
   for (var result in results) {
     if (!artists.map((e) => e.name).contains(result.artist)) {
-      artists.add(HLVArtist(result.artist, result.visibleTo, []));
+      print("Artist: " + result.artistImageUrl);
+      artists.add(HLVArtist(result.artist, result.visibleTo, [], result.artistImageUrl));
       artistIndices[result.artist] = artistIndex++;
     }
     if (result.type == "album") {
@@ -109,12 +121,16 @@ List<HLVArtist> findResultsToHLVContent(List<FindResult> results) {
       if (workingArtist.albums.isEmpty ||
           !workingArtist.albums
               .contains((album) => album.name == result.album)) {
-        workingArtist.albums
-            .add(HLVAlbum(result.album, result.imageUrl, result.visibleTo, []));
+        workingArtist.albums.add(HLVAlbum(result.album, result.imageUrl,
+            result.visibleTo, [], result.artistImageUrl));
         var albumIndex = workingArtist.albums.length - 1;
         workingArtist.albums[albumIndex].songs = result.songs
-            .map((s) => HLVSong(s.title, s.url, result.visibleTo,
-                workingArtist.albums[albumIndex].imageUrl))
+            .map((s) => HLVSong(
+                s.title,
+                s.url,
+                result.visibleTo,
+                workingArtist.albums[albumIndex].imageUrl,
+                result.artistImageUrl))
             .toList();
       }
     }
@@ -126,14 +142,22 @@ List<HLVArtist> findResultsToHLVContent(List<FindResult> results) {
           .indexWhere((album) => album.name == result.album);
       if (albumIndex != -1) {
         HLVAlbum workingAlbum = workingArtist.albums[albumIndex];
-        workingAlbum.songs.add(HLVSong(result.songs[0].title,
-            result.songs[0].url, result.visibleTo, workingAlbum.imageUrl));
+        workingAlbum.songs.add(HLVSong(
+            result.songs[0].title,
+            result.songs[0].url,
+            result.visibleTo,
+            workingAlbum.imageUrl,
+            result.artistImageUrl));
       } else {
-        workingArtist.albums
-            .add(HLVAlbum(result.album, result.imageUrl, result.visibleTo, [
-          HLVSong(result.songs[0].title, result.songs[0].url, result.visibleTo,
-              result.imageUrl),
-        ]));
+        workingArtist.albums.add(HLVAlbum(
+            result.album,
+            result.imageUrl,
+            result.visibleTo,
+            [
+              HLVSong(result.songs[0].title, result.songs[0].url,
+                  result.visibleTo, result.imageUrl, result.artistImageUrl),
+            ],
+            result.artistImageUrl));
       }
     }
   }
@@ -146,10 +170,12 @@ void printHLVContent(List<HLVArtist> artists) {
     for (var album in artist.albums) {
       print("  Album: ${album.name}");
       print("  - Image: ${album.imageUrl}");
+      print("  - Artist Image: ${album.artistImageUrl}");
       for (var song in album.songs) {
         print("    Song: ${song.name}");
         print("    - URL: ${song.url}");
         print("    - Image: ${song.imageUrl}");
+        print("    - Artist Image: ${song.artistImageUrl}");
       }
     }
   }

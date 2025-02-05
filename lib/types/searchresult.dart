@@ -52,6 +52,7 @@ class SearchResult with _$SearchResult {
     required String artist,
     required String album,
     required String imageUrl,
+    required String artistImageUrl,
     required String type,
   }) = _SearchResult;
 
@@ -74,11 +75,13 @@ class FindResult with _$FindResult {
     required String artist,
     required String album,
     required String imageUrl,
+    required String artistImageUrl,
     required List<String> visibleTo,
     required String type,
     required List<FindResultSong> songs,
   }) = _FindResult;
 
+  //get cardString => this.artistImageUrl;
   get cardString => switch(type) {
     "song" => "${songs[0].title} - $artist: $name",
     "album" => "$name - $artist",
@@ -96,6 +99,7 @@ class FindResult with _$FindResult {
     album: song.albumDisplayName,
     artist: song.artistDisplayName,
     imageUrl: song.imageUrl,
+    artistImageUrl: song.imageUrl,
     visibleTo: song.visibleTo,
     songs: [FindResultSong(title: song.displayName, url: song.audioUrl, trackNumber: 0)],
     );

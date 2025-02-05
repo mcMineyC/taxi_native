@@ -512,6 +512,7 @@ mixin _$SearchResult {
   String get artist => throw _privateConstructorUsedError;
   String get album => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
+  String get artistImageUrl => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
 
   /// Serializes this SearchResult to a JSON map.
@@ -536,6 +537,7 @@ abstract class $SearchResultCopyWith<$Res> {
       String artist,
       String album,
       String imageUrl,
+      String artistImageUrl,
       String type});
 }
 
@@ -559,6 +561,7 @@ class _$SearchResultCopyWithImpl<$Res, $Val extends SearchResult>
     Object? artist = null,
     Object? album = null,
     Object? imageUrl = null,
+    Object? artistImageUrl = null,
     Object? type = null,
   }) {
     return _then(_value.copyWith(
@@ -582,6 +585,10 @@ class _$SearchResultCopyWithImpl<$Res, $Val extends SearchResult>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      artistImageUrl: null == artistImageUrl
+          ? _value.artistImageUrl
+          : artistImageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -604,6 +611,7 @@ abstract class _$$SearchResultImplCopyWith<$Res>
       String artist,
       String album,
       String imageUrl,
+      String artistImageUrl,
       String type});
 }
 
@@ -625,6 +633,7 @@ class __$$SearchResultImplCopyWithImpl<$Res>
     Object? artist = null,
     Object? album = null,
     Object? imageUrl = null,
+    Object? artistImageUrl = null,
     Object? type = null,
   }) {
     return _then(_$SearchResultImpl(
@@ -648,6 +657,10 @@ class __$$SearchResultImplCopyWithImpl<$Res>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      artistImageUrl: null == artistImageUrl
+          ? _value.artistImageUrl
+          : artistImageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -665,6 +678,7 @@ class _$SearchResultImpl extends _SearchResult {
       required this.artist,
       required this.album,
       required this.imageUrl,
+      required this.artistImageUrl,
       required this.type})
       : super._();
 
@@ -682,11 +696,13 @@ class _$SearchResultImpl extends _SearchResult {
   @override
   final String imageUrl;
   @override
+  final String artistImageUrl;
+  @override
   final String type;
 
   @override
   String toString() {
-    return 'SearchResult(id: $id, name: $name, artist: $artist, album: $album, imageUrl: $imageUrl, type: $type)';
+    return 'SearchResult(id: $id, name: $name, artist: $artist, album: $album, imageUrl: $imageUrl, artistImageUrl: $artistImageUrl, type: $type)';
   }
 
   @override
@@ -700,13 +716,15 @@ class _$SearchResultImpl extends _SearchResult {
             (identical(other.album, album) || other.album == album) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
+            (identical(other.artistImageUrl, artistImageUrl) ||
+                other.artistImageUrl == artistImageUrl) &&
             (identical(other.type, type) || other.type == type));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, name, artist, album, imageUrl, type);
+  int get hashCode => Object.hash(
+      runtimeType, id, name, artist, album, imageUrl, artistImageUrl, type);
 
   /// Create a copy of SearchResult
   /// with the given fields replaced by the non-null parameter values.
@@ -731,6 +749,7 @@ abstract class _SearchResult extends SearchResult {
       required final String artist,
       required final String album,
       required final String imageUrl,
+      required final String artistImageUrl,
       required final String type}) = _$SearchResultImpl;
   const _SearchResult._() : super._();
 
@@ -747,6 +766,8 @@ abstract class _SearchResult extends SearchResult {
   String get album;
   @override
   String get imageUrl;
+  @override
+  String get artistImageUrl;
   @override
   String get type;
 
@@ -768,6 +789,7 @@ mixin _$FindResult {
   String get artist => throw _privateConstructorUsedError;
   String get album => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
+  String get artistImageUrl => throw _privateConstructorUsedError;
   List<String> get visibleTo => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   List<FindResultSong> get songs => throw _privateConstructorUsedError;
@@ -793,6 +815,7 @@ abstract class $FindResultCopyWith<$Res> {
       String artist,
       String album,
       String imageUrl,
+      String artistImageUrl,
       List<String> visibleTo,
       String type,
       List<FindResultSong> songs});
@@ -817,6 +840,7 @@ class _$FindResultCopyWithImpl<$Res, $Val extends FindResult>
     Object? artist = null,
     Object? album = null,
     Object? imageUrl = null,
+    Object? artistImageUrl = null,
     Object? visibleTo = null,
     Object? type = null,
     Object? songs = null,
@@ -837,6 +861,10 @@ class _$FindResultCopyWithImpl<$Res, $Val extends FindResult>
       imageUrl: null == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      artistImageUrl: null == artistImageUrl
+          ? _value.artistImageUrl
+          : artistImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       visibleTo: null == visibleTo
           ? _value.visibleTo
@@ -867,6 +895,7 @@ abstract class _$$FindResultImplCopyWith<$Res>
       String artist,
       String album,
       String imageUrl,
+      String artistImageUrl,
       List<String> visibleTo,
       String type,
       List<FindResultSong> songs});
@@ -889,6 +918,7 @@ class __$$FindResultImplCopyWithImpl<$Res>
     Object? artist = null,
     Object? album = null,
     Object? imageUrl = null,
+    Object? artistImageUrl = null,
     Object? visibleTo = null,
     Object? type = null,
     Object? songs = null,
@@ -909,6 +939,10 @@ class __$$FindResultImplCopyWithImpl<$Res>
       imageUrl: null == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      artistImageUrl: null == artistImageUrl
+          ? _value.artistImageUrl
+          : artistImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       visibleTo: null == visibleTo
           ? _value._visibleTo
@@ -934,6 +968,7 @@ class _$FindResultImpl extends _FindResult {
       required this.artist,
       required this.album,
       required this.imageUrl,
+      required this.artistImageUrl,
       required final List<String> visibleTo,
       required this.type,
       required final List<FindResultSong> songs})
@@ -952,6 +987,8 @@ class _$FindResultImpl extends _FindResult {
   final String album;
   @override
   final String imageUrl;
+  @override
+  final String artistImageUrl;
   final List<String> _visibleTo;
   @override
   List<String> get visibleTo {
@@ -972,7 +1009,7 @@ class _$FindResultImpl extends _FindResult {
 
   @override
   String toString() {
-    return 'FindResult(name: $name, artist: $artist, album: $album, imageUrl: $imageUrl, visibleTo: $visibleTo, type: $type, songs: $songs)';
+    return 'FindResult(name: $name, artist: $artist, album: $album, imageUrl: $imageUrl, artistImageUrl: $artistImageUrl, visibleTo: $visibleTo, type: $type, songs: $songs)';
   }
 
   @override
@@ -985,6 +1022,8 @@ class _$FindResultImpl extends _FindResult {
             (identical(other.album, album) || other.album == album) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
+            (identical(other.artistImageUrl, artistImageUrl) ||
+                other.artistImageUrl == artistImageUrl) &&
             const DeepCollectionEquality()
                 .equals(other._visibleTo, _visibleTo) &&
             (identical(other.type, type) || other.type == type) &&
@@ -999,6 +1038,7 @@ class _$FindResultImpl extends _FindResult {
       artist,
       album,
       imageUrl,
+      artistImageUrl,
       const DeepCollectionEquality().hash(_visibleTo),
       type,
       const DeepCollectionEquality().hash(_songs));
@@ -1025,6 +1065,7 @@ abstract class _FindResult extends FindResult {
       required final String artist,
       required final String album,
       required final String imageUrl,
+      required final String artistImageUrl,
       required final List<String> visibleTo,
       required final String type,
       required final List<FindResultSong> songs}) = _$FindResultImpl;
@@ -1041,6 +1082,8 @@ abstract class _FindResult extends FindResult {
   String get album;
   @override
   String get imageUrl;
+  @override
+  String get artistImageUrl;
   @override
   List<String> get visibleTo;
   @override

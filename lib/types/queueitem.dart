@@ -61,5 +61,6 @@ class QueueItem with _$QueueItem {
     added: 0,
     addedBy: "jedi",
     visibleTo: ["all"],
+    inLibrary: ["testguy"]
   );
 }

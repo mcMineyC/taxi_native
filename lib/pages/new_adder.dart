@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:beamer/beamer.dart';
 import 'dart:convert';
+import 'package:flutter/scheduler.dart';
 
 import '../helper_widgets.dart';
 import '../types/searchresult.dart';
@@ -88,6 +89,13 @@ class _AdderPageState extends ConsumerState {
         findResultsProcessed = true;
       }
       page = "find:results";
+    }else if(state.state == "auth:fail"){
+      
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Adder login failed!  If this issue, persists, please contact the developer.")));
+        Beamer.of(context).beamToNamed("/login");
+      });
+      return Container();
     }
     print("Adder: query: $query");
     print("Adder: Page $page");

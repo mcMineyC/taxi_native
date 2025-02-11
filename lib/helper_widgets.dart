@@ -16,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'types/playlist.dart';
 import 'types/song.dart';
 import 'types/searchresult.dart';
+import 'utilities.dart';
 import 'platform_utils.dart';
 
 class MediaCard extends ConsumerWidget {
@@ -27,13 +28,15 @@ class MediaCard extends ConsumerWidget {
   final String thingType;
   final String image;
   final String addedBy;
+  final bool inLibrary;
   const MediaCard(
       {super.key,
       required this.text,
       required this.thingId,
       required this.thingType,
       required this.image,
-      required this.addedBy});
+      required this.addedBy,
+      required this.inLibrary});
 
   List<ContextMenuButtonConfig> buildMenuButtons(
       BuildContext context, WidgetRef ref) {
@@ -140,6 +143,24 @@ class MediaCard extends ConsumerWidget {
             icon: const Icon(Icons.abc), onPressed: () {}));
         break;
     }
+    if (inLibrary) buttons.add(ContextMenuButtonConfig(
+      "Add to library",
+      icon: Icon(Icons.bookmark_rounded),
+      onPressed: () {
+        ref.read(addToLibraryProvider(thingId, thingType).future).then((value) {
+          refreshLibrary(ref);
+        });
+      },
+    ));
+    else buttons.add(ContextMenuButtonConfig(
+      "Remove from library",
+      icon: Icon(Icons.bookmark_remove_rounded),
+      onPressed: () {
+        ref.read(removeFromLibraryProvider(thingId, thingType).future).then((value) {
+          refreshLibrary(ref);
+        });
+      },
+    ));
     buttons.add(ContextMenuButtonConfig(
       thingType == "playlist" ? "Owner: $addedBy" : "Added by: $addedBy",
       onPressed: null,
@@ -641,7 +662,7 @@ class _EditPlaylistDialogState extends State<EditPlaylistDialog> {
 
 Future playlistLogic(WidgetRef ref, BuildContext context, String thingId,
     String thingType) async {
-  //Okay, so first we show a choose dialog. TODO: only show allowedCollaborator playlists
+  //Okay, so first we show a choose dialog.
   var dialog = AddPlaylistDialog(
       playlists: await ref.read(fetchPlaylistsProvider(editable: true).future));
   var result = await showDialog<Map<String, dynamic>>(
@@ -704,7 +725,8 @@ Future playlistLogic(WidgetRef ref, BuildContext context, String thingId,
     var fp = FilledPlaylist(
         id: p.id,
         displayName: "",
-        visibleTo: [currentUser],
+        visibleTo: ["all"],
+        inLibrary: [currentUser],
         allowedCollaborators: [currentUser],
         songs: newSongs,
         added: DateTime.now().millisecondsSinceEpoch,

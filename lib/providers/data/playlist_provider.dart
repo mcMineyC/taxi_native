@@ -250,6 +250,7 @@ Future<FilledPlaylist> findPlaylist(FindPlaylistRef ref, String id) async {
     displayName: playlist.displayName,
     owner: playlist.owner,
     visibleTo: playlist.visibleTo,
+    inLibrary: playlist.inLibrary,
     allowedCollaborators: playlist.allowedCollaborators,
     added: playlist.added,
     songs: newSongs.reversed.toList(),

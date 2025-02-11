@@ -878,7 +878,7 @@ class _DeletePlaylistProviderElement
   String get playlistId => (origin as DeletePlaylistProvider).playlistId;
 }
 
-String _$findPlaylistHash() => r'492aef4e96b658740258e85dff2b1605962ae0d5';
+String _$findPlaylistHash() => r'3e7cb7c788c204b99d02c7139e8bf1e0d2f3e5c8';
 
 /// See also [findPlaylist].
 @ProviderFor(findPlaylist)

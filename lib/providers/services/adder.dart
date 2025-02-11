@@ -125,6 +125,10 @@ class Adder extends _$Adder {
     print("Adder: Init");
   }
 
+  Future<void> retryAuth() async {
+    socket.emit('auth', {"authtoken": await ref.read(authtokenProvider.future)});
+  }
+
   void search(String query, SearchType type, SearchSource source) {
     print("Searcher: Searching ${query}");
     state = state.copyWith(state: "loading:search", query: query, searchType: type);

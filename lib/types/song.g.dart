@@ -20,6 +20,8 @@ _$SongImpl _$$SongImplFromJson(Map<String, dynamic> json) => _$SongImpl(
       duration: (json['duration'] as num).toDouble(),
       visibleTo:
           (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
+      inLibrary:
+          (json['inLibrary'] as List<dynamic>).map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$$SongImplToJson(_$SongImpl instance) =>
@@ -36,4 +38,5 @@ Map<String, dynamic> _$$SongImplToJson(_$SongImpl instance) =>
       'addedBy': instance.addedBy,
       'duration': instance.duration,
       'visibleTo': instance.visibleTo,
+      'inLibrary': instance.inLibrary,
     };

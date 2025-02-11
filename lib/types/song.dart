@@ -1,6 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:audio_service/audio_service.dart';
 import 'queueitem.dart';
+import '../providers/data/preferences_provider.dart';
+import '../service_locator.dart';
 
 part 'song.freezed.dart';
 part 'song.g.dart';
@@ -21,6 +23,7 @@ class Song with _$Song {
     required String addedBy,
     required double duration,
     required List<String> visibleTo,
+    required List<String> inLibrary,
   }) = _Song;
 
   factory Song.fromJson(Map<String, dynamic> json) => _$SongFromJson(json);
@@ -53,6 +56,7 @@ class Song with _$Song {
     duration: duration,
     audioUrl: audioUrl,
   );
+  bool get isInLibrary => inLibrary.contains(ServiceLocator().get<PreferencesProvider>().username);
 }
 
 extension ConvertToQueueItem on MediaItem {
@@ -83,6 +87,7 @@ Song EmptySong(){
     imageUrl: '',
     audioUrl: 'blank:',
     visibleTo: [],
+    inLibrary: ["testguy"],
     addedBy: 'testguy'
   );
 }

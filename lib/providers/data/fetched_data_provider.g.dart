@@ -6,7 +6,7 @@ part of 'fetched_data_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchSongsHash() => r'c3a2f60495056213d1518824693640466774b309';
+String _$fetchSongsHash() => r'742b91150294d7f58d52ba43abe6023d54fd651b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -157,7 +157,7 @@ class _FetchSongsProviderElement extends FutureProviderElement<List<Song>>
   bool? get ignore => (origin as FetchSongsProvider).ignore;
 }
 
-String _$fetchAlbumsHash() => r'00ad7d60a5515af9e8d4a7d7e8fc174559516f66';
+String _$fetchAlbumsHash() => r'25073bd97bc2af927e17d544dd1ab645b63dd1e3';
 
 /// See also [fetchAlbums].
 @ProviderFor(fetchAlbums)
@@ -287,7 +287,7 @@ class _FetchAlbumsProviderElement extends FutureProviderElement<List<Album>>
   bool get ignore => (origin as FetchAlbumsProvider).ignore;
 }
 
-String _$fetchArtistsHash() => r'c8c6538768762b822e70ba6bba722a2ea5183e05';
+String _$fetchArtistsHash() => r'd908a3bc33bef51318c609338a6d86b5d0625951';
 
 /// See also [fetchArtists].
 @ProviderFor(fetchArtists)
@@ -417,7 +417,7 @@ class _FetchArtistsProviderElement extends FutureProviderElement<List<Artist>>
   bool get ignore => (origin as FetchArtistsProvider).ignore;
 }
 
-String _$findBatchSongsHash() => r'c49b0679f7f0377e39087ad2696452c3f314a8cf';
+String _$findBatchSongsHash() => r'69e4d147e3b8bd5dfc01eab4dc6c144978245340';
 
 /// See also [findBatchSongs].
 @ProviderFor(findBatchSongs)
@@ -565,7 +565,7 @@ class _FindBatchSongsProviderElement
   bool get ignore => (origin as FindBatchSongsProvider).ignore;
 }
 
-String _$findSongHash() => r'0459e926269a860a0be819235ccea631603cabcc';
+String _$findSongHash() => r'29445173cc04032ece1057dfab1e426fb0f373bd';
 
 /// See also [findSong].
 @ProviderFor(findSong)
@@ -711,7 +711,7 @@ class _FindSongProviderElement extends AutoDisposeFutureProviderElement<Song>
   bool get ignore => (origin as FindSongProvider).ignore;
 }
 
-String _$findSongsByAlbumHash() => r'9ae6f2ebbd4ff079ac413fd4a32eb591e38c9d36';
+String _$findSongsByAlbumHash() => r'6366f7b65779493cb607b55a231867fadb9552ad';
 
 /// See also [findSongsByAlbum].
 @ProviderFor(findSongsByAlbum)
@@ -1008,7 +1008,7 @@ class _FindSongsByArtistProviderElement
 }
 
 String _$findAlbumsByArtistHash() =>
-    r'c9bbc3b8d9a3e130ec5d93ab3ed0927ff12f6c51';
+    r'140b4a7e0848615851583244ff6a33ae1f859110';
 
 /// See also [findAlbumsByArtist].
 @ProviderFor(findAlbumsByArtist)
@@ -1158,7 +1158,7 @@ class _FindAlbumsByArtistProviderElement
 }
 
 String _$findNoSinglesByArtistHash() =>
-    r'f1259e350c2ecf405ae52a7a10dad236227b7154';
+    r'7b11a8958e91d996026928d80731094b84b2e30c';
 
 /// See also [findNoSinglesByArtist].
 @ProviderFor(findNoSinglesByArtist)
@@ -1308,7 +1308,7 @@ class _FindNoSinglesByArtistProviderElement
 }
 
 String _$findSinglesByArtistHash() =>
-    r'5ce46207610e8378b6ff1debb2a4c8510c94d9f8';
+    r'0e0b3844f08797b3967bc7724e9d83e22d24e6ba';
 
 /// See also [findSinglesByArtist].
 @ProviderFor(findSinglesByArtist)
@@ -1457,7 +1457,7 @@ class _FindSinglesByArtistProviderElement
   bool get ignore => (origin as FindSinglesByArtistProvider).ignore;
 }
 
-String _$findAlbumHash() => r'643a2ea8a386c67d2149ff34090c5e16a10f4a7e';
+String _$findAlbumHash() => r'199a38a8346b1b3cc292483f3aca157cb86cab23';
 
 /// See also [findAlbum].
 @ProviderFor(findAlbum)
@@ -1603,7 +1603,7 @@ class _FindAlbumProviderElement extends AutoDisposeFutureProviderElement<Album>
   bool get ignore => (origin as FindAlbumProvider).ignore;
 }
 
-String _$findArtistHash() => r'a27d1cde2ca5e5ada937ece0ef0ec9b490437a3f';
+String _$findArtistHash() => r'f73d8e5e02bff87988b8434f5ce8a31924200bc4';
 
 /// See also [findArtist].
 @ProviderFor(findArtist)
@@ -2497,6 +2497,300 @@ class _EditItemVisibilityProviderElement
   String get id => (origin as EditItemVisibilityProvider).id;
   @override
   List<String> get users => (origin as EditItemVisibilityProvider).users;
+}
+
+String _$addToLibraryHash() => r'264c4af95c65ccda1392a6b153c2bbbfce7d475b';
+
+/// See also [addToLibrary].
+@ProviderFor(addToLibrary)
+const addToLibraryProvider = AddToLibraryFamily();
+
+/// See also [addToLibrary].
+class AddToLibraryFamily extends Family<AsyncValue<bool>> {
+  /// See also [addToLibrary].
+  const AddToLibraryFamily();
+
+  /// See also [addToLibrary].
+  AddToLibraryProvider call(
+    String id,
+    String type,
+  ) {
+    return AddToLibraryProvider(
+      id,
+      type,
+    );
+  }
+
+  @override
+  AddToLibraryProvider getProviderOverride(
+    covariant AddToLibraryProvider provider,
+  ) {
+    return call(
+      provider.id,
+      provider.type,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'addToLibraryProvider';
+}
+
+/// See also [addToLibrary].
+class AddToLibraryProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [addToLibrary].
+  AddToLibraryProvider(
+    String id,
+    String type,
+  ) : this._internal(
+          (ref) => addToLibrary(
+            ref as AddToLibraryRef,
+            id,
+            type,
+          ),
+          from: addToLibraryProvider,
+          name: r'addToLibraryProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$addToLibraryHash,
+          dependencies: AddToLibraryFamily._dependencies,
+          allTransitiveDependencies:
+              AddToLibraryFamily._allTransitiveDependencies,
+          id: id,
+          type: type,
+        );
+
+  AddToLibraryProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+    required this.type,
+  }) : super.internal();
+
+  final String id;
+  final String type;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(AddToLibraryRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: AddToLibraryProvider._internal(
+        (ref) => create(ref as AddToLibraryRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+        type: type,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _AddToLibraryProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is AddToLibraryProvider &&
+        other.id == id &&
+        other.type == type;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, type.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin AddToLibraryRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `id` of this provider.
+  String get id;
+
+  /// The parameter `type` of this provider.
+  String get type;
+}
+
+class _AddToLibraryProviderElement
+    extends AutoDisposeFutureProviderElement<bool> with AddToLibraryRef {
+  _AddToLibraryProviderElement(super.provider);
+
+  @override
+  String get id => (origin as AddToLibraryProvider).id;
+  @override
+  String get type => (origin as AddToLibraryProvider).type;
+}
+
+String _$removeFromLibraryHash() => r'41d5a44c2afc5865ae0db5b774dfa2dad0e3e2ac';
+
+/// See also [removeFromLibrary].
+@ProviderFor(removeFromLibrary)
+const removeFromLibraryProvider = RemoveFromLibraryFamily();
+
+/// See also [removeFromLibrary].
+class RemoveFromLibraryFamily extends Family<AsyncValue<bool>> {
+  /// See also [removeFromLibrary].
+  const RemoveFromLibraryFamily();
+
+  /// See also [removeFromLibrary].
+  RemoveFromLibraryProvider call(
+    String id,
+    String type,
+  ) {
+    return RemoveFromLibraryProvider(
+      id,
+      type,
+    );
+  }
+
+  @override
+  RemoveFromLibraryProvider getProviderOverride(
+    covariant RemoveFromLibraryProvider provider,
+  ) {
+    return call(
+      provider.id,
+      provider.type,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'removeFromLibraryProvider';
+}
+
+/// See also [removeFromLibrary].
+class RemoveFromLibraryProvider extends AutoDisposeFutureProvider<bool> {
+  /// See also [removeFromLibrary].
+  RemoveFromLibraryProvider(
+    String id,
+    String type,
+  ) : this._internal(
+          (ref) => removeFromLibrary(
+            ref as RemoveFromLibraryRef,
+            id,
+            type,
+          ),
+          from: removeFromLibraryProvider,
+          name: r'removeFromLibraryProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$removeFromLibraryHash,
+          dependencies: RemoveFromLibraryFamily._dependencies,
+          allTransitiveDependencies:
+              RemoveFromLibraryFamily._allTransitiveDependencies,
+          id: id,
+          type: type,
+        );
+
+  RemoveFromLibraryProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.id,
+    required this.type,
+  }) : super.internal();
+
+  final String id;
+  final String type;
+
+  @override
+  Override overrideWith(
+    FutureOr<bool> Function(RemoveFromLibraryRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: RemoveFromLibraryProvider._internal(
+        (ref) => create(ref as RemoveFromLibraryRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        id: id,
+        type: type,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<bool> createElement() {
+    return _RemoveFromLibraryProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is RemoveFromLibraryProvider &&
+        other.id == id &&
+        other.type == type;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, type.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin RemoveFromLibraryRef on AutoDisposeFutureProviderRef<bool> {
+  /// The parameter `id` of this provider.
+  String get id;
+
+  /// The parameter `type` of this provider.
+  String get type;
+}
+
+class _RemoveFromLibraryProviderElement
+    extends AutoDisposeFutureProviderElement<bool> with RemoveFromLibraryRef {
+  _RemoveFromLibraryProviderElement(super.provider);
+
+  @override
+  String get id => (origin as RemoveFromLibraryProvider).id;
+  @override
+  String get type => (origin as RemoveFromLibraryProvider).type;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

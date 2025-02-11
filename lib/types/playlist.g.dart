@@ -13,6 +13,8 @@ _$PlaylistImpl _$$PlaylistImplFromJson(Map<String, dynamic> json) =>
       displayName: json['displayName'] as String,
       visibleTo:
           (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
+      inLibrary:
+          (json['inLibrary'] as List<dynamic>).map((e) => e as String).toList(),
       allowedCollaborators: (json['allowedCollaborators'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
@@ -26,6 +28,7 @@ Map<String, dynamic> _$$PlaylistImplToJson(_$PlaylistImpl instance) =>
       'owner': instance.owner,
       'displayName': instance.displayName,
       'visibleTo': instance.visibleTo,
+      'inLibrary': instance.inLibrary,
       'allowedCollaborators': instance.allowedCollaborators,
       'songs': instance.songs,
       'added': instance.added,

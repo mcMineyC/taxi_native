@@ -15,6 +15,7 @@ class HLVArtist {
     return {
       'name': name,
       'imageUrl': imageUrl,
+      'visibleTo': visibleTo,
       'albums': albums.map((album) => album.toJson()).toList(),
     };
   }
@@ -49,6 +50,7 @@ class HLVAlbum {
       'name': name,
       'imageUrl': imageUrl,
       'artistImageUrl': artistImageUrl,
+      'visibleTo': visibleTo,
       'songs': songs.map((song) => song.toJson()).toList(),
     };
   }
@@ -85,6 +87,7 @@ class HLVSong {
       'name': name,
       'url': url,
       'imageUrl': imageUrl,
+      'visibleTo': visibleTo,
       'artistImageUrl': artistImageUrl,
     };
   }
@@ -180,3 +183,7 @@ void printHLVContent(List<HLVArtist> artists) {
     }
   }
 }
+
+List<String> kSupportedHLVUrlTypes = ["youtube", "http", "https"];
+List<String> kSupportedHLVUrlProtocols = ["youtube:", "http://", "https://"];
+final String kSupportedHLVUrlTypesString = kSupportedHLVUrlProtocols.sublist(0, kSupportedHLVUrlProtocols.length - 1).join(", ") + ", or " + kSupportedHLVUrlProtocols[kSupportedHLVUrlProtocols.length - 1];

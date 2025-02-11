@@ -21,7 +21,7 @@ Future<List<Song>> fetchSongs(FetchSongsRef ref, {bool? ignore = false}) async {
   final _sp = await SharedPreferences.getInstance();
   print("IGNORING: $ignore");
   var response = await http.post(
-      Uri.parse("${_p.backendUrl}/info/songs${ignore! ? "?ignore=true" : ""}"),
+      Uri.parse("${_p.backendUrl}/info/songs${ignore! ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -49,7 +49,7 @@ Future<List<Album>> fetchAlbums(FetchAlbumsRef ref,
     {bool ignore = false}) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("${_p.backendUrl}/info/albums${ignore ? "?ignore=true" : ""}"),
+      Uri.parse("${_p.backendUrl}/info/albums${ignore ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -73,7 +73,7 @@ Future<List<Artist>> fetchArtists(FetchArtistsRef ref,
   final _sp = await SharedPreferences.getInstance();
   print("IGNORING: $ignore");
   var response = await http.post(
-      Uri.parse("${_p.backendUrl}/info/artists${ignore ? "?ignore=true" : ""}"),
+      Uri.parse("${_p.backendUrl}/info/artists${ignore ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -99,7 +99,7 @@ Future<List<Song>> findBatchSongs(FindBatchSongsRef ref, List<String> ids,
   //print("REQUESTING: ${ids.map((e) => e.substring(e.length - 8))}");
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/songs/batch${ignore ? "?ignore=true" : ""}"),
+          "${_p.backendUrl}/info/songs/batch${ignore ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           {'authtoken': (_sp.getString("token") ?? ""), 'ids': ids}));
@@ -130,7 +130,7 @@ Future<Song> findSong(FindSongRef ref, String id, {bool ignore = false}) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/songs/$id${ignore ? "?ignore=true" : ""}"),
+          "${_p.backendUrl}/info/songs/$id${ignore ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': (_sp.getString("token") ?? "")}));
@@ -147,7 +147,7 @@ Future<List<Song>> findSongsByAlbum(FindSongsByAlbumRef ref, String id,
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/songs/by/album/$id${ignore ? "?ignore=true" : ""}"),
+          "${_p.backendUrl}/info/songs/by/album/$id${ignore ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': (_sp.getString("token") ?? "")}));
@@ -185,7 +185,7 @@ Future<List<Album>> findAlbumsByArtist(FindAlbumsByArtistRef ref, String id,
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/albums/by/artist/$id${ignore ? "?ignore=true" : ""}"),
+          "${_p.backendUrl}/info/albums/by/artist/$id${ignore ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -210,7 +210,7 @@ Future<List<Album>> findNoSinglesByArtist(
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/albums/by/artist/$id?excludeSingles=true${ignore ? "&ignore=true" : ""}"),
+          "${_p.backendUrl}/info/albums/by/artist/$id?excludeSingles=true${ignore ? "&mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -234,7 +234,7 @@ Future<List<Song>> findSinglesByArtist(FindSinglesByArtistRef ref, String id,
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/singles/by/artist/$id${ignore ? "?ignore=true" : ""}"),
+          "${_p.backendUrl}/info/singles/by/artist/$id${ignore ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -258,7 +258,7 @@ Future<Album> findAlbum(FindAlbumRef ref, String id,
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/album/$id${ignore ? "?ignore=true" : ""}"),
+          "${_p.backendUrl}/info/album/$id${ignore ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -276,7 +276,7 @@ Future<Artist> findArtist(FindArtistRef ref, String id,
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/artist/$id${ignore ? "?ignore=true" : ""}"),
+          "${_p.backendUrl}/info/artist/$id${ignore ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -409,4 +409,47 @@ Future<bool> editItemVisibility(EditItemVisibilityRef ref, String type,
     if (type == "artist") ref.refresh(fetchArtistsProvider(ignore: false));
   }
   return clearCondition;
+}
+
+@Riverpod(keepAlive: false)
+Future<bool> addToLibrary(AddToLibraryRef ref, String id, String type) async {
+  var _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+    Uri.parse("${_p.backendUrl}/addToLibrary"),
+    headers: Map<String, String>.from({
+      'Content-Type': 'application/json',
+    }),
+    body: jsonEncode(<String, String>{
+      'authtoken': _sp.getString("token") ?? "",
+      'id': id,
+      'type': type,
+    }),
+  );
+  if (response.statusCode != 200) {
+    return false;
+  }
+  Map<String, bool> data = jsonDecode(response.body);
+  return data["success"] ?? false;
+}
+
+
+@Riverpod(keepAlive: false)
+Future<bool> removeFromLibrary(RemoveFromLibraryRef ref, String id, String type) async {
+  var _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+    Uri.parse("${_p.backendUrl}/removeFromLibrary"),
+    headers: Map<String, String>.from({
+      'Content-Type': 'application/json',
+    }),
+    body: jsonEncode(<String, String>{
+      'authtoken': _sp.getString("token") ?? "",
+      'id': id,
+      'type': type,
+    }),
+  );
+  if (response.statusCode != 200) {
+    return false;
+  }
+  Map<String, bool> data = jsonDecode(response.body);
+  return data["success"] ?? false;
 }

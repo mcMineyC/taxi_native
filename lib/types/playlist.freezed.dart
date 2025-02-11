@@ -24,6 +24,7 @@ mixin _$Playlist {
   String get owner => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
   List<String> get visibleTo => throw _privateConstructorUsedError;
+  List<String> get inLibrary => throw _privateConstructorUsedError;
   List<String> get allowedCollaborators => throw _privateConstructorUsedError;
   List<String> get songs => throw _privateConstructorUsedError;
   int get added => throw _privateConstructorUsedError;
@@ -48,6 +49,7 @@ abstract class $PlaylistCopyWith<$Res> {
       String owner,
       String displayName,
       List<String> visibleTo,
+      List<String> inLibrary,
       List<String> allowedCollaborators,
       List<String> songs,
       int added});
@@ -72,6 +74,7 @@ class _$PlaylistCopyWithImpl<$Res, $Val extends Playlist>
     Object? owner = null,
     Object? displayName = null,
     Object? visibleTo = null,
+    Object? inLibrary = null,
     Object? allowedCollaborators = null,
     Object? songs = null,
     Object? added = null,
@@ -92,6 +95,10 @@ class _$PlaylistCopyWithImpl<$Res, $Val extends Playlist>
       visibleTo: null == visibleTo
           ? _value.visibleTo
           : visibleTo // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      inLibrary: null == inLibrary
+          ? _value.inLibrary
+          : inLibrary // ignore: cast_nullable_to_non_nullable
               as List<String>,
       allowedCollaborators: null == allowedCollaborators
           ? _value.allowedCollaborators
@@ -122,6 +129,7 @@ abstract class _$$PlaylistImplCopyWith<$Res>
       String owner,
       String displayName,
       List<String> visibleTo,
+      List<String> inLibrary,
       List<String> allowedCollaborators,
       List<String> songs,
       int added});
@@ -144,6 +152,7 @@ class __$$PlaylistImplCopyWithImpl<$Res>
     Object? owner = null,
     Object? displayName = null,
     Object? visibleTo = null,
+    Object? inLibrary = null,
     Object? allowedCollaborators = null,
     Object? songs = null,
     Object? added = null,
@@ -164,6 +173,10 @@ class __$$PlaylistImplCopyWithImpl<$Res>
       visibleTo: null == visibleTo
           ? _value._visibleTo
           : visibleTo // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      inLibrary: null == inLibrary
+          ? _value._inLibrary
+          : inLibrary // ignore: cast_nullable_to_non_nullable
               as List<String>,
       allowedCollaborators: null == allowedCollaborators
           ? _value._allowedCollaborators
@@ -189,10 +202,12 @@ class _$PlaylistImpl implements _Playlist {
       required this.owner,
       required this.displayName,
       required final List<String> visibleTo,
+      required final List<String> inLibrary,
       required final List<String> allowedCollaborators,
       required final List<String> songs,
       required this.added})
       : _visibleTo = visibleTo,
+        _inLibrary = inLibrary,
         _allowedCollaborators = allowedCollaborators,
         _songs = songs;
 
@@ -211,6 +226,14 @@ class _$PlaylistImpl implements _Playlist {
     if (_visibleTo is EqualUnmodifiableListView) return _visibleTo;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_visibleTo);
+  }
+
+  final List<String> _inLibrary;
+  @override
+  List<String> get inLibrary {
+    if (_inLibrary is EqualUnmodifiableListView) return _inLibrary;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_inLibrary);
   }
 
   final List<String> _allowedCollaborators;
@@ -235,7 +258,7 @@ class _$PlaylistImpl implements _Playlist {
 
   @override
   String toString() {
-    return 'Playlist(id: $id, owner: $owner, displayName: $displayName, visibleTo: $visibleTo, allowedCollaborators: $allowedCollaborators, songs: $songs, added: $added)';
+    return 'Playlist(id: $id, owner: $owner, displayName: $displayName, visibleTo: $visibleTo, inLibrary: $inLibrary, allowedCollaborators: $allowedCollaborators, songs: $songs, added: $added)';
   }
 
   @override
@@ -250,6 +273,8 @@ class _$PlaylistImpl implements _Playlist {
             const DeepCollectionEquality()
                 .equals(other._visibleTo, _visibleTo) &&
             const DeepCollectionEquality()
+                .equals(other._inLibrary, _inLibrary) &&
+            const DeepCollectionEquality()
                 .equals(other._allowedCollaborators, _allowedCollaborators) &&
             const DeepCollectionEquality().equals(other._songs, _songs) &&
             (identical(other.added, added) || other.added == added));
@@ -263,6 +288,7 @@ class _$PlaylistImpl implements _Playlist {
       owner,
       displayName,
       const DeepCollectionEquality().hash(_visibleTo),
+      const DeepCollectionEquality().hash(_inLibrary),
       const DeepCollectionEquality().hash(_allowedCollaborators),
       const DeepCollectionEquality().hash(_songs),
       added);
@@ -289,6 +315,7 @@ abstract class _Playlist implements Playlist {
       required final String owner,
       required final String displayName,
       required final List<String> visibleTo,
+      required final List<String> inLibrary,
       required final List<String> allowedCollaborators,
       required final List<String> songs,
       required final int added}) = _$PlaylistImpl;
@@ -304,6 +331,8 @@ abstract class _Playlist implements Playlist {
   String get displayName;
   @override
   List<String> get visibleTo;
+  @override
+  List<String> get inLibrary;
   @override
   List<String> get allowedCollaborators;
   @override
@@ -325,6 +354,7 @@ mixin _$FilledPlaylist {
   String get owner => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
   List<String> get visibleTo => throw _privateConstructorUsedError;
+  List<String> get inLibrary => throw _privateConstructorUsedError;
   List<String> get allowedCollaborators => throw _privateConstructorUsedError;
   List<Song> get songs => throw _privateConstructorUsedError;
   int get added => throw _privateConstructorUsedError;
@@ -347,6 +377,7 @@ abstract class $FilledPlaylistCopyWith<$Res> {
       String owner,
       String displayName,
       List<String> visibleTo,
+      List<String> inLibrary,
       List<String> allowedCollaborators,
       List<Song> songs,
       int added});
@@ -371,6 +402,7 @@ class _$FilledPlaylistCopyWithImpl<$Res, $Val extends FilledPlaylist>
     Object? owner = null,
     Object? displayName = null,
     Object? visibleTo = null,
+    Object? inLibrary = null,
     Object? allowedCollaborators = null,
     Object? songs = null,
     Object? added = null,
@@ -391,6 +423,10 @@ class _$FilledPlaylistCopyWithImpl<$Res, $Val extends FilledPlaylist>
       visibleTo: null == visibleTo
           ? _value.visibleTo
           : visibleTo // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      inLibrary: null == inLibrary
+          ? _value.inLibrary
+          : inLibrary // ignore: cast_nullable_to_non_nullable
               as List<String>,
       allowedCollaborators: null == allowedCollaborators
           ? _value.allowedCollaborators
@@ -421,6 +457,7 @@ abstract class _$$FilledPlaylistImplCopyWith<$Res>
       String owner,
       String displayName,
       List<String> visibleTo,
+      List<String> inLibrary,
       List<String> allowedCollaborators,
       List<Song> songs,
       int added});
@@ -443,6 +480,7 @@ class __$$FilledPlaylistImplCopyWithImpl<$Res>
     Object? owner = null,
     Object? displayName = null,
     Object? visibleTo = null,
+    Object? inLibrary = null,
     Object? allowedCollaborators = null,
     Object? songs = null,
     Object? added = null,
@@ -463,6 +501,10 @@ class __$$FilledPlaylistImplCopyWithImpl<$Res>
       visibleTo: null == visibleTo
           ? _value._visibleTo
           : visibleTo // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      inLibrary: null == inLibrary
+          ? _value._inLibrary
+          : inLibrary // ignore: cast_nullable_to_non_nullable
               as List<String>,
       allowedCollaborators: null == allowedCollaborators
           ? _value._allowedCollaborators
@@ -488,10 +530,12 @@ class _$FilledPlaylistImpl extends _FilledPlaylist {
       required this.owner,
       required this.displayName,
       required final List<String> visibleTo,
+      required final List<String> inLibrary,
       required final List<String> allowedCollaborators,
       required final List<Song> songs,
       required this.added})
       : _visibleTo = visibleTo,
+        _inLibrary = inLibrary,
         _allowedCollaborators = allowedCollaborators,
         _songs = songs,
         super._();
@@ -508,6 +552,14 @@ class _$FilledPlaylistImpl extends _FilledPlaylist {
     if (_visibleTo is EqualUnmodifiableListView) return _visibleTo;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_visibleTo);
+  }
+
+  final List<String> _inLibrary;
+  @override
+  List<String> get inLibrary {
+    if (_inLibrary is EqualUnmodifiableListView) return _inLibrary;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_inLibrary);
   }
 
   final List<String> _allowedCollaborators;
@@ -532,7 +584,7 @@ class _$FilledPlaylistImpl extends _FilledPlaylist {
 
   @override
   String toString() {
-    return 'FilledPlaylist(id: $id, owner: $owner, displayName: $displayName, visibleTo: $visibleTo, allowedCollaborators: $allowedCollaborators, songs: $songs, added: $added)';
+    return 'FilledPlaylist(id: $id, owner: $owner, displayName: $displayName, visibleTo: $visibleTo, inLibrary: $inLibrary, allowedCollaborators: $allowedCollaborators, songs: $songs, added: $added)';
   }
 
   @override
@@ -547,6 +599,8 @@ class _$FilledPlaylistImpl extends _FilledPlaylist {
             const DeepCollectionEquality()
                 .equals(other._visibleTo, _visibleTo) &&
             const DeepCollectionEquality()
+                .equals(other._inLibrary, _inLibrary) &&
+            const DeepCollectionEquality()
                 .equals(other._allowedCollaborators, _allowedCollaborators) &&
             const DeepCollectionEquality().equals(other._songs, _songs) &&
             (identical(other.added, added) || other.added == added));
@@ -559,6 +613,7 @@ class _$FilledPlaylistImpl extends _FilledPlaylist {
       owner,
       displayName,
       const DeepCollectionEquality().hash(_visibleTo),
+      const DeepCollectionEquality().hash(_inLibrary),
       const DeepCollectionEquality().hash(_allowedCollaborators),
       const DeepCollectionEquality().hash(_songs),
       added);
@@ -579,6 +634,7 @@ abstract class _FilledPlaylist extends FilledPlaylist {
       required final String owner,
       required final String displayName,
       required final List<String> visibleTo,
+      required final List<String> inLibrary,
       required final List<String> allowedCollaborators,
       required final List<Song> songs,
       required final int added}) = _$FilledPlaylistImpl;
@@ -592,6 +648,8 @@ abstract class _FilledPlaylist extends FilledPlaylist {
   String get displayName;
   @override
   List<String> get visibleTo;
+  @override
+  List<String> get inLibrary;
   @override
   List<String> get allowedCollaborators;
   @override

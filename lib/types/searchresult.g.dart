@@ -83,6 +83,8 @@ _$FindResultImpl _$$FindResultImplFromJson(Map<String, dynamic> json) =>
       artistImageUrl: json['artistImageUrl'] as String,
       visibleTo:
           (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
+      inLibrary:
+          (json['inLibrary'] as List<dynamic>).map((e) => e as String).toList(),
       type: json['type'] as String,
       songs: (json['songs'] as List<dynamic>)
           .map((e) => FindResultSong.fromJson(e as Map<String, dynamic>))
@@ -97,6 +99,7 @@ Map<String, dynamic> _$$FindResultImplToJson(_$FindResultImpl instance) =>
       'imageUrl': instance.imageUrl,
       'artistImageUrl': instance.artistImageUrl,
       'visibleTo': instance.visibleTo,
+      'inLibrary': instance.inLibrary,
       'type': instance.type,
       'songs': instance.songs,
     };

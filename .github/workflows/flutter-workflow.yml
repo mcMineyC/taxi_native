@@ -126,19 +126,19 @@ jobs:
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - name: Download Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: taxi-native.apk
           path: .
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: taxi-native-linux_x64.zip
           path: .
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: taxi.app.zip
           path: .
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: taxi.exe
           path: .

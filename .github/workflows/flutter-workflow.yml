@@ -45,7 +45,7 @@ jobs:
           java-version: '21'
       - run: flutter build apk
       - run: cp build/app/outputs/apk/release/app-release.apk taxi-native.apk
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: taxi-native.apk
           path: taxi-native.apk
@@ -65,7 +65,7 @@ jobs:
           sudo apt install libmpv-dev mpv
       - run: flutter build linux
       - run: sh -c "cd build/linux/x64/release/bundle && zip -r taxi-native-linux_x64.zip . && cp taxi-native-linux_x64.zip ../../../../../"
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: taxi-native-linux_x64.zip
           path: taxi-native-linux_x64.zip
@@ -84,7 +84,7 @@ jobs:
         with:
           path: Installers/innoSetupScript.iss
           options: /O+
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: taxi.exe
           path: Installers/taxi.exe
@@ -94,7 +94,7 @@ jobs:
   #   steps:
   #     - name: Clone repository
   #       uses: actions/checkout@v4
-  #     - uses: actions/upload-artifact@v3
+  #     - uses: actions/upload-artifact@v4
   #       with:
   #         name: taxi.exe
   #         path: ./Installers/taxi.exe
@@ -110,7 +110,7 @@ jobs:
       - run: flutter build macos
       - run: cp -rf build/macos/Build/Products/Release/taxi.app taxi.app
       - run: zip -r taxi.app.zip taxi.app
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: taxi.app.zip
           path: taxi.app.zip

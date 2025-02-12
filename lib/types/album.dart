@@ -36,5 +36,5 @@ class Album with _$Album {
     addedBy: '',
   );
 
-  bool get isInLibrary => inLibrary.contains(ServiceLocator().get<PreferencesProvider>().username);
+  bool get isInLibrary => inLibrary.contains(ServiceLocator().get<PreferencesProvider>().loginName);
 }

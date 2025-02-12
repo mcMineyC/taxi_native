@@ -1,10 +1,13 @@
 import "package:freezed_annotation/freezed_annotation.dart";
 import "song.dart";
+import "../providers/data/preferences_provider.dart";
+import "../service_locator.dart";
 part "playlist.freezed.dart";
 part "playlist.g.dart";
 
 @freezed
 class Playlist with _$Playlist {
+  const Playlist._();
   factory Playlist({
     required String id,
     required String owner,
@@ -27,6 +30,7 @@ class Playlist with _$Playlist {
     added: 0,
     owner: "testguy"
   );
+  bool get isInLibrary => inLibrary.contains(ServiceLocator().get<PreferencesProvider>().loginName);
 }
 
 @freezed
@@ -66,4 +70,5 @@ class FilledPlaylist with _$FilledPlaylist {
     songs: [],
     added: 0
   );
+  bool get isInLibrary => inLibrary.contains(ServiceLocator().get<PreferencesProvider>().username);
 }

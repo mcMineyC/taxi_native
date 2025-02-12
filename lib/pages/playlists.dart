@@ -8,9 +8,11 @@ import '../providers/error_watcher.dart';
 import '../types/playlist.dart';
 
 class PlaylistsPage extends ConsumerWidget {
+  final bool private;
+  PlaylistsPage({required this.private});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var playlistProvider = fetchPlaylistsProvider(editable: false);
+    var playlistProvider = fetchPlaylistsProvider(editable: false, ignore: private);
     final AsyncValue<List<Playlist>> playlists = ref.watch(playlistProvider);
     handleError(ref, playlistProvider, Beamer.of(context));
     return Container(

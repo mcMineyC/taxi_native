@@ -6,7 +6,7 @@ part of 'fetched_data_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchSongsHash() => r'742b91150294d7f58d52ba43abe6023d54fd651b';
+String _$fetchSongsHash() => r'f50ba7fe7e2ce7cb2106cabe9d9d2c129db42563';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -287,7 +287,7 @@ class _FetchAlbumsProviderElement extends FutureProviderElement<List<Album>>
   bool get ignore => (origin as FetchAlbumsProvider).ignore;
 }
 
-String _$fetchArtistsHash() => r'd908a3bc33bef51318c609338a6d86b5d0625951';
+String _$fetchArtistsHash() => r'4747ebd56ba5e9e389ab58cebf8be0df4baab95e';
 
 /// See also [fetchArtists].
 @ProviderFor(fetchArtists)
@@ -859,7 +859,7 @@ class _FindSongsByAlbumProviderElement
   bool get ignore => (origin as FindSongsByAlbumProvider).ignore;
 }
 
-String _$findSongsByArtistHash() => r'c0003ad62d8fcbcb1a132b6dea4176b244d4ed47';
+String _$findSongsByArtistHash() => r'02b3fbcdf9b16d7572e4b5eaf1d9a22d64c1cc85';
 
 /// See also [findSongsByArtist].
 @ProviderFor(findSongsByArtist)
@@ -2499,7 +2499,7 @@ class _EditItemVisibilityProviderElement
   List<String> get users => (origin as EditItemVisibilityProvider).users;
 }
 
-String _$addToLibraryHash() => r'264c4af95c65ccda1392a6b153c2bbbfce7d475b';
+String _$addToLibraryHash() => r'be5aa35dbd9e4bf7bfbfdd55856ecce3069ccbf4';
 
 /// See also [addToLibrary].
 @ProviderFor(addToLibrary)
@@ -2646,7 +2646,7 @@ class _AddToLibraryProviderElement
   String get type => (origin as AddToLibraryProvider).type;
 }
 
-String _$removeFromLibraryHash() => r'41d5a44c2afc5865ae0db5b774dfa2dad0e3e2ac';
+String _$removeFromLibraryHash() => r'c655d4265c54804192b9776f1c840551f7b0bb1a';
 
 /// See also [removeFromLibrary].
 @ProviderFor(removeFromLibrary)

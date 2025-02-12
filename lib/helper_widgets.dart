@@ -144,19 +144,19 @@ class MediaCard extends ConsumerWidget {
         break;
     }
     if (inLibrary) buttons.add(ContextMenuButtonConfig(
-      "Add to library",
-      icon: Icon(Icons.bookmark_rounded),
+      "Remove from library",
+      icon: Icon(Icons.bookmark_remove_rounded),
       onPressed: () {
-        ref.read(addToLibraryProvider(thingId, thingType).future).then((value) {
+        ref.read(removeFromLibraryProvider(thingId, thingType).future).then((value) {
           refreshLibrary(ref);
         });
       },
     ));
     else buttons.add(ContextMenuButtonConfig(
-      "Remove from library",
-      icon: Icon(Icons.bookmark_remove_rounded),
+      "Add to library",
+      icon: Icon(Icons.bookmark_rounded),
       onPressed: () {
-        ref.read(removeFromLibraryProvider(thingId, thingType).future).then((value) {
+        ref.read(addToLibraryProvider(thingId, thingType).future).then((value) {
           refreshLibrary(ref);
         });
       },
@@ -328,6 +328,7 @@ Widget EmptyCardRow() {
         thingType: "placeholder",
         image: "https://placehold.co/512x512.png",
         addedBy: "jedi",
+        inLibrary: true,
       ),
   ]);
 }

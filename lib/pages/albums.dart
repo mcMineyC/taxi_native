@@ -9,10 +9,12 @@ import '../providers/error_watcher.dart';
 import '../types/album.dart';
 
 class AlbumsPage extends ConsumerWidget {
+  final bool private;
+  AlbumsPage({required this.private});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<Album>> albums = ref.watch(fetchAlbumsProvider(ignore: false));
-    handleError(ref, fetchAlbumsProvider(ignore: false), Beamer.of(context));
+    final AsyncValue<List<Album>> albums = ref.watch(fetchAlbumsProvider(ignore: private));
+    handleError(ref, fetchAlbumsProvider(ignore: private), Beamer.of(context));
     return albums.when(
       data: (data) {
         var cardList = data.map((e) => {
@@ -20,7 +22,8 @@ class AlbumsPage extends ConsumerWidget {
           "image": e.imageUrl,
           "id": e.id,
           "type": "album",
-          "addedBy": e.addedBy
+          "addedBy": e.addedBy,
+          "inLibrary": e.isInLibrary,
         }).toList();
         return CardView(cardList: cardList);
       },

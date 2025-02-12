@@ -9,18 +9,22 @@ import '../types/song.dart';
 import 'package:beamer/beamer.dart';
 
 class SongsPage extends ConsumerWidget {
+  final bool private;
+  SongsPage({required this.private});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<Song>> songs = ref.watch(fetchSongsProvider(ignore: false));
-    handleError(ref, fetchSongsProvider(ignore: false), Beamer.of(context));
+    final AsyncValue<List<Song>> songs = ref.watch(fetchSongsProvider(ignore: private));
+    print("songs: rebuilding");
+    handleError(ref, fetchSongsProvider(ignore: private), Beamer.of(context));
     return songs.when(
       data: (data) {
         var cardList = data.map((e) => {
           "text": e.displayName,
           "image": e.imageUrl,
           "id": e.id,
+          "type": "song",
           "addedBy": e.addedBy,
-          "type": "song"
+          "inLibrary": e.isInLibrary,
         }).toList();
         return CardView(cardList: cardList);
       },

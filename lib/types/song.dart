@@ -56,7 +56,7 @@ class Song with _$Song {
     duration: duration,
     audioUrl: audioUrl,
   );
-  bool get isInLibrary => inLibrary.contains(ServiceLocator().get<PreferencesProvider>().username);
+  bool get isInLibrary => inLibrary.contains(ServiceLocator().get<PreferencesProvider>().loginName);
 }
 
 extension ConvertToQueueItem on MediaItem {

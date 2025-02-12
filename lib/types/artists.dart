@@ -33,5 +33,5 @@ class Artist with _$Artist {
     inLibrary: ["testguy"],
     addedBy: '',
   );
-  bool get isInLibrary => this.inLibrary.contains(ServiceLocator().get<PreferencesProvider>().username);
+  bool get isInLibrary => inLibrary.contains(ServiceLocator().get<PreferencesProvider>().loginName);
 }

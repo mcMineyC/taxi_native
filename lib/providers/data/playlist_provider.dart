@@ -16,10 +16,10 @@ part 'playlist_provider.g.dart';
 PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
 
 @Riverpod(keepAlive: true)
-Future<List<Playlist>> fetchPlaylists(FetchPlaylistsRef ref, {bool editable = false}) async {
+Future<List<Playlist>> fetchPlaylists(FetchPlaylistsRef ref, {bool editable = false, bool ignore = false}) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("${p.backendUrl}/playlists?sort=none&editable=$editable"),
+      Uri.parse("${p.backendUrl}/playlists?sort=none&editable=$editable&mine=$ignore"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -92,6 +92,8 @@ Future<bool> addPlaylist(AddPlaylistRef ref, Playlist playlist) async {
   if (desponse["success"] == true) {
     ref.refresh(fetchPlaylistsProvider(editable: false));
     ref.refresh(fetchPlaylistsProvider(editable: true));
+    ref.refresh(fetchPlaylistsProvider(ignore: true));
+    ref.refresh(fetchPlaylistsProvider(ignore: false));
   }
   return true;
 }

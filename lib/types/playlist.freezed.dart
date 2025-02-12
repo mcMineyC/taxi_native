@@ -196,7 +196,7 @@ class __$$PlaylistImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$PlaylistImpl implements _Playlist {
+class _$PlaylistImpl extends _Playlist {
   _$PlaylistImpl(
       {required this.id,
       required this.owner,
@@ -209,7 +209,8 @@ class _$PlaylistImpl implements _Playlist {
       : _visibleTo = visibleTo,
         _inLibrary = inLibrary,
         _allowedCollaborators = allowedCollaborators,
-        _songs = songs;
+        _songs = songs,
+        super._();
 
   factory _$PlaylistImpl.fromJson(Map<String, dynamic> json) =>
       _$$PlaylistImplFromJson(json);
@@ -309,7 +310,7 @@ class _$PlaylistImpl implements _Playlist {
   }
 }
 
-abstract class _Playlist implements Playlist {
+abstract class _Playlist extends Playlist {
   factory _Playlist(
       {required final String id,
       required final String owner,
@@ -319,6 +320,7 @@ abstract class _Playlist implements Playlist {
       required final List<String> allowedCollaborators,
       required final List<String> songs,
       required final int added}) = _$PlaylistImpl;
+  _Playlist._() : super._();
 
   factory _Playlist.fromJson(Map<String, dynamic> json) =
       _$PlaylistImpl.fromJson;

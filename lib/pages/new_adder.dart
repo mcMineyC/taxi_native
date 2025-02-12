@@ -5,6 +5,7 @@ import 'package:beamer/beamer.dart';
 import 'dart:convert';
 import 'package:flutter/scheduler.dart';
 
+import '../utilities.dart';
 import '../helper_widgets.dart';
 import '../types/searchresult.dart';
 import '../types/hierarchicalListView.dart';
@@ -251,6 +252,7 @@ class _AdderPageState extends ConsumerState {
     print("Find page submitted");
   }
   void dutiesDone(BuildContext context){
+    refreshLibrary(ref);
     ref.read(adderProvider.notifier).done();
   }
 

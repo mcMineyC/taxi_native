@@ -6,7 +6,7 @@ part of 'playlist_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchPlaylistsHash() => r'39b009e9545b7886444742c84de1bde2774098ff';
+String _$fetchPlaylistsHash() => r'502246784feeb987f436d8adc0f313e069d3de95';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -41,9 +41,11 @@ class FetchPlaylistsFamily extends Family<AsyncValue<List<Playlist>>> {
   /// See also [fetchPlaylists].
   FetchPlaylistsProvider call({
     bool editable = false,
+    bool ignore = false,
   }) {
     return FetchPlaylistsProvider(
       editable: editable,
+      ignore: ignore,
     );
   }
 
@@ -53,6 +55,7 @@ class FetchPlaylistsFamily extends Family<AsyncValue<List<Playlist>>> {
   ) {
     return call(
       editable: provider.editable,
+      ignore: provider.ignore,
     );
   }
 
@@ -76,10 +79,12 @@ class FetchPlaylistsProvider extends FutureProvider<List<Playlist>> {
   /// See also [fetchPlaylists].
   FetchPlaylistsProvider({
     bool editable = false,
+    bool ignore = false,
   }) : this._internal(
           (ref) => fetchPlaylists(
             ref as FetchPlaylistsRef,
             editable: editable,
+            ignore: ignore,
           ),
           from: fetchPlaylistsProvider,
           name: r'fetchPlaylistsProvider',
@@ -91,6 +96,7 @@ class FetchPlaylistsProvider extends FutureProvider<List<Playlist>> {
           allTransitiveDependencies:
               FetchPlaylistsFamily._allTransitiveDependencies,
           editable: editable,
+          ignore: ignore,
         );
 
   FetchPlaylistsProvider._internal(
@@ -101,9 +107,11 @@ class FetchPlaylistsProvider extends FutureProvider<List<Playlist>> {
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.editable,
+    required this.ignore,
   }) : super.internal();
 
   final bool editable;
+  final bool ignore;
 
   @override
   Override overrideWith(
@@ -119,6 +127,7 @@ class FetchPlaylistsProvider extends FutureProvider<List<Playlist>> {
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         editable: editable,
+        ignore: ignore,
       ),
     );
   }
@@ -130,13 +139,16 @@ class FetchPlaylistsProvider extends FutureProvider<List<Playlist>> {
 
   @override
   bool operator ==(Object other) {
-    return other is FetchPlaylistsProvider && other.editable == editable;
+    return other is FetchPlaylistsProvider &&
+        other.editable == editable &&
+        other.ignore == ignore;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, editable.hashCode);
+    hash = _SystemHash.combine(hash, ignore.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -147,6 +159,9 @@ class FetchPlaylistsProvider extends FutureProvider<List<Playlist>> {
 mixin FetchPlaylistsRef on FutureProviderRef<List<Playlist>> {
   /// The parameter `editable` of this provider.
   bool get editable;
+
+  /// The parameter `ignore` of this provider.
+  bool get ignore;
 }
 
 class _FetchPlaylistsProviderElement
@@ -155,6 +170,8 @@ class _FetchPlaylistsProviderElement
 
   @override
   bool get editable => (origin as FetchPlaylistsProvider).editable;
+  @override
+  bool get ignore => (origin as FetchPlaylistsProvider).ignore;
 }
 
 String _$fetchNewPlaylistsHash() => r'425d704bec4ea4374e6e748b550987300cb9d844';
@@ -174,7 +191,7 @@ final fetchNewPlaylistsProvider = FutureProvider<List<Playlist>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FetchNewPlaylistsRef = FutureProviderRef<List<Playlist>>;
-String _$addPlaylistHash() => r'dcf30f06960292070eb7a87613c2873f48b490f9';
+String _$addPlaylistHash() => r'8bafd7c7f7ac9f8ea1863bb7d3e7a61e75b40207';
 
 /// See also [addPlaylist].
 @ProviderFor(addPlaylist)

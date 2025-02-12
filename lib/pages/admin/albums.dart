@@ -152,6 +152,7 @@ class _AlbumPane2State extends ConsumerState<AlbumsPane2> {
             ),
           ),
           VisibleToField(
+            shouldRefresh: true,
             value: currentSong.visibleTo.toList(),
             onChanged: (value) => currentSong = currentSong.copyWith(visibleTo: value),
             onSaved: (v) async => await ref.read(editItemVisibilityProvider("album", currentSong.id, v).future),
@@ -285,7 +286,8 @@ class _AlbumPane2State extends ConsumerState<AlbumsPane2> {
     ref.refresh(fetchAlbumsProvider(ignore: true));
     ref.refresh(fetchArtistsProvider(ignore: true));
     ref.read(searchProvider.notifier).search(ref.read(searchProvider.notifier).query, "album", ignore: true);
-    ref.refresh(fetchPlaylistsProvider);
+    ref.refresh(fetchPlaylistsProvider(editable: false));
+    ref.refresh(fetchPlaylistsProvider(editable: true));
     ref.refresh(fetchRecentlyPlayedProvider);
     setState(() {
       selected = currentSong;

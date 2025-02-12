@@ -45,7 +45,7 @@ class _SearchableTypedViewState extends ConsumerState<SearchableTypedView> {
         datas = ref.watch(fetchArtistsProvider(ignore: true));
         break;
       case "playlists":
-        datas = ref.watch(fetchPlaylistsProvider);
+        datas = ref.watch(fetchPlaylistsProvider(editable: false));
         break;
       default: 
         datas = AsyncValue.data([Album.empty()]);

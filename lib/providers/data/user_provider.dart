@@ -37,9 +37,11 @@ Future<int> loginPassword(LoginPasswordRef ref, String username, String password
         return 1;
       }
     }else{
+      print("LoginProvider: error logging in with password: status code was not 200: ${response.statusCode};");
       return -1;
     }
   }catch(e) {
+    print("LoginProvider: error logging in with password: $e");
     return -1;
   }
 }

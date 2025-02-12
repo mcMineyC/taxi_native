@@ -6,7 +6,7 @@ part of 'info_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$addRecentlyPlayedHash() => r'9c942570a769eb85ef31d3d23a137119a5d933a7';
+String _$addRecentlyPlayedHash() => r'c980030092321411bb183b613e8d5bbfb2fa3f5f';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -142,6 +142,8 @@ class AddRecentlyPlayedProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin AddRecentlyPlayedRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `id` of this provider.
   String get id;
@@ -156,7 +158,7 @@ class _AddRecentlyPlayedProviderElement
 }
 
 String _$fetchRecentlyPlayedHash() =>
-    r'8f7a10cc430bb08e3734518b704be5cf55be2b94';
+    r'd10a7208573324ccae7dafb4852ed47934720c7d';
 
 /// See also [fetchRecentlyPlayed].
 @ProviderFor(fetchRecentlyPlayed)
@@ -170,6 +172,8 @@ final fetchRecentlyPlayedProvider = FutureProvider<List<Song>>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef FetchRecentlyPlayedRef = FutureProviderRef<List<Song>>;
 String _$fetchFavoritesHash() => r'1dd74bab56f4de4452f98d21b8d3ad1915866bde';
 
@@ -185,6 +189,8 @@ final fetchFavoritesProvider = FutureProvider<List<Song>>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef FetchFavoritesRef = FutureProviderRef<List<Song>>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

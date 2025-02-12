@@ -1,6 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:audio_service/audio_service.dart';
 import 'queueitem.dart';
+import '../providers/data/preferences_provider.dart';
+import '../service_locator.dart';
 
 part 'song.freezed.dart';
 part 'song.g.dart';
@@ -16,11 +18,12 @@ class Song with _$Song {
     required String albumDisplayName,
     required String artistDisplayName,
     required String imageUrl,
-    required String youtubeId,
+    required String audioUrl,
     required int    added,
     required String addedBy,
     required double duration,
     required List<String> visibleTo,
+    required List<String> inLibrary,
   }) = _Song;
 
   factory Song.fromJson(Map<String, dynamic> json) => _$SongFromJson(json);
@@ -29,7 +32,7 @@ class Song with _$Song {
   
   MediaItem toMediaItem() {
     return MediaItem(
-      id: youtubeId,
+      id: audioUrl,
       title: displayName,
       album: albumDisplayName,
       artist: artistDisplayName,
@@ -50,10 +53,10 @@ class Song with _$Song {
     albumName: albumDisplayName,
     artistName: artistDisplayName,
     imageUrl: imageUrl,
-    youtubeId: youtubeId,
     duration: duration,
-    audioUrl: "not_fetched",
+    audioUrl: audioUrl,
   );
+  bool get isInLibrary => inLibrary.contains(ServiceLocator().get<PreferencesProvider>().loginName);
 }
 
 extension ConvertToQueueItem on MediaItem {
@@ -66,9 +69,8 @@ extension ConvertToQueueItem on MediaItem {
     albumName: extras!["song"]?.albumDisplayName ?? "",
     artistName: extras!["song"]?.artistDisplayName ?? "",
     imageUrl: extras!["song"]?.imageUrl ?? "",
-    youtubeId: extras!["song"]?.youtubeId ?? "",
     duration: extras!["song"]?.duration ?? 0,
-    audioUrl: "not_fetched",
+    audioUrl: id,
   );
 }    
 
@@ -83,8 +85,9 @@ Song EmptySong(){
     added: 0,
     duration: 0.1,
     imageUrl: '',
-    youtubeId: '000000',
+    audioUrl: 'blank:',
     visibleTo: [],
+    inLibrary: ["testguy"],
     addedBy: 'testguy'
   );
 }

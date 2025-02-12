@@ -27,6 +27,7 @@ mixin _$Artist {
   String get imageUrl => throw _privateConstructorUsedError;
   int get added => throw _privateConstructorUsedError;
   List<String> get visibleTo => throw _privateConstructorUsedError;
+  List<String> get inLibrary => throw _privateConstructorUsedError;
   String get addedBy => throw _privateConstructorUsedError;
 
   /// Serializes this Artist to a JSON map.
@@ -51,6 +52,7 @@ abstract class $ArtistCopyWith<$Res> {
       String imageUrl,
       int added,
       List<String> visibleTo,
+      List<String> inLibrary,
       String addedBy});
 }
 
@@ -76,6 +78,7 @@ class _$ArtistCopyWithImpl<$Res, $Val extends Artist>
     Object? imageUrl = null,
     Object? added = null,
     Object? visibleTo = null,
+    Object? inLibrary = null,
     Object? addedBy = null,
   }) {
     return _then(_value.copyWith(
@@ -107,6 +110,10 @@ class _$ArtistCopyWithImpl<$Res, $Val extends Artist>
           ? _value.visibleTo
           : visibleTo // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      inLibrary: null == inLibrary
+          ? _value.inLibrary
+          : inLibrary // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       addedBy: null == addedBy
           ? _value.addedBy
           : addedBy // ignore: cast_nullable_to_non_nullable
@@ -130,6 +137,7 @@ abstract class _$$ArtistImplCopyWith<$Res> implements $ArtistCopyWith<$Res> {
       String imageUrl,
       int added,
       List<String> visibleTo,
+      List<String> inLibrary,
       String addedBy});
 }
 
@@ -153,6 +161,7 @@ class __$$ArtistImplCopyWithImpl<$Res>
     Object? imageUrl = null,
     Object? added = null,
     Object? visibleTo = null,
+    Object? inLibrary = null,
     Object? addedBy = null,
   }) {
     return _then(_$ArtistImpl(
@@ -184,6 +193,10 @@ class __$$ArtistImplCopyWithImpl<$Res>
           ? _value._visibleTo
           : visibleTo // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      inLibrary: null == inLibrary
+          ? _value._inLibrary
+          : inLibrary // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       addedBy: null == addedBy
           ? _value.addedBy
           : addedBy // ignore: cast_nullable_to_non_nullable
@@ -194,7 +207,7 @@ class __$$ArtistImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ArtistImpl implements _Artist {
+class _$ArtistImpl extends _Artist {
   _$ArtistImpl(
       {required this.id,
       required this.displayName,
@@ -203,8 +216,11 @@ class _$ArtistImpl implements _Artist {
       required this.imageUrl,
       required this.added,
       required final List<String> visibleTo,
+      required final List<String> inLibrary,
       required this.addedBy})
-      : _visibleTo = visibleTo;
+      : _visibleTo = visibleTo,
+        _inLibrary = inLibrary,
+        super._();
 
   factory _$ArtistImpl.fromJson(Map<String, dynamic> json) =>
       _$$ArtistImplFromJson(json);
@@ -229,12 +245,20 @@ class _$ArtistImpl implements _Artist {
     return EqualUnmodifiableListView(_visibleTo);
   }
 
+  final List<String> _inLibrary;
+  @override
+  List<String> get inLibrary {
+    if (_inLibrary is EqualUnmodifiableListView) return _inLibrary;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_inLibrary);
+  }
+
   @override
   final String addedBy;
 
   @override
   String toString() {
-    return 'Artist(id: $id, displayName: $displayName, albumCount: $albumCount, songCount: $songCount, imageUrl: $imageUrl, added: $added, visibleTo: $visibleTo, addedBy: $addedBy)';
+    return 'Artist(id: $id, displayName: $displayName, albumCount: $albumCount, songCount: $songCount, imageUrl: $imageUrl, added: $added, visibleTo: $visibleTo, inLibrary: $inLibrary, addedBy: $addedBy)';
   }
 
   @override
@@ -254,6 +278,8 @@ class _$ArtistImpl implements _Artist {
             (identical(other.added, added) || other.added == added) &&
             const DeepCollectionEquality()
                 .equals(other._visibleTo, _visibleTo) &&
+            const DeepCollectionEquality()
+                .equals(other._inLibrary, _inLibrary) &&
             (identical(other.addedBy, addedBy) || other.addedBy == addedBy));
   }
 
@@ -268,6 +294,7 @@ class _$ArtistImpl implements _Artist {
       imageUrl,
       added,
       const DeepCollectionEquality().hash(_visibleTo),
+      const DeepCollectionEquality().hash(_inLibrary),
       addedBy);
 
   /// Create a copy of Artist
@@ -286,7 +313,7 @@ class _$ArtistImpl implements _Artist {
   }
 }
 
-abstract class _Artist implements Artist {
+abstract class _Artist extends Artist {
   factory _Artist(
       {required final String id,
       required final String displayName,
@@ -295,7 +322,9 @@ abstract class _Artist implements Artist {
       required final String imageUrl,
       required final int added,
       required final List<String> visibleTo,
+      required final List<String> inLibrary,
       required final String addedBy}) = _$ArtistImpl;
+  _Artist._() : super._();
 
   factory _Artist.fromJson(Map<String, dynamic> json) = _$ArtistImpl.fromJson;
 
@@ -313,6 +342,8 @@ abstract class _Artist implements Artist {
   int get added;
   @override
   List<String> get visibleTo;
+  @override
+  List<String> get inLibrary;
   @override
   String get addedBy;
 

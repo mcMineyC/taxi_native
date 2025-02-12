@@ -17,7 +17,6 @@ class QueueItem with _$QueueItem {
     required String albumName,
     required String artistName,
     required String imageUrl,
-    required String youtubeId,
     required double duration,
     required String audioUrl,
   }) = _QueueItem;
@@ -33,13 +32,12 @@ class QueueItem with _$QueueItem {
     albumName: "",
     artistName: "",
     imageUrl: "",
-    youtubeId: "",
     duration: 0,
-    audioUrl: "not_fetched",
+    audioUrl: "blank:",
   );
     
   MediaItem toMediaItem() => MediaItem(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        id: RegExp(r'\${{%(.*)%}}\$(.*)').firstMatch(audioUrl)?.group(2) ?? "",
         title: displayName,
         album: albumName,
         artist: artistName,
@@ -51,7 +49,7 @@ class QueueItem with _$QueueItem {
       );
 
   Song toSong() => Song(
-    id: youtubeId,
+    id: DateTime.now().millisecondsSinceEpoch.toString(),
     albumId: albumId,
     artistId: artistId,
     displayName: displayName,
@@ -59,11 +57,10 @@ class QueueItem with _$QueueItem {
     albumDisplayName: albumName,
     imageUrl: imageUrl,
     duration: duration,
-    youtubeId: youtubeId,
+    audioUrl: audioUrl,
     added: 0,
     addedBy: "jedi",
     visibleTo: ["all"],
+    inLibrary: ["testguy"]
   );
-
-
 }

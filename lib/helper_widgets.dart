@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:convert';
 import 'dart:async';
 
 import 'package:beamer/beamer.dart';
@@ -9,8 +10,13 @@ import 'package:context_menus/context_menus.dart';
 import 'providers/services/player.dart';
 import 'providers/data/playlist_provider.dart';
 import 'providers/data/fetched_data_provider.dart';
+import 'service_locator.dart';
+import 'providers/data/preferences_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'types/playlist.dart';
 import 'types/song.dart';
+import 'types/searchresult.dart';
+import 'utilities.dart';
 import 'platform_utils.dart';
 
 class MediaCard extends ConsumerWidget {
@@ -22,13 +28,15 @@ class MediaCard extends ConsumerWidget {
   final String thingType;
   final String image;
   final String addedBy;
+  final bool inLibrary;
   const MediaCard(
       {super.key,
       required this.text,
       required this.thingId,
       required this.thingType,
       required this.image,
-      required this.addedBy});
+      required this.addedBy,
+      required this.inLibrary});
 
   List<ContextMenuButtonConfig> buildMenuButtons(
       BuildContext context, WidgetRef ref) {
@@ -135,6 +143,24 @@ class MediaCard extends ConsumerWidget {
             icon: const Icon(Icons.abc), onPressed: () {}));
         break;
     }
+    if (inLibrary) buttons.add(ContextMenuButtonConfig(
+      "Remove from library",
+      icon: Icon(Icons.bookmark_remove_rounded),
+      onPressed: () {
+        ref.read(removeFromLibraryProvider(thingId, thingType).future).then((value) {
+          refreshLibrary(ref);
+        });
+      },
+    ));
+    else buttons.add(ContextMenuButtonConfig(
+      "Add to library",
+      icon: Icon(Icons.bookmark_rounded),
+      onPressed: () {
+        ref.read(addToLibraryProvider(thingId, thingType).future).then((value) {
+          refreshLibrary(ref);
+        });
+      },
+    ));
     buttons.add(ContextMenuButtonConfig(
       thingType == "playlist" ? "Owner: $addedBy" : "Added by: $addedBy",
       onPressed: null,
@@ -207,7 +233,7 @@ class MediaCard extends ConsumerWidget {
                           print("Setting playlist");
                           // ref.read(playerProvider.notifier).setPlaylist(thingId);
                           Beamer.of(context).beamToNamed("/playlist/$thingId");
-                        break;
+                          break;
                         case "placeholder":
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(
@@ -233,25 +259,29 @@ class MediaCard extends ConsumerWidget {
                           //   color: Colors.teal,
                           //   borderRadius: BorderRadius.circular(12),
                           // ),
-                          child: thingType == "playlist" ? PlaylistImage(playlistId: thingId) : CachedNetworkImage(
-                            imageUrl: image,
-                            imageBuilder: (context, imageProvider) => Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.contain,
+                          child: thingType == "playlist"
+                              ? PlaylistImage(playlistId: thingId)
+                              : CachedNetworkImage(
+                                  imageUrl: image,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
+                                  placeholder: (context, url) => Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.grey[200],
+                                          borderRadius:
+                                              BorderRadius.circular(12))),
+                                  errorWidget: (context, url, error) => Icon(
+                                      Icons.error_outline_rounded,
+                                      color: Colors.pink[700]),
                                 ),
-                              ),
-                            ),
-                            placeholder: (context, url) => Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(12))),
-                            errorWidget: (context, url, error) => Icon(
-                                Icons.error_outline_rounded,
-                                color: Colors.pink[700]),
-                          ),
                         ),
                       ),
                       Container(
@@ -298,6 +328,7 @@ Widget EmptyCardRow() {
         thingType: "placeholder",
         image: "https://placehold.co/512x512.png",
         addedBy: "jedi",
+        inLibrary: true,
       ),
   ]);
 }
@@ -353,7 +384,7 @@ class FancyImage extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(24, 20, 24, 0),
+      //margin: EdgeInsets.fromLTRB(24, 20, 24, 0),
       height: height.toDouble(),
       width: width.toDouble(),
       child: CachedNetworkImage(
@@ -387,15 +418,13 @@ class AddPlaylistDialog extends StatefulWidget {
 }
 
 class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
-  Playlist selected = Playlist(
-      id: "create",
-      displayName: "Common",
-      songs: [],
-      public: true,
-      added: 0,
-      owner: "testguy");
+  Playlist selected = Playlist.empty(); // also not used
+  String currentUser = "";
+  PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
   @override
   void initState() {
+    currentUser = p.loginName;
+    print("current user is $currentUser");
     super.initState();
   }
 
@@ -415,13 +444,7 @@ class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
                 child: Text("Create new playlist"),
                 onPressed: () {
                   setState(() {
-                    selected = Playlist(
-                        id: "create",
-                        displayName: "Common",
-                        songs: [],
-                        public: true,
-                        added: 0,
-                        owner: "testguy");
+                    selected = Playlist.empty().copyWith(id: "create"); // this basically only uses the "create" id
                     Navigator.of(context)
                         .pop({"selected": true, "value": selected});
                   });
@@ -461,22 +484,16 @@ class _AddPlaylistDialogState extends State<AddPlaylistDialog> {
   }
 }
 
-class CreatePlaylistDialog extends StatefulWidget {
+class EditPlaylistDialog extends StatefulWidget {
   @override
-  _CreatePlaylistDialogState createState() => _CreatePlaylistDialogState();
+  _EditPlaylistDialogState createState() => _EditPlaylistDialogState();
 
   FilledPlaylist starter;
-  CreatePlaylistDialog({required this.starter});
+  EditPlaylistDialog({required this.starter});
 }
 
-class _CreatePlaylistDialogState extends State<CreatePlaylistDialog> {
-  FilledPlaylist current = FilledPlaylist(
-      id: "create",
-      displayName: "Common",
-      songs: [],
-      public: true,
-      added: 0,
-      owner: "testguy");
+class _EditPlaylistDialogState extends State<EditPlaylistDialog> {
+  FilledPlaylist current = FilledPlaylist.empty(); // this gets replaced by the starter (passed in by the caller)
   late ThemeData theme;
   List<Song> songs = [];
   TextEditingController nameController = TextEditingController();
@@ -542,43 +559,80 @@ class _CreatePlaylistDialogState extends State<CreatePlaylistDialog> {
                       labelText: 'Playlist name',
                     ),
                   ),
-                  SpacerWidget(height: 10, width: 0),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: imageController,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Image URL',
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                        child: FilledButton(
-                          child: Row(mainAxisSize: MainAxisSize.min, children: [
-                            Icon(Icons.auto_fix_high),
-                            Container(width: 6),
-                            Text("Autogenerate"),
-                          ]),
-                          onPressed: () {},
-                        ),
-                      ),
-                    ],
-                  ),
+                  //SpacerWidget(height: 10, width: 0),
+                  //Row(
+                  //  children: [
+                  //    Expanded(
+                  //      child: TextField(
+                  //        controller: imageController,
+                  //        decoration: const InputDecoration(
+                  //          border: OutlineInputBorder(),
+                  //          labelText: 'Image URL',
+                  //        ),
+                  //      ),
+                  //    ),
+                  //    Container(
+                  //      margin: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  //      child: FilledButton(
+                  //        child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  //          Icon(Icons.auto_fix_high),
+                  //          Container(width: 6),
+                  //          Text("Autogenerate"),
+                  //        ]),
+                  //        onPressed: () {},
+                  //      ),
+                  //    ),
+                  //  ],
+                  //),
+                  // Playlist image support not done yet, currently just tiles first four songs
                   SpacerWidget(height: 8, width: 0),
                   Row(
                     children: [
-                      Text("Public"),
+                      Text("Visible to"),
                       Expanded(child: Container()),
-                      Switch(
-                          value: current.public,
-                          onChanged: (value) {
-                            setState(() {
-                              current = current.copyWith(public: value);
+                      TextButton(
+                        child: Text("Edit..."),
+                        onPressed: () async {
+                          var result = await getVisibleToFieldDialog(current.visibleTo, "Visible to", context);
+                          setState(() {
+                            current = current.copyWith(visibleTo: result);
+                          });
+                        },
+                      ),
+                      //Switch(
+                      //    value: current.visible,
+                      //    onChanged: (value) {
+                      //      setState(() {
+                      //        current = current.copyWith(public: value);
+                      //      });
+                      //    }),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text("Allowed collaborators"),
+                      Expanded(child: Container()),
+                      TextButton(
+                        child: Text("Edit..."),
+                        onPressed: () async {
+                          var result = await getVisibleToFieldDialog(current.allowedCollaborators, "Allowed collaborators", context);
+                          setState(() {
+                            current = current.copyWith(allowedCollaborators: result);
+                            result.forEach((c) {
+                              if (!current.visibleTo.contains(c) && current.visibleTo != ["all"]) {
+                                current = current.copyWith(visibleTo: [...current.visibleTo, c]);
+                              }
                             });
-                          }),
+                          });
+                        },
+                      ),
+                      //Switch(
+                      //    value: current.visible,
+                      //    onChanged: (value) {
+                      //      setState(() {
+                      //        current = current.copyWith(public: value);
+                      //      });
+                      //    }),
                     ],
                   ),
                   Text("${current.songs.length} songs",
@@ -609,14 +663,17 @@ class _CreatePlaylistDialogState extends State<CreatePlaylistDialog> {
 
 Future playlistLogic(WidgetRef ref, BuildContext context, String thingId,
     String thingType) async {
+  //Okay, so first we show a choose dialog.
   var dialog = AddPlaylistDialog(
-      playlists: await ref.read(fetchPlaylistsProvider.future));
+      playlists: await ref.read(fetchPlaylistsProvider(editable: true).future));
   var result = await showDialog<Map<String, dynamic>>(
       context: context, builder: (context) => dialog);
   // print("Dialog result: $result");
+  //Then, we check if the id is create or not
+  // If/else used for checking if user cancelled
   if (result != null &&
       result["selected"] &&
-      (result["value"] as Playlist).id != "create") {
+      (result["value"] as Playlist).id != "create") { // they chose an existing playlist
     // print("Adding song to playlist");
     // print("SID $thingId, PID ${result["value"].id}");
     List<String> oldSongs = [];
@@ -641,49 +698,56 @@ Future playlistLogic(WidgetRef ref, BuildContext context, String thingId,
         .read(addIdsToPlaylistProvider(result["value"].id, oldSongs).future);
   } else if (result != null &&
       result["selected"] &&
-      (result["value"] as Playlist).id == "create") {
-    List<String> oldSongs = [];
+      (result["value"] as Playlist).id == "create") {  // okay, awesome, we're creating a playlist
+    // fetch the songs ids!
+    List<Song> newSongs = [];
     switch (thingType) {
       case "song":
-        oldSongs = [thingId];
+        newSongs = [await ref.read(findSongProvider(thingId).future)];
         break;
       case "album":
-        oldSongs = (await ref.read(findSongsByAlbumProvider(thingId).future))
-            .map((s) => s.id)
+        newSongs = (await ref.read(findSongsByAlbumProvider(thingId).future))
             .toList();
-        print("Adding ${oldSongs.length} songs from album");
+        print("Adding ${newSongs.length} songs from album");
         break;
       case "artist":
-        oldSongs = (await ref.read(findSongsByArtistProvider(thingId).future))
-            .map((s) => s.id)
+        newSongs = (await ref.read(findSongsByArtistProvider(thingId).future))
             .toList();
-        print("Adding ${oldSongs.length} songs from artist");
+        print("Adding ${newSongs.length} songs from artist");
+        break;
+      case "playlist":
+        newSongs = (await ref.read(findSongsByPlaylistProvider(thingId).future)).toList();
+        print("Adding ${newSongs.length} songs from playlist");
         break;
     }
     var p = result["value"] as Playlist;
-    List<Song> newSongs = [];
-    newSongs = await ref.read(findBatchSongsProvider(oldSongs).future);
     print("Found ${newSongs.length} songs to add to playlist");
+    var currentUser = (await SharedPreferences.getInstance()).getString("username")!;
     var fp = FilledPlaylist(
         id: p.id,
-        displayName: p.displayName,
-        public: p.public,
+        displayName: "",
+        visibleTo: ["all"],
+        inLibrary: [currentUser],
+        allowedCollaborators: [currentUser],
         songs: newSongs,
-        added: p.added,
-        owner: p.owner);
-    var createDialog = CreatePlaylistDialog(starter: (fp as FilledPlaylist));
+        added: DateTime.now().millisecondsSinceEpoch,
+        owner: currentUser
+    );  // okay, this is the magic
+    var createDialog = EditPlaylistDialog(starter: fp); // then we pass the started playlist to the edit dialog
     var result2 = await showDialog<Map<String, dynamic>>(
         context: context, builder: (_) => createDialog);
     if (result2 != null && result2["created"]) {
-      Playlist p = (result2["value"] as FilledPlaylist).toPlaylist();
-      // print("Creating playlist with name ${p.displayName}");
+      Playlist p = (result2["value"] as FilledPlaylist).toPlaylist(); // shenanagins because of type safety
+      print("AddPlaylistFlow: Creating playlist with name ${p.displayName}");
+      print(p);
       await ref.read(addPlaylistProvider(p).future);
-      print("Playlist created");
+      print("AddPlaylistFlow: Playlist created");
     } else if (result2 != null && !result2["created"]) {
-      print("User cancelled");
+      print("AddPlaylistFlow: User cancelled, dialog2");
     }
+
   } else if (result != null && !result["selected"]) {
-    print("User cancelled");
+    print("AddPlaylistFlow: User cancelled, dialog1");
   }
 }
 
@@ -698,6 +762,29 @@ Future playlistLogic(WidgetRef ref, BuildContext context, String thingId,
 //  'Luke',
 //  'James',
 //];
+Future<List<String>> getVisibleToFieldDialog(List<String> value, String title, BuildContext context) async {
+  var result = await showDialog<List<String>>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(title),
+      content: Container(
+        child: VisibleToField(
+          shouldRefresh: false,
+          id: "visibleToFieldDialog",
+          value: value,
+          onChanged: (v) => {},
+          onSaved: (v) async {Navigator.pop(context, v.toList());},
+        ),
+      ),
+    ),
+  );
+  print("Result ${jsonEncode(result)}");
+  return result != null ? result : value;
+}
+
+
+
+
 
 class VisibleToField extends ConsumerStatefulWidget {
   VisibleToField(
@@ -705,12 +792,15 @@ class VisibleToField extends ConsumerStatefulWidget {
       required this.onChanged,
       required this.value,
       required this.onSaved,
-      required this.id});
+      required this.id,
+      required this.shouldRefresh
+      });
   Function(List<String> data) onChanged;
   Future<void> Function(List<String> data) onSaved;
   String id;
   List<String> value = [];
   _VisibleToFieldState? state;
+  bool shouldRefresh;
 
   @override
   _VisibleToFieldState createState() {
@@ -727,10 +817,10 @@ class _VisibleToFieldState extends ConsumerState<VisibleToField> {
   List<String> get value => _value;
   String id = "";
   set initalValue(List<String> v) => setState(() {
-        _value = v;
+        _value = v.toList();
         id = widget.id;
       });
-  set value(List<String> v) => setState(() => _value = v);
+  set value(List<String> v) => setState(() => _value = v.toList());
   bool _loading = true;
   @override
   Widget build(BuildContext context) {
@@ -738,7 +828,7 @@ class _VisibleToFieldState extends ConsumerState<VisibleToField> {
     AsyncValue<List<String>> users = ref.watch(fetchUsernamesProvider);
     users.when(
       data: (d) => setState(() {
-        _userList = d;
+        _userList = d.where((element) => element != "testguy").toList();
         _loading = false;
         if (_value.contains("all")) setState(() => _value = _userList.toList());
       }),
@@ -752,7 +842,7 @@ class _VisibleToFieldState extends ConsumerState<VisibleToField> {
     print("Value: $value, initial: ${widget.value}");
     return Container(
         child: _loading
-            ? Center(child: CircularProgressIndicator())
+            ? CircularProgressIndicator()
             : Wrap(spacing: 8, runSpacing: 8, children: [
                 ..._userList.map(
                   (e) => InputChip(
@@ -773,6 +863,7 @@ class _VisibleToFieldState extends ConsumerState<VisibleToField> {
                   onPressed: () => widget.onSaved(_value).then((_) {
                     ScaffoldMessenger.of(context)
                         .showSnackBar(const SnackBar(content: Text("Saved")));
+                    if (!widget.shouldRefresh) return;
                     ref.refresh(fetchSongsProvider(ignore: true));
                     ref.refresh(fetchAlbumsProvider(ignore: true));
                     ref.refresh(fetchArtistsProvider(ignore: true));
@@ -921,7 +1012,7 @@ ColorSourceMode getColorSourceModeFromString(String mode) {
   }
 }
 
-class PlaylistImage extends ConsumerWidget{
+class PlaylistImage extends ConsumerWidget {
   final String playlistId;
   PlaylistImage({required this.playlistId});
 
@@ -934,37 +1025,41 @@ class PlaylistImage extends ConsumerWidget{
     return playlistAsyncValue.when(
       data: (playlist) {
         final songs = playlist.songs.take(4).toList();
-        if(songs.length == 0){
-          return Container(width: 200, height: 200, child: Center(child: Text("¯\\_(ツ)_/¯", style: Theme.of(context).textTheme.headlineMedium)));
-          }else if(songs.length < 4){
+        if (songs.length == 0) {
+          return Container(
+              width: 200,
+              height: 200,
+              child: Center(
+                  child: Text("¯\\_(ツ)_/¯",
+                      style: Theme.of(context).textTheme.headlineMedium)));
+        } else if (songs.length < 4) {
           Song song = songs[0];
-         return           CachedNetworkImage(
-                      imageUrl: song.imageUrl,
-                      imageBuilder: (context, imageProvider) => Container(
-                        width: width.toDouble(),
-                        height: height.toDouble(),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      placeholder: (context, url) => Container(
-                        width: width.toDouble(),
-                        height: height.toDouble(),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => Icon(
-                        Icons.error_outline_rounded,
-                        color: Colors.pink[700],
-                      ),
-                    );
-
+          return CachedNetworkImage(
+            imageUrl: song.imageUrl,
+            imageBuilder: (context, imageProvider) => Container(
+              width: width.toDouble(),
+              height: height.toDouble(),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(
+                  image: imageProvider,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            placeholder: (context, url) => Container(
+              width: width.toDouble(),
+              height: height.toDouble(),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            errorWidget: (context, url, error) => Icon(
+              Icons.error_outline_rounded,
+              color: Colors.pink[700],
+            ),
+          );
         }
         return GridView.count(
           physics: const NeverScrollableScrollPhysics(),
@@ -973,38 +1068,206 @@ class PlaylistImage extends ConsumerWidget{
           crossAxisSpacing: 0,
           mainAxisSpacing: 0,
           primary: false,
-          children: songs.map((song) =>
-                   CachedNetworkImage(
-                      imageUrl: song.imageUrl,
-                      imageBuilder: (context, imageProvider) => Container(
-                        width: width/4,
-                        height: width/4,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      placeholder: (context, url) => Container(
-                        width: width/4,
-                        height: width/4,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => Icon(
-                        Icons.error_outline_rounded,
-                        color: Colors.pink[700],
+          children: songs
+              .map(
+                (song) => CachedNetworkImage(
+                  imageUrl: song.imageUrl,
+                  imageBuilder: (context, imageProvider) => Container(
+                    width: width / 4,
+                    height: width / 4,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
                       ),
                     ),
-                ).toList(),
+                  ),
+                  placeholder: (context, url) => Container(
+                    width: width / 4,
+                    height: width / 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Icon(
+                    Icons.error_outline_rounded,
+                    color: Colors.pink[700],
+                  ),
+                ),
+              )
+              .toList(),
         );
       },
       loading: () => Center(child: CircularProgressIndicator()),
       error: (error, stack) => Center(child: Text('Error: $error')),
     );
+  }
+}
+
+class AdderCard extends StatefulWidget {
+  Function(bool selected, SearchResult searchResult) selectedCallback;
+  SearchResult searchResult;
+  bool selected;
+  AdderCard({required this.selectedCallback, required this.searchResult, required this.selected});
+  @override
+  _AdderCardState createState() => _AdderCardState(searchResult: searchResult, selected: selected);
+}
+
+class _AdderCardState extends State<AdderCard> {
+  SearchResult searchResult;
+  bool selected = false;
+  int cardWidth = 200;
+  int cardPadding = 10;
+  _AdderCardState({required this.searchResult, required this.selected});
+  Widget build(BuildContext context) {
+
+    int crossAxisNum = ((MediaQuery.of(context).size.width - 110) / 200).ceil();
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) =>
+            ContextMenuRegion(
+              contextMenu: GenericContextMenu(
+                buttonConfigs: buildMenuButtons(searchResult),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Card(
+                    clipBehavior: Clip.hardEdge,
+                    child: InkWell(
+                        onTap: () {
+                          setState((){selected = !selected;});
+                          widget.selectedCallback(selected, searchResult);
+                          //print(searchResult.name);
+                        },
+                        onLongPress: () {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("\"${searchResult.name}\" - \"${searchResult.artist}\"")));
+                        },
+                        child: Container(
+                          //color: Colors.pink,
+                          child: Tooltip(
+                            decoration: const BoxDecoration(
+                              color: Colors.transparent,
+                            ),
+                            richMessage: WidgetSpan(
+                                child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: BackdropFilter(
+                                  child: Container(
+                                    //margin: EdgeInsets.symmetric(
+                                    //    horizontal: 12, vertical: 6),
+                                    child: Text(searchResult.name,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                          fontSize: 14)
+                                    )
+                                  ),
+                                  filter: ImageFilter.blur(
+                                    sigmaX: 8, sigmaY: 8),
+                                  ),
+                                ),
+                              ),
+                              child: Stack(
+                                children: <Widget>[
+                                  if(!selected) cardBody(constraints),
+                                  if(selected) ColorFiltered(
+                                    colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.2), BlendMode.dstATop),
+                                    child: cardBody(constraints),
+                                  ), 
+                                  if(selected) Center(
+                                    child: Container(
+                                      width: 52,
+                                      height: 52,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        //color: Theme.of(context).colorScheme.brightness == Brightness.dark ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.primary,
+                                        color: Theme.of(context).colorScheme.inversePrimary
+                                      ),
+                                      child: Icon(Icons.check_rounded, color: Theme.of(context).colorScheme.primary, size: 30),
+                                    ),
+                                  ),
+                                ]
+                              )
+                            )
+                          )
+                        )
+                    )
+                )
+              ),
+            );
+ }
+ List<ContextMenuButtonConfig> buildMenuButtons(SearchResult searchResult) {
+   List<ContextMenuButtonConfig> buttons = [];
+   if(searchResult.type == "song"){
+     buttons = [
+       unclickableTextButton(text: "Type: song"),
+       unclickableTextButton(text: "Artist: ${searchResult.artist}", icon: const Icon(Icons.person)),
+       unclickableTextButton(text: "Album: ${searchResult.album}", icon: const Icon(Icons.album)),
+       unclickableTextButton(text: "Name: \"${searchResult.name}\"", icon: const Icon(Icons.music_note)),
+     ];
+   }else if(searchResult.type == "album"){
+     buttons = [
+       unclickableTextButton(text: "Type: album"),
+       unclickableTextButton(text: "Artist: ${searchResult.artist}", icon: const Icon(Icons.person)),
+       unclickableTextButton(text: "Name: \"${searchResult.name}\"", icon: const Icon(Icons.music_note)),
+     ];
+   }else if(searchResult.type == "artist"){
+     buttons = [
+       unclickableTextButton(text: "Type: artist"),
+       unclickableTextButton(text: "Name: \"${searchResult.name}\"", icon: const Icon(Icons.music_note)),
+     ];
+   }
+
+   return buttons;
+  }
+  ContextMenuButtonConfig unclickableTextButton({String text = "", Widget? icon}){
+    return ContextMenuButtonConfig(text, icon: icon, onPressed: null);
+  }
+ Widget cardBody(BoxConstraints constraints) {
+   // TODO BUG: Some cards (1st and 3rd) have no left padding
+   return Column(
+     mainAxisSize: MainAxisSize.min,
+     crossAxisAlignment: CrossAxisAlignment.center,
+       children: [
+         Container(
+         //color: Colors.red,
+           margin: EdgeInsets.only(top: cardPadding.toDouble() / 2),
+           //color: Colors.yellow,
+           child: FancyImage(
+             url: searchResult.imageUrl,
+             height: constraints.maxWidth.floor() - (cardPadding * 2),
+             width: constraints.maxWidth.floor() - (cardPadding * 2),
+           )
+         ),
+         Container(
+           margin: EdgeInsets.symmetric(horizontal: cardPadding.toDouble()),
+           child: Text(
+             searchResult.name,
+             textAlign: TextAlign.center,
+             maxLines: 1,
+             overflow: TextOverflow.ellipsis,
+         )
+       ),
+       Container(
+        margin: EdgeInsets.only(bottom: cardPadding.toDouble() / 2),
+         child: Text(searchResult.type),
+       ),
+     ]
+   );
+ }
+}
+
+String? specialUrlToPlain(String url){
+  List<String> parts = url.split(":");
+  switch(parts.first){
+    case "http":
+    case "https":
+      return url;
+    case "youtube":
+      return "https://www.youtube.com/watch?v=${parts[1]}";
+    default:
+      return null;
   }
 }

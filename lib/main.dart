@@ -21,7 +21,7 @@ import 'pages/artist.dart';
 import 'pages/albums.dart';
 import 'pages/album.dart';
 import 'pages/songs.dart';
-import 'pages/adder.dart';
+import 'pages/new_adder.dart';
 import 'pages/queue.dart';
 import 'pages/landing.dart';
 import 'pages/search.dart';
@@ -174,19 +174,19 @@ class App extends ConsumerWidget {
             key: const ValueKey('artists'),
             title: 'Artists',
             popToNamed: '/home',
-            child: HomePage(homeJunk: ArtistsPage()),
+            child: HomePage(homeJunk: ArtistsPage(private: true)),
           ),
       '/albums': (context, state, data) => BeamPage(
             key: const ValueKey('albums'),
             title: 'Albums',
             popToNamed: '/home',
-            child: HomePage(homeJunk: AlbumsPage()),
+            child: HomePage(homeJunk: AlbumsPage(private: true)),
           ),
       '/songs': (context, state, data) => BeamPage(
             key: const ValueKey('songs'),
             title: 'Songs',
             popToNamed: '/home',
-            child: HomePage(homeJunk: SongsPage()),
+            child: HomePage(homeJunk: SongsPage(private: true)),
           ),
       '/queue': (context, state, data) => BeamPage(
             key: const ValueKey('queue'),
@@ -210,7 +210,7 @@ class App extends ConsumerWidget {
             key: const ValueKey('playlists'),
             title: 'Playlists',
             popToNamed: '/home',
-            child: HomePage(homeJunk: PlaylistsPage()),
+            child: HomePage(homeJunk: PlaylistsPage(private: true)),
           ),
       '/playlist/:playlistId': (context, state, data) {
         final playlistId = state.uri

@@ -15,6 +15,8 @@ _$ArtistImpl _$$ArtistImplFromJson(Map<String, dynamic> json) => _$ArtistImpl(
       added: (json['added'] as num).toInt(),
       visibleTo:
           (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
+      inLibrary:
+          (json['inLibrary'] as List<dynamic>).map((e) => e as String).toList(),
       addedBy: json['addedBy'] as String,
     );
 
@@ -27,5 +29,6 @@ Map<String, dynamic> _$$ArtistImplToJson(_$ArtistImpl instance) =>
       'imageUrl': instance.imageUrl,
       'added': instance.added,
       'visibleTo': instance.visibleTo,
+      'inLibrary': instance.inLibrary,
       'addedBy': instance.addedBy,
     };

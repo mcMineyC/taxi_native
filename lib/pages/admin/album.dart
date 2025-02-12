@@ -11,6 +11,7 @@ import "../../types/album.dart";
 import "../../helper_widgets.dart";
 import "../../info_card.dart";
 import "generics.dart";
+import "../../utilities.dart";
 
 class AlbumsPane1 extends ConsumerStatefulWidget {
   int selectedIndex = 0;
@@ -181,7 +182,7 @@ class _AlbumPane2State extends ConsumerState<AlbumsPane2> {
                     ],
                   )) ?? false;
                   if(!confirm) return;
-                  if(await saveChanges()) refreshChanges();
+                  if(await saveChanges()) _refreshChanges();
                 }
               )
             ],
@@ -195,16 +196,8 @@ class _AlbumPane2State extends ConsumerState<AlbumsPane2> {
     return await ref.read(updateAlbumProvider(selected, (await ref.read(findSongsByAlbumProvider(selected.id).future))).future);
   }
 
-  void refreshChanges() {
-    ref.read(playerProvider.notifier).clear();
-    ref.refresh(fetchSongsProvider(ignore: true));
-    ref.refresh(fetchAlbumsProvider(ignore: true));
-    ref.refresh(fetchAlbumsProvider(ignore: true));
-    ref.refresh(fetchSongsProvider(ignore: false));
-    ref.refresh(fetchAlbumsProvider(ignore: false));
-    ref.refresh(fetchAlbumsProvider(ignore: false));
-    ref.refresh(fetchPlaylistsProvider);
-    ref.refresh(fetchRecentlyPlayedProvider);
+  void _refreshChanges() {
+    refreshChanges(ref);
     setState(() => mutated = false);
   }
 

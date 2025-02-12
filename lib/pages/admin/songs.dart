@@ -11,6 +11,7 @@ import "../../types/song.dart";
 import "../../info_card.dart";
 import "generics.dart";
 import "../../helper_widgets.dart";
+import '../../utilities.dart';
 
 class SongsPane2 extends ConsumerStatefulWidget {
   final Song selected;
@@ -35,7 +36,7 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
   TextEditingController nameController = TextEditingController();
   TextEditingController artistController = TextEditingController();
   TextEditingController albumController = TextEditingController();
-  TextEditingController youtubeIdController = TextEditingController();
+  TextEditingController urlController = TextEditingController();
   TextEditingController imageUrlController = TextEditingController();
 
   @override
@@ -63,7 +64,7 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
       nameController.text = currentSong.displayName;
       artistController.text = currentSong.artistDisplayName;
       albumController.text = currentSong.albumDisplayName;
-      youtubeIdController.text = currentSong.youtubeId;
+      urlController.text = currentSong.audioUrl;
       imageUrlController.text = currentSong.imageUrl;
     }
     print("Current song: ${currentSong.displayName}");
@@ -131,19 +132,19 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
             ),
             ListTile(
               title: TextField(
-                controller: youtubeIdController,
+                controller: urlController,
                 decoration: const InputDecoration(
                   labelText: "Video ID",
                   filled: true
                 ),
                 onChanged: (value) {
                   setState(() => mutated = true);
-                  currentSong = currentSong.copyWith(youtubeId: value);
+                  currentSong = currentSong.copyWith(audioUrl: value);
                 }
               ),
               trailing: IconButton(
                 icon: const Icon(Icons.play_arrow_rounded),
-                onPressed: () => ref.read(playerProvider.notifier).playYoutubeId(youtubeIdController.text),
+                onPressed: () => ref.read(playerProvider.notifier).playYoutubeId(urlController.text),
               ),
             ),
             ListTile(
@@ -164,6 +165,7 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
               ),
             ),
             VisibleToField(
+              shouldRefresh: true,
               value: currentSong.visibleTo.toList(),
               onChanged: (value) => currentSong = currentSong.copyWith(visibleTo: value),
               onSaved: (v) async => await ref.read(editItemVisibilityProvider("song", currentSong.id, v).future),
@@ -183,7 +185,7 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
                       if(deleted) {
                         print("Song deleted");
                         widget.deselect(null);
-                        refreshChanges();
+                        _refreshChanges();
                       }
                     }
                   }),
@@ -245,7 +247,7 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
                       ],
                     )) ?? false;
                     if(!confirm) return;
-                    if(await saveChanges()) refreshChanges();
+                    if(await saveChanges()) _refreshChanges();
                   }
                 )
               ],
@@ -260,21 +262,9 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
     return await ref.read(updateSongProvider(currentSong).future);
   }
 
-  void refreshChanges() {
-    ref.read(playerProvider.notifier).clear();
-    ref.refresh(fetchSongsProvider(ignore: false));
-    ref.refresh(fetchAlbumsProvider(ignore: false));
-    ref.refresh(fetchArtistsProvider(ignore: false));
-    ref.refresh(fetchSongsProvider(ignore: true));
-    ref.refresh(fetchAlbumsProvider(ignore: true));
-    ref.refresh(fetchArtistsProvider(ignore: true));
-    ref.read(searchProvider.notifier).search(ref.read(searchProvider.notifier).query, "song", ignore: true);
-    ref.refresh(fetchPlaylistsProvider);
-    ref.refresh(fetchRecentlyPlayedProvider);
-    setState(() {
-      selected = currentSong;
-      mutated = false;
-    });
+  void _refreshChanges() {
+    refreshChanges(ref);
+    setState(() => mutated = false);
   }
 
   AlertDialog discardDialog(BuildContext context, Song current) {

@@ -1,0 +1,36 @@
+[
+  {
+    "name": "Minecraft Remix EP (Dawphin Remix)",
+    "artist": "Dawphin",
+    "album": "Minecraft Remix EP (Dawphin Remix)",
+    "imageUrl": "https://i.scdn.co/image/ab67616d0000b2739204f2979760fcee07dd5ea3",
+    "type": "album",
+    "songs": [
+      {
+        "title": "Sweden (Dawphin Remix)",
+        "id": "lXl7BxYJmU8",
+        "trackNumber": 0
+      },
+      {
+        "title": "Living Mice (Dawphin Remix)",
+        "id": "eoLkZWBqdeQ",
+        "trackNumber": 1
+      },
+      {
+        "title": "Subwoofer Lullaby (Dawphin Remix)",
+        "id": "zthzumHJKDk",
+        "trackNumber": 2
+      },
+      {
+        "title": "Clark (Dawphin Remix)",
+        "id": "pNzTOT9XFeE",
+        "trackNumber": 3
+      },
+      {
+        "title": "Wet Hands (Dawlphin Remix)",
+        "id": "WCXaDM2bycI",
+        "trackNumber": 4
+      }
+    ]
+  }
+]

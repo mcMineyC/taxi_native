@@ -27,11 +27,12 @@ mixin _$Song {
   String get albumDisplayName => throw _privateConstructorUsedError;
   String get artistDisplayName => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
-  String get youtubeId => throw _privateConstructorUsedError;
+  String get audioUrl => throw _privateConstructorUsedError;
   int get added => throw _privateConstructorUsedError;
   String get addedBy => throw _privateConstructorUsedError;
   double get duration => throw _privateConstructorUsedError;
   List<String> get visibleTo => throw _privateConstructorUsedError;
+  List<String> get inLibrary => throw _privateConstructorUsedError;
 
   /// Serializes this Song to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -55,11 +56,12 @@ abstract class $SongCopyWith<$Res> {
       String albumDisplayName,
       String artistDisplayName,
       String imageUrl,
-      String youtubeId,
+      String audioUrl,
       int added,
       String addedBy,
       double duration,
-      List<String> visibleTo});
+      List<String> visibleTo,
+      List<String> inLibrary});
 }
 
 /// @nodoc
@@ -84,11 +86,12 @@ class _$SongCopyWithImpl<$Res, $Val extends Song>
     Object? albumDisplayName = null,
     Object? artistDisplayName = null,
     Object? imageUrl = null,
-    Object? youtubeId = null,
+    Object? audioUrl = null,
     Object? added = null,
     Object? addedBy = null,
     Object? duration = null,
     Object? visibleTo = null,
+    Object? inLibrary = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -119,9 +122,9 @@ class _$SongCopyWithImpl<$Res, $Val extends Song>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      youtubeId: null == youtubeId
-          ? _value.youtubeId
-          : youtubeId // ignore: cast_nullable_to_non_nullable
+      audioUrl: null == audioUrl
+          ? _value.audioUrl
+          : audioUrl // ignore: cast_nullable_to_non_nullable
               as String,
       added: null == added
           ? _value.added
@@ -138,6 +141,10 @@ class _$SongCopyWithImpl<$Res, $Val extends Song>
       visibleTo: null == visibleTo
           ? _value.visibleTo
           : visibleTo // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      inLibrary: null == inLibrary
+          ? _value.inLibrary
+          : inLibrary // ignore: cast_nullable_to_non_nullable
               as List<String>,
     ) as $Val);
   }
@@ -158,11 +165,12 @@ abstract class _$$SongImplCopyWith<$Res> implements $SongCopyWith<$Res> {
       String albumDisplayName,
       String artistDisplayName,
       String imageUrl,
-      String youtubeId,
+      String audioUrl,
       int added,
       String addedBy,
       double duration,
-      List<String> visibleTo});
+      List<String> visibleTo,
+      List<String> inLibrary});
 }
 
 /// @nodoc
@@ -184,11 +192,12 @@ class __$$SongImplCopyWithImpl<$Res>
     Object? albumDisplayName = null,
     Object? artistDisplayName = null,
     Object? imageUrl = null,
-    Object? youtubeId = null,
+    Object? audioUrl = null,
     Object? added = null,
     Object? addedBy = null,
     Object? duration = null,
     Object? visibleTo = null,
+    Object? inLibrary = null,
   }) {
     return _then(_$SongImpl(
       id: null == id
@@ -219,9 +228,9 @@ class __$$SongImplCopyWithImpl<$Res>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      youtubeId: null == youtubeId
-          ? _value.youtubeId
-          : youtubeId // ignore: cast_nullable_to_non_nullable
+      audioUrl: null == audioUrl
+          ? _value.audioUrl
+          : audioUrl // ignore: cast_nullable_to_non_nullable
               as String,
       added: null == added
           ? _value.added
@@ -239,6 +248,10 @@ class __$$SongImplCopyWithImpl<$Res>
           ? _value._visibleTo
           : visibleTo // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      inLibrary: null == inLibrary
+          ? _value._inLibrary
+          : inLibrary // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -254,12 +267,14 @@ class _$SongImpl extends _Song {
       required this.albumDisplayName,
       required this.artistDisplayName,
       required this.imageUrl,
-      required this.youtubeId,
+      required this.audioUrl,
       required this.added,
       required this.addedBy,
       required this.duration,
-      required final List<String> visibleTo})
+      required final List<String> visibleTo,
+      required final List<String> inLibrary})
       : _visibleTo = visibleTo,
+        _inLibrary = inLibrary,
         super._();
 
   factory _$SongImpl.fromJson(Map<String, dynamic> json) =>
@@ -280,7 +295,7 @@ class _$SongImpl extends _Song {
   @override
   final String imageUrl;
   @override
-  final String youtubeId;
+  final String audioUrl;
   @override
   final int added;
   @override
@@ -295,9 +310,17 @@ class _$SongImpl extends _Song {
     return EqualUnmodifiableListView(_visibleTo);
   }
 
+  final List<String> _inLibrary;
+  @override
+  List<String> get inLibrary {
+    if (_inLibrary is EqualUnmodifiableListView) return _inLibrary;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_inLibrary);
+  }
+
   @override
   String toString() {
-    return 'Song(id: $id, albumId: $albumId, artistId: $artistId, displayName: $displayName, albumDisplayName: $albumDisplayName, artistDisplayName: $artistDisplayName, imageUrl: $imageUrl, youtubeId: $youtubeId, added: $added, addedBy: $addedBy, duration: $duration, visibleTo: $visibleTo)';
+    return 'Song(id: $id, albumId: $albumId, artistId: $artistId, displayName: $displayName, albumDisplayName: $albumDisplayName, artistDisplayName: $artistDisplayName, imageUrl: $imageUrl, audioUrl: $audioUrl, added: $added, addedBy: $addedBy, duration: $duration, visibleTo: $visibleTo, inLibrary: $inLibrary)';
   }
 
   @override
@@ -317,14 +340,16 @@ class _$SongImpl extends _Song {
                 other.artistDisplayName == artistDisplayName) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
-            (identical(other.youtubeId, youtubeId) ||
-                other.youtubeId == youtubeId) &&
+            (identical(other.audioUrl, audioUrl) ||
+                other.audioUrl == audioUrl) &&
             (identical(other.added, added) || other.added == added) &&
             (identical(other.addedBy, addedBy) || other.addedBy == addedBy) &&
             (identical(other.duration, duration) ||
                 other.duration == duration) &&
             const DeepCollectionEquality()
-                .equals(other._visibleTo, _visibleTo));
+                .equals(other._visibleTo, _visibleTo) &&
+            const DeepCollectionEquality()
+                .equals(other._inLibrary, _inLibrary));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -338,11 +363,12 @@ class _$SongImpl extends _Song {
       albumDisplayName,
       artistDisplayName,
       imageUrl,
-      youtubeId,
+      audioUrl,
       added,
       addedBy,
       duration,
-      const DeepCollectionEquality().hash(_visibleTo));
+      const DeepCollectionEquality().hash(_visibleTo),
+      const DeepCollectionEquality().hash(_inLibrary));
 
   /// Create a copy of Song
   /// with the given fields replaced by the non-null parameter values.
@@ -369,11 +395,12 @@ abstract class _Song extends Song {
       required final String albumDisplayName,
       required final String artistDisplayName,
       required final String imageUrl,
-      required final String youtubeId,
+      required final String audioUrl,
       required final int added,
       required final String addedBy,
       required final double duration,
-      required final List<String> visibleTo}) = _$SongImpl;
+      required final List<String> visibleTo,
+      required final List<String> inLibrary}) = _$SongImpl;
   _Song._() : super._();
 
   factory _Song.fromJson(Map<String, dynamic> json) = _$SongImpl.fromJson;
@@ -393,7 +420,7 @@ abstract class _Song extends Song {
   @override
   String get imageUrl;
   @override
-  String get youtubeId;
+  String get audioUrl;
   @override
   int get added;
   @override
@@ -402,6 +429,8 @@ abstract class _Song extends Song {
   double get duration;
   @override
   List<String> get visibleTo;
+  @override
+  List<String> get inLibrary;
 
   /// Create a copy of Song
   /// with the given fields replaced by the non-null parameter values.

@@ -28,7 +28,6 @@ mixin _$QueueItem {
   String get albumName => throw _privateConstructorUsedError;
   String get artistName => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
-  String get youtubeId => throw _privateConstructorUsedError;
   double get duration => throw _privateConstructorUsedError;
   String get audioUrl => throw _privateConstructorUsedError;
 
@@ -56,7 +55,6 @@ abstract class $QueueItemCopyWith<$Res> {
       String albumName,
       String artistName,
       String imageUrl,
-      String youtubeId,
       double duration,
       String audioUrl});
 }
@@ -84,7 +82,6 @@ class _$QueueItemCopyWithImpl<$Res, $Val extends QueueItem>
     Object? albumName = null,
     Object? artistName = null,
     Object? imageUrl = null,
-    Object? youtubeId = null,
     Object? duration = null,
     Object? audioUrl = null,
   }) {
@@ -121,10 +118,6 @@ class _$QueueItemCopyWithImpl<$Res, $Val extends QueueItem>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      youtubeId: null == youtubeId
-          ? _value.youtubeId
-          : youtubeId // ignore: cast_nullable_to_non_nullable
-              as String,
       duration: null == duration
           ? _value.duration
           : duration // ignore: cast_nullable_to_non_nullable
@@ -154,7 +147,6 @@ abstract class _$$QueueItemImplCopyWith<$Res>
       String albumName,
       String artistName,
       String imageUrl,
-      String youtubeId,
       double duration,
       String audioUrl});
 }
@@ -180,7 +172,6 @@ class __$$QueueItemImplCopyWithImpl<$Res>
     Object? albumName = null,
     Object? artistName = null,
     Object? imageUrl = null,
-    Object? youtubeId = null,
     Object? duration = null,
     Object? audioUrl = null,
   }) {
@@ -217,10 +208,6 @@ class __$$QueueItemImplCopyWithImpl<$Res>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      youtubeId: null == youtubeId
-          ? _value.youtubeId
-          : youtubeId // ignore: cast_nullable_to_non_nullable
-              as String,
       duration: null == duration
           ? _value.duration
           : duration // ignore: cast_nullable_to_non_nullable
@@ -245,7 +232,6 @@ class _$QueueItemImpl extends _QueueItem {
       required this.albumName,
       required this.artistName,
       required this.imageUrl,
-      required this.youtubeId,
       required this.duration,
       required this.audioUrl})
       : super._();
@@ -270,15 +256,13 @@ class _$QueueItemImpl extends _QueueItem {
   @override
   final String imageUrl;
   @override
-  final String youtubeId;
-  @override
   final double duration;
   @override
   final String audioUrl;
 
   @override
   String toString() {
-    return 'QueueItem(type: $type, id: $id, albumId: $albumId, artistId: $artistId, displayName: $displayName, albumName: $albumName, artistName: $artistName, imageUrl: $imageUrl, youtubeId: $youtubeId, duration: $duration, audioUrl: $audioUrl)';
+    return 'QueueItem(type: $type, id: $id, albumId: $albumId, artistId: $artistId, displayName: $displayName, albumName: $albumName, artistName: $artistName, imageUrl: $imageUrl, duration: $duration, audioUrl: $audioUrl)';
   }
 
   @override
@@ -299,8 +283,6 @@ class _$QueueItemImpl extends _QueueItem {
                 other.artistName == artistName) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
-            (identical(other.youtubeId, youtubeId) ||
-                other.youtubeId == youtubeId) &&
             (identical(other.duration, duration) ||
                 other.duration == duration) &&
             (identical(other.audioUrl, audioUrl) ||
@@ -309,19 +291,8 @@ class _$QueueItemImpl extends _QueueItem {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      type,
-      id,
-      albumId,
-      artistId,
-      displayName,
-      albumName,
-      artistName,
-      imageUrl,
-      youtubeId,
-      duration,
-      audioUrl);
+  int get hashCode => Object.hash(runtimeType, type, id, albumId, artistId,
+      displayName, albumName, artistName, imageUrl, duration, audioUrl);
 
   /// Create a copy of QueueItem
   /// with the given fields replaced by the non-null parameter values.
@@ -349,7 +320,6 @@ abstract class _QueueItem extends QueueItem {
       required final String albumName,
       required final String artistName,
       required final String imageUrl,
-      required final String youtubeId,
       required final double duration,
       required final String audioUrl}) = _$QueueItemImpl;
   _QueueItem._() : super._();
@@ -373,8 +343,6 @@ abstract class _QueueItem extends QueueItem {
   String get artistName;
   @override
   String get imageUrl;
-  @override
-  String get youtubeId;
   @override
   double get duration;
   @override

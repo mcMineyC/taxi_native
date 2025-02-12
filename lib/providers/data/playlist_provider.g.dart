@@ -6,37 +6,7 @@ part of 'playlist_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchPlaylistsHash() => r'259c6501faa8d1bfce42c911a41d1b3ae61f96a2';
-
-/// See also [fetchPlaylists].
-@ProviderFor(fetchPlaylists)
-final fetchPlaylistsProvider = FutureProvider<List<Playlist>>.internal(
-  fetchPlaylists,
-  name: r'fetchPlaylistsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$fetchPlaylistsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef FetchPlaylistsRef = FutureProviderRef<List<Playlist>>;
-String _$fetchNewPlaylistsHash() => r'425d704bec4ea4374e6e748b550987300cb9d844';
-
-/// See also [fetchNewPlaylists].
-@ProviderFor(fetchNewPlaylists)
-final fetchNewPlaylistsProvider = FutureProvider<List<Playlist>>.internal(
-  fetchNewPlaylists,
-  name: r'fetchNewPlaylistsProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$fetchNewPlaylistsHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef FetchNewPlaylistsRef = FutureProviderRef<List<Playlist>>;
-String _$addPlaylistHash() => r'af50dc3d7ab7bb7a206547ff999b119965ad4286';
+String _$fetchPlaylistsHash() => r'502246784feeb987f436d8adc0f313e069d3de95';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -58,6 +28,170 @@ class _SystemHash {
     return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
   }
 }
+
+/// See also [fetchPlaylists].
+@ProviderFor(fetchPlaylists)
+const fetchPlaylistsProvider = FetchPlaylistsFamily();
+
+/// See also [fetchPlaylists].
+class FetchPlaylistsFamily extends Family<AsyncValue<List<Playlist>>> {
+  /// See also [fetchPlaylists].
+  const FetchPlaylistsFamily();
+
+  /// See also [fetchPlaylists].
+  FetchPlaylistsProvider call({
+    bool editable = false,
+    bool ignore = false,
+  }) {
+    return FetchPlaylistsProvider(
+      editable: editable,
+      ignore: ignore,
+    );
+  }
+
+  @override
+  FetchPlaylistsProvider getProviderOverride(
+    covariant FetchPlaylistsProvider provider,
+  ) {
+    return call(
+      editable: provider.editable,
+      ignore: provider.ignore,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'fetchPlaylistsProvider';
+}
+
+/// See also [fetchPlaylists].
+class FetchPlaylistsProvider extends FutureProvider<List<Playlist>> {
+  /// See also [fetchPlaylists].
+  FetchPlaylistsProvider({
+    bool editable = false,
+    bool ignore = false,
+  }) : this._internal(
+          (ref) => fetchPlaylists(
+            ref as FetchPlaylistsRef,
+            editable: editable,
+            ignore: ignore,
+          ),
+          from: fetchPlaylistsProvider,
+          name: r'fetchPlaylistsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$fetchPlaylistsHash,
+          dependencies: FetchPlaylistsFamily._dependencies,
+          allTransitiveDependencies:
+              FetchPlaylistsFamily._allTransitiveDependencies,
+          editable: editable,
+          ignore: ignore,
+        );
+
+  FetchPlaylistsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.editable,
+    required this.ignore,
+  }) : super.internal();
+
+  final bool editable;
+  final bool ignore;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<Playlist>> Function(FetchPlaylistsRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: FetchPlaylistsProvider._internal(
+        (ref) => create(ref as FetchPlaylistsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        editable: editable,
+        ignore: ignore,
+      ),
+    );
+  }
+
+  @override
+  FutureProviderElement<List<Playlist>> createElement() {
+    return _FetchPlaylistsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is FetchPlaylistsProvider &&
+        other.editable == editable &&
+        other.ignore == ignore;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, editable.hashCode);
+    hash = _SystemHash.combine(hash, ignore.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin FetchPlaylistsRef on FutureProviderRef<List<Playlist>> {
+  /// The parameter `editable` of this provider.
+  bool get editable;
+
+  /// The parameter `ignore` of this provider.
+  bool get ignore;
+}
+
+class _FetchPlaylistsProviderElement
+    extends FutureProviderElement<List<Playlist>> with FetchPlaylistsRef {
+  _FetchPlaylistsProviderElement(super.provider);
+
+  @override
+  bool get editable => (origin as FetchPlaylistsProvider).editable;
+  @override
+  bool get ignore => (origin as FetchPlaylistsProvider).ignore;
+}
+
+String _$fetchNewPlaylistsHash() => r'425d704bec4ea4374e6e748b550987300cb9d844';
+
+/// See also [fetchNewPlaylists].
+@ProviderFor(fetchNewPlaylists)
+final fetchNewPlaylistsProvider = FutureProvider<List<Playlist>>.internal(
+  fetchNewPlaylists,
+  name: r'fetchNewPlaylistsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$fetchNewPlaylistsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef FetchNewPlaylistsRef = FutureProviderRef<List<Playlist>>;
+String _$addPlaylistHash() => r'8bafd7c7f7ac9f8ea1863bb7d3e7a61e75b40207';
 
 /// See also [addPlaylist].
 @ProviderFor(addPlaylist)
@@ -172,6 +306,8 @@ class AddPlaylistProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin AddPlaylistRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `playlist` of this provider.
   Playlist get playlist;
@@ -185,7 +321,7 @@ class _AddPlaylistProviderElement extends AutoDisposeFutureProviderElement<bool>
   Playlist get playlist => (origin as AddPlaylistProvider).playlist;
 }
 
-String _$addIdToPlaylistHash() => r'4cd2ab830e8c0c787329a32ef6b7755d115c3f00';
+String _$addIdToPlaylistHash() => r'5cab17b36fa65cd3b81aa4721072ebd1c158bdbb';
 
 /// See also [addIdToPlaylist].
 @ProviderFor(addIdToPlaylist)
@@ -312,6 +448,8 @@ class AddIdToPlaylistProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin AddIdToPlaylistRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `playlistId` of this provider.
   String get playlistId;
@@ -330,7 +468,7 @@ class _AddIdToPlaylistProviderElement
   String get id => (origin as AddIdToPlaylistProvider).id;
 }
 
-String _$addIdsToPlaylistHash() => r'd41069ac61b1462628e34b4a5e3076839ce095d9';
+String _$addIdsToPlaylistHash() => r'e08564f6e2c9a28f036b2fb3526cdf2f2362307b';
 
 /// See also [addIdsToPlaylist].
 @ProviderFor(addIdsToPlaylist)
@@ -457,6 +595,8 @@ class AddIdsToPlaylistProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin AddIdsToPlaylistRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `playlistId` of this provider.
   String get playlistId;
@@ -476,7 +616,7 @@ class _AddIdsToPlaylistProviderElement
 }
 
 String _$deleteIndexFromPlaylistHash() =>
-    r'3e7c10b158c98399a5136ded78b345470bfe8e45';
+    r'0458b5ab981b65981477e1808da6564c86703b17';
 
 /// See also [deleteIndexFromPlaylist].
 @ProviderFor(deleteIndexFromPlaylist)
@@ -603,6 +743,8 @@ class DeleteIndexFromPlaylistProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin DeleteIndexFromPlaylistRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `playlistId` of this provider.
   String get playlistId;
@@ -623,7 +765,7 @@ class _DeleteIndexFromPlaylistProviderElement
   int get index => (origin as DeleteIndexFromPlaylistProvider).index;
 }
 
-String _$deletePlaylistHash() => r'1b77dd39f17392d488f4691bd2467e05391b5d61';
+String _$deletePlaylistHash() => r'0c50cfe138cb88dac50cc2d2e06104db36f963f8';
 
 /// See also [deletePlaylist].
 @ProviderFor(deletePlaylist)
@@ -738,6 +880,8 @@ class DeletePlaylistProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin DeletePlaylistRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `playlistId` of this provider.
   String get playlistId;
@@ -751,7 +895,7 @@ class _DeletePlaylistProviderElement
   String get playlistId => (origin as DeletePlaylistProvider).playlistId;
 }
 
-String _$findPlaylistHash() => r'c09804457752fe153dd623d014da056b538e76ef';
+String _$findPlaylistHash() => r'3e7cb7c788c204b99d02c7139e8bf1e0d2f3e5c8';
 
 /// See also [findPlaylist].
 @ProviderFor(findPlaylist)
@@ -866,6 +1010,8 @@ class FindPlaylistProvider extends AutoDisposeFutureProvider<FilledPlaylist> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FindPlaylistRef on AutoDisposeFutureProviderRef<FilledPlaylist> {
   /// The parameter `id` of this provider.
   String get id;
@@ -997,6 +1143,8 @@ class FindSongsByPlaylistProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin FindSongsByPlaylistRef on AutoDisposeFutureProviderRef<List<Song>> {
   /// The parameter `id` of this provider.
   String get id;
@@ -1011,4 +1159,4 @@ class _FindSongsByPlaylistProviderElement
   String get id => (origin as FindSongsByPlaylistProvider).id;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -1,10 +1,13 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../providers/data/preferences_provider.dart';
+import '../service_locator.dart';
 
 part 'album.freezed.dart';
 part 'album.g.dart';
 
 @freezed
 class Album with _$Album {
+  Album._();
   factory Album({
     required String id,
     required String artistId,
@@ -14,6 +17,7 @@ class Album with _$Album {
     required String imageUrl,
     required int    added,
     required List<String> visibleTo,
+    required List<String> inLibrary,
     required String addedBy,
   }) = _Album;
 
@@ -28,6 +32,9 @@ class Album with _$Album {
     imageUrl: '',
     added: 0,
     visibleTo: [],
+    inLibrary: ["testguy"],
     addedBy: '',
   );
+
+  bool get isInLibrary => inLibrary.contains(ServiceLocator().get<PreferencesProvider>().loginName);
 }

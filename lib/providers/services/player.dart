@@ -23,6 +23,37 @@ import '../../miller_shuffle.dart';
 part 'player.g.dart';
 part 'player.freezed.dart';
 
+class _CachedYoutubeUrl {
+  final String url;
+  final DateTime timestamp;
+  final DateTime lastAccessed;
+
+  _CachedYoutubeUrl({
+    required this.url,
+    required this.timestamp,
+    DateTime? lastAccessed,
+  }) : lastAccessed = lastAccessed ?? DateTime.now();
+
+  bool get isValid {
+    final now = DateTime.now();
+    return now.difference(timestamp) < const Duration(hours: 1);
+  }
+
+  Map<String, dynamic> toJson() => {
+        'url': url,
+        'timestamp': timestamp.toIso8601String(),
+        'lastAccessed': lastAccessed.toIso8601String(),
+      };
+
+  factory _CachedYoutubeUrl.fromJson(Map<String, dynamic> json) {
+    return _CachedYoutubeUrl(
+      url: json['url'],
+      timestamp: DateTime.parse(json['timestamp']),
+      lastAccessed: DateTime.parse(json['lastAccessed']),
+    );
+  }
+}
+
 @freezed
 class PlayerInfo with _$PlayerInfo {
   factory PlayerInfo({
@@ -48,6 +79,10 @@ class PlayerInfo with _$PlayerInfo {
 
 @riverpod
 class Player extends _$Player {
+  static final Map<String, _CachedYoutubeUrl> _youtubeCache = {};
+  static const int _maxCacheSize = 100;
+  static const Duration _cacheDuration = Duration(hours: 1);
+
   AudioPlayer player = AudioPlayer();
   YoutubeExplode yt = YoutubeExplode();
   PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
@@ -59,6 +94,39 @@ class Player extends _$Player {
   bool paused = false;
   bool needInteraction = false;
   int needSeekTo = 0;
+  String? lastSavedSongId;
+
+  Future<void> _loadYoutubeCache() async {
+    final prefs = await SharedPreferences.getInstance();
+    final cacheString = prefs.getString('youtube_cache');
+    if (cacheString != null) {
+      final cacheData = jsonDecode(cacheString) as Map<String, dynamic>;
+      cacheData.forEach((key, value) {
+        _youtubeCache[key] = _CachedYoutubeUrl.fromJson(value);
+      });
+    }
+  }
+
+  Future<void> _persistYoutubeCache() async {
+    final prefs = await SharedPreferences.getInstance();
+    final cacheData =
+        _youtubeCache.map((key, value) => MapEntry(key, value.toJson()));
+    await prefs.setString('youtube_cache', jsonEncode(cacheData));
+  }
+
+  void _cleanYoutubeCache() {
+    _youtubeCache.removeWhere((key, value) => !value.isValid);
+  }
+
+  void _removeLeastRecentlyUsedYoutubeUrl() {
+    if (_youtubeCache.isEmpty) return;
+
+    var oldestKey = _youtubeCache.entries.reduce((a, b) {
+      return a.value.lastAccessed.isBefore(b.value.lastAccessed) ? a : b;
+    }).key;
+
+    _youtubeCache.remove(oldestKey);
+  }
 
   @override
   PlayerInfo build() {
@@ -85,6 +153,7 @@ class Player extends _$Player {
     if (_isInit) return;
     _isInit = true;
     _sp = await SharedPreferences.getInstance();
+    await _loadYoutubeCache();
     print("Playerinfo: init");
     if (!PlatformUtils.isWeb &&
         (PlatformUtils.isLinux || PlatformUtils.isWindows))
@@ -123,7 +192,8 @@ class Player extends _$Player {
         this.state = this.state.copyWith(isPlaying: state.playing);
       if (state.processingState == ProcessingState.ready &&
           !state.playing &&
-          needInteraction) {
+          needInteraction &&
+          lastSavedSongId == this.state.id) {
         needInteraction = false;
         player.seek(Duration(milliseconds: needSeekTo));
         print("Seeked position to ${needSeekTo}");
@@ -136,6 +206,7 @@ class Player extends _$Player {
       var i = PlayerInfo.fromJson(jsonDecode(_sp.getString("playerinfo")!));
       print("Loading persisted playerinfo");
       needSeekTo = i.position;
+      lastSavedSongId = i.id;
       state = i;
       needInteraction = true;
       if (!PlatformUtils.isWeb && p.autoResume) {
@@ -160,7 +231,7 @@ class Player extends _$Player {
   }
 
   void stop() {
-    player.stop();
+    player.pause();
     state = state.copyWith(isPlaying: false);
     setQueue([]);
   }
@@ -247,7 +318,6 @@ class Player extends _$Player {
 
   void setSong(String id) async {
     ref.read(findSongProvider(id).future).then((songObject) async {
-      _queue = [songObject.toQueueItem()];
       setQueue([songObject.toQueueItem()]);
       state = state.copyWith(shuffle: false);
       skipToItem(0);
@@ -265,7 +335,6 @@ class Player extends _$Player {
       queue: [i],
       isPlaying: true,
     );
-    _queue = [i];
     setQueue([i]);
     state = state.copyWith(shuffle: false);
     skipToItem(0);
@@ -276,7 +345,6 @@ class Player extends _$Player {
       List<QueueItem> newQueue = songs.map((s) => s.toQueueItem()).toList();
       setQueue(newQueue);
       state = state.copyWith(shuffle: false);
-      _queue = newQueue;
       skipToItem(0);
     });
   }
@@ -285,7 +353,6 @@ class Player extends _$Player {
     ref.read(findSongsByAlbumProvider(id).future).then((songs) async {
       var newQueue = [...state.queue, ...songs.map((s) => s.toQueueItem())];
       setQueue(newQueue);
-      _queue = newQueue;
     });
   }
 
@@ -294,7 +361,6 @@ class Player extends _$Player {
       var newQueue = songs.map((s) => s.toQueueItem()).toList();
       setQueue(newQueue);
       state = state.copyWith(shuffle: false);
-      _queue = newQueue;
       skipToItem(0);
     });
   }
@@ -303,7 +369,6 @@ class Player extends _$Player {
     ref.read(findSongsByArtistProvider(id).future).then((songs) async {
       var newQueue = [...state.queue, ...songs.map((s) => s.toQueueItem())];
       state = state.copyWith(queue: newQueue);
-      _queue = newQueue;
     });
   }
 
@@ -312,7 +377,6 @@ class Player extends _$Player {
       var newQueue = songs.map((s) => s.toQueueItem()).toList();
       setQueue(newQueue);
       state = state.copyWith(shuffle: false);
-      _queue = newQueue;
       skipToItem(0);
     });
   }
@@ -321,13 +385,11 @@ class Player extends _$Player {
     ref.read(findSongsByPlaylistProvider(id).future).then((songs) async {
       var newQueue = [...state.queue, ...songs.map((s) => s.toQueueItem())];
       setQueue(newQueue);
-      _queue = newQueue;
     });
   }
 
   void addToQueue(Song song) async {
     var newQueue = [...state.queue, song.toQueueItem()];
-    _queue = newQueue;
     setQueue(newQueue);
   }
 
@@ -335,14 +397,12 @@ class Player extends _$Player {
     ref.read(findSongProvider(id).future).then((songObject) async {
       var newQueue = [...state.queue, songObject.toQueueItem()];
       setQueue(newQueue);
-      _queue = newQueue;
     });
   }
 
   void clearQueue() async {
     player.pause();
     setQueue([]);
-    _queue = [];
     state = state.copyWith(currentIndex: 0);
   }
 
@@ -371,19 +431,14 @@ class Player extends _$Player {
     needInteraction = false;
     state = state.copyWith(position: 0);
     print("Playing youtube $id");
-    playQueueItem(QueueItem(
-      type: "youtube-song",
-      id: DateTime.now().microsecondsSinceEpoch.toString(),
-      artistId: "youtube",
-      albumId: "youtube",
-      displayName: "Youtube",
-      artistName: "Youtube",
-      albumName: "Youtube",
-      youtubeId: id,
-      duration: 0,
-      imageUrl: "https://i.imgur.com/0fU7kZG.jpg",
-      audioUrl: "not_fetched",
+    state = state.copyWith(thinking: true);
+    player.pause();
+    var url = await fetchYTVideo(id);
+    await player.setAudioSource(AudioSource.uri(
+      Uri.parse(url),
     ));
+    player.play();
+    state = state.copyWith(thinking: false);
   }
 
   void playFindResult(FindResult result) async {
@@ -398,22 +453,23 @@ class Player extends _$Player {
       artistName: result.artist,
       albumName: result.album,
       duration: 0,
-      youtubeId: result.songs[0].id,
       imageUrl: "https://i.imgur.com/0fU7kZG.jpg",
-      audioUrl: "not_fetched",
+      audioUrl: result.songs[0].url,
     ));
   }
 
   Future<void> shuffle() async {
-    List<QueueItem> chew =
-        List<QueueItem>.filled(state.queue.length, QueueItem.empty());
-    for (int i = 0; i < state.queue.length; i++) {
-      chew[i] = state.queue[superShuffle(
-          i, DateTime.now().millisecondsSinceEpoch, state.queue.length)];
+    List<QueueItem> unshuffled = [...state.queue];
+    List<QueueItem> shuffled = [];
+
+    while (unshuffled.isNotEmpty) {
+      int index = superShuffle(shuffled.length,
+          DateTime.now().millisecondsSinceEpoch, unshuffled.length);
+      shuffled.add(unshuffled.removeAt(index));
     }
-    _queue = chew;
+
+    setQueue(shuffled);
     state = state.copyWith(shuffle: true);
-    setQueue(chew);
     skipToItem(0);
   }
 
@@ -425,18 +481,16 @@ class Player extends _$Player {
     state = state.copyWith(thinking: true);
     player.pause();
     var url = item.audioUrl;
-    if (url == "not_fetched") {
+    if (url.split(":").first != "prefetched") {
       if (PlatformUtils.isWeb) return;
-      print("Fetching ${item.displayName}, $url");
-      url = await fetchYTVideo(item.youtubeId);
-      //if(PlatformUtils.isWeb) url = "$backendUrl/proxy/$url";
-      var nq = state.queue.toList();
-      nq[state.currentIndex] = item.copyWith(audioUrl: url);
-      setQueue(nq);
+      url = await getAudioUrl(url);
+    } else {
+      url = RegExp(r'\${{%(.*)%}}\$(.*)').firstMatch(url)?.group(2) ?? "";
+      if (url.isEmpty)
+        throw Exception("Audio url fetch failed: ${item.audioUrl}");
     }
-    //print("Going to play $url");
     await player.setAudioSource(AudioSource.uri(
-      Uri.parse(url),
+      Uri.parse(await getAudioUrl(url)),
       tag: MediaItem(
           id: DateTime.now().microsecondsSinceEpoch.toString(),
           title: item.displayName,
@@ -451,18 +505,28 @@ class Player extends _$Player {
       ref.read(addRecentlyPlayedProvider(item.id).future).then((value) {
         if (value == true) ref.refresh(fetchRecentlyPlayedProvider.future);
       });
-      if (state.queue.length == 1) {
+      if (state.queue.length == 1 &&
+          state.queue[skipDex(1)].audioUrl.split(":").first == "prefetched") {
         print("Queue is one, returning");
         return;
       }
-      var nextUrl = await fetchYTVideo(state.queue[skipDex(1)].youtubeId);
-      if (PlatformUtils.isWeb) nextUrl = "$backendUrl/proxy/$nextUrl";
+      var nextUrl = await getAudioUrl(item.audioUrl);
       var nq = state.queue.toList();
       nq[skipDex(1)] = nq[skipDex(1)].copyWith(audioUrl: nextUrl);
       if (state.queue.length > 1) {
+        String originalUrl = "";
+        if (state.queue[state.currentIndex].audioUrl.split(":").first ==
+            "prefetched") {
+          originalUrl = RegExp(r'\${{%(.*)%}}\$(.*)')
+                  .firstMatch(state.queue[state.currentIndex].audioUrl)
+                  ?.group(1) ??
+              "";
+        } else {
+          return;
+        }
         print("UNPREPPING: ${state.queue[state.currentIndex].displayName}");
         nq[state.currentIndex] =
-            state.queue[state.currentIndex].copyWith(audioUrl: "not_fetched");
+            state.queue[state.currentIndex].copyWith(audioUrl: originalUrl);
       }
       print("PREPPED: ${nq[skipDex(1)].displayName}");
       setQueue(nq);
@@ -470,16 +534,72 @@ class Player extends _$Player {
   }
 
   Future<String> fetchYTVideo(String id) async {
-    if (state.queue.length == 1 && state.queue[0].audioUrl != "not_fetched")
-      return state.queue[0].audioUrl;
-    print("fetching video $id");
+    _cleanYoutubeCache();
+
+    // Check cache first
+    if (_youtubeCache.containsKey(id)) {
+      var cached = _youtubeCache[id]!;
+      if (cached.isValid) {
+        print("Youtube: using cached URL for $id");
+        // Update last accessed time
+        _youtubeCache[id] = _CachedYoutubeUrl(
+          url: cached.url,
+          timestamp: cached.timestamp,
+          lastAccessed: DateTime.now(),
+        );
+        return cached.url;
+      } else {
+        _youtubeCache.remove(id);
+      }
+    }
+
+    // If cache is full, remove least recently used
+    if (_youtubeCache.length >= _maxCacheSize) {
+      _removeLeastRecentlyUsedYoutubeUrl();
+    }
+
+    print("Youtube: fetching video $id");
     var media = await yt.videos.streamsClient.getManifest(id);
     var streamInfo = media.audioOnly
         .where((e) =>
             e.audioCodec != 'opus' && e.container != StreamContainer.webM)
         .withHighestBitrate();
     var url = streamInfo.url.toString();
+
+    // Cache the result
+    _youtubeCache[id] = _CachedYoutubeUrl(
+      url: url,
+      timestamp: DateTime.now(),
+    );
+
+    // Persist cache
+    await _persistYoutubeCache();
+
     return url;
+  }
+
+  Future<String> getAudioUrl(String audioUrl) async {
+    var audioUrlParts = audioUrl.split(":");
+    var type = audioUrlParts.first;
+    var data = audioUrlParts.sublist(1).join(":");
+    switch (type) {
+      case "http":
+      case "https":
+        return audioUrl;
+      case "youtube":
+        return "prefetched:\${{%$audioUrl%}}\$${await fetchYTVideo(data)}";
+      case "blank":
+        return "";
+      case "scratch":
+        return "";
+      case "custom":
+        return "";
+      case "prefetched":
+        return RegExp(r'\${{%(.*)%}}\$(.*)').firstMatch(audioUrl)?.group(2) ??
+            "";
+      default:
+        return "";
+    }
   }
 
   get canNext {

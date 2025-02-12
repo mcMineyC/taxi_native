@@ -56,7 +56,7 @@ class InfoEditorCardState extends ConsumerState<InfoEditorCard> {
           (modifiedData.type == "song" || modifiedData.type == "album")
               ? modifiedData.artist
               : "This isn't going to actually be used";
-      videoIdController.text = modifiedData.songs[0].id;
+      videoIdController.text = modifiedData.songs[0].url;
       imageUrlController.text = modifiedData.imageUrl;
       modified = true;
       print("Set data $modified");
@@ -189,7 +189,7 @@ class InfoEditorCardState extends ConsumerState<InfoEditorCard> {
               onChanged: (String videoId) {
                 if (modifiedData.type == "song") {
                   var song = modifiedData.songs.toList();
-                  song[0] = song[0].copyWith(id: videoId);
+                  song[0] = song[0].copyWith(url: videoId);
                   modifiedData = modifiedData.copyWith(songs: song);
                 }
               },

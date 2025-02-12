@@ -59,6 +59,7 @@ _$SearchResultImpl _$$SearchResultImplFromJson(Map<String, dynamic> json) =>
       artist: json['artist'] as String,
       album: json['album'] as String,
       imageUrl: json['imageUrl'] as String,
+      artistImageUrl: json['artistImageUrl'] as String,
       type: json['type'] as String,
     );
 
@@ -69,6 +70,7 @@ Map<String, dynamic> _$$SearchResultImplToJson(_$SearchResultImpl instance) =>
       'artist': instance.artist,
       'album': instance.album,
       'imageUrl': instance.imageUrl,
+      'artistImageUrl': instance.artistImageUrl,
       'type': instance.type,
     };
 
@@ -78,6 +80,11 @@ _$FindResultImpl _$$FindResultImplFromJson(Map<String, dynamic> json) =>
       artist: json['artist'] as String,
       album: json['album'] as String,
       imageUrl: json['imageUrl'] as String,
+      artistImageUrl: json['artistImageUrl'] as String,
+      visibleTo:
+          (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
+      inLibrary:
+          (json['inLibrary'] as List<dynamic>).map((e) => e as String).toList(),
       type: json['type'] as String,
       songs: (json['songs'] as List<dynamic>)
           .map((e) => FindResultSong.fromJson(e as Map<String, dynamic>))
@@ -90,6 +97,9 @@ Map<String, dynamic> _$$FindResultImplToJson(_$FindResultImpl instance) =>
       'artist': instance.artist,
       'album': instance.album,
       'imageUrl': instance.imageUrl,
+      'artistImageUrl': instance.artistImageUrl,
+      'visibleTo': instance.visibleTo,
+      'inLibrary': instance.inLibrary,
       'type': instance.type,
       'songs': instance.songs,
     };
@@ -97,7 +107,7 @@ Map<String, dynamic> _$$FindResultImplToJson(_$FindResultImpl instance) =>
 _$FindResultSongImpl _$$FindResultSongImplFromJson(Map<String, dynamic> json) =>
     _$FindResultSongImpl(
       title: json['title'] as String,
-      id: json['id'] as String,
+      url: json['url'] as String,
       trackNumber: (json['trackNumber'] as num).toInt(),
     );
 
@@ -105,7 +115,7 @@ Map<String, dynamic> _$$FindResultSongImplToJson(
         _$FindResultSongImpl instance) =>
     <String, dynamic>{
       'title': instance.title,
-      'id': instance.id,
+      'url': instance.url,
       'trackNumber': instance.trackNumber,
     };
 

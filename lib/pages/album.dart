@@ -42,7 +42,20 @@ class AlbumPage extends ConsumerWidget {
                   data: (data) => [
                     Text(data.displayName, style: Theme.of(context).textTheme.headlineLarge!.copyWith(color: Theme.of(context).colorScheme.onSurface), overflow: TextOverflow.ellipsis),
                     Text(data.artistDisplayName, style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Theme.of(context).colorScheme.onSurface), overflow: TextOverflow.ellipsis),
-                    Text("${data.songCount} song${(data.songCount > 1) ? "s" : ""}", style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurface), overflow: TextOverflow.ellipsis),
+                    Text(
+                      //"${data.songCount} song${(data.songCount > 1) ? "s" : ""}",
+                      "Added by ${data.addedBy}",
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.onSurface), overflow: TextOverflow.ellipsis
+                    ),
+                    Text(
+                        "Added on ${(){DateTime time = DateTime.fromMillisecondsSinceEpoch(data.added).toLocal(); return time.month.toString().padLeft(2, "0") + "/" + time.day.toString().padLeft(2, "0") + "/" + time.year.toString() + " " + time.hour.toString().padLeft(2, "0") + ":" + time.minute.toString().padLeft(2, "0");}()}",
+                        //"${data.songCount} song${(data.songCount > 1) ? "s" : ""}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(
+                                color: Theme.of(context).colorScheme.onSurface),
+                        overflow: TextOverflow.ellipsis),
                   ],
                   loading: () => [
                     const Skeletonizer(enabled: true, child: Text("Loading")),
@@ -76,7 +89,7 @@ class AlbumPage extends ConsumerWidget {
                 OutlinedButton(
                   child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Container(margin: EdgeInsets.only(right: 8), child: Icon(Icons.playlist_add_rounded)), Text("Add to playlist")]),
                   // onPressed: () => ref.read(playerProvider.notifier).addAlbumToQueue(id),
-                  onPressed: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Not implemented yet!')))
+                  onPressed: () async => await playlistLogic(ref, context, id, "album"),
                 ),
               ],
             ),
@@ -94,13 +107,16 @@ class AlbumPage extends ConsumerWidget {
                 title: Text(data[index].displayName),
                 subtitle: Text("${data[index].albumDisplayName} - ${data[index].artistDisplayName}", overflow: TextOverflow.ellipsis),
                 trailing: PopupMenuButton<SongMenuItem>(
-                  onSelected: (SongMenuItem item) {
+                  onSelected: (SongMenuItem item) async {
                     switch (item) {
                       case SongMenuItem.play:
                         ref.read(playerProvider.notifier).setSong(data[index].id);
                         break;
                       case SongMenuItem.addToQueue:
                         ref.read(playerProvider.notifier).addIdToQueue(data[index].id);
+                        break;
+                      case SongMenuItem.addToPlaylist:
+                        await playlistLogic(ref, context, data[index].id, "song");
                         break;
                       case SongMenuItem.delete:
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Not implemented yet!')));
@@ -117,6 +133,10 @@ class AlbumPage extends ConsumerWidget {
                     const PopupMenuItem<SongMenuItem>(
                       value: SongMenuItem.addToQueue,
                       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.add_rounded), Text("Add to queue")])
+                    ),
+                    const PopupMenuItem<SongMenuItem>(
+                      value: SongMenuItem.addToPlaylist,
+                      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.playlist_add_rounded), Text("Add to playlist")])
                     ),
                     const PopupMenuItem<SongMenuItem>(
                       value: SongMenuItem.delete,
@@ -138,6 +158,7 @@ class AlbumPage extends ConsumerWidget {
 enum SongMenuItem {
   play,
   addToQueue,
+  addToPlaylist,
   divider,
   delete,
 }

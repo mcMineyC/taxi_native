@@ -52,6 +52,7 @@ class SearchResult with _$SearchResult {
     required String artist,
     required String album,
     required String imageUrl,
+    required String artistImageUrl,
     required String type,
   }) = _SearchResult;
 
@@ -74,10 +75,14 @@ class FindResult with _$FindResult {
     required String artist,
     required String album,
     required String imageUrl,
+    required String artistImageUrl,
+    required List<String> visibleTo,
+    required List<String> inLibrary,
     required String type,
     required List<FindResultSong> songs,
   }) = _FindResult;
 
+  //get cardString => this.artistImageUrl;
   get cardString => switch(type) {
     "song" => "${songs[0].title} - $artist: $name",
     "album" => "$name - $artist",
@@ -95,7 +100,10 @@ class FindResult with _$FindResult {
     album: song.albumDisplayName,
     artist: song.artistDisplayName,
     imageUrl: song.imageUrl,
-    songs: [FindResultSong(title: song.displayName, id: song.youtubeId, trackNumber: 0)],
+    artistImageUrl: song.imageUrl,
+    visibleTo: song.visibleTo,
+    inLibrary: song.inLibrary,
+    songs: [FindResultSong(title: song.displayName, url: song.audioUrl, trackNumber: 0)],
     );
 
 }
@@ -104,7 +112,7 @@ class FindResult with _$FindResult {
 class FindResultSong with _$FindResultSong {
   const factory FindResultSong({
     required String title,
-    required String id, 
+    required String url, 
     required int trackNumber,
   }) = _FindResultSong;
 
@@ -142,9 +150,24 @@ enum SearchType {
   track('Song', 'track'),
   album('Album', 'album'),
   artist('Artist', 'artist'),
+  //playlist('Playlist', 'playlist'),
+  url("URL", "url"),
   all('All', 'all');
 
   const SearchType(this.label, this.type);
   final String label;
   final String type;
 }
+
+enum SearchSource {
+  spotify('Spotify', 'spotify');
+  //spotify('Spotify', 'spotify'),
+  //youtube('YouTube', 'youtube'),
+  //scratch('Scratch', 'scratch'),
+  //custom('Custom (MP3)', 'custom');
+
+  const SearchSource(this.label, this.type);
+  final String label;
+  final String type;
+}
+final spotifyUrlRegex = RegExp(r'https:\/\/open\.spotify\.com\/(track|album|artist|playlist)\/([^?]*)(\?si=.*)?');

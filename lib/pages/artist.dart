@@ -60,7 +60,8 @@ class ArtistPage extends ConsumerWidget {
                                 color: Theme.of(context).colorScheme.onSurface),
                         overflow: TextOverflow.ellipsis),
                     Text(
-                        "${data.songCount} song${(data.songCount > 1) ? "s" : ""}",
+                        "Added by ${data.addedBy}",
+                        //"${data.songCount} song${(data.songCount > 1) ? "s" : ""}",
                         style: Theme.of(context)
                             .textTheme
                             .titleMedium!
@@ -68,7 +69,8 @@ class ArtistPage extends ConsumerWidget {
                                 color: Theme.of(context).colorScheme.onSurface),
                         overflow: TextOverflow.ellipsis),
                     Text(
-                        "${data.albumCount} album${(data.albumCount > 1) ? "s" : ""}",
+                        "Added on ${(){DateTime time = DateTime.fromMillisecondsSinceEpoch(data.added).toLocal(); return time.month.toString().padLeft(2, "0") + "/" + time.day.toString().padLeft(2, "0") + "/" + time.year.toString() + " " + time.hour.toString().padLeft(2, "0") + ":" + time.minute.toString().padLeft(2, "0");}()}",
+                        //"${data.albumCount} album${(data.albumCount > 1) ? "s" : ""}",
                         style: Theme.of(context)
                             .textTheme
                             .titleMedium!
@@ -139,10 +141,6 @@ class ArtistPage extends ConsumerWidget {
                               child: Icon(Icons.playlist_add_rounded)),
                           Text("Add to playlist")
                         ]),
-                    // onPressed: () => ref.read(playerProvider.notifier).addAlbumToQueue(id),
-                    //onPressed: () => ScaffoldMessenger.of(context)
-                    //    .showSnackBar(
-                    //        SnackBar(content: Text('Not implemented yet!')))),
                     onPressed: () async {
                       await playlistLogic(ref, context, id, "artist");
                     },
@@ -189,7 +187,9 @@ class ArtistPage extends ConsumerWidget {
                       image: a.imageUrl,
                       thingId: a.id,
                       thingType: "album",
-                      addedBy: a.addedBy))
+                      addedBy: a.addedBy,
+                      inLibrary: a.isInLibrary,
+                  ))
                   .toList(),
             ),
             loading: () => const Center(child: CircularProgressIndicator()),
@@ -233,7 +233,9 @@ class ArtistPage extends ConsumerWidget {
                       image: a.imageUrl,
                       thingId: a.id,
                       thingType: "song",
-                      addedBy: a.addedBy))
+                      addedBy: a.addedBy,
+                      inLibrary: a.isInLibrary,
+                      ))
                   .toList(),
             ),
             loading: () => const Center(child: CircularProgressIndicator()),

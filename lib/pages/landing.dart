@@ -57,13 +57,14 @@ class LandingPage extends ConsumerWidget {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      MediaCard(
-                        text: "A great song",
-                        thingId: "thisisgreat",
-                        thingType: "placeholder",
-                        image: "https://placehold.co/512x512.png",
-                        addedBy: "jedi",
-                      ),
+                      //MediaCard(
+                      //  text: "A great song",
+                      //  thingId: "thisisgreat",
+                      //  thingType: "placeholder",
+                      //  image: "https://placehold.co/512x512.png",
+                      //  addedBy: "jedi",
+                      //  inLibrary: true,
+                      //),
                     ],
                   ),
                 )
@@ -94,6 +95,7 @@ class LandingPage extends ConsumerWidget {
                           thingId: song.id,
                           thingType: "song",
                           addedBy: song.addedBy,
+                          inLibrary: song.isInLibrary,
                         )).toList(),
                       );
                     },
@@ -131,13 +133,13 @@ class LandingPage extends ConsumerWidget {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [ 
-                      MediaCard(
-                        text: "Megalovania",
-                        thingId: "idklol",
-                        thingType: "placeholder",
-                        image: "https://placehold.co/512x512.png",
-                        addedBy: "jedi",
-                      ),
+                      //MediaCard(
+                      //  text: "Megalovania",
+                      //  thingId: "idklol",
+                      //  thingType: "placeholder",
+                      //  image: "https://placehold.co/512x512.png",
+                      //  addedBy: "jedi",
+                      //),
                     ],
                   ),
                 )
@@ -168,6 +170,7 @@ class LandingPage extends ConsumerWidget {
                           thingId: playlist.id,
                           thingType: "playlist",
                           addedBy: playlist.owner,
+                          inLibrary: playlist.isInLibrary,
                         )).toList(),
                       );
                     },
@@ -212,6 +215,7 @@ class LandingPage extends ConsumerWidget {
                           thingId: song.id,
                           thingType: "song",
                           addedBy: song.addedBy,
+                          inLibrary: song.isInLibrary,
                         )).toList(),
                       );
                     },

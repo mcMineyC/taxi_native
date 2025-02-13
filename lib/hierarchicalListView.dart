@@ -165,7 +165,9 @@ class HierarchicalListView extends StatelessWidget {
         ContextMenuButtonConfig(
           "Open in browser",
           icon: Icon(Icons.link_rounded),
-          onPressed: () {},
+          onPressed: () {
+            launchUrl(Uri.parse(specialUrlToPlain(song.url)!));
+          },
         ),
         if (song.url.startsWith("http"))
           ContextMenuButtonConfig(

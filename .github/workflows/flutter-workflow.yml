@@ -45,7 +45,7 @@ jobs:
           java-version: '21'
       - run: flutter build apk
       - run: cp build/app/outputs/apk/release/app-release.apk taxi-native.apk
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: taxi-native.apk
           path: taxi-native.apk
@@ -60,12 +60,13 @@ jobs:
           channel: stable # or: beta, master (or main)
       - name: Install dependencies
         run: |
+          sudo apt-get update
           sudo apt-get install libunwind-dev zip
           sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
           sudo apt install libmpv-dev mpv
       - run: flutter build linux
       - run: sh -c "cd build/linux/x64/release/bundle && zip -r taxi-native-linux_x64.zip . && cp taxi-native-linux_x64.zip ../../../../../"
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: taxi-native-linux_x64.zip
           path: taxi-native-linux_x64.zip
@@ -84,7 +85,7 @@ jobs:
         with:
           path: Installers/innoSetupScript.iss
           options: /O+
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: taxi.exe
           path: Installers/taxi.exe
@@ -94,7 +95,7 @@ jobs:
   #   steps:
   #     - name: Clone repository
   #       uses: actions/checkout@v4
-  #     - uses: actions/upload-artifact@v3
+  #     - uses: actions/upload-artifact@v4
   #       with:
   #         name: taxi.exe
   #         path: ./Installers/taxi.exe
@@ -110,7 +111,7 @@ jobs:
       - run: flutter build macos
       - run: cp -rf build/macos/Build/Products/Release/taxi.app taxi.app
       - run: zip -r taxi.app.zip taxi.app
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: taxi.app.zip
           path: taxi.app.zip
@@ -126,19 +127,19 @@ jobs:
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - name: Download Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: taxi-native.apk
           path: .
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: taxi-native-linux_x64.zip
           path: .
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: taxi.app.zip
           path: .
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: taxi.exe
           path: .

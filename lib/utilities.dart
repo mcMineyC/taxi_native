@@ -35,4 +35,21 @@ void refreshLibrary(WidgetRef ref) {
   ref.refresh(fetchPlaylistsProvider(ignore: false));
   ref.refresh(fetchNewPlaylistsProvider);
   ref.refresh(fetchNewSongsProvider);
+  ref.refresh(fetchRecentlyPlayedProvider);
+}
+
+void logout(WidgetRef ref) {
+  ref.invalidate(fetchSongsProvider(ignore: true));
+  ref.invalidate(fetchAlbumsProvider(ignore: true));
+  ref.invalidate(fetchArtistsProvider(ignore: true));
+  ref.invalidate(fetchSongsProvider(ignore: false));
+  ref.invalidate(fetchAlbumsProvider(ignore: false));
+  ref.invalidate(fetchArtistsProvider(ignore: false));
+  ref.invalidate(fetchPlaylistsProvider(editable: false));
+  ref.invalidate(fetchPlaylistsProvider(editable: true));
+  ref.invalidate(fetchPlaylistsProvider(ignore: true));
+  ref.invalidate(fetchPlaylistsProvider(ignore: false));
+  ref.invalidate(fetchNewPlaylistsProvider);
+  ref.invalidate(fetchNewSongsProvider);
+  ref.invalidate(fetchRecentlyPlayedProvider);
 }

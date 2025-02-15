@@ -7,6 +7,7 @@ import '../providers/data/preferences_provider.dart';
 import '../providers/services/player.dart';
 import '../platform_utils.dart';
 import '../helper_widgets.dart';
+import '../utilities.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -228,7 +229,7 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                     builder: (context) => AlertDialog(
                           title: const Text("Logout?"),
                           content: const Text(
-                              "You will be logged out and all settings will reset to their defaults. This action cannot be undone."),
+                              "You will be logged out and need to log in again. This action cannot be undone."),
                           actions: <Widget>[
                             TextButton(
                               child: const Text("No"),
@@ -242,8 +243,9 @@ class SettingsPageState extends ConsumerState<SettingsPage> {
                         ));
                 if (result == true) {
                   ref.read(playerProvider.notifier).stop();
-                  await themeChanger.reset();
-                  await prefProvider.reset();
+                  logout(ref);
+                  //await themeChanger.reset(); // changing the color is a bit too drastic
+                  //await prefProvider.reset(); // do I really need to do this?
                   await prefProvider.logout();
                   Beamer.of(context).beamToReplacementNamed("/login");
                 }

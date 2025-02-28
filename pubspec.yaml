@@ -8,6 +8,7 @@ environment:
   flutter: ">=3.0.0"
 
 dependencies:
+  sentry_flutter: ^8.13.2
   flutter:
     sdk: flutter
   google_fonts: ^6.2.1
@@ -69,6 +70,7 @@ dependencies:
   #   #   url: https://github.com/mcMineyC/just_audio_handlers.git
   #   path: ../just_audio_handlers
 dev_dependencies:
+  sentry_dart_plugin: ^2.4.1
   build_runner:
   custom_lint:
   riverpod_generator: ^2.6.3
@@ -81,3 +83,9 @@ flutter:
       fonts:
         - asset: fonts/Poppins-Regular.ttf
           style: normal
+
+sentry:
+  upload_debug_symbols: true
+  upload_source_maps: true
+  project: flutter
+  org: jedis-masterful-solutions-llc

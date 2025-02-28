@@ -34,9 +34,10 @@ import 'pages/library.dart';
 import 'pages/admin/dashboard.dart';
 
 import 'login.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
-  // print("Current commit: ${String.fromEnvironment("GIT_REV")}");
+  print("Current commit: ${String.fromEnvironment("GIT_REV")}");
   print("Ensuring widget binding is initialized");
   WidgetsFlutterBinding.ensureInitialized();
   ServiceLocator()
@@ -58,7 +59,17 @@ void main() async {
     brightness: themeProvider.dark ? Brightness.dark : Brightness.light,
   );
   print("Starting app");
-  runApp(prov.MultiProvider(
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = 'https://3973b1695745ae1ad7a912af51d9c792@o4508899116580864.ingest.us.sentry.io/4508899118284800';
+      // Set tracesSampleRate to 1.0 to capture 100% of transactions for tracing.
+      // We recommend adjusting this value in production.
+      options.tracesSampleRate = 1.0;
+      // The sampling rate for profiling is relative to tracesSampleRate
+      // Setting to 1.0 will profile 100% of sampled transactions:
+      options.profilesSampleRate = 1.0;
+    },
+    appRunner: () => runApp(SentryWidget(child: prov.MultiProvider(
     providers: [
       prov.ChangeNotifierProvider(create: (_) => themeProvider),
       prov.ChangeNotifierProvider(create: (_) => prefsProvider),
@@ -98,7 +109,10 @@ void main() async {
       ),
       child: App(),
     )),
-  ));
+  ))),
+  );
+  // TODO: Remove this line after sending the first sample event to sentry.
+  await Sentry.captureException(Exception('This is a sample exception.'));
 }
 
 class App extends ConsumerWidget {

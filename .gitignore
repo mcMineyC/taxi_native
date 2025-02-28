@@ -53,3 +53,5 @@ app.*.map.json
 # Ignore built exes
 /Installers/taxi.exe
 /sentry-wizard
+
+sentry.properties

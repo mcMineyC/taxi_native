@@ -1,0 +1,4 @@
+Bugs
+- Fix album song order (trackNumber)
+- scrollability (album, artist)
+

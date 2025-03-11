@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:beamer/beamer.dart';
 import 'dart:convert';
+//import 'package:collection/collection.dart';
 import 'package:flutter/scheduler.dart';
 
 import '../utilities.dart';
@@ -36,6 +37,7 @@ class _AdderPageState extends ConsumerState {
   List<FindResult> findResults = [];
   bool findResultsProcessed = false;
   List<HLVArtist> hlvArtists = [];
+  FoundPlaylist? foundPlaylist;
   void pullSearchResults(state) {
     print("Pulling search results");
     restoredSelectedSearchResults = false;
@@ -90,8 +92,13 @@ class _AdderPageState extends ConsumerState {
         findResultsProcessed = true;
       }
       page = "find:results";
+    }else if(state.state == "find:results:playlist"){
+      if(!findResultsProcessed){
+        foundPlaylist = state.foundPlaylist;
+        findResultsProcessed = true;
+      }
+      page = "find:results:playlist";
     }else if(state.state == "auth:fail"){
-      
       SchedulerBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Adder login failed!  If this issue, persists, please contact the developer.")));
         Beamer.of(context).beamToNamed("/login");
@@ -150,6 +157,7 @@ class _AdderPageState extends ConsumerState {
                     "search" => searchPage(context, null, false),
                     "search:results" => searchPage(context, searchResults, false),
                     "find:results" => findPage(context, findResults),
+                    "find:results:playlist" => Center(child: Text("Congratulations, you found an unfinished page!\nThis will be the third step for adding a playlist.")),
                     _ => Center(
                           child: Column(children: [
                         Text("Unknown state: ${state.state}",
@@ -171,7 +179,7 @@ class _AdderPageState extends ConsumerState {
                     }else{
                       return () {
                         if (parts[0] == "search") cancel();
-                        else if(page == "find:results"){
+                        else if(page.startsWith("find:results")){
                           page = "search:results";
                           findResultsProcessed = false;
                           //ref.read(adderProvider.notifier).clearSelectedSearchResults();
@@ -407,9 +415,13 @@ class _AdderPageState extends ConsumerState {
                         selected: selectedSearchResults.contains(e),
                         searchResult: e,
                         selectedCallback: (bool selected, SearchResult _) {
-                          if (selected)
+                          if (selected){
+                            if(selectedSearchResults.firstWhereOrNull((element) => element.type == "playlist") != null){
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("You can only select one playlist at a time.\nWhen one is selected, it's the only item that can be added.")));
+                              return;
+                            }
                             ref.read(adderProvider.notifier).selectSearchResult(e);
-                          else
+                          }else
                             ref.read(adderProvider.notifier).deselectSearchResult(e);
                           print((selected ? "Selected" : "Deselected")+" "+e.name);
                           pullSearchResults(ref.read(adderProvider));

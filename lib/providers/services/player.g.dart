@@ -48,7 +48,7 @@ Map<String, dynamic> _$$PlayerInfoImplToJson(_$PlayerInfoImpl instance) =>
 // RiverpodGenerator
 // **************************************************************************
 
-String _$playerHash() => r'872bb13e531fb3a93d424e72ea8b7902aa232f1b';
+String _$playerHash() => r'f07905c31c8fb4ca83514fa93afaa86429373fb0';
 
 /// See also [Player].
 @ProviderFor(Player)

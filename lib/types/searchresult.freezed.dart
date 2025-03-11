@@ -1315,6 +1315,719 @@ abstract class _FindResultSong implements FindResultSong {
       throw _privateConstructorUsedError;
 }
 
+FoundPlaylist _$FoundPlaylistFromJson(Map<String, dynamic> json) {
+  return _FoundPlaylist.fromJson(json);
+}
+
+/// @nodoc
+mixin _$FoundPlaylist {
+  String get name => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
+  String get owner => throw _privateConstructorUsedError;
+  String get ownerImageUrl => throw _privateConstructorUsedError;
+  String get imageUrl => throw _privateConstructorUsedError;
+  List<String> get visibleTo => throw _privateConstructorUsedError;
+  List<String> get inLibrary => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
+  List<FoundPlaylistSong> get songs => throw _privateConstructorUsedError;
+
+  /// Serializes this FoundPlaylist to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of FoundPlaylist
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $FoundPlaylistCopyWith<FoundPlaylist> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $FoundPlaylistCopyWith<$Res> {
+  factory $FoundPlaylistCopyWith(
+          FoundPlaylist value, $Res Function(FoundPlaylist) then) =
+      _$FoundPlaylistCopyWithImpl<$Res, FoundPlaylist>;
+  @useResult
+  $Res call(
+      {String name,
+      String id,
+      String owner,
+      String ownerImageUrl,
+      String imageUrl,
+      List<String> visibleTo,
+      List<String> inLibrary,
+      String type,
+      List<FoundPlaylistSong> songs});
+}
+
+/// @nodoc
+class _$FoundPlaylistCopyWithImpl<$Res, $Val extends FoundPlaylist>
+    implements $FoundPlaylistCopyWith<$Res> {
+  _$FoundPlaylistCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of FoundPlaylist
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? name = null,
+    Object? id = null,
+    Object? owner = null,
+    Object? ownerImageUrl = null,
+    Object? imageUrl = null,
+    Object? visibleTo = null,
+    Object? inLibrary = null,
+    Object? type = null,
+    Object? songs = null,
+  }) {
+    return _then(_value.copyWith(
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      owner: null == owner
+          ? _value.owner
+          : owner // ignore: cast_nullable_to_non_nullable
+              as String,
+      ownerImageUrl: null == ownerImageUrl
+          ? _value.ownerImageUrl
+          : ownerImageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      visibleTo: null == visibleTo
+          ? _value.visibleTo
+          : visibleTo // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      inLibrary: null == inLibrary
+          ? _value.inLibrary
+          : inLibrary // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      songs: null == songs
+          ? _value.songs
+          : songs // ignore: cast_nullable_to_non_nullable
+              as List<FoundPlaylistSong>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$FoundPlaylistImplCopyWith<$Res>
+    implements $FoundPlaylistCopyWith<$Res> {
+  factory _$$FoundPlaylistImplCopyWith(
+          _$FoundPlaylistImpl value, $Res Function(_$FoundPlaylistImpl) then) =
+      __$$FoundPlaylistImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String name,
+      String id,
+      String owner,
+      String ownerImageUrl,
+      String imageUrl,
+      List<String> visibleTo,
+      List<String> inLibrary,
+      String type,
+      List<FoundPlaylistSong> songs});
+}
+
+/// @nodoc
+class __$$FoundPlaylistImplCopyWithImpl<$Res>
+    extends _$FoundPlaylistCopyWithImpl<$Res, _$FoundPlaylistImpl>
+    implements _$$FoundPlaylistImplCopyWith<$Res> {
+  __$$FoundPlaylistImplCopyWithImpl(
+      _$FoundPlaylistImpl _value, $Res Function(_$FoundPlaylistImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of FoundPlaylist
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? name = null,
+    Object? id = null,
+    Object? owner = null,
+    Object? ownerImageUrl = null,
+    Object? imageUrl = null,
+    Object? visibleTo = null,
+    Object? inLibrary = null,
+    Object? type = null,
+    Object? songs = null,
+  }) {
+    return _then(_$FoundPlaylistImpl(
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      owner: null == owner
+          ? _value.owner
+          : owner // ignore: cast_nullable_to_non_nullable
+              as String,
+      ownerImageUrl: null == ownerImageUrl
+          ? _value.ownerImageUrl
+          : ownerImageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      visibleTo: null == visibleTo
+          ? _value._visibleTo
+          : visibleTo // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      inLibrary: null == inLibrary
+          ? _value._inLibrary
+          : inLibrary // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      songs: null == songs
+          ? _value._songs
+          : songs // ignore: cast_nullable_to_non_nullable
+              as List<FoundPlaylistSong>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$FoundPlaylistImpl extends _FoundPlaylist {
+  const _$FoundPlaylistImpl(
+      {required this.name,
+      required this.id,
+      required this.owner,
+      required this.ownerImageUrl,
+      required this.imageUrl,
+      required final List<String> visibleTo,
+      required final List<String> inLibrary,
+      required this.type,
+      required final List<FoundPlaylistSong> songs})
+      : _visibleTo = visibleTo,
+        _inLibrary = inLibrary,
+        _songs = songs,
+        super._();
+
+  factory _$FoundPlaylistImpl.fromJson(Map<String, dynamic> json) =>
+      _$$FoundPlaylistImplFromJson(json);
+
+  @override
+  final String name;
+  @override
+  final String id;
+  @override
+  final String owner;
+  @override
+  final String ownerImageUrl;
+  @override
+  final String imageUrl;
+  final List<String> _visibleTo;
+  @override
+  List<String> get visibleTo {
+    if (_visibleTo is EqualUnmodifiableListView) return _visibleTo;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_visibleTo);
+  }
+
+  final List<String> _inLibrary;
+  @override
+  List<String> get inLibrary {
+    if (_inLibrary is EqualUnmodifiableListView) return _inLibrary;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_inLibrary);
+  }
+
+  @override
+  final String type;
+  final List<FoundPlaylistSong> _songs;
+  @override
+  List<FoundPlaylistSong> get songs {
+    if (_songs is EqualUnmodifiableListView) return _songs;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_songs);
+  }
+
+  @override
+  String toString() {
+    return 'FoundPlaylist(name: $name, id: $id, owner: $owner, ownerImageUrl: $ownerImageUrl, imageUrl: $imageUrl, visibleTo: $visibleTo, inLibrary: $inLibrary, type: $type, songs: $songs)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$FoundPlaylistImpl &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.owner, owner) || other.owner == owner) &&
+            (identical(other.ownerImageUrl, ownerImageUrl) ||
+                other.ownerImageUrl == ownerImageUrl) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            const DeepCollectionEquality()
+                .equals(other._visibleTo, _visibleTo) &&
+            const DeepCollectionEquality()
+                .equals(other._inLibrary, _inLibrary) &&
+            (identical(other.type, type) || other.type == type) &&
+            const DeepCollectionEquality().equals(other._songs, _songs));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      name,
+      id,
+      owner,
+      ownerImageUrl,
+      imageUrl,
+      const DeepCollectionEquality().hash(_visibleTo),
+      const DeepCollectionEquality().hash(_inLibrary),
+      type,
+      const DeepCollectionEquality().hash(_songs));
+
+  /// Create a copy of FoundPlaylist
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$FoundPlaylistImplCopyWith<_$FoundPlaylistImpl> get copyWith =>
+      __$$FoundPlaylistImplCopyWithImpl<_$FoundPlaylistImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$FoundPlaylistImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _FoundPlaylist extends FoundPlaylist {
+  const factory _FoundPlaylist(
+      {required final String name,
+      required final String id,
+      required final String owner,
+      required final String ownerImageUrl,
+      required final String imageUrl,
+      required final List<String> visibleTo,
+      required final List<String> inLibrary,
+      required final String type,
+      required final List<FoundPlaylistSong> songs}) = _$FoundPlaylistImpl;
+  const _FoundPlaylist._() : super._();
+
+  factory _FoundPlaylist.fromJson(Map<String, dynamic> json) =
+      _$FoundPlaylistImpl.fromJson;
+
+  @override
+  String get name;
+  @override
+  String get id;
+  @override
+  String get owner;
+  @override
+  String get ownerImageUrl;
+  @override
+  String get imageUrl;
+  @override
+  List<String> get visibleTo;
+  @override
+  List<String> get inLibrary;
+  @override
+  String get type;
+  @override
+  List<FoundPlaylistSong> get songs;
+
+  /// Create a copy of FoundPlaylist
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$FoundPlaylistImplCopyWith<_$FoundPlaylistImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+FoundPlaylistSong _$FoundPlaylistSongFromJson(Map<String, dynamic> json) {
+  return _FoundPlaylistSong.fromJson(json);
+}
+
+/// @nodoc
+mixin _$FoundPlaylistSong {
+  String get title => throw _privateConstructorUsedError;
+  String get album => throw _privateConstructorUsedError;
+  String get artist => throw _privateConstructorUsedError;
+  String get albumCoverURL => throw _privateConstructorUsedError;
+  String get artistImageUrl => throw _privateConstructorUsedError;
+  List<String> get visibleTo => throw _privateConstructorUsedError;
+  List<String> get inLibrary => throw _privateConstructorUsedError;
+  String get url => throw _privateConstructorUsedError;
+  int get trackNumber => throw _privateConstructorUsedError;
+  String get type => throw _privateConstructorUsedError;
+
+  /// Serializes this FoundPlaylistSong to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of FoundPlaylistSong
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $FoundPlaylistSongCopyWith<FoundPlaylistSong> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $FoundPlaylistSongCopyWith<$Res> {
+  factory $FoundPlaylistSongCopyWith(
+          FoundPlaylistSong value, $Res Function(FoundPlaylistSong) then) =
+      _$FoundPlaylistSongCopyWithImpl<$Res, FoundPlaylistSong>;
+  @useResult
+  $Res call(
+      {String title,
+      String album,
+      String artist,
+      String albumCoverURL,
+      String artistImageUrl,
+      List<String> visibleTo,
+      List<String> inLibrary,
+      String url,
+      int trackNumber,
+      String type});
+}
+
+/// @nodoc
+class _$FoundPlaylistSongCopyWithImpl<$Res, $Val extends FoundPlaylistSong>
+    implements $FoundPlaylistSongCopyWith<$Res> {
+  _$FoundPlaylistSongCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of FoundPlaylistSong
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? title = null,
+    Object? album = null,
+    Object? artist = null,
+    Object? albumCoverURL = null,
+    Object? artistImageUrl = null,
+    Object? visibleTo = null,
+    Object? inLibrary = null,
+    Object? url = null,
+    Object? trackNumber = null,
+    Object? type = null,
+  }) {
+    return _then(_value.copyWith(
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      album: null == album
+          ? _value.album
+          : album // ignore: cast_nullable_to_non_nullable
+              as String,
+      artist: null == artist
+          ? _value.artist
+          : artist // ignore: cast_nullable_to_non_nullable
+              as String,
+      albumCoverURL: null == albumCoverURL
+          ? _value.albumCoverURL
+          : albumCoverURL // ignore: cast_nullable_to_non_nullable
+              as String,
+      artistImageUrl: null == artistImageUrl
+          ? _value.artistImageUrl
+          : artistImageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      visibleTo: null == visibleTo
+          ? _value.visibleTo
+          : visibleTo // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      inLibrary: null == inLibrary
+          ? _value.inLibrary
+          : inLibrary // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String,
+      trackNumber: null == trackNumber
+          ? _value.trackNumber
+          : trackNumber // ignore: cast_nullable_to_non_nullable
+              as int,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$FoundPlaylistSongImplCopyWith<$Res>
+    implements $FoundPlaylistSongCopyWith<$Res> {
+  factory _$$FoundPlaylistSongImplCopyWith(_$FoundPlaylistSongImpl value,
+          $Res Function(_$FoundPlaylistSongImpl) then) =
+      __$$FoundPlaylistSongImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String title,
+      String album,
+      String artist,
+      String albumCoverURL,
+      String artistImageUrl,
+      List<String> visibleTo,
+      List<String> inLibrary,
+      String url,
+      int trackNumber,
+      String type});
+}
+
+/// @nodoc
+class __$$FoundPlaylistSongImplCopyWithImpl<$Res>
+    extends _$FoundPlaylistSongCopyWithImpl<$Res, _$FoundPlaylistSongImpl>
+    implements _$$FoundPlaylistSongImplCopyWith<$Res> {
+  __$$FoundPlaylistSongImplCopyWithImpl(_$FoundPlaylistSongImpl _value,
+      $Res Function(_$FoundPlaylistSongImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of FoundPlaylistSong
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? title = null,
+    Object? album = null,
+    Object? artist = null,
+    Object? albumCoverURL = null,
+    Object? artistImageUrl = null,
+    Object? visibleTo = null,
+    Object? inLibrary = null,
+    Object? url = null,
+    Object? trackNumber = null,
+    Object? type = null,
+  }) {
+    return _then(_$FoundPlaylistSongImpl(
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      album: null == album
+          ? _value.album
+          : album // ignore: cast_nullable_to_non_nullable
+              as String,
+      artist: null == artist
+          ? _value.artist
+          : artist // ignore: cast_nullable_to_non_nullable
+              as String,
+      albumCoverURL: null == albumCoverURL
+          ? _value.albumCoverURL
+          : albumCoverURL // ignore: cast_nullable_to_non_nullable
+              as String,
+      artistImageUrl: null == artistImageUrl
+          ? _value.artistImageUrl
+          : artistImageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      visibleTo: null == visibleTo
+          ? _value._visibleTo
+          : visibleTo // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      inLibrary: null == inLibrary
+          ? _value._inLibrary
+          : inLibrary // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String,
+      trackNumber: null == trackNumber
+          ? _value.trackNumber
+          : trackNumber // ignore: cast_nullable_to_non_nullable
+              as int,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$FoundPlaylistSongImpl implements _FoundPlaylistSong {
+  const _$FoundPlaylistSongImpl(
+      {required this.title,
+      required this.album,
+      required this.artist,
+      required this.albumCoverURL,
+      required this.artistImageUrl,
+      required final List<String> visibleTo,
+      required final List<String> inLibrary,
+      required this.url,
+      required this.trackNumber,
+      required this.type})
+      : _visibleTo = visibleTo,
+        _inLibrary = inLibrary;
+
+  factory _$FoundPlaylistSongImpl.fromJson(Map<String, dynamic> json) =>
+      _$$FoundPlaylistSongImplFromJson(json);
+
+  @override
+  final String title;
+  @override
+  final String album;
+  @override
+  final String artist;
+  @override
+  final String albumCoverURL;
+  @override
+  final String artistImageUrl;
+  final List<String> _visibleTo;
+  @override
+  List<String> get visibleTo {
+    if (_visibleTo is EqualUnmodifiableListView) return _visibleTo;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_visibleTo);
+  }
+
+  final List<String> _inLibrary;
+  @override
+  List<String> get inLibrary {
+    if (_inLibrary is EqualUnmodifiableListView) return _inLibrary;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_inLibrary);
+  }
+
+  @override
+  final String url;
+  @override
+  final int trackNumber;
+  @override
+  final String type;
+
+  @override
+  String toString() {
+    return 'FoundPlaylistSong(title: $title, album: $album, artist: $artist, albumCoverURL: $albumCoverURL, artistImageUrl: $artistImageUrl, visibleTo: $visibleTo, inLibrary: $inLibrary, url: $url, trackNumber: $trackNumber, type: $type)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$FoundPlaylistSongImpl &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.album, album) || other.album == album) &&
+            (identical(other.artist, artist) || other.artist == artist) &&
+            (identical(other.albumCoverURL, albumCoverURL) ||
+                other.albumCoverURL == albumCoverURL) &&
+            (identical(other.artistImageUrl, artistImageUrl) ||
+                other.artistImageUrl == artistImageUrl) &&
+            const DeepCollectionEquality()
+                .equals(other._visibleTo, _visibleTo) &&
+            const DeepCollectionEquality()
+                .equals(other._inLibrary, _inLibrary) &&
+            (identical(other.url, url) || other.url == url) &&
+            (identical(other.trackNumber, trackNumber) ||
+                other.trackNumber == trackNumber) &&
+            (identical(other.type, type) || other.type == type));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      title,
+      album,
+      artist,
+      albumCoverURL,
+      artistImageUrl,
+      const DeepCollectionEquality().hash(_visibleTo),
+      const DeepCollectionEquality().hash(_inLibrary),
+      url,
+      trackNumber,
+      type);
+
+  /// Create a copy of FoundPlaylistSong
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$FoundPlaylistSongImplCopyWith<_$FoundPlaylistSongImpl> get copyWith =>
+      __$$FoundPlaylistSongImplCopyWithImpl<_$FoundPlaylistSongImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$FoundPlaylistSongImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _FoundPlaylistSong implements FoundPlaylistSong {
+  const factory _FoundPlaylistSong(
+      {required final String title,
+      required final String album,
+      required final String artist,
+      required final String albumCoverURL,
+      required final String artistImageUrl,
+      required final List<String> visibleTo,
+      required final List<String> inLibrary,
+      required final String url,
+      required final int trackNumber,
+      required final String type}) = _$FoundPlaylistSongImpl;
+
+  factory _FoundPlaylistSong.fromJson(Map<String, dynamic> json) =
+      _$FoundPlaylistSongImpl.fromJson;
+
+  @override
+  String get title;
+  @override
+  String get album;
+  @override
+  String get artist;
+  @override
+  String get albumCoverURL;
+  @override
+  String get artistImageUrl;
+  @override
+  List<String> get visibleTo;
+  @override
+  List<String> get inLibrary;
+  @override
+  String get url;
+  @override
+  int get trackNumber;
+  @override
+  String get type;
+
+  /// Create a copy of FoundPlaylistSong
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$FoundPlaylistSongImplCopyWith<_$FoundPlaylistSongImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 AddResult _$AddResultFromJson(Map<String, dynamic> json) {
   return _AddResult.fromJson(json);
 }

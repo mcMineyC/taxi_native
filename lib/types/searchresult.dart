@@ -122,6 +122,44 @@ class FindResultSong with _$FindResultSong {
 }
 
 @freezed
+class FoundPlaylist with _$FoundPlaylist {
+  const FoundPlaylist._();
+  const factory FoundPlaylist({
+    required String name,
+    required String id,
+    required String owner,
+    required String ownerImageUrl,
+    required String imageUrl,
+    required List<String> visibleTo,
+    required List<String> inLibrary,
+    required String type,
+    required List<FoundPlaylistSong> songs,
+  }) = _FoundPlaylist;
+
+  factory FoundPlaylist.fromJson(Map<String, dynamic> json) =>
+      _$FoundPlaylistFromJson(json);
+}
+
+@freezed
+class FoundPlaylistSong with _$FoundPlaylistSong {
+  const factory FoundPlaylistSong({
+    required String title,
+    required String album, 
+    required String artist,
+    required String albumCoverURL,
+    required String artistImageUrl,
+    required List<String> visibleTo,
+    required List<String> inLibrary,
+    required String url,
+    required int trackNumber,
+    required String type,
+  }) = _FoundPlaylistSong;
+
+  factory FoundPlaylistSong.fromJson(Map<String, dynamic> json) =>
+      _$FoundPlaylistSongFromJson(json);
+}
+
+@freezed
 class AddResult with _$AddResult {
   const AddResult._();
   const factory AddResult({

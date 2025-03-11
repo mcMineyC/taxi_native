@@ -30,6 +30,8 @@ class AddState with _$AddState {
     required List<SearchResult> selectedSearchResults,
     required List<String> selectedSearchResultIds,
     required List<FindResult> findResults,
+    FoundPlaylist? foundPlaylist,
+    //required bool
     required AddResult addResult,
     required bool done,
     required bool authed,
@@ -104,12 +106,19 @@ class Adder extends _$Adder {
 
     socket.on('findresults', (data) {
       print("Adder: Find results");
-      //print(data["results"][0].toString());
-      var found = List<FindResult>.empty(growable: true);
-      data["results"].forEach((element) {
-        found.add(FindResult.fromJson(element));
-      });
-      state = state.copyWith(state: "find:results", findResults: found);
+      print("Adder: Do we have a playlist? ${data["isPlaylist"]}");
+      if(data["isPlaylist"] == false){
+        //print(data["results"][0].toString());
+        var found = List<FindResult>.empty(growable: true);
+        data["results"].forEach((element) {
+          found.add(FindResult.fromJson(element));
+        });
+        state = state.copyWith(state: "find:results", findResults: found);
+      }else{
+        print("Adder: We have a playlist!!! Party town");
+        FoundPlaylist playlist = FoundPlaylist.fromJson(data["results"][0]);
+        state = state.copyWith(state: "find:results:playlist", foundPlaylist: playlist);
+      }
     });
 
     socket.on('addresult', (data) {

@@ -119,6 +119,68 @@ Map<String, dynamic> _$$FindResultSongImplToJson(
       'trackNumber': instance.trackNumber,
     };
 
+_$FoundPlaylistImpl _$$FoundPlaylistImplFromJson(Map<String, dynamic> json) =>
+    _$FoundPlaylistImpl(
+      name: json['name'] as String,
+      id: json['id'] as String,
+      owner: json['owner'] as String,
+      ownerImageUrl: json['ownerImageUrl'] as String,
+      imageUrl: json['imageUrl'] as String,
+      visibleTo:
+          (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
+      inLibrary:
+          (json['inLibrary'] as List<dynamic>).map((e) => e as String).toList(),
+      type: json['type'] as String,
+      songs: (json['songs'] as List<dynamic>)
+          .map((e) => FoundPlaylistSong.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$$FoundPlaylistImplToJson(_$FoundPlaylistImpl instance) =>
+    <String, dynamic>{
+      'name': instance.name,
+      'id': instance.id,
+      'owner': instance.owner,
+      'ownerImageUrl': instance.ownerImageUrl,
+      'imageUrl': instance.imageUrl,
+      'visibleTo': instance.visibleTo,
+      'inLibrary': instance.inLibrary,
+      'type': instance.type,
+      'songs': instance.songs,
+    };
+
+_$FoundPlaylistSongImpl _$$FoundPlaylistSongImplFromJson(
+        Map<String, dynamic> json) =>
+    _$FoundPlaylistSongImpl(
+      title: json['title'] as String,
+      album: json['album'] as String,
+      artist: json['artist'] as String,
+      albumCoverURL: json['albumCoverURL'] as String,
+      artistImageUrl: json['artistImageUrl'] as String,
+      visibleTo:
+          (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
+      inLibrary:
+          (json['inLibrary'] as List<dynamic>).map((e) => e as String).toList(),
+      url: json['url'] as String,
+      trackNumber: (json['trackNumber'] as num).toInt(),
+      type: json['type'] as String,
+    );
+
+Map<String, dynamic> _$$FoundPlaylistSongImplToJson(
+        _$FoundPlaylistSongImpl instance) =>
+    <String, dynamic>{
+      'title': instance.title,
+      'album': instance.album,
+      'artist': instance.artist,
+      'albumCoverURL': instance.albumCoverURL,
+      'artistImageUrl': instance.artistImageUrl,
+      'visibleTo': instance.visibleTo,
+      'inLibrary': instance.inLibrary,
+      'url': instance.url,
+      'trackNumber': instance.trackNumber,
+      'type': instance.type,
+    };
+
 _$AddResultImpl _$$AddResultImplFromJson(Map<String, dynamic> json) =>
     _$AddResultImpl(
       success: json['success'] as bool,

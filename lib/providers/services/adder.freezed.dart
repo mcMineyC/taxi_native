@@ -27,6 +27,8 @@ mixin _$AddState {
   List<String> get selectedSearchResultIds =>
       throw _privateConstructorUsedError;
   List<FindResult> get findResults => throw _privateConstructorUsedError;
+  FoundPlaylist? get foundPlaylist =>
+      throw _privateConstructorUsedError; //required bool
   AddResult get addResult => throw _privateConstructorUsedError;
   bool get done => throw _privateConstructorUsedError;
   bool get authed => throw _privateConstructorUsedError;
@@ -53,10 +55,12 @@ abstract class $AddStateCopyWith<$Res> {
       List<SearchResult> selectedSearchResults,
       List<String> selectedSearchResultIds,
       List<FindResult> findResults,
+      FoundPlaylist? foundPlaylist,
       AddResult addResult,
       bool done,
       bool authed});
 
+  $FoundPlaylistCopyWith<$Res>? get foundPlaylist;
   $AddResultCopyWith<$Res> get addResult;
 }
 
@@ -84,6 +88,7 @@ class _$AddStateCopyWithImpl<$Res, $Val extends AddState>
     Object? selectedSearchResults = null,
     Object? selectedSearchResultIds = null,
     Object? findResults = null,
+    Object? foundPlaylist = freezed,
     Object? addResult = null,
     Object? done = null,
     Object? authed = null,
@@ -125,6 +130,10 @@ class _$AddStateCopyWithImpl<$Res, $Val extends AddState>
           ? _value.findResults
           : findResults // ignore: cast_nullable_to_non_nullable
               as List<FindResult>,
+      foundPlaylist: freezed == foundPlaylist
+          ? _value.foundPlaylist
+          : foundPlaylist // ignore: cast_nullable_to_non_nullable
+              as FoundPlaylist?,
       addResult: null == addResult
           ? _value.addResult
           : addResult // ignore: cast_nullable_to_non_nullable
@@ -138,6 +147,20 @@ class _$AddStateCopyWithImpl<$Res, $Val extends AddState>
           : authed // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
+  }
+
+  /// Create a copy of AddState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $FoundPlaylistCopyWith<$Res>? get foundPlaylist {
+    if (_value.foundPlaylist == null) {
+      return null;
+    }
+
+    return $FoundPlaylistCopyWith<$Res>(_value.foundPlaylist!, (value) {
+      return _then(_value.copyWith(foundPlaylist: value) as $Val);
+    });
   }
 
   /// Create a copy of AddState
@@ -169,10 +192,13 @@ abstract class _$$AddStateImplCopyWith<$Res>
       List<SearchResult> selectedSearchResults,
       List<String> selectedSearchResultIds,
       List<FindResult> findResults,
+      FoundPlaylist? foundPlaylist,
       AddResult addResult,
       bool done,
       bool authed});
 
+  @override
+  $FoundPlaylistCopyWith<$Res>? get foundPlaylist;
   @override
   $AddResultCopyWith<$Res> get addResult;
 }
@@ -199,6 +225,7 @@ class __$$AddStateImplCopyWithImpl<$Res>
     Object? selectedSearchResults = null,
     Object? selectedSearchResultIds = null,
     Object? findResults = null,
+    Object? foundPlaylist = freezed,
     Object? addResult = null,
     Object? done = null,
     Object? authed = null,
@@ -240,6 +267,10 @@ class __$$AddStateImplCopyWithImpl<$Res>
           ? _value._findResults
           : findResults // ignore: cast_nullable_to_non_nullable
               as List<FindResult>,
+      foundPlaylist: freezed == foundPlaylist
+          ? _value.foundPlaylist
+          : foundPlaylist // ignore: cast_nullable_to_non_nullable
+              as FoundPlaylist?,
       addResult: null == addResult
           ? _value.addResult
           : addResult // ignore: cast_nullable_to_non_nullable
@@ -269,6 +300,7 @@ class _$AddStateImpl extends _AddState {
       required final List<SearchResult> selectedSearchResults,
       required final List<String> selectedSearchResultIds,
       required final List<FindResult> findResults,
+      this.foundPlaylist,
       required this.addResult,
       required this.done,
       required this.authed})
@@ -323,6 +355,9 @@ class _$AddStateImpl extends _AddState {
   }
 
   @override
+  final FoundPlaylist? foundPlaylist;
+//required bool
+  @override
   final AddResult addResult;
   @override
   final bool done;
@@ -331,7 +366,7 @@ class _$AddStateImpl extends _AddState {
 
   @override
   String toString() {
-    return 'AddState(id: $id, query: $query, searchType: $searchType, searchSource: $searchSource, state: $state, searchResults: $searchResults, selectedSearchResults: $selectedSearchResults, selectedSearchResultIds: $selectedSearchResultIds, findResults: $findResults, addResult: $addResult, done: $done, authed: $authed)';
+    return 'AddState(id: $id, query: $query, searchType: $searchType, searchSource: $searchSource, state: $state, searchResults: $searchResults, selectedSearchResults: $selectedSearchResults, selectedSearchResultIds: $selectedSearchResultIds, findResults: $findResults, foundPlaylist: $foundPlaylist, addResult: $addResult, done: $done, authed: $authed)';
   }
 
   @override
@@ -354,6 +389,8 @@ class _$AddStateImpl extends _AddState {
                 other._selectedSearchResultIds, _selectedSearchResultIds) &&
             const DeepCollectionEquality()
                 .equals(other._findResults, _findResults) &&
+            (identical(other.foundPlaylist, foundPlaylist) ||
+                other.foundPlaylist == foundPlaylist) &&
             (identical(other.addResult, addResult) ||
                 other.addResult == addResult) &&
             (identical(other.done, done) || other.done == done) &&
@@ -372,6 +409,7 @@ class _$AddStateImpl extends _AddState {
       const DeepCollectionEquality().hash(_selectedSearchResults),
       const DeepCollectionEquality().hash(_selectedSearchResultIds),
       const DeepCollectionEquality().hash(_findResults),
+      foundPlaylist,
       addResult,
       done,
       authed);
@@ -396,6 +434,7 @@ abstract class _AddState extends AddState {
       required final List<SearchResult> selectedSearchResults,
       required final List<String> selectedSearchResultIds,
       required final List<FindResult> findResults,
+      final FoundPlaylist? foundPlaylist,
       required final AddResult addResult,
       required final bool done,
       required final bool authed}) = _$AddStateImpl;
@@ -419,6 +458,8 @@ abstract class _AddState extends AddState {
   List<String> get selectedSearchResultIds;
   @override
   List<FindResult> get findResults;
+  @override
+  FoundPlaylist? get foundPlaylist; //required bool
   @override
   AddResult get addResult;
   @override

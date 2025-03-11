@@ -38,6 +38,7 @@ class _AdderPageState extends ConsumerState {
   bool findResultsProcessed = false;
   List<HLVArtist> hlvArtists = [];
   FoundPlaylist? foundPlaylist;
+  TextEditingController foundPlaylistNameController = TextEditingController();
   void pullSearchResults(state) {
     print("Pulling search results");
     restoredSelectedSearchResults = false;
@@ -95,6 +96,7 @@ class _AdderPageState extends ConsumerState {
     }else if(state.state == "find:results:playlist"){
       if(!findResultsProcessed){
         foundPlaylist = state.foundPlaylist;
+        foundPlaylistNameController.text = foundPlaylist!.name;
         findResultsProcessed = true;
       }
       page = "find:results:playlist";
@@ -157,7 +159,8 @@ class _AdderPageState extends ConsumerState {
                     "search" => searchPage(context, null, false),
                     "search:results" => searchPage(context, searchResults, false),
                     "find:results" => findPage(context, findResults),
-                    "find:results:playlist" => Center(child: Text("Congratulations, you found an unfinished page!\nThis will be the third step for adding a playlist.")),
+                    //"find:results:playlist" => Center(child: Text("Congratulations, you found an unfinished page!\nThis will be the third step for adding a playlist.")),
+                    "find:results:playlist" => findResultsPlaylistPage(context, foundPlaylist!),
                     _ => Center(
                           child: Column(children: [
                         Text("Unknown state: ${state.state}",
@@ -205,7 +208,9 @@ class _AdderPageState extends ConsumerState {
                         }else if(page == "search:results"){
                           searchPageSubmitted(context);
                         }else if(page == "find:results"){
-                          findPageSubmitted(context);
+                          findPageSubmitted(context, "");
+                        }else if(page == "find:results:playlist"){
+                          findPageSubmitted(context, "playlist");
                         }
                       };
                     }
@@ -254,9 +259,15 @@ class _AdderPageState extends ConsumerState {
     restoredSelectedSearchResults = false;
     ref.read(adderProvider.notifier).findVideosForSelectedSearchResults();
   }
-  void findPageSubmitted(BuildContext context) {
+  void findPageSubmitted(BuildContext context, String extension) {
+    if(extension == "playlist") {
+      print("Can't submit yet");
+      print(foundPlaylistNameController.value.text);
+      return;
+    }else if(extension == "") {
+      ref.read(adderProvider.notifier).addHLVResults(hlvArtists);
+    }
     page = "loading:add";
-    ref.read(adderProvider.notifier).addHLVResults(hlvArtists);
     print("Find page submitted");
   }
   void dutiesDone(BuildContext context){
@@ -434,8 +445,70 @@ class _AdderPageState extends ConsumerState {
     ));
   }
 
-  //
+  Widget findResultsPlaylistPage(BuildContext context, FoundPlaylist playlist) {
+    return Column(  
+      children: [
+        Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 0, bottom: 16),
+                child: Text(
+                  "Step 3: Verify Info - Playlist",
+                  textAlign: TextAlign.left,
+                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold)
+                ),
+              ),
+              TextField(
+              controller: foundPlaylistNameController,
+                decoration: InputDecoration(
+                  labelText: 'Playlist Name',
+                  border: OutlineInputBorder(),
+                ),
+                //onChanged: (text) {
+                //  playlist = playlist.copyWith(name: text);
+                //},
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ListView(
+            children: playlist.songs.map((song) => 
+              ListTile(
+                title: Text(song.title),
+                subtitle: Text(song.artist),
+                trailing: PopupMenuButton<void Function()>(
+                  itemBuilder: (context) {
+                    return [
+                      PopupMenuItem(
+                        value: () {
+                          print("Edit playlist song ${song.title}");
+                        },
+                        child: Row(children: [Icon(Icons.edit), SpacerWidget(width: 4), Text("Edit")]),
+                      ),
+                      PopupMenuItem(
+                        value: () {
+                          print("Delete playlist song ${song.title}");
+                        },
+                        child: Row(children: [Icon(Icons.delete), SpacerWidget(width: 4), Text("Delete")]),
+                      ),
+                    ];
+                  },
+                  onSelected: (fn) => fn(),
+                ),
+                  
+              ),
+            ).toList(),
+          ),
+        ),
+      ],
+    );
+  }
 }
+enum FoundPlaylistSongPopupMenuItems { edit, delete }
 
 void showImage(BuildContext context, String imageUrl) {
   showDialog(

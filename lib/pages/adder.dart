@@ -29,6 +29,7 @@ class _AdderPageState extends ConsumerState {
   int page = 1;
   List<SearchResult> selectedSearchResults = [];
   SearchType selectedSearchType = SearchType.track;
+  SearchSource selectedSearchSource = SearchSource.spotify;
   List<GlobalKey<InfoEditorCardState>> stateKeys = [];
   List<FindResult> correctedFindResults = [];
 

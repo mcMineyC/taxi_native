@@ -155,9 +155,14 @@ class Player extends _$Player {
     _sp = await SharedPreferences.getInstance();
     await _loadYoutubeCache();
     print("Playerinfo: init");
-    if (!PlatformUtils.isWeb &&
-        (PlatformUtils.isLinux || PlatformUtils.isWindows))
-      JustAudioMediaKit.ensureInitialized();
+    //if (!PlatformUtils.isWeb &&
+    //    (PlatformUtils.isLinux || PlatformUtils.isWindows))
+    JustAudioMediaKit.ensureInitialized(
+      linux: true,
+      windows: true,
+      android: true,
+      macOS: true,
+    );
     player.positionStream.listen((Duration d) {
       state = state.copyWith(position: d.inMilliseconds);
       if (d.inMilliseconds > 0 &&
@@ -481,6 +486,7 @@ class Player extends _$Player {
     state = state.copyWith(thinking: true);
     player.pause();
     var url = item.audioUrl;
+    print("audioUrl: $url");
     if (url.split(":").first != "prefetched") {
       if (PlatformUtils.isWeb) return;
       url = await getAudioUrl(url);
@@ -489,6 +495,7 @@ class Player extends _$Player {
       if (url.isEmpty)
         throw Exception("Audio url fetch failed: ${item.audioUrl}");
     }
+    print("Playing url: $url");
     await player.setAudioSource(AudioSource.uri(
       Uri.parse(await getAudioUrl(url)),
       tag: MediaItem(

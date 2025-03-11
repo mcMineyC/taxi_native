@@ -50,7 +50,7 @@ dependencies:
       ref: minor
   just_audio_media_kit: 2.0.3
   just_audio_windows: any
-  media_kit_libs_linux: any
+  media_kit_libs_linux: ^1.1.3
   # media_kit_libs_windows: any
   just_audio_background: any
   media_kit_native_event_loop: ^1.0.8
@@ -58,11 +58,13 @@ dependencies:
   just_audio_web: ^0.4.11
   squiggly_slider: ^1.0.5
   dynamic_color: ^1.7.0
-  media_kit_libs_windows_audio: any
+  media_kit_libs_windows_audio: ^1.0.9
   build_runner: ^2.4.14
   hooks_riverpod: ^2.6.1
   url_launcher: ^6.3.1
   transparent_image: ^2.0.1
+  media_kit_libs_android_audio: ^1.3.6
+  media_kit_libs_macos_audio: ^1.1.4
   #analyzer: ^0.38.2
   # just_audio_handlers:
   #   # git:

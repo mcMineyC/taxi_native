@@ -165,7 +165,7 @@ class Player extends _$Player {
     );
     player.positionStream.listen((Duration d) {
       state = state.copyWith(position: d.inMilliseconds);
-      if (d.inMilliseconds > 0 &&
+      /*if (d.inMilliseconds > 0 &&
           state.duration > 0 &&
           !PlatformUtils.isWeb &&
           (PlatformUtils.isIOS || PlatformUtils.isMacOS) &&
@@ -176,12 +176,13 @@ class Player extends _$Player {
           !PlatformUtils.isWeb &&
           (PlatformUtils.isIOS || PlatformUtils.isMacOS) &&
           (d.inMilliseconds > state.duration) &&
-          canNext) print("Hacky darwin workaround");
+          canNext) print("Hacky darwin workaround");*/
+      // maybe this isn't needed anymore?
     });
     player.durationStream.listen((Duration? d) => state = state.copyWith(
         duration: (d?.inMilliseconds ?? 0) ~/
             (!PlatformUtils.isWeb &&
-                    (PlatformUtils.isIOS || PlatformUtils.isMacOS)
+                    (PlatformUtils.isIOS || PlatformUtils.isMacOS) && false
                 ? 2
                 : 1)));
     player.playerStateStream.listen((state) {

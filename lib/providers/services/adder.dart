@@ -35,6 +35,8 @@ class AddState with _$AddState {
     required AddResult addResult,
     required bool done,
     required bool authed,
+    required int totalResults,
+    required int completedResults,
   }) = _AddState;
 }
 
@@ -61,6 +63,8 @@ class Adder extends _$Adder {
       addResult: AddResult(success: false, count: AddResultCount(artists: 0, albums: 0, songs: 0)),
       done: false,
       authed: false,
+      totalResults: 0,
+      completedResults: 0
     ); 
   }
 
@@ -104,6 +108,10 @@ class Adder extends _$Adder {
       print("Adder: Search results: ${results.length}");
     });
 
+    socket.on('findprogress', (data) {
+      state = state.copyWith(totalResults: data["total"], completedResults: data["completed"]);
+    });
+
     socket.on('findresults', (data) {
       print("Adder: Find results");
       print("Adder: Do we have a playlist? ${data["isPlaylist"]}");
@@ -145,7 +153,7 @@ class Adder extends _$Adder {
   }
 
   void findVideosFor(List<SearchResult> results, SearchSource source) {
-    state = state.copyWith(state: "loading:find");
+    state = state.copyWith(state: "loading:find", totalResults: 0, completedResults: 0);
     print("Adder: Find videos for ${results.length} results");
     socket.emit('find', {'selected': results, 'source': source.type});
   }
@@ -159,6 +167,7 @@ class Adder extends _$Adder {
   void addHLVResults(List<HLVArtist> results) {
     state = state.copyWith(state: "loading:add");
     print("Adder: Add ${results.length} results");
+    print(jsonEncode(results));
     socket.emit('add', {"hierarchy": results});
   }
 

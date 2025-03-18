@@ -1327,6 +1327,7 @@ mixin _$FoundPlaylist {
   String get ownerImageUrl => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
   List<String> get visibleTo => throw _privateConstructorUsedError;
+  List<String> get allowedCollaborators => throw _privateConstructorUsedError;
   List<String> get inLibrary => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
   List<FoundPlaylistSong> get songs => throw _privateConstructorUsedError;
@@ -1354,6 +1355,7 @@ abstract class $FoundPlaylistCopyWith<$Res> {
       String ownerImageUrl,
       String imageUrl,
       List<String> visibleTo,
+      List<String> allowedCollaborators,
       List<String> inLibrary,
       String type,
       List<FoundPlaylistSong> songs});
@@ -1380,6 +1382,7 @@ class _$FoundPlaylistCopyWithImpl<$Res, $Val extends FoundPlaylist>
     Object? ownerImageUrl = null,
     Object? imageUrl = null,
     Object? visibleTo = null,
+    Object? allowedCollaborators = null,
     Object? inLibrary = null,
     Object? type = null,
     Object? songs = null,
@@ -1408,6 +1411,10 @@ class _$FoundPlaylistCopyWithImpl<$Res, $Val extends FoundPlaylist>
       visibleTo: null == visibleTo
           ? _value.visibleTo
           : visibleTo // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      allowedCollaborators: null == allowedCollaborators
+          ? _value.allowedCollaborators
+          : allowedCollaborators // ignore: cast_nullable_to_non_nullable
               as List<String>,
       inLibrary: null == inLibrary
           ? _value.inLibrary
@@ -1440,6 +1447,7 @@ abstract class _$$FoundPlaylistImplCopyWith<$Res>
       String ownerImageUrl,
       String imageUrl,
       List<String> visibleTo,
+      List<String> allowedCollaborators,
       List<String> inLibrary,
       String type,
       List<FoundPlaylistSong> songs});
@@ -1464,6 +1472,7 @@ class __$$FoundPlaylistImplCopyWithImpl<$Res>
     Object? ownerImageUrl = null,
     Object? imageUrl = null,
     Object? visibleTo = null,
+    Object? allowedCollaborators = null,
     Object? inLibrary = null,
     Object? type = null,
     Object? songs = null,
@@ -1493,6 +1502,10 @@ class __$$FoundPlaylistImplCopyWithImpl<$Res>
           ? _value._visibleTo
           : visibleTo // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      allowedCollaborators: null == allowedCollaborators
+          ? _value._allowedCollaborators
+          : allowedCollaborators // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       inLibrary: null == inLibrary
           ? _value._inLibrary
           : inLibrary // ignore: cast_nullable_to_non_nullable
@@ -1519,10 +1532,12 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
       required this.ownerImageUrl,
       required this.imageUrl,
       required final List<String> visibleTo,
+      required final List<String> allowedCollaborators,
       required final List<String> inLibrary,
       required this.type,
       required final List<FoundPlaylistSong> songs})
       : _visibleTo = visibleTo,
+        _allowedCollaborators = allowedCollaborators,
         _inLibrary = inLibrary,
         _songs = songs,
         super._();
@@ -1548,6 +1563,15 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
     return EqualUnmodifiableListView(_visibleTo);
   }
 
+  final List<String> _allowedCollaborators;
+  @override
+  List<String> get allowedCollaborators {
+    if (_allowedCollaborators is EqualUnmodifiableListView)
+      return _allowedCollaborators;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_allowedCollaborators);
+  }
+
   final List<String> _inLibrary;
   @override
   List<String> get inLibrary {
@@ -1568,7 +1592,7 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
 
   @override
   String toString() {
-    return 'FoundPlaylist(name: $name, id: $id, owner: $owner, ownerImageUrl: $ownerImageUrl, imageUrl: $imageUrl, visibleTo: $visibleTo, inLibrary: $inLibrary, type: $type, songs: $songs)';
+    return 'FoundPlaylist(name: $name, id: $id, owner: $owner, ownerImageUrl: $ownerImageUrl, imageUrl: $imageUrl, visibleTo: $visibleTo, allowedCollaborators: $allowedCollaborators, inLibrary: $inLibrary, type: $type, songs: $songs)';
   }
 
   @override
@@ -1586,6 +1610,8 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
             const DeepCollectionEquality()
                 .equals(other._visibleTo, _visibleTo) &&
             const DeepCollectionEquality()
+                .equals(other._allowedCollaborators, _allowedCollaborators) &&
+            const DeepCollectionEquality()
                 .equals(other._inLibrary, _inLibrary) &&
             (identical(other.type, type) || other.type == type) &&
             const DeepCollectionEquality().equals(other._songs, _songs));
@@ -1601,6 +1627,7 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
       ownerImageUrl,
       imageUrl,
       const DeepCollectionEquality().hash(_visibleTo),
+      const DeepCollectionEquality().hash(_allowedCollaborators),
       const DeepCollectionEquality().hash(_inLibrary),
       type,
       const DeepCollectionEquality().hash(_songs));
@@ -1629,6 +1656,7 @@ abstract class _FoundPlaylist extends FoundPlaylist {
       required final String ownerImageUrl,
       required final String imageUrl,
       required final List<String> visibleTo,
+      required final List<String> allowedCollaborators,
       required final List<String> inLibrary,
       required final String type,
       required final List<FoundPlaylistSong> songs}) = _$FoundPlaylistImpl;
@@ -1649,6 +1677,8 @@ abstract class _FoundPlaylist extends FoundPlaylist {
   String get imageUrl;
   @override
   List<String> get visibleTo;
+  @override
+  List<String> get allowedCollaborators;
   @override
   List<String> get inLibrary;
   @override

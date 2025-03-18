@@ -128,6 +128,9 @@ _$FoundPlaylistImpl _$$FoundPlaylistImplFromJson(Map<String, dynamic> json) =>
       imageUrl: json['imageUrl'] as String,
       visibleTo:
           (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
+      allowedCollaborators: (json['allowedCollaborators'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
       inLibrary:
           (json['inLibrary'] as List<dynamic>).map((e) => e as String).toList(),
       type: json['type'] as String,
@@ -144,6 +147,7 @@ Map<String, dynamic> _$$FoundPlaylistImplToJson(_$FoundPlaylistImpl instance) =>
       'ownerImageUrl': instance.ownerImageUrl,
       'imageUrl': instance.imageUrl,
       'visibleTo': instance.visibleTo,
+      'allowedCollaborators': instance.allowedCollaborators,
       'inLibrary': instance.inLibrary,
       'type': instance.type,
       'songs': instance.songs,

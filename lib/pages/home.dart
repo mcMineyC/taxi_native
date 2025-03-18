@@ -99,7 +99,7 @@ class MobileHomePage extends ConsumerWidget {
     int height = MediaQuery.of(context).size.height.toInt();
     return Scaffold(
       floatingActionButton: Container(
-        margin: EdgeInsets.only(bottom: (height >= 560) ? 16 : 0),
+        margin: EdgeInsets.only(bottom: 0),
         child: FloatingActionButton(
           onPressed: () => Beamer.of(context).beamToNamed('/search'),
           tooltip: "Search",

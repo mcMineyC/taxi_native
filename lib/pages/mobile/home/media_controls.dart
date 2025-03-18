@@ -14,13 +14,15 @@ class MobilePlayerControls extends ConsumerWidget {
     final player = ref.watch(playerProvider);
     persistenceFunction(player);
     return Container(
-      padding: EdgeInsets.only(top: (height >= 560 ? 16 : 0)),
-      height: (height >= 560 ? 100 : 84),
+      //padding: EdgeInsets.only(top: (height >= 560 ? 16 : 0)),
+      height: 64,
       child: Column(
         children: [
           Expanded(
-            child: Row(children: [
-              Expanded(
+            child: Row(
+            mainAxisAlignment: width >= 616 ? MainAxisAlignment.start : MainAxisAlignment.center,
+            children: [
+              if(width >= 616) Expanded(
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
@@ -44,11 +46,12 @@ class MobilePlayerControls extends ConsumerWidget {
                 ),
               ),
               Container(
+              //color: Colors.green[500],
                 // Button group
-                margin: EdgeInsets.only(right: 84),
+                margin: width >= 616 ? EdgeInsets.only(right: 84) : EdgeInsets.only(right: 36),
                 child: Row(
                   children: [
-                    if (width >= 296 && width <= 525)
+                    if (width < 616)
                       IconButton(
                         onPressed: () {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -136,40 +139,54 @@ class MobilePlayerControls extends ConsumerWidget {
               ),
             ]),
           ),
-          if (height >= 560)
-            Listener(
-              onPointerSignal: (event) {
-                if (player.thinking) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Currently thinking...")));
-                  return;
-                }
-                if (event is PointerScrollEvent) {
-                  if (event.scrollDelta.dy < 0) {
-                    ref.read(playerProvider.notifier).seekForward(3000);
-                  } else {
-                    ref.read(playerProvider.notifier).seekBackward(3000);
-                  }
-                }
-              },
-              child: Container(
-                  height: 16,
-                  // color: Colors.green,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  margin: const EdgeInsets.only(top: 16),
-                  child: Column(
-                    children: [
-                      LinearProgressIndicator(
-                        minHeight: 8,
-                        borderRadius: BorderRadius.circular(9999),
-                        value: player.duration == 0
-                            ? 0
-                            : player.position / player.duration,
-                      ),
-                      Expanded(child: Container()),
-                    ],
-                  )),
-            ),
+          // No mobile seekbar
+          //if (height >= 560)
+          //  Container(
+          //    padding: const EdgeInsets.symmetric(horizontal: 16),
+          //    margin: const EdgeInsets.only(top: 16),
+          //    child: Slider(
+          //      value: player.position.toDouble(),
+          //      max: player.duration.toDouble(),
+          //      min: 0,
+          //      onChanged: (_){},
+          //      onChangeEnd: (value) {
+          //        ref.read(playerProvider.notifier).seek(Duration(milliseconds: value.toInt()));
+          //      },
+          //    ),
+          //  ),
+            //Listener(
+            //  onPointerSignal: (event) {
+            //    if (player.thinking) {
+            //      ScaffoldMessenger.of(context).showSnackBar(
+            //          const SnackBar(content: Text("Currently thinking...")));
+            //      return;
+            //    }
+            //    if (event is PointerScrollEvent) {
+            //      if (event.scrollDelta.dy < 0) {
+            //        ref.read(playerProvider.notifier).seekForward(3000);
+            //      } else {
+            //        ref.read(playerProvider.notifier).seekBackward(3000);
+            //      }
+            //    }
+            //  },
+            //  child: Container(
+            //      height: 16,
+            //      // color: Colors.green,
+            //      padding: const EdgeInsets.symmetric(horizontal: 16),
+            //      margin: const EdgeInsets.only(top: 16),
+            //      child: Column(
+            //        children: [
+            //          LinearProgressIndicator(
+            //            minHeight: 8,
+            //            borderRadius: BorderRadius.circular(9999),
+            //            value: player.duration == 0
+            //                ? 0
+            //                : player.position / player.duration,
+            //          ),
+            //          Expanded(child: Container()),
+            //        ],
+            //      )),
+            //),
         ],
       ),
     );

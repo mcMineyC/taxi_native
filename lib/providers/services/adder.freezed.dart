@@ -32,6 +32,8 @@ mixin _$AddState {
   AddResult get addResult => throw _privateConstructorUsedError;
   bool get done => throw _privateConstructorUsedError;
   bool get authed => throw _privateConstructorUsedError;
+  int get totalResults => throw _privateConstructorUsedError;
+  int get completedResults => throw _privateConstructorUsedError;
 
   /// Create a copy of AddState
   /// with the given fields replaced by the non-null parameter values.
@@ -58,7 +60,9 @@ abstract class $AddStateCopyWith<$Res> {
       FoundPlaylist? foundPlaylist,
       AddResult addResult,
       bool done,
-      bool authed});
+      bool authed,
+      int totalResults,
+      int completedResults});
 
   $FoundPlaylistCopyWith<$Res>? get foundPlaylist;
   $AddResultCopyWith<$Res> get addResult;
@@ -92,6 +96,8 @@ class _$AddStateCopyWithImpl<$Res, $Val extends AddState>
     Object? addResult = null,
     Object? done = null,
     Object? authed = null,
+    Object? totalResults = null,
+    Object? completedResults = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -146,6 +152,14 @@ class _$AddStateCopyWithImpl<$Res, $Val extends AddState>
           ? _value.authed
           : authed // ignore: cast_nullable_to_non_nullable
               as bool,
+      totalResults: null == totalResults
+          ? _value.totalResults
+          : totalResults // ignore: cast_nullable_to_non_nullable
+              as int,
+      completedResults: null == completedResults
+          ? _value.completedResults
+          : completedResults // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 
@@ -195,7 +209,9 @@ abstract class _$$AddStateImplCopyWith<$Res>
       FoundPlaylist? foundPlaylist,
       AddResult addResult,
       bool done,
-      bool authed});
+      bool authed,
+      int totalResults,
+      int completedResults});
 
   @override
   $FoundPlaylistCopyWith<$Res>? get foundPlaylist;
@@ -229,6 +245,8 @@ class __$$AddStateImplCopyWithImpl<$Res>
     Object? addResult = null,
     Object? done = null,
     Object? authed = null,
+    Object? totalResults = null,
+    Object? completedResults = null,
   }) {
     return _then(_$AddStateImpl(
       id: null == id
@@ -283,6 +301,14 @@ class __$$AddStateImplCopyWithImpl<$Res>
           ? _value.authed
           : authed // ignore: cast_nullable_to_non_nullable
               as bool,
+      totalResults: null == totalResults
+          ? _value.totalResults
+          : totalResults // ignore: cast_nullable_to_non_nullable
+              as int,
+      completedResults: null == completedResults
+          ? _value.completedResults
+          : completedResults // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -303,7 +329,9 @@ class _$AddStateImpl extends _AddState {
       this.foundPlaylist,
       required this.addResult,
       required this.done,
-      required this.authed})
+      required this.authed,
+      required this.totalResults,
+      required this.completedResults})
       : _searchResults = searchResults,
         _selectedSearchResults = selectedSearchResults,
         _selectedSearchResultIds = selectedSearchResultIds,
@@ -363,10 +391,14 @@ class _$AddStateImpl extends _AddState {
   final bool done;
   @override
   final bool authed;
+  @override
+  final int totalResults;
+  @override
+  final int completedResults;
 
   @override
   String toString() {
-    return 'AddState(id: $id, query: $query, searchType: $searchType, searchSource: $searchSource, state: $state, searchResults: $searchResults, selectedSearchResults: $selectedSearchResults, selectedSearchResultIds: $selectedSearchResultIds, findResults: $findResults, foundPlaylist: $foundPlaylist, addResult: $addResult, done: $done, authed: $authed)';
+    return 'AddState(id: $id, query: $query, searchType: $searchType, searchSource: $searchSource, state: $state, searchResults: $searchResults, selectedSearchResults: $selectedSearchResults, selectedSearchResultIds: $selectedSearchResultIds, findResults: $findResults, foundPlaylist: $foundPlaylist, addResult: $addResult, done: $done, authed: $authed, totalResults: $totalResults, completedResults: $completedResults)';
   }
 
   @override
@@ -394,7 +426,11 @@ class _$AddStateImpl extends _AddState {
             (identical(other.addResult, addResult) ||
                 other.addResult == addResult) &&
             (identical(other.done, done) || other.done == done) &&
-            (identical(other.authed, authed) || other.authed == authed));
+            (identical(other.authed, authed) || other.authed == authed) &&
+            (identical(other.totalResults, totalResults) ||
+                other.totalResults == totalResults) &&
+            (identical(other.completedResults, completedResults) ||
+                other.completedResults == completedResults));
   }
 
   @override
@@ -412,7 +448,9 @@ class _$AddStateImpl extends _AddState {
       foundPlaylist,
       addResult,
       done,
-      authed);
+      authed,
+      totalResults,
+      completedResults);
 
   /// Create a copy of AddState
   /// with the given fields replaced by the non-null parameter values.
@@ -437,7 +475,9 @@ abstract class _AddState extends AddState {
       final FoundPlaylist? foundPlaylist,
       required final AddResult addResult,
       required final bool done,
-      required final bool authed}) = _$AddStateImpl;
+      required final bool authed,
+      required final int totalResults,
+      required final int completedResults}) = _$AddStateImpl;
   _AddState._() : super._();
 
   @override
@@ -466,6 +506,10 @@ abstract class _AddState extends AddState {
   bool get done;
   @override
   bool get authed;
+  @override
+  int get totalResults;
+  @override
+  int get completedResults;
 
   /// Create a copy of AddState
   /// with the given fields replaced by the non-null parameter values.

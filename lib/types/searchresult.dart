@@ -131,6 +131,7 @@ class FoundPlaylist with _$FoundPlaylist {
     required String ownerImageUrl,
     required String imageUrl,
     required List<String> visibleTo,
+    required List<String> allowedCollaborators,
     required List<String> inLibrary,
     required String type,
     required List<FoundPlaylistSong> songs,

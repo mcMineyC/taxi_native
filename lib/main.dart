@@ -299,11 +299,12 @@ class App extends ConsumerWidget {
       }
       return MaterialApp.router(
         // debugShowCheckedModeBanner: false,
-        title: 'Taxi - Native',
+        title: 'Taxi',
         theme: ThemeData(
           colorScheme: scheme,
           textTheme: theme.textTheme,
           useMaterial3: true,
+          sliderTheme: const SliderThemeData(year2023: false),
         ),
         routerDelegate: routerDelegate,
         routeInformationParser: BeamerParser(),

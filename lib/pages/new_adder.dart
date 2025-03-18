@@ -141,7 +141,7 @@ class _AdderPageState extends ConsumerState {
                     ]
                   )
                 ),
-                "loading:find" => const Center(child: CircularProgressIndicator()),
+                "loading:find" => loadingFindPage(state.totalResults, state.completedResults),
                 "loading:search" => searchPage(context, null, true),
                 "loading:add" => const Center(
                   child: Column(
@@ -445,6 +445,23 @@ class _AdderPageState extends ConsumerState {
     ));
   }
 
+  Widget loadingFindPage(int total, int completed){
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(
+            value: total != 0 ? completed.toDouble() / total.toDouble() : null,
+          ),
+          SpacerWidget(height: 10),
+          Text("Finding videos..."),
+          if(total != 0) Text("${completed}/${total}"),
+        ]
+      ),
+    );
+  }
+
   Widget findResultsPlaylistPage(BuildContext context, FoundPlaylist playlist) {
     return Column(  
       children: [
@@ -471,6 +488,74 @@ class _AdderPageState extends ConsumerState {
                 //  playlist = playlist.copyWith(name: text);
                 //},
               ),
+              SpacerWidget(height: 10),
+              Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Visible To:"),
+                      SpacerWidget(height: 5),
+                      Row(crossAxisAlignment: CrossAxisAlignment.center, children:[
+                        Icon(Icons.info_outline, size: 20, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                        SpacerWidget(width: 5),
+                        Text("Also changes visbility of contained songs", style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                      ])
+                    ]
+                  ),
+                  Expanded(child: Container()),
+                  TextButton(
+                    child: Text("Edit..."),
+                    onPressed: () async {
+                      var result = await getVisibleToFieldDialog(
+                          playlist.visibleTo, "Visible to", context);
+                      setState(() => foundPlaylist = playlist.copyWith(visibleTo: result));
+                    },
+                  ),
+                  //VisibleToField(
+                  //  value: playlist.visibleTo,
+                  //  id: playlist.id,
+                  //  shouldRefresh: false,
+                  //  onSaved: (List<String> v) async {
+                  //    setState(() {
+                  //      foundPlaylist = foundPlaylist!.copyWith(visibleTo: v);
+                  //    });
+                  //    print("Saved ${v}");
+                  //    return null;
+                  //  },
+                  //  onChanged: (v) => print("Changed ${v}"),
+                  //),
+                ]
+              ),
+              SpacerWidget(height: 10),
+              Row(
+                    children: [
+                      Text("Allowed collaborators"),
+                      Expanded(child: Container()),
+                      TextButton(
+                        child: Text("Edit..."),
+                        onPressed: () async {
+                          var result = await getVisibleToFieldDialog(playlist.allowedCollaborators, "Allowed collaborators", context);
+                          setState(() {
+                            foundPlaylist = playlist.copyWith(allowedCollaborators: result);
+                            result.forEach((c) {
+                              if (!playlist.visibleTo.contains(c) && playlist.visibleTo != ["all"]) {
+                                foundPlaylist = playlist.copyWith(visibleTo: [...playlist.visibleTo, c]);
+                              }
+                            });
+                          });
+                        },
+                      ),
+                      //Switch(
+                      //    value: current.visible,
+                      //    onChanged: (value) {
+                      //      setState(() {
+                      //        current = current.copyWith(public: value);
+                      //      });
+                      //    }),
+                    ],
+                  ),
+
             ],
           ),
         ),

@@ -63,3 +63,8 @@ extension IterableExtensions<T> on Iterable<T> {
     }
   }
 }
+
+String millisecondsToDurationString(int milliseconds) {
+  final duration = Duration(milliseconds: milliseconds);
+  return "${duration.inHours > 0 ? duration.inHours.toString() + ":" : ""}${duration.inHours > 0 ? (duration.inMinutes % 60).toString().padLeft(2, '0') : duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}";
+}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../player/fullscreen.dart';
 import '../../../providers/services/player.dart';
 
 class MobilePlayerControls extends ConsumerWidget {
@@ -51,13 +52,13 @@ class MobilePlayerControls extends ConsumerWidget {
                 margin: width >= 616 ? EdgeInsets.only(right: 84) : EdgeInsets.only(right: 36),
                 child: Row(
                   children: [
-                    if (width < 616)
                       IconButton(
                         onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content:
-                                      Text("Fullscreen player view not done")));
+                          showFullscreenPlayer(context);
+                          //ScaffoldMessenger.of(context).showSnackBar(
+                          //    const SnackBar(
+                          //        content:
+                          //            Text("Fullscreen player view not done")));
                         },
                         icon: const Icon(Icons.keyboard_arrow_up_rounded),
                       ),

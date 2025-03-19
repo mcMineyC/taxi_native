@@ -26,6 +26,7 @@ mixin _$PlayerInfo {
   String get displayName => throw _privateConstructorUsedError;
   String get artistDisplayName => throw _privateConstructorUsedError;
   String get albumDisplayName => throw _privateConstructorUsedError;
+  String get imageUrl => throw _privateConstructorUsedError;
   int get duration => throw _privateConstructorUsedError;
   int get position => throw _privateConstructorUsedError;
   bool get isPlaying => throw _privateConstructorUsedError;
@@ -58,6 +59,7 @@ abstract class $PlayerInfoCopyWith<$Res> {
       String displayName,
       String artistDisplayName,
       String albumDisplayName,
+      String imageUrl,
       int duration,
       int position,
       bool isPlaying,
@@ -89,6 +91,7 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
     Object? displayName = null,
     Object? artistDisplayName = null,
     Object? albumDisplayName = null,
+    Object? imageUrl = null,
     Object? duration = null,
     Object? position = null,
     Object? isPlaying = null,
@@ -122,6 +125,10 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
       albumDisplayName: null == albumDisplayName
           ? _value.albumDisplayName
           : albumDisplayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       duration: null == duration
           ? _value.duration
@@ -174,6 +181,7 @@ abstract class _$$PlayerInfoImplCopyWith<$Res>
       String displayName,
       String artistDisplayName,
       String albumDisplayName,
+      String imageUrl,
       int duration,
       int position,
       bool isPlaying,
@@ -203,6 +211,7 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
     Object? displayName = null,
     Object? artistDisplayName = null,
     Object? albumDisplayName = null,
+    Object? imageUrl = null,
     Object? duration = null,
     Object? position = null,
     Object? isPlaying = null,
@@ -236,6 +245,10 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
       albumDisplayName: null == albumDisplayName
           ? _value.albumDisplayName
           : albumDisplayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       duration: null == duration
           ? _value.duration
@@ -283,6 +296,7 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       required this.displayName,
       required this.artistDisplayName,
       required this.albumDisplayName,
+      required this.imageUrl,
       required this.duration,
       required this.position,
       required this.isPlaying,
@@ -309,6 +323,8 @@ class _$PlayerInfoImpl implements _PlayerInfo {
   @override
   final String albumDisplayName;
   @override
+  final String imageUrl;
+  @override
   final int duration;
   @override
   final int position;
@@ -333,7 +349,7 @@ class _$PlayerInfoImpl implements _PlayerInfo {
 
   @override
   String toString() {
-    return 'PlayerInfo(id: $id, artistId: $artistId, albumId: $albumId, displayName: $displayName, artistDisplayName: $artistDisplayName, albumDisplayName: $albumDisplayName, duration: $duration, position: $position, isPlaying: $isPlaying, queue: $queue, currentIndex: $currentIndex, shuffle: $shuffle, loop: $loop, thinking: $thinking)';
+    return 'PlayerInfo(id: $id, artistId: $artistId, albumId: $albumId, displayName: $displayName, artistDisplayName: $artistDisplayName, albumDisplayName: $albumDisplayName, imageUrl: $imageUrl, duration: $duration, position: $position, isPlaying: $isPlaying, queue: $queue, currentIndex: $currentIndex, shuffle: $shuffle, loop: $loop, thinking: $thinking)';
   }
 
   @override
@@ -351,6 +367,8 @@ class _$PlayerInfoImpl implements _PlayerInfo {
                 other.artistDisplayName == artistDisplayName) &&
             (identical(other.albumDisplayName, albumDisplayName) ||
                 other.albumDisplayName == albumDisplayName) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
             (identical(other.duration, duration) ||
                 other.duration == duration) &&
             (identical(other.position, position) ||
@@ -376,6 +394,7 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       displayName,
       artistDisplayName,
       albumDisplayName,
+      imageUrl,
       duration,
       position,
       isPlaying,
@@ -409,6 +428,7 @@ abstract class _PlayerInfo implements PlayerInfo {
       required final String displayName,
       required final String artistDisplayName,
       required final String albumDisplayName,
+      required final String imageUrl,
       required final int duration,
       required final int position,
       required final bool isPlaying,
@@ -433,6 +453,8 @@ abstract class _PlayerInfo implements PlayerInfo {
   String get artistDisplayName;
   @override
   String get albumDisplayName;
+  @override
+  String get imageUrl;
   @override
   int get duration;
   @override

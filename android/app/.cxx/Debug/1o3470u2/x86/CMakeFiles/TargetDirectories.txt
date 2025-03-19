@@ -1,0 +1,2 @@
+/home/jedi/Documents/Coding/taxi/taxi_native/android/app/.cxx/Debug/1o3470u2/x86/CMakeFiles/edit_cache.dir
+/home/jedi/Documents/Coding/taxi/taxi_native/android/app/.cxx/Debug/1o3470u2/x86/CMakeFiles/rebuild_cache.dir

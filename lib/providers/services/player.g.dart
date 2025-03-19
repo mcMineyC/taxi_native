@@ -14,6 +14,7 @@ _$PlayerInfoImpl _$$PlayerInfoImplFromJson(Map<String, dynamic> json) =>
       displayName: json['displayName'] as String,
       artistDisplayName: json['artistDisplayName'] as String,
       albumDisplayName: json['albumDisplayName'] as String,
+      imageUrl: json['imageUrl'] as String,
       duration: (json['duration'] as num).toInt(),
       position: (json['position'] as num).toInt(),
       isPlaying: json['isPlaying'] as bool,
@@ -34,6 +35,7 @@ Map<String, dynamic> _$$PlayerInfoImplToJson(_$PlayerInfoImpl instance) =>
       'displayName': instance.displayName,
       'artistDisplayName': instance.artistDisplayName,
       'albumDisplayName': instance.albumDisplayName,
+      'imageUrl': instance.imageUrl,
       'duration': instance.duration,
       'position': instance.position,
       'isPlaying': instance.isPlaying,
@@ -48,7 +50,7 @@ Map<String, dynamic> _$$PlayerInfoImplToJson(_$PlayerInfoImpl instance) =>
 // RiverpodGenerator
 // **************************************************************************
 
-String _$playerHash() => r'f07905c31c8fb4ca83514fa93afaa86429373fb0';
+String _$playerHash() => r'6f3d8a9d9c89949315046f657a6dd0e5dd4a399e';
 
 /// See also [Player].
 @ProviderFor(Player)

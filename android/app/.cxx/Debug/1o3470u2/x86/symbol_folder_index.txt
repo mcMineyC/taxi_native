@@ -1,0 +1,1 @@
+/home/jedi/Documents/Coding/taxi/taxi_native/build/app/intermediates/cxx/Debug/1o3470u2/obj/x86

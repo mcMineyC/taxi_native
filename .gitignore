@@ -49,6 +49,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/ap/.cxx
 
 # Ignore built exes
 /Installers/taxi.exe

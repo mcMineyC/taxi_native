@@ -3,8 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../providers/services/player.dart';
-import '../../../helper_widgets.dart';
+import '../../../../providers/services/player.dart';
+import '../../../../helpers/widgets/helper_widgets.dart';
 
 class DesktopBottomBar extends ConsumerWidget {
   DesktopBottomBar({required this.persistenceFunction});

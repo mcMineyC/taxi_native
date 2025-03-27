@@ -3,8 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as prov;
-import 'providers/data/user_provider.dart';
-import 'providers/data/preferences_provider.dart';
+import '../providers/data/user_provider.dart';
+import '../providers/data/preferences_provider.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});

@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 
 import '../data/preferences_provider.dart';
-import '../../service_locator.dart';
+import '../../helpers/service_locator.dart';
 import '../../types/song.dart';
 import '../../types/album.dart';
 import '../../types/artists.dart';

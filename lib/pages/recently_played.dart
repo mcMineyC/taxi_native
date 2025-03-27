@@ -6,9 +6,9 @@ import 'package:context_menus/context_menus.dart';
 import "../providers/data/info_provider.dart";
 import '../providers/data/fetched_data_provider.dart';
 import "../providers/services/player.dart";
-import '../utilities.dart';
-import "../helper_widgets.dart";
-import "../platform_utils.dart";
+import '../helpers/utilities.dart';
+import "../helpers/widgets/helper_widgets.dart";
+import "../helpers/platform_utils.dart";
 import "../types/song.dart";
 
 class RecentlyPlayedPage extends ConsumerWidget {

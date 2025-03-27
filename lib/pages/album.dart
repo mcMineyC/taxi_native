@@ -8,7 +8,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../providers/error_watcher.dart';
 import '../providers/data/fetched_data_provider.dart';
 import '../providers/services/player.dart';
-import '../helper_widgets.dart';
+import '../helpers/widgets/helper_widgets.dart';
 
 class AlbumPage extends ConsumerWidget {
   const AlbumPage({Key? key, required this.id}) : super(key: key);

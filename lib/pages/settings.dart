@@ -5,9 +5,9 @@ import 'package:provider/provider.dart' as prov;
 import '../providers/theme_provider.dart';
 import '../providers/data/preferences_provider.dart';
 import '../providers/services/player.dart';
-import '../platform_utils.dart';
-import '../helper_widgets.dart';
-import '../utilities.dart';
+import '../helpers/platform_utils.dart';
+import '../helpers/widgets/helper_widgets.dart';
+import '../helpers/utilities.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {

@@ -7,11 +7,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:context_menus/context_menus.dart';
 import 'package:provider/provider.dart' as prov;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'service_locator.dart';
+import 'helpers/service_locator.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'providers/data/preferences_provider.dart';
 import 'providers/theme_provider.dart';
-import 'uppercase_extension.dart';
+import 'helpers/extensions/uppercase_extension.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 
 import 'pages/error.dart';
@@ -26,15 +26,15 @@ import 'pages/queue.dart';
 import 'pages/landing.dart';
 import 'pages/search.dart';
 import 'pages/playlists.dart';
-import 'pages/playlist.dart';
+import 'pages/responsive/playlist/playlist.dart';
 import 'pages/settings.dart';
 import 'pages/checklist.dart';
-import 'pages/library.dart';
+import 'pages/responsive/library/library.dart';
 import 'pages/recently_played.dart';
 
 import 'pages/admin/dashboard.dart';
 
-import 'login.dart';
+import 'pages/login.dart';
 
 void main() async {
   // print("Current commit: ${String.fromEnvironment("GIT_REV")}");

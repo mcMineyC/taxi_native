@@ -9,12 +9,12 @@ import 'package:flutter/services.dart';
 
 import '../providers/services/player.dart';
 
-import 'desktop/home/navigation.dart';
-import 'desktop/home/mediacontrols.dart';
-import 'desktop/home/appbar.dart';
-import 'mobile/home/navigation.dart';
-import 'mobile/home/media_controls.dart';
-import 'mobile/home/appbar.dart';
+import 'responsive/skeleton/desktop/navigation.dart';
+import 'responsive/skeleton/desktop/mediacontrols.dart';
+import 'responsive/skeleton/desktop/appbar.dart';
+import 'responsive/skeleton/mobile/navigation.dart';
+import 'responsive/skeleton/mobile/media_controls.dart';
+import 'responsive/skeleton/mobile/appbar.dart';
 
 class HomePage extends ConsumerWidget {
   HomePage({super.key, required this.homeJunk});

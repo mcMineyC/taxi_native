@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'marque.dart';
 
-import 'package:taxi_native/utilities.dart';
-import '../../../providers/services/player.dart';
+import 'package:taxi_native/helpers/utilities.dart';
+import '../../../../providers/services/player.dart';
 
 class MobileFullscreenPlayerPage extends ConsumerStatefulWidget {
   MobileFullscreenPlayerPage({Key? key}) : super(key: key);

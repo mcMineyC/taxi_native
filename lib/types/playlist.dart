@@ -1,7 +1,7 @@
 import "package:freezed_annotation/freezed_annotation.dart";
 import "song.dart";
 import "../providers/data/preferences_provider.dart";
-import "../service_locator.dart";
+import "../helpers/service_locator.dart";
 part "playlist.freezed.dart";
 part "playlist.g.dart";
 

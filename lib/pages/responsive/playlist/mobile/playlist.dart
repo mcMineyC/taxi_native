@@ -4,24 +4,24 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:taxi_native/helper_widgets.dart';
-import 'package:taxi_native/constants.dart';
+import 'package:taxi_native/helpers/widgets/helper_widgets.dart';
+import 'package:taxi_native/helpers/constants.dart';
 
-import '../providers/error_watcher.dart';
-import '../providers/data/playlist_provider.dart';
-import '../providers/services/player.dart';
-import '../types/playlist.dart';
-import '../types/song.dart';
+import '../../../../providers/error_watcher.dart';
+import '../../../../providers/data/playlist_provider.dart';
+import '../../../../providers/services/player.dart';
+import '../../../../types/playlist.dart';
+import '../../../../types/song.dart';
 
-class PlaylistPage extends ConsumerStatefulWidget {
+class MobilePlaylistPage extends ConsumerStatefulWidget {
   @override
-  PlaylistPageState createState() => PlaylistPageState();
+  MobilePlaylistPageState createState() => MobilePlaylistPageState();
 
   String id;
-  PlaylistPage({required this.id, super.key});
+  MobilePlaylistPage({required this.id, super.key});
 }
 
-class PlaylistPageState extends ConsumerState<PlaylistPage> {
+class MobilePlaylistPageState extends ConsumerState<MobilePlaylistPage> {
   String id = "";
   bool loading = true;
   FilledPlaylist data = FilledPlaylist.empty();
@@ -63,8 +63,8 @@ class PlaylistPageState extends ConsumerState<PlaylistPage> {
       error: (_, __) => setState(() => loading = true),
     );
     //print("Playlist page rebuild");
-    //print("PlaylistPage: current width: ${ScreenBreakpoint.determine(MediaQuery.of(context).size.width.toInt())}");
-    //print("PlaylistPage: width: ${MediaQuery.of(context).size.width.toInt()}");
+    //print("MobilePlaylistPage: current width: ${ScreenBreakpoint.determine(MediaQuery.of(context).size.width.toInt())}");
+    //print("MobilePlaylistPage: width: ${MediaQuery.of(context).size.width.toInt()}");
     return Padding(
       padding: EdgeInsets.all(12),
       child: Column(

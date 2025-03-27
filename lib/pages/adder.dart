@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:beamer/beamer.dart';
 
-import '../helper_widgets.dart';
+import '../helpers/widgets/helper_widgets.dart';
 import '../types/searchresult.dart';
 import '../providers/services/adder.dart';
 import '../providers/services/player.dart';
 import '../providers/data/fetched_data_provider.dart';
-import '../tone_extension.dart';
+import '../helpers/extensions/tone_extension.dart';
 import 'dart:convert';
 
 class AdderPage extends ConsumerStatefulWidget {

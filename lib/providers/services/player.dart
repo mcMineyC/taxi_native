@@ -7,8 +7,8 @@ import 'package:just_audio_media_kit/just_audio_media_kit.dart';
 import "package:youtube_explode_dart/youtube_explode_dart.dart";
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../../platform_utils.dart';
-import '../../service_locator.dart';
+import '../../helpers/platform_utils.dart';
+import '../../helpers/service_locator.dart';
 
 import '../data/fetched_data_provider.dart';
 import '../data/info_provider.dart';
@@ -18,7 +18,7 @@ import '../data/preferences_provider.dart';
 import '../../types/song.dart';
 import '../../types/searchresult.dart';
 import '../../types/queueitem.dart';
-import '../../miller_shuffle.dart';
+import '../../helpers/miller_shuffle.dart';
 
 part 'player.g.dart';
 part 'player.freezed.dart';

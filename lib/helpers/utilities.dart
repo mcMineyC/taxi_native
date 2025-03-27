@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'providers/data/fetched_data_provider.dart';
-import 'providers/data/playlist_provider.dart';
-import 'providers/data/new_provider.dart';
-import 'providers/services/player.dart';
-import 'providers/data/info_provider.dart';
+import '../providers/data/fetched_data_provider.dart';
+import '../providers/data/playlist_provider.dart';
+import '../providers/data/new_provider.dart';
+import '../providers/services/player.dart';
+import '../providers/data/info_provider.dart';
 
 void refreshChanges(WidgetRef ref) {
   ref.read(playerProvider.notifier).clear();

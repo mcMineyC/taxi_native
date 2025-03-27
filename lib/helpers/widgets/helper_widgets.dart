@@ -7,17 +7,17 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:context_menus/context_menus.dart';
-import 'providers/services/player.dart';
-import 'providers/data/playlist_provider.dart';
-import 'providers/data/fetched_data_provider.dart';
-import 'service_locator.dart';
-import 'providers/data/preferences_provider.dart';
+import '../../providers/services/player.dart';
+import '../../providers/data/playlist_provider.dart';
+import '../../providers/data/fetched_data_provider.dart';
+import '../service_locator.dart';
+import '../../providers/data/preferences_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'types/playlist.dart';
-import 'types/song.dart';
-import 'types/searchresult.dart';
-import 'utilities.dart';
-import 'platform_utils.dart';
+import '../../types/playlist.dart';
+import '../../types/song.dart';
+import '../../types/searchresult.dart';
+import '../utilities.dart';
+import '../platform_utils.dart';
 
 class MediaCard extends ConsumerWidget {
   static const double height = 198;

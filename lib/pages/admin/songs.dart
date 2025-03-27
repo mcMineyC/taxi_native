@@ -8,10 +8,10 @@ import "../../providers/data/playlist_provider.dart";
 import "../../providers/services/player.dart";
 import "../../providers/services/search.dart";
 import "../../types/song.dart";
-import "../../info_card.dart";
+import "../../helpers/widgets/info_card.dart";
 import "generics.dart";
-import "../../helper_widgets.dart";
-import '../../utilities.dart';
+import "../../helpers/widgets/helper_widgets.dart";
+import '../../helpers/utilities.dart';
 
 class SongsPane2 extends ConsumerStatefulWidget {
   final Song selected;

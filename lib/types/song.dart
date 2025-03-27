@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:audio_service/audio_service.dart';
 import 'queueitem.dart';
 import '../providers/data/preferences_provider.dart';
-import '../service_locator.dart';
+import '../helpers/service_locator.dart';
 
 part 'song.freezed.dart';
 part 'song.g.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'types/hierarchicalListView.dart';
+import '../../types/hierarchicalListView.dart';
 import 'helper_widgets.dart';
 import 'package:context_menus/context_menus.dart';
 import 'package:url_launcher/url_launcher.dart';

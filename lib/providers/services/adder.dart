@@ -3,8 +3,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'dart:convert';
-import '../../platform_utils.dart';
-import '../../service_locator.dart';
+import '../../helpers/platform_utils.dart';
+import '../../helpers/service_locator.dart';
 
 import '../data/user_provider.dart';
 import '../data/preferences_provider.dart';

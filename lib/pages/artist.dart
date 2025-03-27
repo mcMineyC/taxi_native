@@ -8,8 +8,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../providers/error_watcher.dart';
 import '../providers/data/fetched_data_provider.dart';
 import '../providers/services/player.dart';
-import '../platform_utils.dart';
-import '../helper_widgets.dart';
+import '../helpers/platform_utils.dart';
+import '../helpers/widgets/helper_widgets.dart';
 
 class ArtistPage extends ConsumerWidget {
   const ArtistPage({Key? key, required this.id}) : super(key: key);

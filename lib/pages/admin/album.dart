@@ -8,10 +8,10 @@ import "../../providers/data/playlist_provider.dart";
 import "../../providers/services/search.dart";
 import "../../providers/services/player.dart";
 import "../../types/album.dart";
-import "../../helper_widgets.dart";
-import "../../info_card.dart";
+import "../../helpers/widgets/helper_widgets.dart";
+import "../../helpers/widgets/info_card.dart";
 import "generics.dart";
-import "../../utilities.dart";
+import "../../helpers/utilities.dart";
 
 class AlbumsPane1 extends ConsumerStatefulWidget {
   int selectedIndex = 0;

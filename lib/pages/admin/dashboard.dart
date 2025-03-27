@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:beamer/beamer.dart";
 
-import '../desktop/home/appbar.dart';
+import '../responsive/skeleton/desktop/appbar.dart';
 
 import "../../types/song.dart";
 import "../../types/album.dart";

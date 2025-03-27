@@ -6,13 +6,13 @@ import 'dart:convert';
 //import 'package:collection/collection.dart';
 import 'package:flutter/scheduler.dart';
 
-import '../utilities.dart';
-import '../helper_widgets.dart';
+import '../helpers/utilities.dart';
+import '../helpers/widgets/helper_widgets.dart';
 import '../types/searchresult.dart';
 import '../types/hierarchicalListView.dart';
 import '../providers/services/adder.dart';
 import '../providers/services/player.dart';
-import '../hierarchicalListView.dart';
+import '../helpers/widgets/hierarchicalListView.dart';
 
 // NEW ADDER
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import "package:provider/provider.dart" as prov;
-import '../helper_widgets.dart';
+import '../helpers/widgets/helper_widgets.dart';
 import '../types/song.dart';
 import '../types/playlist.dart';
 import '../providers/error_watcher.dart';

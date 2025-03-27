@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../providers/data/preferences_provider.dart';
-import '../service_locator.dart';
+import '../helpers/service_locator.dart';
 
 part 'album.freezed.dart';
 part 'album.g.dart';

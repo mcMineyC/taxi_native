@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import '../helper_widgets.dart';
+import '../helpers/widgets/helper_widgets.dart';
 
 class CardView extends StatelessWidget {
   final List cardList;

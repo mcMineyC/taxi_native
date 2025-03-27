@@ -1,3 +1,4 @@
+import "package:flutter/material.dart";
 enum ScreenBreakpoint{
   small(width: 352),
   medium(width: 580),
@@ -22,4 +23,15 @@ enum ScreenBreakpoint{
     }
     return ScreenBreakpoint.unknown;
   }
+  static bool isMobile(BuildContext context){
+    ScreenBreakpoint sb = determine(MediaQuery.of(context).size.width.toInt());
+    return switch(sb){
+      ScreenBreakpoint.small => true,
+      ScreenBreakpoint.medium => true,
+      ScreenBreakpoint.large => true,
+      ScreenBreakpoint.huge => false,
+      _ => false
+    };
+  }
 }
+bool isMobile(BuildContext context) => ScreenBreakpoint.isMobile(context);

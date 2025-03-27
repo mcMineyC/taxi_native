@@ -9,8 +9,8 @@ import "../../providers/services/search.dart";
 import "../../providers/services/player.dart";
 import "../../types/album.dart";
 import "../../types/song.dart";
-import "../../helper_widgets.dart";
-import "../../info_card.dart";
+import "../../helpers/widgets/helper_widgets.dart";
+import "../../helpers/widgets/info_card.dart";
 import "generics.dart";
 
 class AlbumsPane1 extends ConsumerStatefulWidget {

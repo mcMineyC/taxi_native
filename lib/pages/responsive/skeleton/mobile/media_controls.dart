@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../player/fullscreen.dart';
-import '../../../providers/services/player.dart';
+import '../../fullscreen_player/mobile/fullscreen.dart';
+import '../../../../providers/services/player.dart';
 
 class MobilePlayerControls extends ConsumerWidget {
   MobilePlayerControls({required this.persistenceFunction});

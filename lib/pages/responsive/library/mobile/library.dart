@@ -1,19 +1,22 @@
 import "package:flutter/material.dart";
 import "package:shared_preferences/shared_preferences.dart";
-import "../../../service_locator.dart";
-import "../../../helper_widgets.dart";
-import "../../songs.dart";
-import "../../albums.dart";
-import "../../artists.dart";
-import "../../playlists.dart";
-class DesktopLibraryPage extends StatefulWidget {
+import "../common/common.dart";
+import "../../../../helpers/service_locator.dart";
+import "../../../../helpers/widgets/helper_widgets.dart";
+import "../../../songs.dart";
+import "../../../albums.dart";
+import "../../../artists.dart";
+import "../../../playlists.dart";
+
+class MobileLibraryPage extends StatefulWidget {
   final String? initialPage;
-  DesktopLibraryPage({Key? key, this.initialPage}) : super(key: key);
+  MobileLibraryPage({Key? key, this.initialPage}) : super(key: key);
+
   @override
-  DesktopLibraryPageState createState() => DesktopLibraryPageState();
+  MobileLibraryPageState createState() => MobileLibraryPageState();
 }
 
-class DesktopLibraryPageState extends State<DesktopLibraryPage> {
+class MobileLibraryPageState extends State<MobileLibraryPage> {
   bool private = true;
   @override
   initState() {
@@ -22,61 +25,65 @@ class DesktopLibraryPageState extends State<DesktopLibraryPage> {
     private = prefs.getBool('privateLibrary') ?? true;
     String tabString = widget.initialPage ?? prefs.getString('libraryTab') ?? "songs";
     currentTab = switch(tabString) {
-      "songs" => _TabList.songs,
-      "albums" => _TabList.albums,
-      "artists" => _TabList.artists,
-      "playlists" => _TabList.playlists,
-      _ => _TabList.songs,
+      "songs" => TabList.songs,
+      "albums" => TabList.albums,
+      "artists" => TabList.artists,
+      "playlists" => TabList.playlists,
+      _ => TabList.songs,
     };
   }
 
-  _TabList currentTab = _TabList.songs;
+  TabList currentTab = TabList.songs;
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Row(
+        Container(
+        //width: MediaQuery.of(context).size.width, 
+        child: SingleChildScrollView(
+        //shrinkwrap: true,
+          scrollDirection: Axis.horizontal,
+          child: Row(
           //mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: SegmentedButton<_TabList>(
-                segments: const <ButtonSegment<_TabList>>[
-                  ButtonSegment<_TabList>(
-                      value: _TabList.songs,
+              child: SegmentedButton<TabList>(
+                segments: const <ButtonSegment<TabList>>[
+                  ButtonSegment<TabList>(
+                      value: TabList.songs,
                       label: Text('Songs'),
                       icon: Icon(Icons.music_note_rounded)),
-                  ButtonSegment<_TabList>(
-                      value: _TabList.albums,
+                  ButtonSegment<TabList>(
+                      value: TabList.albums,
                       label: Text('Albums'),
                       icon: Icon(Icons.library_music_rounded)),
-                  ButtonSegment<_TabList>(
-                      value: _TabList.artists,
+                  ButtonSegment<TabList>(
+                      value: TabList.artists,
                       label: Text('Artists'),
                       icon: Icon(Icons.person_rounded)),
-                  ButtonSegment<_TabList>(
-                      value: _TabList.playlists,
+                  ButtonSegment<TabList>(
+                      value: TabList.playlists,
                       label: Text('Playlists'),
                       icon: Icon(Icons.playlist_add_rounded)),
                 ],
                 selectedIcon: const Icon(Icons.check_rounded),
-                selected: <_TabList>{currentTab},
-                onSelectionChanged: (Set<_TabList> newSelection) async {
+                selected: <TabList>{currentTab},
+                onSelectionChanged: (Set<TabList> newSelection) async {
                   setState(() {
                     currentTab = newSelection.first;
                   });
                   (await SharedPreferences.getInstance()).setString('libraryTab',
                     switch(currentTab){
-                      _TabList.songs => 'songs',
-                      _TabList.albums => 'albums',
-                      _TabList.artists => 'artists',
-                      _TabList.playlists => 'playlists',
+                      TabList.songs => 'songs',
+                      TabList.albums => 'albums',
+                      TabList.artists => 'artists',
+                      TabList.playlists => 'playlists',
                     }
                   );
                 },
               )
             ),
-            Expanded(child: Container()),
             Text(
               "My Library",
             ),
@@ -89,17 +96,17 @@ class DesktopLibraryPageState extends State<DesktopLibraryPage> {
               }
             ),
           ],
+        ),),
         ),
         Expanded(
           child: switch(currentTab) {
-            _TabList.songs => SongsPage(private: private),
-            _TabList.albums => AlbumsPage(private: private),
-            _TabList.artists => ArtistsPage(private: private),
-            _TabList.playlists => PlaylistsPage(private: private),
+            TabList.songs => SongsPage(private: private),
+            TabList.albums => AlbumsPage(private: private),
+            TabList.artists => ArtistsPage(private: private),
+            TabList.playlists => PlaylistsPage(private: private),
           },
         ),
       ],
     );
   }
 }
-enum _TabList { songs, albums, artists, playlists }

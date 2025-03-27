@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/home/jedi/.cache/flutter_sdk/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/home/jedi/Android/Sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/home/jedi/Documents/Coding/taxi/taxi_native/android/app/.cxx/RelWithDebInfo/4f3z3c58/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/home/jedi/Android/Sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/home/jedi/Documents/Coding/taxi/taxi_native/android/app/.cxx/RelWithDebInfo/4f3z3c58/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

@@ -158,7 +158,7 @@ class _AddRecentlyPlayedProviderElement
 }
 
 String _$fetchRecentlyPlayedHash() =>
-    r'd10a7208573324ccae7dafb4852ed47934720c7d';
+    r'ed60eb5b7418bc056ee4b11b77f3bc8e398aa972';
 
 /// See also [fetchRecentlyPlayed].
 @ProviderFor(fetchRecentlyPlayed)
@@ -175,6 +175,24 @@ final fetchRecentlyPlayedProvider = FutureProvider<List<Song>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FetchRecentlyPlayedRef = FutureProviderRef<List<Song>>;
+String _$fetchLandingRecentlyPlayedHash() =>
+    r'757eb95ec6d63c0a29ccfc656b42a8fb5953710a';
+
+/// See also [fetchLandingRecentlyPlayed].
+@ProviderFor(fetchLandingRecentlyPlayed)
+final fetchLandingRecentlyPlayedProvider = FutureProvider<List<Song>>.internal(
+  fetchLandingRecentlyPlayed,
+  name: r'fetchLandingRecentlyPlayedProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$fetchLandingRecentlyPlayedHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef FetchLandingRecentlyPlayedRef = FutureProviderRef<List<Song>>;
 String _$fetchFavoritesHash() => r'1dd74bab56f4de4452f98d21b8d3ad1915866bde';
 
 /// See also [fetchFavorites].

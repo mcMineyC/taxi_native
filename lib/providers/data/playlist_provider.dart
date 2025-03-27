@@ -94,6 +94,7 @@ Future<bool> addPlaylist(AddPlaylistRef ref, Playlist playlist) async {
     ref.refresh(fetchPlaylistsProvider(editable: true));
     ref.refresh(fetchPlaylistsProvider(ignore: true));
     ref.refresh(fetchPlaylistsProvider(ignore: false));
+    ref.refresh(fetchNewPlaylistsProvider);
   }
   return true;
 }

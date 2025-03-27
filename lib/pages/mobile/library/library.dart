@@ -8,6 +8,10 @@ import "../../artists.dart";
 import "../../playlists.dart";
 
 class MobileLibraryPage extends StatefulWidget {
+  final String? initialPage;
+  MobileLibraryPage({Key? key, this.initialPage}) : super(key: key);
+
+  @override
   MobileLibraryPageState createState() => MobileLibraryPageState();
 }
 
@@ -18,7 +22,8 @@ class MobileLibraryPageState extends State<MobileLibraryPage> {
     super.initState();
     SharedPreferences prefs = ServiceLocator().get<SharedPreferences>();
     private = prefs.getBool('privateLibrary') ?? true;
-    currentTab = switch(prefs.getString('libraryTab')) {
+    String tabString = widget.initialPage ?? prefs.getString('libraryTab') ?? "songs";
+    currentTab = switch(tabString) {
       "songs" => _TabList.songs,
       "albums" => _TabList.albums,
       "artists" => _TabList.artists,

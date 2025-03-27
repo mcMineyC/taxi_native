@@ -7,6 +7,9 @@ import "../../albums.dart";
 import "../../artists.dart";
 import "../../playlists.dart";
 class DesktopLibraryPage extends StatefulWidget {
+  final String? initialPage;
+  DesktopLibraryPage({Key? key, this.initialPage}) : super(key: key);
+  @override
   DesktopLibraryPageState createState() => DesktopLibraryPageState();
 }
 
@@ -17,7 +20,8 @@ class DesktopLibraryPageState extends State<DesktopLibraryPage> {
     super.initState();
     SharedPreferences prefs = ServiceLocator().get<SharedPreferences>();
     private = prefs.getBool('privateLibrary') ?? true;
-    currentTab = switch(prefs.getString('libraryTab')) {
+    String tabString = widget.initialPage ?? prefs.getString('libraryTab') ?? "songs";
+    currentTab = switch(tabString) {
       "songs" => _TabList.songs,
       "albums" => _TabList.albums,
       "artists" => _TabList.artists,

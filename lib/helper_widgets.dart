@@ -1020,6 +1020,7 @@ class PlaylistImage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final width = 200;
     final height = 200;
+    final int radius = 8;
     final playlistAsyncValue = ref.watch(findPlaylistProvider(playlistId));
 
     return playlistAsyncValue.when(
@@ -1068,15 +1069,15 @@ class PlaylistImage extends ConsumerWidget {
           crossAxisSpacing: 0,
           mainAxisSpacing: 0,
           primary: false,
-          children: songs
+          children: songs.asMap().entries
               .map(
-                (song) => CachedNetworkImage(
-                  imageUrl: song.imageUrl,
+                (entry) => CachedNetworkImage(
+                  imageUrl: entry.value.imageUrl,
                   imageBuilder: (context, imageProvider) => Container(
                     width: width / 4,
                     height: width / 4,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: deriveFromIndex(entry.key, radius),
                       image: DecorationImage(
                         image: imageProvider,
                         fit: BoxFit.cover,
@@ -1088,7 +1089,7 @@ class PlaylistImage extends ConsumerWidget {
                     height: width / 4,
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: deriveFromIndex(entry.key, radius),
                     ),
                   ),
                   errorWidget: (context, url, error) => Icon(
@@ -1102,6 +1103,14 @@ class PlaylistImage extends ConsumerWidget {
       },
       loading: () => Center(child: CircularProgressIndicator()),
       error: (error, stack) => Center(child: Text('Error: $error')),
+    );
+  }
+  BorderRadius deriveFromIndex(int index, int radius) {
+    return BorderRadius.only(
+      topLeft: index == 0 ? Radius.circular(8) : Radius.zero,
+      topRight: index == 1 ? Radius.circular(8) : Radius.zero,
+      bottomLeft: index == 2 ? Radius.circular(8) : Radius.zero,
+      bottomRight: index == 3 ? Radius.circular(8) : Radius.zero,
     );
   }
 }

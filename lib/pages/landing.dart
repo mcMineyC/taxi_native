@@ -12,13 +12,29 @@ import '../providers/data/preferences_provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:beamer/beamer.dart';
 
-class LandingPage extends ConsumerWidget {
+class LandingPage extends ConsumerStatefulWidget {
+  LandingPage({super.key});
+  _LandingPageState createState() => _LandingPageState();
+}
+
+class _LandingPageState extends ConsumerState<LandingPage> {
+  final List<bool> shouldShowSections = [
+    true, //hello
+    false, //favorites
+    true, // recently played
+    false, //recommended
+    true, //playlists
+    true, //new songs
+  ];
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     PreferencesProvider p = prov.Provider.of<PreferencesProvider>(context);
-    final AsyncValue<List<Song>> newSongs = ref.watch(fetchNewSongsProvider);
-    final AsyncValue<List<Song>> recentlyPlayed = ref.watch(fetchRecentlyPlayedProvider);
+    final AsyncValue<List<Song>> recentlyPlayed = ref.watch(fetchLandingRecentlyPlayedProvider);
     final AsyncValue<List<Playlist>> newPlaylists = ref.watch(fetchNewPlaylistsProvider);
+    final AsyncValue<List<Song>> newSongs = ref.watch(fetchNewSongsProvider);
+    recentlyPlayed.whenData((data) => shouldShowSections[2] = data.isNotEmpty);
+    newPlaylists.whenData((data) => shouldShowSections[4] = data.isNotEmpty);
+    newSongs.whenData((data) => shouldShowSections[5] = data.isNotEmpty);
     // Handle unauth errors
     BeamerDelegate bd = Beamer.of(context);
     handleError(ref, fetchNewSongsProvider, bd);
@@ -31,7 +47,7 @@ class LandingPage extends ConsumerWidget {
       margin: EdgeInsets.fromLTRB(12, 0, 12, 0),
       child: ListView(
         children: [
-          Text(
+          if(shouldShowSections[0]) Text(
             "Hello, ${p.username}!",
             style: TextStyle(
               fontSize: 50,
@@ -40,7 +56,7 @@ class LandingPage extends ConsumerWidget {
             ),
             textAlign: TextAlign.left,
           ),
-          Column(
+          if(shouldShowSections[1]) Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
@@ -71,16 +87,30 @@ class LandingPage extends ConsumerWidget {
               )
             ]
           ),
-          Column(
+          if(shouldShowSections[2]) Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                " Recently Played",
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w500,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    " Recently Played",
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                  TextButton(
+                    child: Text("See All"),
+                    //style: TextButton.styleFrom(
+                    //  primary: Theme.of(context).colorScheme.onSurface,
+                    //),
+                    onPressed: () { 
+                      Beamer.of(context).beamToNamed("/recentlyPlayed");
+                    },
+                  ),
+                ],
               ),
               Container(
                 height: MediaCard.height,
@@ -116,16 +146,30 @@ class LandingPage extends ConsumerWidget {
               )
             ]
           ),
-          Column(
+          if(shouldShowSections[3]) Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                " Recommended By Others",
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w500,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    " Recommended By Others",
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                  TextButton(
+                    child: Text("See All"),
+                    //style: TextButton.styleFrom(
+                    //  primary: Theme.of(context).colorScheme.onSurface,
+                    //),
+                    onPressed: () { 
+                      Beamer.of(context).beamToNamed("/recommendations");
+                    },
+                  ),
+                ],
               ),
               Container(
                 height: MediaCard.height,
@@ -146,16 +190,30 @@ class LandingPage extends ConsumerWidget {
               )
             ]
           ),
-          Column(
+          if(shouldShowSections[4]) Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                "  New Playlists",
-                style: TextStyle(
-                  fontSize: 26, 
-                  fontWeight: FontWeight.w500,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    " New Playlists",
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                  TextButton(
+                    child: Text("See All"),
+                    //style: TextButton.styleFrom(
+                    //  primary: Theme.of(context).colorScheme.onSurface,
+                    //),
+                    onPressed: () { 
+                      Beamer.of(context).beamToNamed("/playlists");
+                    },
+                  ),
+                ],
               ),
               Container(
                 height: MediaCard.height,
@@ -191,16 +249,30 @@ class LandingPage extends ConsumerWidget {
               )
             ]
           ),
-          Column(
+          if(shouldShowSections[5]) Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                "  New Songs",
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w500,
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    " New Songs",
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                  TextButton(
+                    child: Text("See All"),
+                    //style: TextButton.styleFrom(
+                    //  primary: Theme.of(context).colorScheme.onSurface,
+                    //),
+                    onPressed: () { 
+                      Beamer.of(context).beamToNamed("/songs");
+                    },
+                  ),
+                ],
               ),
               Container(
                 height: MediaCard.height,

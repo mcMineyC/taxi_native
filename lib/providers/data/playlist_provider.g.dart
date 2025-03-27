@@ -191,7 +191,7 @@ final fetchNewPlaylistsProvider = FutureProvider<List<Playlist>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FetchNewPlaylistsRef = FutureProviderRef<List<Playlist>>;
-String _$addPlaylistHash() => r'8bafd7c7f7ac9f8ea1863bb7d3e7a61e75b40207';
+String _$addPlaylistHash() => r'5aed04aa799b2284be7916aa3a3cb29d2e7ddeae';
 
 /// See also [addPlaylist].
 @ProviderFor(addPlaylist)

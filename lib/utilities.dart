@@ -20,6 +20,7 @@ void refreshChanges(WidgetRef ref) {
   ref.refresh(fetchNewPlaylistsProvider);
   ref.refresh(fetchNewSongsProvider);
   ref.refresh(fetchRecentlyPlayedProvider);
+  ref.refresh(fetchLandingRecentlyPlayedProvider);
 }
 
 void refreshLibrary(WidgetRef ref) {
@@ -36,6 +37,7 @@ void refreshLibrary(WidgetRef ref) {
   ref.refresh(fetchNewPlaylistsProvider);
   ref.refresh(fetchNewSongsProvider);
   ref.refresh(fetchRecentlyPlayedProvider);
+  ref.refresh(fetchLandingRecentlyPlayedProvider);
 }
 
 void logout(WidgetRef ref) {
@@ -52,6 +54,7 @@ void logout(WidgetRef ref) {
   ref.invalidate(fetchNewPlaylistsProvider);
   ref.invalidate(fetchNewSongsProvider);
   ref.invalidate(fetchRecentlyPlayedProvider);
+  ref.invalidate(fetchLandingRecentlyPlayedProvider);
 }
 
 extension IterableExtensions<T> on Iterable<T> {

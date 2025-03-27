@@ -52,11 +52,37 @@ Future<List<Song>> fetchRecentlyPlayed(FetchRecentlyPlayedRef ref) async {
   if(desponse["authed"] == false) {
     return Future.error({"code": 401, "name": "recently-played-get", "error": "Not authenticated"});
   }
-  List<String> responsible = List<String>.from(desponse["played"]);
-  var songs = <Song>[];
-  songs = await ref.read(findBatchSongsProvider(responsible).future);
+  List<Map<String, dynamic>> responsible = List<Map<String, dynamic>>.from(desponse["played"]);
+  //var songs = <Song>[];
+  //songs = await ref.read(findBatchSongsProvider(responsible).future);
+  List<Song> songs = responsible.map<Song>((e) => Song.fromJson(e)).toList();
   return songs;
 }
+
+@Riverpod(keepAlive: true)
+Future<List<Song>> fetchLandingRecentlyPlayed(FetchLandingRecentlyPlayedRef ref) async {
+  var _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+      Uri.parse("${p.backendUrl}/recently-played/"+(_sp.getString("username") ?? "")+"?limit=10"),
+      headers: Map<String, String>.from({
+        'Content-Type': 'application/json'
+      }),
+      body: jsonEncode(<String, String>{
+        'authtoken': (_sp.getString("token") ?? "")
+      })
+  );
+  var desponse = jsonDecode(response.body);
+  // print("Response: $desponse");
+  if(desponse["authed"] == false) {
+    return Future.error({"code": 401, "name": "recently-played-get-landing", "error": "Not authenticated"});
+  }
+  List<Map<String, dynamic>> responsible = List<Map<String, dynamic>>.from(desponse["played"]);
+  //var songs = <Song>[];
+  //songs = await ref.read(findBatchSongsProvider(responsible).future);
+  List<Song> songs = responsible.map<Song>((e) => Song.fromJson(e)).toList();
+  return songs;
+}
+
 
 @Riverpod(keepAlive: true)
 Future<List<Song>> fetchFavorites(FetchFavoritesRef ref) async {

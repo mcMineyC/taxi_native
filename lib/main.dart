@@ -30,6 +30,7 @@ import 'pages/playlist.dart';
 import 'pages/settings.dart';
 import 'pages/checklist.dart';
 import 'pages/library.dart';
+import 'pages/recently_played.dart';
 
 import 'pages/admin/dashboard.dart';
 
@@ -138,7 +139,25 @@ class App extends ConsumerWidget {
             popToNamed: '/home',
             child: HomePage(homeJunk: LibraryPage()),
           ),
+      '/library/:initialRoute': (context, state, data) {
+        final route = state.uri
+            .toString()
+            .split("/library/")
+            .last
+            .split("/")
+            .first
+            .split("?")
+            .first;
+        print("Route: $route");
+        return BeamPage(
+          key: ValueKey("library$route"),
+          title: "Library",
+          popToNamed: '/home',
+          child: HomePage(homeJunk: LibraryPage(initialPage: route)),
+        );
+      },
       '/artist/:artistId': (context, state, data) {
+        print("Artist ID: ${state.pathParameters["artistId"] ?? "not here :("}");
         final artistId = state.uri
             .toString()
             .split("/artist/")
@@ -254,12 +273,33 @@ class App extends ConsumerWidget {
             .first
             .split("?")
             .first;
-        print("Admin route: $route");
+        //print("Admin route: $route");
         return BeamPage(
           key: ValueKey("admin-$route"),
           title: "Admin: ${route.capitalize()}",
           popToNamed: '/admin',
           child: AdminDashboardPage(route),
+        );
+      },
+      '/recentlyPlayed': (context, state, data) => BeamPage(
+        key: const ValueKey('played-me'),
+        title: 'Recently Played',
+        child: HomePage(homeJunk: RecentlyPlayedPage()),
+      ),
+      '/recentlyPlayed/:user': (context, state, data) {
+        final user = state.uri
+          .toString()
+          .split("/recentlyPlayed/")
+          .last
+          .split("/")
+          .first
+          .split("?")
+          .first;
+        return BeamPage(
+          key: ValueKey('played-${user}'),
+          title: 'Recently Played',
+          popToNamed: '/home',
+          child: HomePage(homeJunk: RecentlyPlayedPage()),
         );
       },
     }),
@@ -284,17 +324,17 @@ class App extends ConsumerWidget {
     return DynamicColorBuilder(
         builder: (ColorScheme? light, ColorScheme? dark) {
       if (theme.auto) {
-        print("Using dynamic colors");
+        print("main.dart@310: Using dynamic colors");
         if (theme.isDark) {
           scheme = dark ?? scheme;
           theme.textTheme = GoogleFonts.poppinsTextTheme().apply(
               bodyColor: scheme.onSurface, displayColor: scheme.onSurface);
-          print("Using dark dynamic colors");
+          print("main.dart@315: Using dark dynamic colors");
         } else {
           scheme = light ?? scheme;
           theme.textTheme = GoogleFonts.poppinsTextTheme().apply(
               bodyColor: scheme.onSurface, displayColor: scheme.onSurface);
-          print("Using light dynamic colors");
+          print("main.dart@320: Using light dynamic colors");
         }
       }
       return MaterialApp.router(

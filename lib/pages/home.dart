@@ -146,7 +146,7 @@ class GenericViewport extends ConsumerWidget {
                     ),
                     child: Container(
                       // color: Colors.green,
-                      margin: const EdgeInsets.fromLTRB(0, 6, 0, 6),
+                      margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                       child: homeJunk,
                     ))),
           ],

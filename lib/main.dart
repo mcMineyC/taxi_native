@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'helpers/service_locator.dart';
 import 'providers/data/preferences_provider.dart';
 import "providers/services/audio_handler.dart";
+import "providers/services/player.dart";
 import "package:audio_service/audio_service.dart";
 import 'providers/theme_provider.dart';
 import 'helpers/extensions/uppercase_extension.dart';

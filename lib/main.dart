@@ -51,8 +51,10 @@ void main() async {
     config: AudioServiceConfig(
       androidNotificationChannelId: 'com.example.taxi_native.channel.audio',
       androidNotificationChannelName: 'Taxi Audio Playback',
-      //androidNotificationOngoing: true,
+      androidNotificationIcon: "drawable/ic_stat_local_taxi",
+      notificationColor: Colors.blue,
       androidStopForegroundOnPause: false,
+      //androidNotificationOngoing: true,
     ),
   );
   ServiceLocator().register<MyAudioHandler>(audioHandler);
@@ -110,7 +112,12 @@ void main() async {
   ));
 }
 
-class App extends ConsumerWidget {
+class App extends ConsumerStatefulWidget{
+  App();
+  @override
+  _AppState createState() => _AppState();
+}
+class _AppState extends ConsumerState<App> {
   final routerDelegate = BeamerDelegate(
     initialPath: '/login',
     locationBuilder: RoutesLocationBuilder(routes: {
@@ -144,7 +151,7 @@ class App extends ConsumerWidget {
       '/library': (context, state, data) => BeamPage(
             key: const ValueKey('library'),
             title: 'Library',
-            popToNamed: '/home',
+            // popToNamed: '/home',
             child: HomePage(homeJunk: LibraryPage()),
           ),
       '/library/:initialRoute': (context, state, data) {
@@ -160,7 +167,7 @@ class App extends ConsumerWidget {
         return BeamPage(
           key: ValueKey("library$route"),
           title: "Library",
-          popToNamed: '/home',
+          // popToNamed: '/home',
           child: HomePage(homeJunk: LibraryPage(initialPage: route)),
         );
       },
@@ -177,7 +184,7 @@ class App extends ConsumerWidget {
         return BeamPage(
           key: ValueKey("artist-view-$artistId"),
           title: "Artist",
-          popToNamed: '/home',
+          // popToNamed: '/home',
           child: HomePage(homeJunk: ArtistPage(id: artistId)),
         );
       },
@@ -193,50 +200,50 @@ class App extends ConsumerWidget {
         return BeamPage(
           key: ValueKey("album-view-$albumId"),
           title: "Album",
-          popToNamed: '/home',
+          // popToNamed: '/home',
           child: HomePage(homeJunk: AlbumPage(id: albumId)),
         );
       },
       '/artists': (context, state, data) => BeamPage(
             key: const ValueKey('artists'),
             title: 'Artists',
-            popToNamed: '/home',
+            // popToNamed: '/home',
             child: HomePage(homeJunk: ArtistsPage(private: true)),
           ),
       '/albums': (context, state, data) => BeamPage(
             key: const ValueKey('albums'),
             title: 'Albums',
-            popToNamed: '/home',
+            // popToNamed: '/home',
             child: HomePage(homeJunk: AlbumsPage(private: true)),
           ),
       '/songs': (context, state, data) => BeamPage(
             key: const ValueKey('songs'),
             title: 'Songs',
-            popToNamed: '/home',
+            // popToNamed: '/home',
             child: HomePage(homeJunk: SongsPage(private: true)),
           ),
       '/queue': (context, state, data) => BeamPage(
             key: const ValueKey('queue'),
             title: 'Queue',
-            popToNamed: '/home',
+            // popToNamed: '/home',
             child: HomePage(homeJunk: QueuePage()),
           ),
       '/adder': (context, state, data) => BeamPage(
             key: const ValueKey('adder'),
             title: 'Adder',
-            popToNamed: '/home',
+            // popToNamed: '/home',
             child: HomePage(homeJunk: AdderPage()),
           ),
       '/search': (context, state, data) => BeamPage(
             key: const ValueKey('search'),
             title: 'Search',
-            popToNamed: '/home',
+            // popToNamed: '/home',
             child: HomePage(homeJunk: SearchPage()),
           ),
       '/playlists': (context, state, data) => BeamPage(
             key: const ValueKey('playlists'),
             title: 'Playlists',
-            popToNamed: '/home',
+            // popToNamed: '/home',
             child: HomePage(homeJunk: PlaylistsPage(private: true)),
           ),
       '/playlist/:playlistId': (context, state, data) {
@@ -251,20 +258,20 @@ class App extends ConsumerWidget {
         return BeamPage(
           key: ValueKey("playlist-view-$playlistId"),
           title: "Playlist",
-          popToNamed: '/home',
+          // popToNamed: '/home',
           child: HomePage(homeJunk: PlaylistPage(id: playlistId)),
         );
       },
       '/settings': (context, state, data) => BeamPage(
             key: const ValueKey('settings'),
             title: 'Settings',
-            popToNamed: '/home',
+            // popToNamed: '/home',
             child: HomePage(homeJunk: SettingsPage()),
           ),
       '/checklist': (context, state, data) => BeamPage(
             key: const ValueKey('checklist'),
             title: 'Roadmap',
-            popToNamed: '/home',
+            // popToNamed: '/home',
             child: HomePage(homeJunk: ChecklistPage()),
           ),
       '/admin': (context, state, data) => BeamPage(
@@ -306,7 +313,7 @@ class App extends ConsumerWidget {
         return BeamPage(
           key: ValueKey('played-${user}'),
           title: 'Recently Played',
-          popToNamed: '/home',
+          // popToNamed: '/home',
           child: HomePage(homeJunk: RecentlyPlayedPage()),
         );
       },
@@ -320,7 +327,7 @@ class App extends ConsumerWidget {
   );
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final theme = prov.Provider.of<ThemeChanger>(context);
     var scheme = ColorScheme.fromSeed(
       seedColor: HexColor.fromHex(theme.seedColor),
@@ -357,6 +364,23 @@ class App extends ConsumerWidget {
         routerDelegate: routerDelegate,
         routeInformationParser: BeamerParser(),
       );
+    });
+  }
+  @override
+  void initState() {
+    super.initState();
+
+    // Listen for app lifecycle changes
+    SystemChannels.lifecycle.setMessageHandler((msg) {
+      print('App lifecycle change: $msg');
+      if (msg == AppLifecycleState.paused.toString() ||
+          msg == AppLifecycleState.inactive.toString() ||
+          msg == AppLifecycleState.detached.toString()) {
+        // App going to background, save state
+        final playerRef = ref.read(playerProvider.notifier);
+        playerRef.persistPlayerState();
+      }
+      return Future.value(msg);
     });
   }
 }

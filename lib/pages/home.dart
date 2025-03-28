@@ -25,9 +25,9 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(playerProvider.notifier).init();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    subject.throttleTime(const Duration(seconds: 1)).listen((value) {
-      _persistPlayerInfo(value).then((_) {});
-    });
+    // subject.throttleTime(const Duration(seconds: 1)).listen((value) {
+    //   _persistPlayerInfo(value).then((_) {});
+    // });
 
     bool useMobile = MediaQuery.of(context).size.width <= 840;
     return useMobile
@@ -38,17 +38,17 @@ class HomePage extends ConsumerWidget {
   }
 
   void persistPlayerInfo(PlayerInfo info) {
-    subject.add(info.copyWith(
-        queue: info.queue
-            .map((e) => e.copyWith(audioUrl: "not_fetched"))
-            .toList()));
+    // subject.add(info.copyWith(
+    //     queue: info.queue
+    //         .map((e) => e.copyWith(audioUrl: "not_fetched"))
+    //         .toList()));
   }
 
-  Future<void> _persistPlayerInfo(PlayerInfo info) async {
-    if (info.position == 0) return;
-    (await SharedPreferences.getInstance())
-        .setString("playerinfo", jsonEncode(info.toJson()));
-  }
+  // Future<void> _persistPlayerInfo(PlayerInfo info) async {
+  //   if (info.position == 0) return;
+  //   (await SharedPreferences.getInstance())
+  //       .setString("playerinfo", jsonEncode(info.toJson()));
+  // }
 }
 
 class DesktopHomePage extends ConsumerWidget {

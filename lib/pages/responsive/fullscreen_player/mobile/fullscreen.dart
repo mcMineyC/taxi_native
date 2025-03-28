@@ -153,11 +153,18 @@ class _MobileFullscreenPlayerPageState extends ConsumerState<MobileFullscreenPla
       fillColor: bgColor,
       splashColor: Colors.transparent,
       onPressed: onPress,
-      child: Icon(
-        thinking ? FluentIcons.spinner_ios_16_filled : (playing ? FluentIcons.pause_24_filled : FluentIcons.play_24_filled),
-        size: iconSize,
-        color: color,
-      ),
+      child: thinking ? 
+        const CircularProgressIndicator() : 
+        Icon(
+          playing ? FluentIcons.pause_24_filled : FluentIcons.play_24_filled,
+          size: iconSize,
+          color: color,
+        ),
+      // child: Icon(
+      //   thinking ? FluentIcons.spinner_ios_16_filled : (playing ? FluentIcons.pause_24_filled : FluentIcons.play_24_filled),
+      //   size: iconSize,
+      //   color: color,
+      // ),
     );
   }
 

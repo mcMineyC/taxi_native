@@ -13,6 +13,7 @@ dependencies:
   http: ^1.2.1
   audio_service: ^0.18.17
   audio_service_mpris: ^0.1.4
+  audioplayers_android_exo: any
   audioplayers: ^6.4.0
   path_provider: ^2.1.5
   youtube_explode_dart: ^2.3.9

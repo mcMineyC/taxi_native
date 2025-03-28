@@ -8,8 +8,9 @@ import 'package:context_menus/context_menus.dart';
 import 'package:provider/provider.dart' as prov;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'helpers/service_locator.dart';
-import 'package:just_audio_background/just_audio_background.dart';
 import 'providers/data/preferences_provider.dart';
+import "providers/services/audio_handler.dart";
+import "package:audio_service/audio_service.dart";
 import 'providers/theme_provider.dart';
 import 'helpers/extensions/uppercase_extension.dart';
 import 'package:dynamic_color/dynamic_color.dart';
@@ -35,6 +36,7 @@ import 'pages/recently_played.dart';
 import 'pages/admin/dashboard.dart';
 
 import 'pages/login.dart';
+late MyAudioHandler audioHandler;
 
 void main() async {
   // print("Current commit: ${String.fromEnvironment("GIT_REV")}");
@@ -44,11 +46,16 @@ void main() async {
       .register<SharedPreferences>(await SharedPreferences.getInstance());
   print("Found shared preferences");
   print("Initing justaudio");
-  await JustAudioBackground.init(
-    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
-    androidNotificationChannelName: 'Audio playback',
-    androidNotificationOngoing: true,
+  audioHandler = await AudioService.init(
+    builder: () => MyAudioHandler(),
+    config: AudioServiceConfig(
+      androidNotificationChannelId: 'com.example.taxi_native.channel.audio',
+      androidNotificationChannelName: 'Taxi Audio Playback',
+      //androidNotificationOngoing: true,
+      androidStopForegroundOnPause: false,
+    ),
   );
+  ServiceLocator().register<MyAudioHandler>(audioHandler);
   PreferencesProvider prefsProvider = PreferencesProvider();
   await prefsProvider.init();
   ServiceLocator().register<PreferencesProvider>(prefsProvider);

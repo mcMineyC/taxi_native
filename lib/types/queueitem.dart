@@ -1,5 +1,5 @@
 import "package:freezed_annotation/freezed_annotation.dart";
-import "package:just_audio_background/just_audio_background.dart";
+import "package:audio_service/audio_service.dart";
 import 'song.dart';
 
 part 'queueitem.freezed.dart';

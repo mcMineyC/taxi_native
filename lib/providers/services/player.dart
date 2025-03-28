@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'audio_handler.dart';
 import "package:youtube_explode_dart/youtube_explode_dart.dart";
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -83,8 +84,7 @@ class Player extends _$Player {
   static const int _maxCacheSize = 100;
   static const Duration _cacheDuration = Duration(hours: 1);
 
-  late AudioPlayer _audioPlayer;
-  late AudioHandler _audioHandler;
+  late MyAudioHandler _audioHandler;
   YoutubeExplode yt = YoutubeExplode();
   PreferencesProvider p = ServiceLocator().get<PreferencesProvider>();
   late final SharedPreferences _sp;
@@ -159,27 +159,23 @@ class Player extends _$Player {
     print("Playerinfo: init");
 
     // Initialize audio service
-    _audioHandler = await AudioService.init(
-      builder: () => MyAudioHandler(),
-      config: AudioServiceConfig(
-        androidNotificationChannelId: 'com.myapp.audio',
-        androidNotificationChannelName: 'Audio playback',
-        androidNotificationOngoing: true,
-      ),
-    );
+    //_audioHandler = AudioService.handler as MyAudioHandler;
+    _audioHandler = ServiceLocator().get<MyAudioHandler>();
 
     // Initialize AudioPlayer
-    _audioPlayer = AudioPlayer();
 
     // Set up position tracking
-    _audioPlayer.onPositionChanged.listen((Duration d) {
+    _audioHandler.positionNotifier.addListener(() {
+      final d = _audioHandler.positionNotifier.value;
       state = state.copyWith(position: d.inMilliseconds);
     });
 
     // Set up duration tracking
-    _audioPlayer.onDurationChanged.listen((Duration d) {
+
+    _audioHandler.durationNotifier.addListener(() {
+      final duration = _audioHandler.durationNotifier.value;
       state = state.copyWith(
-          duration: d.inMilliseconds ~/
+          duration: duration.inMilliseconds ~/
               (!PlatformUtils.isWeb &&
                       (PlatformUtils.isIOS || PlatformUtils.isMacOS) &&
                       false
@@ -187,32 +183,30 @@ class Player extends _$Player {
                   : 1));
     });
 
-    // Set up playback state tracking
-    _audioPlayer.onPlayerStateChanged.listen((PlayerState playerState) {
-      bool isPlaying = playerState == PlayerState.playing;
+    // Listen to playback state from audio handler
+    _audioHandler.playingNotifier.addListener(() {
+      bool isPlaying = _audioHandler.playingNotifier.value;
       state = state.copyWith(isPlaying: isPlaying);
 
-      if (playerState == PlayerState.completed && canNext && !state.thinking) {
-        print("Skipping");
-        paused = false;
-        next();
-      }
-
-      if (playerState == PlayerState.playing &&
-          needInteraction &&
-          lastSavedSongId == state.id) {
+      if (isPlaying && needInteraction && lastSavedSongId == state.id) {
         needInteraction = false;
-        _audioPlayer.seek(Duration(milliseconds: needSeekTo));
+        _audioHandler.seek(Duration(milliseconds: needSeekTo));
         print("Seeked position to $needSeekTo");
       }
     });
 
-    _audioPlayer.onPlayerComplete.listen((_) {
-      if (canNext && !state.thinking) {
-        paused = false;
-        next();
-      }
-    });
+
+    //AudioService.onPlayerStateChangedNotifier.addListener(() {
+    //  var playbackState = _audioHandler.playbackStateNotifier.value;
+    //  // Update any additional state needed from the PlaybackState
+    //  // This is useful for capturing system media controls interactions
+    //  if (playbackState.processingState == AudioProcessingState.completed &&
+    //      canNext && !state.thinking) {
+    //    print("Playback state indicates completion, skipping");
+    //    paused = false;
+    //    next();
+    //  }
+    //});
 
     if (_sp.containsKey("playerinfo")) {
       var i = PlayerInfo.fromJson(jsonDecode(_sp.getString("playerinfo")!));
@@ -228,22 +222,22 @@ class Player extends _$Player {
   }
 
   void seek(Duration d) {
-    _audioPlayer.seek(d);
+    _audioHandler.seek(d);
   }
 
   void seekForward(int milliseconds) {
-    _audioPlayer.seek(Duration(milliseconds: state.position) +
+    _audioHandler.seek(Duration(milliseconds: state.position) +
         Duration(milliseconds: milliseconds));
   }
 
   void seekBackward(int milliseconds) {
     Duration computed = Duration(milliseconds: state.position) -
         Duration(milliseconds: milliseconds);
-    _audioPlayer.seek(computed.isNegative ? Duration.zero : computed);
+    _audioHandler.seek(computed.isNegative ? Duration.zero : computed);
   }
 
   void stop() {
-    _audioPlayer.stop();
+    _audioHandler.stop();
     state = state.copyWith(isPlaying: false);
     setQueue([]);
   }
@@ -252,16 +246,16 @@ class Player extends _$Player {
     if (needInteraction) {
       print("Play called, but need interaction");
       playQueueItem(state.queue[state.currentIndex]);
-      await _audioPlayer.resume();
+      await _audioHandler.play();
       state = state.copyWith(isPlaying: true);
       return;
     }
-    _audioPlayer.resume();
+    _audioHandler.play();
     state = state.copyWith(isPlaying: true);
   }
 
   void pause() async {
-    _audioPlayer.pause();
+    _audioHandler.pause();
     state = state.copyWith(isPlaying: false);
   }
 
@@ -428,7 +422,7 @@ class Player extends _$Player {
   }
 
   void clearQueue() async {
-    _audioPlayer.stop();
+    _audioHandler.stop();
     setQueue([]);
     state = state.copyWith(currentIndex: 0);
   }
@@ -460,11 +454,11 @@ class Player extends _$Player {
     state = state.copyWith(position: 0);
     print("Playing youtube $id");
     state = state.copyWith(thinking: true);
-    _audioPlayer.stop();
+    _audioHandler.stop();
     var url = await fetchYTVideo(id);
 
-    // Play the audio using AudioPlayers
-    await _audioPlayer.play(UrlSource(url));
+    // Play the audio using AudioHandler
+    await _audioHandler.playUrl(url);
 
     // Update media item in audio service
     _audioHandler.mediaItem.add(MediaItem(
@@ -510,16 +504,13 @@ class Player extends _$Player {
 
   Future<void> loop(bool enable) async {
     state = state.copyWith(loop: enable);
-    if (enable) {
-      _audioPlayer.setReleaseMode(ReleaseMode.loop);
-    } else {
-      _audioPlayer.setReleaseMode(ReleaseMode.release);
-    }
+    // Use audio handler to set looping
+    await _audioHandler.setLooping(enable);
   }
 
   Future<void> playQueueItem(QueueItem item) async {
     state = state.copyWith(thinking: true);
-    _audioPlayer.stop();
+    _audioHandler.stop();
     var url = item.audioUrl;
     print("audioUrl: $url");
     if (url.split(":").first != "prefetched") {
@@ -532,8 +523,8 @@ class Player extends _$Player {
     }
     print("Playing url: $url");
 
-    // Play audio with AudioPlayers
-    await _audioPlayer.play(UrlSource(url));
+    // Play audio with AudioHandler
+    await _audioHandler.playUrl(url);
 
     // Update media item in audio service
     _audioHandler.mediaItem.add(MediaItem(
@@ -542,6 +533,7 @@ class Player extends _$Player {
       album: item.albumName,
       artist: item.artistName,
       artUri: Uri.parse(item.imageUrl),
+      duration: state.duration > 0 ? Duration(milliseconds: state.duration) : null,
     ));
 
     state = state.copyWith(thinking: false);
@@ -660,65 +652,5 @@ class Player extends _$Player {
     return (state.currentIndex + 1 >= state.queue.length)
         ? false || state.loop
         : true;
-  }
-}
-
-// Implementation of AudioHandler for audio_service
-class MyAudioHandler extends BaseAudioHandler {
-  final _player = AudioPlayer();
-
-  MyAudioHandler() {
-    _player.onPlayerStateChanged.listen((state) {
-      playbackState.add(playbackState.value.copyWith(
-        playing: state == PlayerState.playing,
-        processingState: _getProcessingState(state),
-      ));
-    });
-
-    _player.onPositionChanged.listen((position) {
-      playbackState.add(playbackState.value.copyWith(
-        updatePosition: position,
-      ));
-    });
-  }
-
-  PlaybackState _getProcessingState(PlayerState state) {
-    switch (state) {
-      case PlayerState.stopped:
-        return AudioProcessingState.idle;
-      case PlayerState.playing:
-        return AudioProcessingState.ready;
-      case PlayerState.paused:
-        return AudioProcessingState.ready;
-      case PlayerState.completed:
-        return AudioProcessingState.completed;
-      default:
-        return AudioProcessingState.idle;
-    }
-  }
-
-  @override
-  Future<void> play() => _player.resume();
-
-  @override
-  Future<void> pause() => _player.pause();
-
-  @override
-  Future<void> stop() => _player.stop();
-
-  @override
-  Future<void> seek(Duration position) => _player.seek(position);
-
-  @override
-  Future<void> skipToNext() => _player.stop();
-
-  @override
-  Future<void> skipToPrevious() => _player.stop();
-
-  @override
-  Future<void> skipToQueueItem(int index) async {
-    if (index < queue.value.length) {
-      mediaItem.add(queue.value[index]);
-    }
   }
 }

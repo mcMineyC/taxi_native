@@ -449,15 +449,19 @@ class Player extends _$Player {
     setQueue(queue);
   }
 
+
   void playYoutubeId(String id) async {
     needInteraction = false;
     state = state.copyWith(position: 0);
     print("Playing youtube $id");
     state = state.copyWith(thinking: true);
     _audioHandler.stop();
-    var url = await fetchYTVideo(id);
 
-    // Play the audio using AudioHandler
+    // Get a direct playable URL
+    var url = await fetchYTVideo(id);
+    print("Got YouTube URL: $url");
+
+    // Play the audio using AudioHandler with the direct URL
     await _audioHandler.playUrl(url);
 
     // Update media item in audio service
@@ -508,23 +512,40 @@ class Player extends _$Player {
     await _audioHandler.setLooping(enable);
   }
 
+
+
   Future<void> playQueueItem(QueueItem item) async {
     state = state.copyWith(thinking: true);
     _audioHandler.stop();
     var url = item.audioUrl;
     print("audioUrl: $url");
-    if (url.split(":").first != "prefetched") {
-      if (PlatformUtils.isWeb) return;
-      url = await getAudioUrl(url);
-    } else {
-      url = RegExp(r'\${{%(.*)%}}\$(.*)').firstMatch(url)?.group(2) ?? "";
-      if (url.isEmpty)
-        throw Exception("Audio url fetch failed: ${item.audioUrl}");
-    }
-    print("Playing url: $url");
 
-    // Play audio with AudioHandler
-    await _audioHandler.playUrl(url);
+    // Extract the actual URL to play
+    String finalUrl = "";
+    if (url.split(":").first == "prefetched") {
+      // Extract the actual URL from the prefetched format
+      finalUrl = RegExp(r'\${{%(.*)%}}\$(.*)').firstMatch(url)?.group(2) ?? "";
+      if (finalUrl.isEmpty) {
+        throw Exception("Audio URL extraction failed: ${item.audioUrl}");
+      }
+    } else {
+      // Get the URL for non-prefetched sources
+      if (PlatformUtils.isWeb) return;
+      finalUrl = await getAudioUrl(url);
+
+      // If this turned into a prefetched URL, extract the actual URL
+      if (finalUrl.split(":").first == "prefetched") {
+        finalUrl = RegExp(r'\${{%(.*)%}}\$(.*)').firstMatch(finalUrl)?.group(2) ?? "";
+        if (finalUrl.isEmpty) {
+          throw Exception("Audio URL extraction failed after getAudioUrl: ${finalUrl}");
+        }
+      }
+    }
+
+    print("Playing final URL: $finalUrl");
+
+    // Play audio with AudioHandler - make sure finalUrl is a direct playable URL
+    await _audioHandler.playUrl(finalUrl);
 
     // Update media item in audio service
     _audioHandler.mediaItem.add(MediaItem(
@@ -617,16 +638,20 @@ class Player extends _$Player {
     return url;
   }
 
+
   Future<String> getAudioUrl(String audioUrl) async {
     var audioUrlParts = audioUrl.split(":");
     var type = audioUrlParts.first;
     var data = audioUrlParts.sublist(1).join(":");
+
     switch (type) {
       case "http":
       case "https":
         return audioUrl;
       case "youtube":
-        return "prefetched:\${{%$audioUrl%}}\$${await fetchYTVideo(data)}";
+        // Store in prefetched format for internal use
+        String actualYoutubeUrl = await fetchYTVideo(data);
+        return "prefetched:\${{%$audioUrl%}}\$$actualYoutubeUrl";
       case "blank":
         return "";
       case "scratch":
@@ -634,8 +659,8 @@ class Player extends _$Player {
       case "custom":
         return "";
       case "prefetched":
-        return RegExp(r'\${{%(.*)%}}\$(.*)').firstMatch(audioUrl)?.group(2) ??
-            "";
+        // Extract the direct URL when needed
+        return RegExp(r'\${{%(.*)%}}\$(.*)').firstMatch(audioUrl)?.group(2) ?? "";
       default:
         return "";
     }

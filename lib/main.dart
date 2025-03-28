@@ -45,7 +45,7 @@ void main() async {
   ServiceLocator()
       .register<SharedPreferences>(await SharedPreferences.getInstance());
   print("Found shared preferences");
-  print("Initing justaudio");
+  print("Initing audio_service");
   audioHandler = await AudioService.init(
     builder: () => MyAudioHandler(),
     config: AudioServiceConfig(
@@ -56,6 +56,7 @@ void main() async {
     ),
   );
   ServiceLocator().register<MyAudioHandler>(audioHandler);
+  print("audio_service init done");
   PreferencesProvider prefsProvider = PreferencesProvider();
   await prefsProvider.init();
   ServiceLocator().register<PreferencesProvider>(prefsProvider);

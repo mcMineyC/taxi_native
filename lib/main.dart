@@ -365,6 +365,7 @@ class _AppState extends ConsumerState<App> {
         ),
         routerDelegate: routerDelegate,
         routeInformationParser: BeamerParser(),
+        backButtonDispatcher: BeamerBackButtonDispatcher(delegate: routerDelegate, alwaysBeamBack: true),
       );
     });
   }

@@ -78,9 +78,10 @@ class HLVSong {
   final String imageUrl;
   final String artistImageUrl;
   final List<String> visibleTo;
+  final int trackNumber;
 
   HLVSong(
-      this.name, this.url, this.visibleTo, this.imageUrl, this.artistImageUrl);
+      this.name, this.url, this.visibleTo, this.imageUrl, this.artistImageUrl, this.trackNumber);
 
   Map<String, dynamic> toJson() {
     return {
@@ -89,6 +90,7 @@ class HLVSong {
       'imageUrl': imageUrl,
       'visibleTo': visibleTo,
       'artistImageUrl': artistImageUrl,
+      'trackNumber': trackNumber
     };
   }
 
@@ -98,6 +100,7 @@ class HLVSong {
     String? imageUrl,
     String? artistImageUrl,
     List<String>? visibleTo,
+    int? trackNumber
   }) {
     return HLVSong(
       name ?? this.name,
@@ -105,6 +108,7 @@ class HLVSong {
       visibleTo ?? this.visibleTo,
       imageUrl ?? this.imageUrl,
       artistImageUrl ?? this.artistImageUrl,
+      trackNumber ?? this.trackNumber,
     );
   }
 }
@@ -133,7 +137,8 @@ List<HLVArtist> findResultsToHLVContent(List<FindResult> results) {
                 s.url,
                 result.visibleTo,
                 workingArtist.albums[albumIndex].imageUrl,
-                result.artistImageUrl))
+                result.artistImageUrl,
+                s.trackNumber))
             .toList();
       }
     }
@@ -150,7 +155,8 @@ List<HLVArtist> findResultsToHLVContent(List<FindResult> results) {
             result.songs[0].url,
             result.visibleTo,
             workingAlbum.imageUrl,
-            result.artistImageUrl));
+            result.artistImageUrl,
+            result.songs[0].trackNumber));
       } else {
         workingArtist.albums.add(HLVAlbum(
             result.album,
@@ -158,7 +164,7 @@ List<HLVArtist> findResultsToHLVContent(List<FindResult> results) {
             result.visibleTo,
             [
               HLVSong(result.songs[0].title, result.songs[0].url,
-                  result.visibleTo, result.imageUrl, result.artistImageUrl),
+                  result.visibleTo, result.imageUrl, result.artistImageUrl, result.songs[0].trackNumber),
             ],
             result.artistImageUrl));
       }

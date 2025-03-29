@@ -20,6 +20,7 @@ class MobileNav extends ConsumerWidget {
     //  numThings++;
     //}
     return Container(
+      margin: const EdgeInsets.only(bottom: 24),
       height: 58,
       child: NavigationBar(
         destinations: [

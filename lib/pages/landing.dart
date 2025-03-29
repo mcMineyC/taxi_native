@@ -25,6 +25,7 @@ class _LandingPageState extends ConsumerState<LandingPage> {
     false, //recommended
     true, //playlists
     true, //new songs
+    true, //add button
   ];
   @override
   Widget build(BuildContext context) {
@@ -305,9 +306,16 @@ class _LandingPageState extends ConsumerState<LandingPage> {
                     ),
                   )
                 )
-              )
+              ),
             ]
-          ),
+          ), //section 5
+          if(shouldShowSections[6]) Container(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            child: FilledButton(
+              child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.download_rounded), SizedBox(width: 4), Text("Adder")]),
+              onPressed: () => Beamer.of(context).beamToNamed("/adder"),
+            ),
+          ), //section 6
         ]
       )
     );

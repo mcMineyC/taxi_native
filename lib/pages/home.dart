@@ -24,7 +24,7 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(playerProvider.notifier).init();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     // subject.throttleTime(const Duration(seconds: 1)).listen((value) {
     //   _persistPlayerInfo(value).then((_) {});
     // });
@@ -107,8 +107,11 @@ class MobileHomePage extends ConsumerWidget {
         ),
       ),
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(58),
-        child: MobileAppBar(),
+        preferredSize: const Size.fromHeight(58+36),
+        child: Container(
+          margin: const EdgeInsets.only(top: 36),
+          child: MobileAppBar(),
+        ),
       ),
       bottomNavigationBar: MobileNav(),
       body: SafeArea(

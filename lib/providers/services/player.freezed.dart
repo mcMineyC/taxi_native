@@ -35,6 +35,7 @@ mixin _$PlayerInfo {
   bool get shuffle => throw _privateConstructorUsedError;
   bool get loop => throw _privateConstructorUsedError;
   bool get thinking => throw _privateConstructorUsedError;
+  double get volume => throw _privateConstructorUsedError;
 
   /// Serializes this PlayerInfo to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -67,7 +68,8 @@ abstract class $PlayerInfoCopyWith<$Res> {
       int currentIndex,
       bool shuffle,
       bool loop,
-      bool thinking});
+      bool thinking,
+      double volume});
 }
 
 /// @nodoc
@@ -100,6 +102,7 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
     Object? shuffle = null,
     Object? loop = null,
     Object? thinking = null,
+    Object? volume = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -162,6 +165,10 @@ class _$PlayerInfoCopyWithImpl<$Res, $Val extends PlayerInfo>
           ? _value.thinking
           : thinking // ignore: cast_nullable_to_non_nullable
               as bool,
+      volume: null == volume
+          ? _value.volume
+          : volume // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -189,7 +196,8 @@ abstract class _$$PlayerInfoImplCopyWith<$Res>
       int currentIndex,
       bool shuffle,
       bool loop,
-      bool thinking});
+      bool thinking,
+      double volume});
 }
 
 /// @nodoc
@@ -220,6 +228,7 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
     Object? shuffle = null,
     Object? loop = null,
     Object? thinking = null,
+    Object? volume = null,
   }) {
     return _then(_$PlayerInfoImpl(
       id: null == id
@@ -282,6 +291,10 @@ class __$$PlayerInfoImplCopyWithImpl<$Res>
           ? _value.thinking
           : thinking // ignore: cast_nullable_to_non_nullable
               as bool,
+      volume: null == volume
+          ? _value.volume
+          : volume // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -304,7 +317,8 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       required this.currentIndex,
       required this.shuffle,
       required this.loop,
-      required this.thinking})
+      required this.thinking,
+      required this.volume})
       : _queue = queue;
 
   factory _$PlayerInfoImpl.fromJson(Map<String, dynamic> json) =>
@@ -346,10 +360,12 @@ class _$PlayerInfoImpl implements _PlayerInfo {
   final bool loop;
   @override
   final bool thinking;
+  @override
+  final double volume;
 
   @override
   String toString() {
-    return 'PlayerInfo(id: $id, artistId: $artistId, albumId: $albumId, displayName: $displayName, artistDisplayName: $artistDisplayName, albumDisplayName: $albumDisplayName, imageUrl: $imageUrl, duration: $duration, position: $position, isPlaying: $isPlaying, queue: $queue, currentIndex: $currentIndex, shuffle: $shuffle, loop: $loop, thinking: $thinking)';
+    return 'PlayerInfo(id: $id, artistId: $artistId, albumId: $albumId, displayName: $displayName, artistDisplayName: $artistDisplayName, albumDisplayName: $albumDisplayName, imageUrl: $imageUrl, duration: $duration, position: $position, isPlaying: $isPlaying, queue: $queue, currentIndex: $currentIndex, shuffle: $shuffle, loop: $loop, thinking: $thinking, volume: $volume)';
   }
 
   @override
@@ -381,7 +397,8 @@ class _$PlayerInfoImpl implements _PlayerInfo {
             (identical(other.shuffle, shuffle) || other.shuffle == shuffle) &&
             (identical(other.loop, loop) || other.loop == loop) &&
             (identical(other.thinking, thinking) ||
-                other.thinking == thinking));
+                other.thinking == thinking) &&
+            (identical(other.volume, volume) || other.volume == volume));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -402,7 +419,8 @@ class _$PlayerInfoImpl implements _PlayerInfo {
       currentIndex,
       shuffle,
       loop,
-      thinking);
+      thinking,
+      volume);
 
   /// Create a copy of PlayerInfo
   /// with the given fields replaced by the non-null parameter values.
@@ -436,7 +454,8 @@ abstract class _PlayerInfo implements PlayerInfo {
       required final int currentIndex,
       required final bool shuffle,
       required final bool loop,
-      required final bool thinking}) = _$PlayerInfoImpl;
+      required final bool thinking,
+      required final double volume}) = _$PlayerInfoImpl;
 
   factory _PlayerInfo.fromJson(Map<String, dynamic> json) =
       _$PlayerInfoImpl.fromJson;
@@ -471,6 +490,8 @@ abstract class _PlayerInfo implements PlayerInfo {
   bool get loop;
   @override
   bool get thinking;
+  @override
+  double get volume;
 
   /// Create a copy of PlayerInfo
   /// with the given fields replaced by the non-null parameter values.

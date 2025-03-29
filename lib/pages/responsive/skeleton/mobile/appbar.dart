@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:beamer/beamer.dart';
 
+import '../../../../helpers/utilities.dart';
 import '../../../../providers/services/search.dart';
 
 class MobileAppBar extends ConsumerWidget {
@@ -69,6 +70,16 @@ class MobileAppBar extends ConsumerWidget {
                 )
               ) :
               Container(),
+            ),
+            Container(
+              // margin: const EdgeInsets.symmetric(horizontal: 4),
+              child: IconButton(
+                icon: const Icon(Icons.refresh_rounded),
+                onPressed: () {
+                  refreshChanges(ref);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Refreshed")));
+                }
+              ),
             ),
             Container(
               width: 96,

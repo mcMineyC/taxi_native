@@ -75,7 +75,7 @@ class RecentlyPlayedPage extends ConsumerWidget {
             isEnd: false,
             isStart: false,
             title: Text("Song name"),
-            subtitle: Text("Album - Artist name"),
+            subtitle: Text("Artist name - album"),
             leading: Container(color: Colors.grey),
           ),
           itemBuilder: (context, index) => ContextMenuRegion(
@@ -84,9 +84,9 @@ class RecentlyPlayedPage extends ConsumerWidget {
               isEnd: index == data.length - 1,
               isStart: index == 0,
               titleText: data[index].displayName,
-              subtitleText: "${data[index].albumDisplayName} - ${data[index].artistDisplayName}",
+              subtitleText: "${data[index].artistDisplayName} - ${data[index].albumDisplayName}",
               leading: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(24),
                 child: CachedNetworkImage(
                   width: 72,
                   height: 72,
@@ -138,7 +138,8 @@ class ModernListItem extends StatelessWidget {
   final String? subtitleText;
   final int horizPadding;
   final int interItemSpacing;
-  ModernListItem({super.key, required this.isEnd, required this.isStart, this.child, this.trailing, this.leading, this.title, this.subtitle, this.titleText, this.subtitleText, this.horizPadding = 12, this.interItemSpacing = 6}) {
+  final double cornerRadius;
+  ModernListItem({super.key, required this.isEnd, required this.isStart, this.child, this.trailing, this.leading, this.title, this.subtitle, this.titleText, this.subtitleText, this.horizPadding = 12, this.interItemSpacing = 2, this.cornerRadius = 24}) {
     assert(child != null || (leading != null || title != null || subtitle != null || subtitleText != null || titleText != null), "Either child or layout-specific widget should be defined");
     assert(child == null && (leading != null || title != null || subtitle != null || titleText != null || subtitleText != null), "Both child and layout-specific widget cannot be defined");
     //assert(title != null && titleText != null, "Either titleText or title should be defined");
@@ -151,7 +152,7 @@ class ModernListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Container(
-      height: 84,
+      height: isStart || isEnd ? 100 : 84,
       margin: EdgeInsets.only(
         bottom: isEnd ? 0 : interItemSpacing/2.0,
         top: isStart ? 0 : interItemSpacing/2.0,
@@ -159,30 +160,36 @@ class ModernListItem extends StatelessWidget {
         right: horizPadding.toDouble()
       ),
       //margin: EdgeInsets.only(bottom: isEnd ? 0 : 8),
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      padding: 
+        // isStart ? EdgeInsets.symmetric(horizontal: 12).copyWith(top: 16) :
+        // isEnd ? EdgeInsets.symmetric(horizontal: 12).copyWith(bottom: 16) :
+        EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: 
-          isEnd ? BorderRadius.only(bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16)) :
-          isStart ? BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)) :
-          null,
+          isStart && isEnd ? BorderRadius.circular(cornerRadius) :
+          isEnd ? BorderRadius.only(bottomLeft: Radius.circular(cornerRadius), bottomRight: Radius.circular(cornerRadius), topLeft: Radius.circular(4), topRight: Radius.circular(4)) :
+          isStart ? BorderRadius.only(topLeft: Radius.circular(cornerRadius), topRight: Radius.circular(cornerRadius), bottomLeft: Radius.circular(4), bottomRight: Radius.circular(4)) :
+          BorderRadius.all(Radius.circular(4)),
         color: theme.colorScheme.surfaceContainerHighest,
       ),
       child: child ?? Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (leading != null) leading!,
-          Container(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                title != null ? title! : Text(titleText!, style: Theme.of(context).textTheme.headlineMedium,),
-                subtitle != null ? subtitle! : Text(subtitleText!, style: Theme.of(context).textTheme.bodyMedium,)
-              ],
+          Expanded(
+            child:Container(
+              margin: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  title != null ? title! : Text(titleText!, style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis),
+                  subtitle != null ? subtitle! : Text(subtitleText!, style: Theme.of(context).textTheme.bodyMedium, overflow: TextOverflow.ellipsis,)
+                ],
+              ),
             ),
           ),
-          if (trailing != null) const Spacer(),
+          // if (trailing != null) const Spacer(),
           if (trailing != null) trailing! //trailing!,
         ],
       ),

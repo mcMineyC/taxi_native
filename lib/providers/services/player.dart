@@ -72,6 +72,7 @@ class PlayerInfo with _$PlayerInfo {
     required bool shuffle,
     required bool loop,
     required bool thinking,
+    required double volume,
   }) = _PlayerInfo;
 
   factory PlayerInfo.fromJson(Map<String, dynamic> json) =>
@@ -95,7 +96,16 @@ class Player extends _$Player {
   bool paused = false;
   bool needInteraction = false;
   int needSeekTo = 0;
+
   String? lastSavedSongId;
+  String? _lastPlayedSongId;
+  int _lastKnownDuration = 0;
+
+  static const String _globalVolumeKey = 'global_player_volume';
+  static const String _songVolumesKey = 'song_volume_settings';
+  Map<String, double> _songVolumes = {};
+  double _globalVolume = 1.0;
+  bool _isRestoringVolume = false;
 
   Future<void> _loadYoutubeCache() async {
     final prefs = await SharedPreferences.getInstance();
@@ -132,37 +142,37 @@ class Player extends _$Player {
   @override
   PlayerInfo build() {
     print("Playerinfo: New playerinfo");
+    ServiceLocator().register<Player>(this);
     return PlayerInfo(
-      id: 'empty',
-      artistId: 'empty',
-      albumId: 'empty',
-      displayName: '',
-      artistDisplayName: '',
-      albumDisplayName: '',
-      imageUrl: '',
-      duration: 0,
-      position: 0,
-      isPlaying: false,
-      queue: [],
-      currentIndex: -1,
-      loop: true,
-      shuffle: false,
-      thinking: false,
-    );
+        id: 'empty',
+        artistId: 'empty',
+        albumId: 'empty',
+        displayName: '',
+        artistDisplayName: '',
+        albumDisplayName: '',
+        imageUrl: '',
+        duration: 0,
+        position: 0,
+        isPlaying: false,
+        queue: [],
+        currentIndex: -1,
+        loop: true,
+        shuffle: false,
+        thinking: false,
+        volume: 1.0);
   }
+
 
   Future<void> init() async {
     if (_isInit) return;
     _isInit = true;
     _sp = await SharedPreferences.getInstance();
     await _loadYoutubeCache();
+    await _loadVolumeSettings();
     print("Playerinfo: init");
 
     // Initialize audio service
-    //_audioHandler = AudioService.handler as MyAudioHandler;
     _audioHandler = ServiceLocator().get<MyAudioHandler>();
-
-    // Initialize AudioPlayer
 
     // Set up position tracking
     _audioHandler.positionNotifier.addListener(() {
@@ -171,7 +181,6 @@ class Player extends _$Player {
     });
 
     // Set up duration tracking
-
     _audioHandler.durationNotifier.addListener(() {
       final duration = _audioHandler.durationNotifier.value;
       state = state.copyWith(
@@ -183,92 +192,258 @@ class Player extends _$Player {
                   : 1));
     });
 
-    // Listen to playback state from audio handler
-    //_audioHandler.playingNotifier.addListener(() {
-    //  bool isPlaying = _audioHandler.playingNotifier.value;
-    //  state = state.copyWith(isPlaying: isPlaying);
-    //
-    //  if (isPlaying && needInteraction && lastSavedSongId == state.id) {
-    //    needInteraction = false;
-    //    _audioHandler.seek(Duration(milliseconds: needSeekTo));
-    //    print("Seeked position to $needSeekTo");
-    //  }
-    //});
+    // REMOVE the playbackState listener that handles completion
+    // and ADD this new completion handler
+    _audioHandler.completedNotifier.addListener(() {
+      if (_audioHandler.completedNotifier.value && !state.thinking) {
+        _handleTrackCompletion();
+      }
+    });
 
-
-
-
-  _audioHandler.playbackState.listen((PlaybackState playbackState) {
-     // Only handle completion events from the audio service
-     if (playbackState.processingState == AudioProcessingState.completed &&
-        !state.thinking) {  // Add thinking check to prevent double handling
-       print("Playback state indicates completion, handling next track");
-
-       // Use a microtask to avoid immediate execution during state transition
-       Future.microtask(() {
-         if (canNext) {
-           print("Moving to next track in queue");
-           paused = false;
-           next();
-         } else if (state.loop && state.queue.isNotEmpty) {
-           print("Looping back to first track");
-           skipToItem(0);
-         }
-       });
-     }
-  });
-
-  _audioHandler.loadingNotifier.addListener(() {
-    state = state.copyWith(thinking: _audioHandler.loadingNotifier.value);
-  });
-
-  // Make sure we update the playing state from the audio handler
-  _audioHandler.playingNotifier.addListener(() {
-    state = state.copyWith(isPlaying: _audioHandler.playingNotifier.value);
-  });
-
-
-
-
-  if (_sp.containsKey("playerinfo")) {
-    try {
-      var i = PlayerInfo.fromJson(jsonDecode(_sp.getString("playerinfo")!));
-      print("Loading persisted playerinfo for song: ${i.displayName}");
-
-      // Verify we have a valid queue and current index
-      if (i.queue.isEmpty || i.currentIndex < 0 || i.currentIndex >= i.queue.length) {
-        print("Persisted state has invalid queue or index - resetting");
-        state = state.copyWith(
-          queue: i.queue,
-          currentIndex: i.queue.isEmpty ? -1 : 0
-        );
-      } else {
-        // Save the position we need to restore
-        needSeekTo = i.position;
-        lastSavedSongId = i.id;
-
-        // Update state with persisted info
-        state = i;
-
-        // Setup for autoplay if needed
-        needInteraction = true;
-
-        if (!PlatformUtils.isWeb && p.autoResume) {
-          // Give a slight delay to ensure initialization is complete
-          Future.delayed(Duration(milliseconds: 800), () async {
-            print("Auto-resuming playback of: ${i.queue[i.currentIndex].displayName}");
-            print("Audio URL: ${i.queue[i.currentIndex].audioUrl}");
-            await playQueueItem(i.queue[i.currentIndex]);
-          });
-        } else {
-          print("Auto-resume disabled");
+    // Use playbackState for state updates (not for completion)
+    _audioHandler.playbackState.listen((PlaybackState playbackState) {
+      // Update thinking state based on processing state
+      if (playbackState.processingState == AudioProcessingState.buffering) {
+        if (!state.thinking) {
+          state = state.copyWith(thinking: true);
+        }
+      } else if (playbackState.processingState == AudioProcessingState.ready) {
+        if (state.thinking) {
+          state = state.copyWith(thinking: false);
         }
       }
-    } catch (e) {
-      print("Error restoring player state: $e");
-      // If there's an error, use the default state
+      // Note: completion is now handled by completedNotifier
+    });
+
+    _audioHandler.loadingNotifier.addListener(() {
+      state = state.copyWith(thinking: _audioHandler.loadingNotifier.value);
+    });
+
+    // Make sure we update the playing state from the audio handler
+    _audioHandler.playingNotifier.addListener(() {
+      state = state.copyWith(isPlaying: _audioHandler.playingNotifier.value);
+    });
+
+    if (_sp.containsKey("playerinfo")) {
+      try {
+        var i = PlayerInfo.fromJson(jsonDecode(_sp.getString("playerinfo")!));
+        print("Loading persisted playerinfo for song: ${i.displayName}");
+
+        // Verify we have a valid queue and current index
+        if (i.queue.isEmpty ||
+            i.currentIndex < 0 ||
+            i.currentIndex >= i.queue.length) {
+          print("Persisted state has invalid queue or index - resetting");
+          state = state.copyWith(
+              queue: i.queue, currentIndex: i.queue.isEmpty ? -1 : 0);
+        } else {
+          // Save the position we need to restore
+          needSeekTo = i.position;
+          lastSavedSongId = i.id;
+
+          // Update state with persisted info
+          state = i;
+
+          // Setup for autoplay if needed
+          needInteraction = true;
+
+          if (!PlatformUtils.isWeb && p.autoResume) {
+            // Give a slight delay to ensure initialization is complete
+            Future.delayed(Duration(milliseconds: 800), () async {
+              print(
+                  "Auto-resuming playback of: ${i.queue[i.currentIndex].displayName}");
+              print("Audio URL: ${i.queue[i.currentIndex].audioUrl}");
+              await playQueueItem(i.queue[i.currentIndex]);
+            });
+          } else {
+            print("Auto-resume disabled");
+          }
+        }
+      } catch (e) {
+        print("Error restoring player state: $e");
+        // If there's an error, use the default state
+      }
     }
   }
+  void _handleTrackCompletion() {
+    // Save the current duration for potential looping
+    if (state.duration > 0) {
+      _lastKnownDuration = state.duration;
+    }
+
+    _reportSongAsRecentlyPlayed(state.id);
+
+    print("Player: Handling track completion");
+
+    // Use a microtask to avoid immediate execution during state transition
+    Future.microtask(() async {
+      // This logic was previously in the playbackState listener
+      if (canNext) {
+        print("Moving to next track in queue");
+        paused = false;
+        await next();
+      } else if (state.loop && state.queue.isNotEmpty) {
+        print("Looping back to first track");
+        // Save the current song ID before looping
+        _lastPlayedSongId = state.id;
+        await skipToItem(0);
+
+        // After skipping, if we have a known duration and the current one is zero,
+        // restore it (this handles the single-track loop case)
+        if (_lastPlayedSongId == state.id &&
+            _lastKnownDuration > 0 &&
+            state.duration == 0) {
+
+          print("Post-loop duration restoration: $_lastKnownDuration ms");
+          state = state.copyWith(duration: _lastKnownDuration);
+        }
+      }
+    });
+  }
+
+  void _reportSongAsRecentlyPlayed(String songId) {
+    // Skip if this is the same song we just reported or if ID is invalid
+    if (songId == 'empty' ||
+        songId.isEmpty) {
+      return;
+    }
+
+    // Report the song as recently played
+    print("Reporting song as recently played: $songId");
+    ref.read(addRecentlyPlayedProvider(songId).future).then((success) {
+      if (success) {
+        print("Successfully added to recently played: $songId");
+        ref.refresh(fetchRecentlyPlayedProvider);
+        ref.refresh(fetchLandingRecentlyPlayedProvider);
+        print("Refreshed recentlyPlayed providers");
+      } else {
+        print("Failed to add to recently played: $songId");
+      }
+    }).catchError((error) {
+      print("Error adding to recently played: $error");
+    });
+  }
+
+  Future<void> _loadVolumeSettings() async {
+    // Load global volume
+    _globalVolume = _sp.getDouble(_globalVolumeKey) ?? 1.0;
+
+    // Load per-song volumes
+    final songVolumesJson = _sp.getString(_songVolumesKey);
+    if (songVolumesJson != null) {
+      try {
+        final Map<String, dynamic> volumesMap = jsonDecode(songVolumesJson);
+        _songVolumes = volumesMap
+            .map((key, value) => MapEntry(key, (value as num).toDouble()));
+      } catch (e) {
+        print("Error loading song volumes: $e");
+        _songVolumes = {};
+      }
+    }
+
+    print(
+        "Loaded global volume: $_globalVolume and ${_songVolumes.length} song-specific volumes");
+  }
+
+  // Save all volume settings
+  Future<void> _saveVolumeSettings() async {
+    // Save global volume
+    await _sp.setDouble(_globalVolumeKey, _globalVolume);
+
+    // Save per-song volumes (limit to most recent 100 songs)
+    if (_songVolumes.length > 100) {
+      // Sort by keys and keep only the most recent 100
+      final sortedKeys = _songVolumes.keys.toList()
+        ..sort((a, b) => b.compareTo(a)); // Assuming newer IDs are "greater"
+
+      final keysToRemove = sortedKeys.sublist(100);
+      for (final key in keysToRemove) {
+        _songVolumes.remove(key);
+      }
+    }
+
+    await _sp.setString(_songVolumesKey, jsonEncode(_songVolumes));
+    print(
+        "Saved volume settings: global=$_globalVolume, song-specific=${_songVolumes.length}");
+  }
+
+  // Get the appropriate volume for the current song
+  double _getCurrentSongVolume() {
+    if (state.id == 'empty' || state.id.isEmpty) {
+      return _globalVolume;
+    }
+
+    return _songVolumes[state.id] ?? _globalVolume;
+  }
+
+  // Apply the current volume to the audio player
+  Future<void> _applyCurrentVolume() async {
+    final volume = _getCurrentSongVolume();
+    await _audioHandler.setVolume(volume);
+
+    // Only update state if we're not in the middle of a restore operation
+    if (!_isRestoringVolume) {
+      state = state.copyWith(volume: volume);
+    }
+  }
+
+  // Public volume control methods
+  Future<void> setVolume(double volume) async {
+    volume = volume.clamp(0.0, 1.0);
+
+    // If we have a valid song ID, save as song-specific volume
+    if (state.id != 'empty' && state.id.isNotEmpty) {
+      _songVolumes[state.id] = volume;
+    }
+
+    // Also update the global volume
+    _globalVolume = volume;
+
+    // Apply to audio player
+    await _audioHandler.setVolume(volume);
+    state = state.copyWith(volume: volume);
+
+    // Save settings
+    await _saveVolumeSettings();
+  }
+
+  Future<void> increaseVolume([double step = 0.1]) async {
+    final newVolume = (state.volume + step).clamp(0.0, 1.0);
+    await setVolume(newVolume);
+  }
+
+  Future<void> decreaseVolume([double step = 0.1]) async {
+    final newVolume = (state.volume - step).clamp(0.0, 1.0);
+    await setVolume(newVolume);
+  }
+
+  Future<void> toggleMute() async {
+    if (state.volume > 0) {
+      // Store current volume in a preference so we can restore it
+      final currentVolume = state.volume;
+      await _sp.setDouble('last_volume_before_mute', currentVolume);
+      await setVolume(0);
+    } else {
+      // Restore previous volume, or use global volume as a default
+      final previousVolume =
+          _sp.getDouble('last_volume_before_mute') ?? _globalVolume;
+      await setVolume(previousVolume);
+    }
+  }
+
+  // Update the state when song changes
+  Future<void> _updateSongStateWithVolume() async {
+    _isRestoringVolume = true;
+    final songVolume = _getCurrentSongVolume();
+
+    // Apply volume to audio player
+    await _audioHandler.setVolume(songVolume);
+
+    // Update state
+    state = state.copyWith(volume: songVolume);
+    _isRestoringVolume = false;
+
+    print("Set volume to $songVolume for song: ${state.id}");
   }
 
   Future<void> seek(Duration d) async {
@@ -319,7 +494,25 @@ class Player extends _$Player {
   }
 
   Future<void> next() async {
+    // Save the current song ID and duration before skipping
+    _lastPlayedSongId = state.id;
+    if (state.duration > 0) {
+      _lastKnownDuration = state.duration;
+    }
+
     await skip(1);
+
+    // If we just looped back to the first song in a single-song queue,
+    // make sure the duration is preserved
+    if (state.queue.length == 1 &&
+        state.loop &&
+        _lastPlayedSongId == state.id &&
+        _lastKnownDuration > 0 &&
+        state.duration == 0) {
+      print(
+          "Preserving duration for repeated single track: $_lastKnownDuration ms");
+      state = state.copyWith(duration: _lastKnownDuration);
+    }
   }
 
   Future<void> previous() async {
@@ -330,7 +523,6 @@ class Player extends _$Player {
     state = state.copyWith(isPlaying: playing);
     paused = !playing;
   }
-
 
   Future<void> setQueue(List<QueueItem> q) async {
     // Ensure all queue items have properly formatted URLs
@@ -357,11 +549,26 @@ class Player extends _$Player {
         .toList());
   }
 
-
   Future<void> skip(int num) async {
+    // Save current song info for potential loop detection
+    _lastPlayedSongId = state.id;
+    if (state.duration > 0) {
+      _lastKnownDuration = state.duration;
+    }
+
     int newIndex = skipDex(num);
     print("Skipping to index $newIndex (from ${state.currentIndex})");
     await skipToItem(newIndex);
+
+    // Check if we've looped a single song
+    if (state.queue.length == 1 &&
+        _lastPlayedSongId == state.id &&
+        _lastKnownDuration > 0 &&
+        state.duration == 0) {
+      print(
+          "Preserving duration after single-track loop: $_lastKnownDuration ms");
+      state = state.copyWith(duration: _lastKnownDuration);
+    }
   }
 
   int skipDex(int num) {
@@ -397,6 +604,8 @@ class Player extends _$Player {
         duration: 0,
         position: 0,
       );
+      _reportSongAsRecentlyPlayed(state.queue[i].id);
+      await _updateSongStateWithVolume();
       await playQueueItem(state.queue[i]);
 
       // Update current media item in audio service
@@ -428,6 +637,7 @@ class Player extends _$Player {
       queue: [i],
       isPlaying: true,
     );
+    await _updateSongStateWithVolume();
     await setQueue([i]);
     state = state.copyWith(shuffle: false);
     await skipToItem(0);
@@ -521,7 +731,6 @@ class Player extends _$Player {
     await setQueue(queue);
   }
 
-
   Future<void> playYoutubeId(String id) async {
     needInteraction = false;
     state = state.copyWith(position: 0);
@@ -590,14 +799,16 @@ class Player extends _$Player {
       await _audioHandler.stop();
       var url = item.audioUrl;
 
-      print("Playing queue item: ${item.displayName} with URL type: ${url.contains(':') ? url.split(':').first : 'unknown'}");
+      print(
+          "Playing queue item: ${item.displayName} with URL type: ${url.contains(':') ? url.split(':').first : 'unknown'}");
 
       // Save if this is the current persisted item for seeking logic
       bool isRestoredItem = needInteraction && item.id == lastSavedSongId;
       int positionToRestore = isRestoredItem ? needSeekTo : 0;
 
       if (isRestoredItem) {
-        print("This is the restored item with saved position: ${positionToRestore}ms");
+        print(
+            "This is the restored item with saved position: ${positionToRestore}ms");
       }
 
       // Extract the actual URL to play
@@ -608,7 +819,9 @@ class Player extends _$Player {
 
         // If we got a prefetched URL, extract the actual URL
         if (finalUrl.startsWith("prefetched:")) {
-          finalUrl = RegExp(r'\${{%(.*)%}}\$(.*)').firstMatch(finalUrl)?.group(2) ?? "";
+          finalUrl =
+              RegExp(r'\${{%(.*)%}}\$(.*)').firstMatch(finalUrl)?.group(2) ??
+                  "";
         }
 
         if (finalUrl.isEmpty) {
@@ -628,7 +841,8 @@ class Player extends _$Player {
         album: item.albumName,
         artist: item.artistName,
         artUri: Uri.parse(item.imageUrl),
-        duration: state.duration > 0 ? Duration(milliseconds: state.duration) : null,
+        duration:
+            state.duration > 0 ? Duration(milliseconds: state.duration) : null,
       ));
 
       // Play audio with AudioHandler
@@ -706,8 +920,6 @@ class Player extends _$Player {
     return url;
   }
 
-
-
   Future<String> getAudioUrl(String audioUrl) async {
     // Check if audioUrl is empty or invalid
     if (audioUrl.isEmpty) {
@@ -717,7 +929,8 @@ class Player extends _$Player {
 
     // Check if URL contains a colon (proper formatting)
     if (!audioUrl.contains(":")) {
-      print("Warning: Malformed audioUrl: $audioUrl (adding 'not_fetched:' prefix)");
+      print(
+          "Warning: Malformed audioUrl: $audioUrl (adding 'not_fetched:' prefix)");
       // If it doesn't have a scheme, treat it as a not_fetched URL
       audioUrl = "not_fetched:$audioUrl";
     }
@@ -755,7 +968,8 @@ class Player extends _$Player {
         return "";
       case "prefetched":
         // Extract the direct URL when needed
-        return RegExp(r'\${{%(.*)%}}\$(.*)').firstMatch(audioUrl)?.group(2) ?? "";
+        return RegExp(r'\${{%(.*)%}}\$(.*)').firstMatch(audioUrl)?.group(2) ??
+            "";
       default:
         print("Unknown audio URL type: $type");
         return audioUrl; // Return the original URL as a fallback
@@ -790,18 +1004,25 @@ class Player extends _$Player {
     // Normal case - we have more items in the queue
     return state.currentIndex + 1 < state.queue.length;
   }
+
   Future<void> persistPlayerState() async {
-    if (_sp != null && p.persistInfo && state.id != 'empty' && state.queue.isNotEmpty) {
-      print("Persistng player state for: ${state.displayName} at position ${state.position}ms");
+    if (_sp != null &&
+        p.persistInfo &&
+        state.id != 'empty' &&
+        state.queue.isNotEmpty) {
+      print(
+          "Persistng player state for: ${state.displayName} at position ${state.position}ms");
 
       // Create a copy of the state with the latest position
-      PlayerInfo stateToPersist = state;
+      PlayerInfo stateToPersist = state.copyWith(isPlaying: false);
+      await _saveVolumeSettings();
 
       // Save to SharedPreferences
       await _sp.setString("playerinfo", jsonEncode(stateToPersist.toJson()));
       print("Player state saved successfully");
     } else {
-      print("Not persisting player state: persistInfo=${p.persistInfo}, id=${state.id}, queueEmpty=${state.queue.isEmpty}");
+      print(
+          "Not persisting player state: persistInfo=${p.persistInfo}, id=${state.id}, queueEmpty=${state.queue.isEmpty}");
     }
   }
 }

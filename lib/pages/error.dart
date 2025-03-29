@@ -6,8 +6,10 @@ class ErrorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Container(
-          constraints: BoxConstraints(maxWidth: 512,maxHeight: 128),
+          margin: const EdgeInsets.all(16),
+          constraints: BoxConstraints(maxWidth: 512),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
                 "How did you even get here? Well, you're here now. There's nothing to do here, so feel free to hit the back button.",
@@ -18,12 +20,12 @@ class ErrorPage extends StatelessWidget {
                 style: TextStyle(fontSize: 16),
               ),
               Text(
-                "Beamer: ${Beamer.of(context).currentPages.last}",
+                "Beamer: ${Beamer.of(context).currentPages}",
                 style: const TextStyle(fontSize: 16),
               ),
               IconButton.filledTonal(
                 onPressed: () => Beamer.of(context).beamToNamed('/home'),
-                icon: const Icon(Icons.arrow_upward_rounded),
+                icon: const Icon(Icons.home_rounded),
               )
             ],
           )

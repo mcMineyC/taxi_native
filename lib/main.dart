@@ -18,7 +18,7 @@ import 'helpers/extensions/uppercase_extension.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 
 import 'pages/error.dart';
-import 'pages/home.dart';
+import 'pages/responsive/skeleton/skeleton.dart';
 import 'pages/artists.dart';
 import 'pages/artist.dart';
 import 'pages/albums.dart';
@@ -30,7 +30,7 @@ import 'pages/landing.dart';
 import 'pages/search.dart';
 import 'pages/playlists.dart';
 import 'pages/responsive/playlist/playlist.dart';
-import 'pages/settings.dart';
+import 'pages/responsive/settings/settings.dart';
 import 'pages/checklist.dart';
 import 'pages/responsive/library/library.dart';
 import 'pages/recently_played.dart';

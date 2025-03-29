@@ -1,20 +1,17 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import "package:rxdart/rxdart.dart";
-import "dart:async";
-import 'dart:convert';
-import 'package:flutter/services.dart';
+import "package:taxi_native/helpers/constants.dart";
 
-import '../providers/services/player.dart';
+import '../../../providers/services/player.dart';
 
-import 'responsive/skeleton/desktop/navigation.dart';
-import 'responsive/skeleton/desktop/mediacontrols.dart';
-import 'responsive/skeleton/desktop/appbar.dart';
-import 'responsive/skeleton/mobile/navigation.dart';
-import 'responsive/skeleton/mobile/media_controls.dart';
-import 'responsive/skeleton/mobile/appbar.dart';
+import 'desktop/navigation.dart';
+import 'desktop/mediacontrols.dart';
+import 'desktop/appbar.dart';
+import 'mobile/navigation.dart';
+import 'mobile/media_controls.dart';
+import 'mobile/appbar.dart';
 
 class HomePage extends ConsumerWidget {
   HomePage({super.key, required this.homeJunk});
@@ -29,8 +26,7 @@ class HomePage extends ConsumerWidget {
     //   _persistPlayerInfo(value).then((_) {});
     // });
 
-    bool useMobile = MediaQuery.of(context).size.width <= 840;
-    return useMobile
+    return isMobile(context)
         ? MobileHomePage(
             homeJunk: homeJunk, persistenceFunction: persistPlayerInfo)
         : DesktopHomePage(
@@ -96,7 +92,6 @@ class MobileHomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    int height = MediaQuery.of(context).size.height.toInt();
     return Scaffold(
       floatingActionButton: Container(
         margin: EdgeInsets.only(bottom: 0),

@@ -22,11 +22,11 @@ jobs:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: '21'
       - run: flutter build apk
-      - run: cp build/app/outputs/apk/release/app-release.apk taxi-native.apk
+      - run: cp build/app/outputs/apk/release/app-release.apk taxi-android.apk
       - uses: actions/upload-artifact@v4
         with:
           name: taxi-android.apk
-          path: taxi-native.apk
+          path: taxi-android.apk
   build-linux:
     runs-on: ubuntu-22.04
     steps:
@@ -42,11 +42,11 @@ jobs:
           sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
           sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-good gstreamer1.0-plugins-bad
       - run: flutter build linux
-      - run: sh -c "cd build/linux/x64/release/bundle && zip -r taxi-native-linux_x64.zip . && cp taxi-native-linux_x64.zip ../../../../../"
+      - run: sh -c "cd build/linux/x64/release/bundle && zip -r taxi-linux_x64.zip . && cp taxi-linux_x64.zip ../../../../../"
       - uses: actions/upload-artifact@v4
         with:
           name: taxi-linux_x64.zip
-          path: taxi-native-linux_x64.zip
+          path: taxi-linux_x64.zip
   build-windows:
     runs-on: windows-latest
     steps:
@@ -67,7 +67,7 @@ jobs:
           options: /O+
       - uses: actions/upload-artifact@v4
         with:
-          name: taxi-windows.exe
+          name: taxi.exe
           path: Installers/taxi.exe
   build-macos:
     runs-on: macos-latest
@@ -80,11 +80,11 @@ jobs:
           channel: stable
       - run: flutter build macos
       - run: cp -rf build/macos/Build/Products/Release/taxi.app taxi.app
-      - run: zip -r taxi.app.zip taxi.app
+      - run: zip -r taxi-mac.app.zip taxi.app
       - uses: actions/upload-artifact@v4
         with:
           name: taxi-mac.app.zip
-          path: taxi.app.zip
+          path: taxi-mac.app.zip
   release:
     runs-on: ubuntu-22.04
     # needs: [build-linux]
@@ -112,8 +112,11 @@ jobs:
           path: .
       - uses: actions/download-artifact@v4
         with:
-          name: taxi-windows.exe
+          name: taxi.exe
           path: .
+      - name: Rename artifacts
+        run: |
+          mv taxi.exe taxi-windows.exe
       - name: List downloaded artifacts
         run: ls -R .
         

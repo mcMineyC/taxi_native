@@ -32,7 +32,7 @@ List<ContextMenuButtonConfig> buildContextMenuConfig(WidgetRef ref, BuildContext
       }
     ),
     ContextMenuButtonConfig(
-      "Play",
+      "Add to playlist",
       icon: Icon(Icons.playlist_add_rounded),
       onPressed: () async{
         await playlistLogic(ref, context, song.id, "song");

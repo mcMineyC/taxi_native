@@ -65,11 +65,11 @@ class MobileAlbumPage extends ConsumerWidget {
                   children: [
                     if(!album.isInLibrary) IconButton.outlined(
                       icon: Icon(Icons.bookmark_remove_rounded),
-                      onPressed: () async => await ref.read(removeFromLibraryProvider(album.id, "album").future),
+                      onPressed: () async => ref.read(removeFromLibraryProvider(album.id, "album").future).then((v) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text("Added to library")))),
                     ),
                     if(album.isInLibrary) IconButton.outlined(
                       icon: Icon(Icons.bookmark_remove_rounded),
-                      onPressed: () async => await ref.read(removeFromLibraryProvider(album.id, "album").future),
+                      onPressed: () async => ref.read(removeFromLibraryProvider(album.id, "album").future).then((v) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text("Removed from library")))),
                     ),
                     IconButton.outlined(
                       icon: Icon(Icons.playlist_add_rounded),

@@ -87,7 +87,8 @@ jobs:
           path: taxi.app.zip
   release:
     runs-on: ubuntu-22.04
-    needs: [build-macos, build-linux, build-windows, build-android] 
+    needs: [build-linux]
+    # needs: [build-macos, build-linux, build-windows, build-android] 
     steps:
       - uses: actions/checkout@v4
       - name: Get current date
@@ -113,6 +114,9 @@ jobs:
         with:
           name: taxi-windows.exe
           path: .
+      - name: List downloaded artifacts
+        run: ls -R .
+        
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "taxi-android.apk,taxi-linux_x64.zip,taxi-mac.app.zip,taxi-windows.exe"

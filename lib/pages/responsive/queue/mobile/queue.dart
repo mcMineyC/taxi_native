@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import "package:context_menus/context_menus.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../types/song.dart';
 //import '../types/queueitem.dart';
 import '../../../../providers/services/player.dart';
 import "../../../../helpers/widgets/modern_list_item.dart";

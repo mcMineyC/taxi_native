@@ -72,9 +72,26 @@ class _CompactBrightnessModeSwitchState
       selectedMode = widget.mode;
       init = true;
     }
-    return DropdownButton<BrightnessModes>(
-      value: selectedMode,
-      onChanged: (BrightnessModes? newValue) {
+    return DropdownMenu<BrightnessModes>(
+      dropdownMenuEntries: [
+        DropdownMenuEntry<BrightnessModes>(
+          value: BrightnessModes.auto,
+          label: 'Auto',
+          leadingIcon: const Icon(Icons.brightness_auto),
+        ),
+        DropdownMenuEntry<BrightnessModes>(
+          value: BrightnessModes.light,
+          label: 'Light',
+          leadingIcon: const Icon(Icons.brightness_high),
+        ),
+        DropdownMenuEntry<BrightnessModes>(
+          value: BrightnessModes.dark,
+          label: 'Dark',
+          leadingIcon: const Icon(Icons.brightness_low),
+        ),
+      ],
+      initialSelection: selectedMode,
+      onSelected: (BrightnessModes? newValue) {
         if (newValue != null) {
           setState(() {
             widget.onSelected(newValue);
@@ -82,41 +99,6 @@ class _CompactBrightnessModeSwitchState
           });
         }
       },
-      items: [
-        DropdownMenuItem<BrightnessModes>(
-          value: BrightnessModes.auto,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Icon(Icons.brightness_auto),
-              SizedBox(width: 8),
-              Text('Auto'),
-            ],
-          ),
-        ),
-        DropdownMenuItem<BrightnessModes>(
-          value: BrightnessModes.light,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Icon(Icons.brightness_high),
-              SizedBox(width: 8),
-              Text('Light'),
-            ],
-          ),
-        ),
-        DropdownMenuItem<BrightnessModes>(
-          value: BrightnessModes.dark,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Icon(Icons.brightness_low),
-              SizedBox(width: 8),
-              Text('Dark'),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }
@@ -191,7 +173,8 @@ class CompactColorSourceModeSwitch extends StatefulWidget {
       _CompactColorSourceModeSwitchState();
 }
 
-class _CompactColorSourceModeSwitchState extends State<CompactColorSourceModeSwitch> {
+class _CompactColorSourceModeSwitchState
+    extends State<CompactColorSourceModeSwitch> {
   bool init = false;
   ColorSourceMode selectedMode = ColorSourceMode.dynamic;
 
@@ -201,9 +184,21 @@ class _CompactColorSourceModeSwitchState extends State<CompactColorSourceModeSwi
       selectedMode = widget.mode;
       init = true;
     }
-    return DropdownButton<ColorSourceMode>(
-      value: selectedMode,
-      onChanged: (ColorSourceMode? newValue) {
+    return DropdownMenu<ColorSourceMode>(
+      dropdownMenuEntries: [
+        DropdownMenuEntry<ColorSourceMode>(
+          value: ColorSourceMode.dynamic,
+          label: 'Dynamic',
+          leadingIcon: const Icon(Icons.autorenew),
+        ),
+        DropdownMenuEntry<ColorSourceMode>(
+          value: ColorSourceMode.manual,
+          label: 'Manual',
+          leadingIcon: const Icon(Icons.settings),
+        ),
+      ],
+      initialSelection: selectedMode,
+      onSelected: (ColorSourceMode? newValue) {
         if (newValue != null) {
           setState(() {
             widget.onSelected(newValue);
@@ -211,30 +206,6 @@ class _CompactColorSourceModeSwitchState extends State<CompactColorSourceModeSwi
           });
         }
       },
-      items: [
-        DropdownMenuItem<ColorSourceMode>(
-          value: ColorSourceMode.dynamic,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Icon(Icons.autorenew),
-              SizedBox(width: 8),
-              Text('Dynamic'),
-            ],
-          ),
-        ),
-        DropdownMenuItem<ColorSourceMode>(
-          value: ColorSourceMode.manual,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Icon(Icons.settings),
-              SizedBox(width: 8),
-              Text('Manual'),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

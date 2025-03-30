@@ -25,7 +25,7 @@ import 'pages/albums.dart';
 import 'pages/album.dart';
 import 'pages/songs.dart';
 import 'pages/new_adder.dart';
-import 'pages/queue.dart';
+import 'pages/responsive/queue/queue.dart';
 import 'pages/landing.dart';
 import 'pages/search.dart';
 import 'pages/playlists.dart';

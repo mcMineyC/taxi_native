@@ -300,6 +300,7 @@ class MobileSettingsPageState extends ConsumerState<MobileSettingsPage> {
                       margin: const EdgeInsets.only(right: 8),
                       child: Text(e.$1),
                     ),
+                    SizedBox(width: 8),
                     Expanded(child: Align(alignment: Alignment.centerRight, child: e.$2))
                   ],
                 ),

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../types/song.dart';
+import '../../../../types/song.dart';
 //import '../types/queueitem.dart';
-import '../providers/services/player.dart';
+import '../../../../providers/services/player.dart';
 
-class QueuePage extends ConsumerWidget {
+class DesktopQueuePage extends ConsumerWidget {
   //List<QueueItem> _queue = [];
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,7 +40,7 @@ class QueuePage extends ConsumerWidget {
             : ListTile(
                 key: Key('$index'),
                 tileColor: index - 1 == playingIndex
-                    ? colorScheme.primary
+                    ? colorScheme.onSurface
                     : colorScheme.surface,
                 title: Text(queue[index - 1].displayName),
                 trailing: ReorderableDragStartListener(

@@ -693,6 +693,9 @@ Future playlistLogic(WidgetRef ref, BuildContext context, String thingId,
             .toList();
         print("Adding ${oldSongs.length} songs from artist");
         break;
+      case "songids":
+        oldSongs = thingId.split(",");
+        break;
     }
     await ref
         .read(addIdsToPlaylistProvider(result["value"].id, oldSongs).future);
@@ -718,6 +721,9 @@ Future playlistLogic(WidgetRef ref, BuildContext context, String thingId,
       case "playlist":
         newSongs = (await ref.read(findSongsByPlaylistProvider(thingId).future)).toList();
         print("Adding ${newSongs.length} songs from playlist");
+        break;
+      case "songids":
+        newSongs = (await ref.read(findBatchSongsProvider(thingId.split(",")).future)).toList();
         break;
     }
     var p = result["value"] as Playlist;
@@ -888,7 +894,7 @@ void showWebError(context) {
       builder: (context) => const AlertDialog(
             title: Text("Not supported"),
             content: Text(
-                "Video playback is not supported in web, due to workarounds.  It used to be, but I had to shut the proxy down because it was sending too many requests to YouTube.  Now only the native apps are supported.  Sorry :("),
+                "Video playback is not supported on web, due to workarounds.  It used to be, but I had to shut the proxy down because it was sending too many requests to YouTube.  Now only the native apps are supported.  Sorry :("),
           ));
 }
 

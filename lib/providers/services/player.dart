@@ -726,8 +726,14 @@ class Player extends _$Player {
 
   Future<void> moveQueueItem(int oldIndex, int newIndex) async {
     List<QueueItem> queue = [...state.queue];
+    print("Queue item going from spot $oldIndex to $newIndex");
+    if(newIndex < 0){
+      print("New index is being snapped to 0");
+      newIndex = 0;
+    }
     QueueItem s = queue.removeAt(oldIndex);
-    queue.insert(newIndex - 1, s);
+    queue.insert(newIndex, s);
+    print("Queue now looks like: $queue");
     await setQueue(queue);
   }
 

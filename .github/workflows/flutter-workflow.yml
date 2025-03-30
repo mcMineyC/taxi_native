@@ -59,7 +59,7 @@ jobs:
       - name: List files and update template
         run: |
           # Run the PowerShell script to update the installer files
-          pwsh ./scripts/update-installer-files.ps1 `
+          pwsh ./Installers/update-installer-files.ps1 `
       - name: Compile .ISS to .EXE Installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.5
         with:

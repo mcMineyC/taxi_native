@@ -87,8 +87,8 @@ jobs:
           path: taxi.app.zip
   release:
     runs-on: ubuntu-22.04
-    needs: [build-linux]
-    # needs: [build-macos, build-linux, build-windows, build-android] 
+    # needs: [build-linux]
+    needs: [build-macos, build-linux, build-windows, build-android] 
     steps:
       - uses: actions/checkout@v4
       - name: Get current date

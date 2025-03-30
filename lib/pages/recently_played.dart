@@ -96,6 +96,14 @@ class RecentlyPlayedPage extends ConsumerWidget {
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
+              trailing: IconButton(
+                icon: Icon(Icons.more_horiz_rounded),
+                onPressed: (){
+                  context.contextMenuOverlay.show(GenericContextMenu(
+                    buttonConfigs: buildContextMenuConfig(context, ref, data[index]),
+                  ));
+                },
+              )
               // trailing: IconButton(
               //   icon: const Icon(Icons.link_rounded),
               //   onPressed: () {},

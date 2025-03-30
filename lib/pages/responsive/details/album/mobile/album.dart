@@ -4,12 +4,14 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:taxi_native/helpers/widgets/marque.dart';
+import 'package:taxi_native/helpers/widgets/modern_list_item.dart';
 // import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../../../providers/error_watcher.dart';
 import '../../../../../providers/data/fetched_data_provider.dart';
-import '../../../../../providers/services/player.dart';
 import '../../../../../helpers/widgets/helper_widgets.dart';
+import '../../../../../providers/services/player.dart';
+import "package:context_menus/context_menus.dart";
 import "../common.dart";
 
 class MobileAlbumPage extends ConsumerWidget {
@@ -55,51 +57,45 @@ class MobileAlbumPage extends ConsumerWidget {
                 ),
               )
             ),
+            SliverToBoxAdapter(
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconButton.outlined(
+                      icon: Icon(Icons.bookmark_remove_rounded),
+                      onPressed: () async => await ref.read(removeFromLibraryProvider(album.id, "album").future),
+                    ),
+                    IconButton.outlined(
+                      icon: Icon(Icons.playlist_add_rounded),
+                      onPressed: () async => await playlistLogic(ref, context, album.id, "album"),
+                    ),
+                    FilledButton(
+                      child: Row(children: [Icon(Icons.play_arrow_rounded),SizedBox(width:4),Text("Play")],),
+                      onPressed: () => ref.read(playerProvider.notifier).setAlbum(id),
+                    )
+                  ]
+                )
+              )
+            ),
             SliverList.list(
-              children: songs.map((song) => ListTile(
-                // leading: FancyImage(url: song.imageUrl, width: 128, height: 128, radius: 8),
-                title: Text(song.displayName),
-                subtitle: Text("${song.albumDisplayName} - ${song.artistDisplayName}", overflow: TextOverflow.ellipsis),
-                trailing: PopupMenuButton<SongMenuItem>(
-                  onSelected: (SongMenuItem item) async {
-                    switch (item) {
-                      case SongMenuItem.play:
-                        ref.read(playerProvider.notifier).setSong(song.id);
-                        break;
-                      case SongMenuItem.addToQueue:
-                        ref.read(playerProvider.notifier).addIdToQueue(song.id);
-                        break;
-                      case SongMenuItem.addToPlaylist:
-                        await playlistLogic(ref, context, song.id, "song");
-                        break;
-                      case SongMenuItem.delete:
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Not implemented yet!')));
-                        break;
-                      default:
-                        return;
-                    }
-                  },
-                  itemBuilder: (BuildContext context) => <PopupMenuEntry<SongMenuItem>>[
-                    const PopupMenuItem<SongMenuItem>(
-                      value: SongMenuItem.play,
-                      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.play_arrow_rounded), Text("Play")]),
-                    ),
-                    const PopupMenuItem<SongMenuItem>(
-                      value: SongMenuItem.addToQueue,
-                      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.add_rounded), Text("Add to queue")])
-                    ),
-                    const PopupMenuItem<SongMenuItem>(
-                      value: SongMenuItem.addToPlaylist,
-                      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.playlist_add_rounded), Text("Add to playlist")])
-                    ),
-                    const PopupMenuItem<SongMenuItem>(
-                      value: SongMenuItem.delete,
-                      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.delete_rounded, color: Colors.red), Text("Delete", style: TextStyle(color: Colors.red))])
-                    ),
-                  ],
-                ),
+              children: songs.asMap().entries.map((entry) => ModernListItem(
+                isEnd: entry.key == songs.length-1,
+                isStart: entry.key == 0,
+                titleText: entry.value.displayName,
+                subtitleText: "${entry.value.artistDisplayName} - ${entry.value.albumDisplayName}",
+                trailing: IconButton(
+                icon: Icon(Icons.more_horiz_rounded),
+                onPressed: (){
+                  context.contextMenuOverlay.show(GenericContextMenu(
+                    buttonConfigs: buildContextMenuConfig(ref, context, entry.value),
+                  ));
+                },
+              )
               )).toList(),
             ),
+            SliverToBoxAdapter(child: SizedBox(height: 24))
           ],
         ),
         loading: () => Expanded(child: Center(child:CircularProgressIndicator())),

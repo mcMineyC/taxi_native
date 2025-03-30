@@ -25,7 +25,7 @@ jobs:
       - run: cp build/app/outputs/apk/release/app-release.apk taxi-native.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: taxi-native.apk
+          name: taxi-android.apk
           path: taxi-native.apk
   build-linux:
     runs-on: ubuntu-22.04
@@ -45,7 +45,7 @@ jobs:
       - run: sh -c "cd build/linux/x64/release/bundle && zip -r taxi-native-linux_x64.zip . && cp taxi-native-linux_x64.zip ../../../../../"
       - uses: actions/upload-artifact@v4
         with:
-          name: taxi-native-linux_x64.zip
+          name: taxi-linux_x64.zip
           path: taxi-native-linux_x64.zip
   build-windows:
     runs-on: windows-latest
@@ -67,7 +67,7 @@ jobs:
           options: /O+
       - uses: actions/upload-artifact@v4
         with:
-          name: taxi.exe
+          name: taxi-windows.exe
           path: Installers/taxi.exe
   build-macos:
     runs-on: macos-latest
@@ -83,7 +83,7 @@ jobs:
       - run: zip -r taxi.app.zip taxi.app
       - uses: actions/upload-artifact@v4
         with:
-          name: taxi.app.zip
+          name: taxi-mac.app.zip
           path: taxi.app.zip
   release:
     runs-on: ubuntu-22.04
@@ -99,20 +99,20 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: taxi-native.apk
-          path: ./taxi-android.apk
+          name: taxi-android.apk
+          path: .
       - uses: actions/download-artifact@v4
         with:
-          name: taxi-native-linux_x64.zip
-          path: ./taxi-linux_x64.zip
+          name: taxi-linux_x64.zip
+          path: .
       - uses: actions/download-artifact@v4
         with:
-          name: taxi.app.zip
-          path: ./taxi-mac.app.zip
+          name: taxi-mac.app.zip
+          path: .
       - uses: actions/download-artifact@v4
         with:
-          name: taxi.exe
-          path: ./taxi-windows.exe
+          name: taxi-windows.exe
+          path: .
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "taxi-android.apk,taxi-linux_x64.zip,taxi-mac.app.zip,taxi-windows.exe"

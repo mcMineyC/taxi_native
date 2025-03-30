@@ -100,22 +100,22 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: taxi-native.apk
-          path: .
+          path: ./taxi-android.apk
       - uses: actions/download-artifact@v4
         with:
           name: taxi-native-linux_x64.zip
-          path: .
+          path: ./taxi-linux_x64.zip
       - uses: actions/download-artifact@v4
         with:
           name: taxi.app.zip
-          path: .
+          path: ./taxi-mac.app.zip
       - uses: actions/download-artifact@v4
         with:
           name: taxi.exe
-          path: .
+          path: ./taxi-windows.exe
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "taxi-native.apk,taxi-native-linux_x64.zip,taxi.app.zip"
+          artifacts: "taxi-android.apk,taxi-linux_x64.zip,taxi-mac.app.zip,taxi-windows.exe"
           tag: ${{ steps.vars.outputs.sha_short }}
           makeLatest: true
           name: ${{ steps.date.outputs.date }}

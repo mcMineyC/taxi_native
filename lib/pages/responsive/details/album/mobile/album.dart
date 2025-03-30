@@ -34,7 +34,7 @@ class MobileAlbumPage extends ConsumerWidget {
                 child: Container(
                   constraints: BoxConstraints(maxHeight: 256, maxWidth: 256),
                   // color: Colors.blue,
-                  margin: const EdgeInsets.all(8.0),
+                  margin: const EdgeInsets.all(12).copyWith(bottom: 4),
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(16)),
                     child: CachedNetworkImage(
@@ -63,7 +63,11 @@ class MobileAlbumPage extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    IconButton.outlined(
+                    if(!album.isInLibrary) IconButton.outlined(
+                      icon: Icon(Icons.bookmark_remove_rounded),
+                      onPressed: () async => await ref.read(removeFromLibraryProvider(album.id, "album").future),
+                    ),
+                    if(album.isInLibrary) IconButton.outlined(
                       icon: Icon(Icons.bookmark_remove_rounded),
                       onPressed: () async => await ref.read(removeFromLibraryProvider(album.id, "album").future),
                     ),
@@ -95,7 +99,7 @@ class MobileAlbumPage extends ConsumerWidget {
               )
               )).toList(),
             ),
-            SliverToBoxAdapter(child: SizedBox(height: 24))
+            SliverToBoxAdapter(child: SizedBox(height: 16)),
           ],
         ),
         loading: () => Expanded(child: Center(child:CircularProgressIndicator())),

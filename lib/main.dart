@@ -22,7 +22,7 @@ import 'pages/responsive/skeleton/skeleton.dart';
 import 'pages/artists.dart';
 import 'pages/artist.dart';
 import 'pages/albums.dart';
-import 'pages/album.dart';
+import 'pages/responsive/details/album/album.dart';
 import 'pages/songs.dart';
 import 'pages/new_adder.dart';
 import 'pages/responsive/queue/queue.dart';

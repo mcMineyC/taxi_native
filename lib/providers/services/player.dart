@@ -305,6 +305,7 @@ class Player extends _$Player {
     // Skip if this is the same song we just reported or if ID is invalid
     if (songId == 'empty' ||
         songId.isEmpty) {
+      // print("PlayerProvider@_report...RecentlyPlayed:308 - songId is not worth saving: $songId");
       return;
     }
 
@@ -312,15 +313,15 @@ class Player extends _$Player {
     print("Reporting song as recently played: $songId");
     ref.read(addRecentlyPlayedProvider(songId).future).then((success) {
       if (success) {
-        print("Successfully added to recently played: $songId");
+        // print("PlayerProvider@_report...RecentlyPlayed:316 - Successfully added to recently played: $songId");
         ref.refresh(fetchRecentlyPlayedProvider);
         ref.refresh(fetchLandingRecentlyPlayedProvider);
-        print("Refreshed recentlyPlayed providers");
+        // print("PlayerProvider@_report...RecentlyPlayed:319 - Refreshed recentlyPlayed providers");
       } else {
-        print("Failed to add to recently played: $songId");
+        // print("PlayerProvider@_report...RecentlyPlayed:321 - Failed to add to recently played: $songId");
       }
     }).catchError((error) {
-      print("Error adding to recently played: $error");
+      // print("PlayerProvider@_report...RecentlyPlayed:324 - Error adding to recently played: $error");
     });
   }
 
@@ -733,8 +734,21 @@ class Player extends _$Player {
     }
     QueueItem s = queue.removeAt(oldIndex);
     queue.insert(newIndex, s);
-    print("Queue now looks like: $queue");
     await setQueue(queue);
+    if(oldIndex == state.currentIndex){
+      print("PlayerProvider@moveQueueItem:738 - Playing queue item was moved; updating currentIndex accordingly");
+      state = state.copyWith(currentIndex: newIndex);
+    }
+  }
+
+  Future<void> removeQueueItem(int index, {bool skip = true}) async {
+    List<QueueItem> queue = [...state.queue];
+    queue.removeAt(index);
+      await setQueue(queue);
+    if(state.currentIndex == index && skip){
+      await this.skip(0);
+      // state = state.copyWith(currentIndex: skipDex(1));
+    }
   }
 
   Future<void> playYoutubeId(String id) async {

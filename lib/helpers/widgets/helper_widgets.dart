@@ -661,7 +661,7 @@ class _EditPlaylistDialogState extends State<EditPlaylistDialog> {
   }
 }
 
-Future playlistLogic(WidgetRef ref, BuildContext context, String thingId,
+Future<void> playlistLogic(WidgetRef ref, BuildContext context, String thingId,
     String thingType) async {
   //Okay, so first we show a choose dialog.
   var dialog = AddPlaylistDialog(

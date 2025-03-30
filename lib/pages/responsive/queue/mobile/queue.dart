@@ -1,12 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import "package:context_menus/context_menus.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../types/song.dart';
 //import '../types/queueitem.dart';
 import '../../../../providers/services/player.dart';
 import "../../../../helpers/widgets/modern_list_item.dart";
+import "../../../../helpers/widgets/helper_widgets.dart";
+import "../common.dart";
 
 class MobileQueuePage extends ConsumerWidget {
   //List<QueueItem> _queue = [];
@@ -17,11 +19,38 @@ class MobileQueuePage extends ConsumerWidget {
     final queue = ref.watch(playerProvider.select((value) => value.queue));
     final int playingIndex =
         ref.watch(playerProvider.select((value) => value.currentIndex));
-    print("Rebuilding queue");
     return CustomScrollView(
       slivers: [
+        SliverToBoxAdapter(child: SizedBox(height: 12)),
         SliverToBoxAdapter(
-          child: Text("hello world"),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 10, right: 12, left: 12),
+            child: Row(
+              children: [
+                FilledButton(
+                  child: Text('Clear Queue'),
+                  onPressed: () {
+                    ref.read(playerProvider.notifier).clearQueue();
+                  },
+                ),
+                Expanded(child: Container()),
+                OutlinedButton(
+                  child: Text("Add to playlist"),
+                  onPressed: () {
+                    playlistLogic(
+                      ref, context,
+                      queue
+                        .where((e) => e.type == "song")
+                        .map((e) => e.id)
+                        .toList()
+                        .join(","), 
+                      "songids",
+                    );
+                  },
+                ),
+              ]
+            ),
+          ),
         ),
         SliverReorderableList(
           itemCount: queue.length,
@@ -31,6 +60,9 @@ class MobileQueuePage extends ConsumerWidget {
             child: ModernListItem(
               isEnd: index == queue.length - 1,
               isStart: index == 0,
+              horizPadding: 12,
+              color: playingIndex == index ? colorScheme.primary : null,
+              textColor: playingIndex == index ? colorScheme.onPrimary : null,
               titleText: queue[index].displayName,
               subtitleText: "${queue[index].artistName} - ${queue[index].albumName}",
               leading: ClipRRect(
@@ -43,7 +75,15 @@ class MobileQueuePage extends ConsumerWidget {
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
-              trailing: Text(index.toString()),
+              trailing: IconButton(
+                icon: Icon(Icons.more_horiz_rounded),
+                onPressed: (){
+                  context.contextMenuOverlay.show(GenericContextMenu(
+                    buttonConfigs: buildContextMenuConfig(context, ref, queue[index].toSong(), index),
+                  ));
+                },
+              )
+              // trailing: Text(index.toString()),
               // trailing: IconButton(
               //   icon: const Icon(Icons.link_rounded),
               //   onPressed: () {},
@@ -59,7 +99,8 @@ class MobileQueuePage extends ConsumerWidget {
             }
             ref.read(playerProvider.notifier).moveQueueItem(oldIndex, newIndex);
           },
-        )
+        ),
+        SliverToBoxAdapter(child: SizedBox(height: 12)),
       ],
     );
     // return Container(

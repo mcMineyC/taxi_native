@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import "package:flutter/material.dart";
 import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 // import 'package:cached_network_image/cached_network_image.dart';
 
-import '../providers/error_watcher.dart';
-import '../providers/data/fetched_data_provider.dart';
-import '../providers/services/player.dart';
-import '../helpers/widgets/helper_widgets.dart';
+import '../../../../../providers/error_watcher.dart';
+import '../../../../../providers/data/fetched_data_provider.dart';
+import '../../../../../providers/services/player.dart';
+import '../../../../../helpers/widgets/helper_widgets.dart';
+import "../common.dart";
 
-class AlbumPage extends ConsumerWidget {
-  const AlbumPage({Key? key, required this.id}) : super(key: key);
+class DesktopAlbumPage extends ConsumerWidget {
+  const DesktopAlbumPage({Key? key, required this.id}) : super(key: key);
   final String id;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -153,12 +153,4 @@ class AlbumPage extends ConsumerWidget {
       ),
     ]);
   }
-}
-
-enum SongMenuItem {
-  play,
-  addToQueue,
-  addToPlaylist,
-  divider,
-  delete,
 }

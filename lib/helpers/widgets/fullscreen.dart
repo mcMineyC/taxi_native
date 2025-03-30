@@ -3,10 +3,10 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluentui_system_icons/fluentui_system_icons.dart';
-import '../../../../helpers/widgets/marque.dart';
+import 'marque.dart';
 
 import 'package:taxi_native/helpers/utilities.dart';
-import '../../../../providers/services/player.dart';
+import '../../providers/services/player.dart';
 
 class MobileFullscreenPlayerPage extends ConsumerStatefulWidget {
   MobileFullscreenPlayerPage({Key? key}) : super(key: key);

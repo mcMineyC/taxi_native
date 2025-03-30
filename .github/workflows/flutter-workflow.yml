@@ -3,7 +3,7 @@ name: Flutter CI
 on:
   push:
     branches:
-    - main
+      - main
 permissions:
   contents: write 
 
@@ -56,6 +56,10 @@ jobs:
         with:
           channel: stable
       - run: flutter build windows
+      - name: List files and update template
+        run: |
+          # Run the PowerShell script to update the installer files
+          pwsh ./scripts/update-installer-files.ps1 `
       - name: Compile .ISS to .EXE Installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.5
         with:
@@ -65,16 +69,6 @@ jobs:
         with:
           name: taxi.exe
           path: Installers/taxi.exe
-  # build-windows:
-  #   needs: setup
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #     - name: Clone repository
-  #       uses: actions/checkout@v4
-  #     - uses: actions/upload-artifact@v4
-  #       with:
-  #         name: taxi.exe
-  #         path: ./Installers/taxi.exe
   build-macos:
     runs-on: macos-latest
     steps:

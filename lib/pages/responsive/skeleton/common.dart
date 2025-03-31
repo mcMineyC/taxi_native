@@ -71,5 +71,5 @@ class _NavDestination {
   final List<String> paths;
   final IconData icon;
   final int showOn;
-  const _NavDestination({required this.label, required this.paths, required this.icon, required this.showOn})
+  const _NavDestination({required this.label, required this.paths, required this.icon, required this.showOn});
 }

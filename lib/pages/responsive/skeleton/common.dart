@@ -24,7 +24,7 @@ _NavInfo navLocations = _NavInfo(navLocations: [
     label: "Adder",
     paths: ["adder"],
     icon: Icons.download_rounded,
-    showOn: 1, // both
+    showOn: 0, // both
   ),
 
 ]);

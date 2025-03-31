@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:taxi_native/helpers/constants.dart';
 
 import '../../fullscreen_player/mobile/fullscreen.dart';
 import '../../../../providers/services/player.dart';
@@ -13,6 +14,7 @@ class MobilePlayerControls extends ConsumerWidget {
     int width = MediaQuery.of(context).size.width.toInt();
     int height = MediaQuery.of(context).size.height.toInt();
     final player = ref.watch(playerProvider);
+    ScreenBreakpoint size = ScreenBreakpoint.determine(MediaQuery.of(context).size.width.toInt());
     persistenceFunction(player);
     return Container(
       //padding: EdgeInsets.only(top: (height >= 560 ? 16 : 0)),
@@ -23,7 +25,7 @@ class MobilePlayerControls extends ConsumerWidget {
             child: Row(
             mainAxisAlignment: width >= 616 ? MainAxisAlignment.start : MainAxisAlignment.center,
             children: [
-              if(width >= 616) Expanded(
+              if(size >= ScreenBreakpoint.large) Expanded(
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 16),
                   child: Column(

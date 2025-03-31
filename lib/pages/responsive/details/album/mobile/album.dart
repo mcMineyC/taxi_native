@@ -10,6 +10,7 @@ import 'package:taxi_native/helpers/widgets/modern_list_item.dart';
 import '../../../../../providers/error_watcher.dart';
 import '../../../../../providers/data/fetched_data_provider.dart';
 import '../../../../../helpers/widgets/helper_widgets.dart';
+import "../../../../../helpers/constants.dart";
 import '../../../../../providers/services/player.dart';
 import "package:context_menus/context_menus.dart";
 import "../common.dart";
@@ -25,6 +26,7 @@ class MobileAlbumPage extends ConsumerWidget {
     var sngs = ref.watch(sp);
     handleError(ref, sp, Beamer.of(context));
     handleError(ref, p, Beamer.of(context));
+    print("Current size: ${ScreenBreakpoint.determine(MediaQuery.of(context).size.width.toInt())}");
     return abum.when(
       data: (album) => sngs.when(
         data: (songs) => CustomScrollView(
@@ -63,15 +65,21 @@ class MobileAlbumPage extends ConsumerWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    if(!album.isInLibrary) IconButton.outlined(
-                      icon: Icon(Icons.bookmark_remove_rounded),
-                      onPressed: () async => ref.read(removeFromLibraryProvider(album.id, "album").future).then((v) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text("Added to library")))),
-                    ),
-                    if(album.isInLibrary) IconButton.outlined(
-                      icon: Icon(Icons.bookmark_remove_rounded),
-                      onPressed: () async => ref.read(removeFromLibraryProvider(album.id, "album").future).then((v) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text("Removed from library")))),
+                    // if(!album.isInLibrary) IconButton.outlined(
+                    //   icon: Icon(Icons.bookmark_remove_rounded),
+                    //   onPressed: () async => ref.read(removeFromLibraryProvider(album.id, "album").future).then((v) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text("Added to library")))),
+                    // ),
+                    // if(album.isInLibrary) IconButton.outlined(
+                    //   icon: Icon(Icons.bookmark_remove_rounded),
+                    //   onPressed: () async => ref.read(removeFromLibraryProvider(album.id, "album").future).then((v) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text("Removed from library")))),
+                    // ),
+                    IconButton.outlined(
+                      icon: Icon(Icons.library_add_rounded),
+                      tooltip: "Add to queue",
+                      onPressed: () async => await playlistLogic(ref, context, album.id, "album"),
                     ),
                     IconButton.outlined(
+                      tooltip: "Add to playlist",
                       icon: Icon(Icons.playlist_add_rounded),
                       onPressed: () async => await playlistLogic(ref, context, album.id, "album"),
                     ),

@@ -38,15 +38,15 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install libunwind-dev zip
+          sudo apt-get install libunwind-dev 
           sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
           sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-good gstreamer1.0-plugins-bad
       - run: flutter build linux
-      - run: sh -c "cd build/linux/x64/release/bundle && zip -r taxi-linux_x64.zip . && cp taxi-linux_x64.zip ../../../../../"
+      - run: sh -c "cd build/linux/x64/release/bundle && tar -czvf taxi-linux_x64.tar.gz . && cp taxi-linux_x64.zip ../../../../../"
       - uses: actions/upload-artifact@v4
         with:
-          name: taxi-linux_x64.zip
-          path: taxi-linux_x64.zip
+          name: taxi-linux_x64.tar.gz
+          path: taxi-linux_x64.tar.gz
   build-windows:
     runs-on: windows-latest
     steps:
@@ -87,11 +87,12 @@ jobs:
             xattr -d com.apple.quarantine /Applications/Taxi.app
           EOF)
           echo $fixer > fix-taxi.command
-      - run: zip -r taxi-mac.app.zip Taxi.app fix-taxi.command
+          chmod a+x fix-taxi.command
+      - run: tar --preserve-permissions -czvf taxi-mac.app.tar.gz Taxi.app fix-taxi.command
       - uses: actions/upload-artifact@v4
         with:
-          name: taxi-mac.app.zip
-          path: taxi-mac.app.zip
+          name: taxi-mac.app.tar.gz
+          path: taxi-mac.app.tar.gz
   release:
     runs-on: ubuntu-22.04
     # needs: [build-linux]
@@ -111,11 +112,11 @@ jobs:
           path: .
       - uses: actions/download-artifact@v4
         with:
-          name: taxi-linux_x64.zip
+          name: taxi-linux_x64.tar.gz
           path: .
       - uses: actions/download-artifact@v4
         with:
-          name: taxi-mac.app.zip
+          name: taxi-mac.app.tar.gz
           path: .
       - uses: actions/download-artifact@v4
         with:

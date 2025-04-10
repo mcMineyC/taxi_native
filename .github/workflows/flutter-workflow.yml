@@ -83,11 +83,11 @@ jobs:
       - name: Write fixer
         run: |
           fixer=$(cat <<EOF
-            #!/bin/zsh
+            #!/bin/zsh\n
             xattr -d com.apple.quarantine /Applications/Taxi.app
           EOF)
           echo $fixer > fix-taxi.command
-          chmod a+x fix-taxi.command
+          # chmod a+x fix-taxi.command # Does nothing as macOS still quarantines everything
       - run: tar --preserve-permissions -czvf taxi-mac.tar.gz Taxi.app fix-taxi.command
       - uses: actions/upload-artifact@v4
         with:

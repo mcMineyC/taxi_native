@@ -88,11 +88,11 @@ jobs:
           EOF)
           echo $fixer > fix-taxi.command
           chmod a+x fix-taxi.command
-      - run: tar --preserve-permissions -czvf taxi-mac.app.tar.gz Taxi.app fix-taxi.command
+      - run: tar --preserve-permissions -czvf taxi-mac.tar.gz Taxi.app fix-taxi.command
       - uses: actions/upload-artifact@v4
         with:
-          name: taxi-mac.app.tar.gz
-          path: taxi-mac.app.tar.gz
+          name: taxi-mac.tar.gz
+          path: taxi-mac.tar.gz
   release:
     runs-on: ubuntu-22.04
     # needs: [build-linux]
@@ -116,7 +116,7 @@ jobs:
           path: .
       - uses: actions/download-artifact@v4
         with:
-          name: taxi-mac.app.tar.gz
+          name: taxi-mac.tar.gz
           path: .
       - uses: actions/download-artifact@v4
         with:
@@ -130,7 +130,7 @@ jobs:
         
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "taxi-android.apk,taxi-linux_x64.tar.gz,taxi-mac.app.tar.gz,taxi-windows.exe"
+          artifacts: "taxi-android.apk,taxi-linux_x64.tar.gz,taxi-mac.tar.gz,taxi-windows.exe"
           tag: ${{ steps.vars.outputs.sha_short }}
           makeLatest: true
           name: ${{ steps.date.outputs.date }}

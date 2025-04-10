@@ -80,12 +80,13 @@ jobs:
           channel: stable
       - run: flutter build macos
       - run: cp -rf build/macos/Build/Products/Release/taxi.app Taxi.app
-      - run: |
-        fixer=$(cat <<EOF
-          #!/bin/zsh
-          xattr -d com.apple.quarantine /Applications/Taxi.app
-        EOF)
-        echo $fixer > fix-taxi.command
+      - name: Write fixer
+        run: |
+          fixer=$(cat <<EOF
+            #!/bin/zsh
+            xattr -d com.apple.quarantine /Applications/Taxi.app
+          EOF)
+          echo $fixer > fix-taxi.command
       - run: zip -r taxi-mac.app.zip Taxi.app fix-taxi.command
       - uses: actions/upload-artifact@v4
         with:

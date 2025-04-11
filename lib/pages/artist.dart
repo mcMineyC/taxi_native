@@ -162,8 +162,10 @@ class ArtistPage extends ConsumerWidget {
                           style: Theme.of(context).textTheme.headlineSmall),
                       Expanded(child: Container()),
                       TextButton(
-                          onPressed: () => Beamer.of(context)
-                              .beamToNamed("/artist/${id}/albums"),
+                          onPressed: () {
+                            Beamer.of(context)
+                              .beamToNamed("/artist/${id}/albums");
+                          },
                           child: Text("See all")),
                     ],
                   )),

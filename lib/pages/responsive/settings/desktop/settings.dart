@@ -161,15 +161,24 @@ class DesktopSettingsPageState extends ConsumerState<DesktopSettingsPage> {
           ),
           (
             "Server url",
-            TextField(
+            Container(constraints: const BoxConstraints(maxWidth: 4000), child: TextField(
               controller: _serverUrlController,
               decoration: const InputDecoration(
                 labelText: "Server URL",
                 border: OutlineInputBorder(),
               ),
               onChanged: (value) => prefProvider.backendUrl = value,
+            )),
+          ),
+          (
+            "",
+            FilledButton(
+              child: const Text("Save"),
+              onPressed: () async {
+                Beamer.of(context).beamToNamed("/login");
+              },
             ),
-          )
+          ),
         ],
         /*
         Column(

@@ -40,22 +40,19 @@ class _NavInfo {
   int determineSelectedIndex(BuildContext context, {Function(int)? validateFunction}){
     LocalKey? currentKey = Beamer.of(context).currentPages.last.key;
     if(currentKey == null) return 0;
-    print("CurrentPath: ${Beamer.of(context).currentPages.last.key}");
-    int index = this.navLocations
+    // print("CurrentPath: ${Beamer.of(context).currentPages.last.key}");
+    List<bool> index = this.navLocations
       .map(
         (e) => e.paths.map(
           (e) => ValueKey(e)
         )
         .contains(currentKey)
       )
-      .toList()
-      .asMap()
-      .entries
-      .firstWhere(
-        (e) => e.value == true
-      )
-      .key;
-    return validateFunction != null ? validateFunction(index) : index;
+      .toList();
+    for(int i = 0; i < index.length; i++){
+      if(index[i] == true) return validateFunction != null ? validateFunction(i) : i;
+    }
+    return 0;
   }
   void navigateTo(context, index){
     if(index >= this.navLocations.length)

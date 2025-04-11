@@ -38,6 +38,7 @@ import 'pages/recently_played.dart';
 import 'pages/admin/dashboard.dart';
 
 import 'pages/login.dart';
+
 late MyAudioHandler audioHandler;
 
 void main() async {
@@ -114,11 +115,12 @@ void main() async {
   ));
 }
 
-class App extends ConsumerStatefulWidget{
+class App extends ConsumerStatefulWidget {
   App();
   @override
   _AppState createState() => _AppState();
 }
+
 class _AppState extends ConsumerState<App> {
   final routerDelegate = BeamerDelegate(
     initialPath: '/login',
@@ -173,20 +175,66 @@ class _AppState extends ConsumerState<App> {
           child: HomePage(homeJunk: LibraryPage(initialPage: route)),
         );
       },
+      // '/artists/:artistId/albums': (context, state, data) {
+      //   final artistId = state.uri
+      //       .toString()
+      //       .split("/artists/")
+      //       .last
+      //       .split("/")
+      //       .first
+      //       .split("?")
+      //       .first;
+      //   print("Viweing albums by $artistId");
+      //   return BeamPage(
+      //     key: ValueKey("albums-by-artist-$artistId"),
+      //     title: "Albums by Artist",
+      //     // popToNamed: '/home',
+      //     child: HomePage(
+      //         homeJunk: AlbumsByArtistPage(artistId: artistId, private: true)),
+      //   );
+      // },
       '/artist/:artistId': (context, state, data) {
-        print("Artist ID: ${state.pathParameters["artistId"] ?? "not here :("}");
+        print(
+            "Artist ID: ${state.pathParameters["artistId"] ?? "not here :("}");
         final artistId = state.uri
             .toString()
             .split("/artist/")
             .last
-            .split("/")
-            .first
             .split("?")
             .first;
+        print("Artist ID: $artistId");
+        if(artistId.contains("/")) {
+          List<String> parts = artistId.split("/");
+          print("Parts: $parts");
+          String id = parts.first;
+          String type = parts.last;
+          switch(type){
+            case "albums":
+              return BeamPage(
+                key: ValueKey("albums-by-artist-$artistId"),
+                title: "Albums by Artist",
+                // popToNamed: '/home',
+                child: HomePage(homeJunk: AlbumsByArtistPage(artistId: id, private: !id.contains("bible"))),
+              );
+            case "singles":
+              return BeamPage(
+                key: ValueKey("singles-by-artist-$artistId"),
+                title: "Singles by Artist",
+                child: HomePage(homeJunk: SinglesByArtistPage(artistId: id, private: !id.contains("bible"))),
+              );
+            case "songs":
+              return BeamPage(
+                key: ValueKey("songs-by-artist-$artistId"),
+                title: "Songs by Artist",
+                child: HomePage(homeJunk: SongsByArtistPage(artistId: id, private: !id.contains("bible"))),
+              );
+            default:
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("What's this??? Debug info: artistViewRoute:${type}/${id}")));
+          };
+        }
         return BeamPage(
           key: ValueKey("artist-view-$artistId"),
           title: "Artist",
-          // popToNamed: '/home',
           child: HomePage(homeJunk: ArtistPage(id: artistId)),
         );
       },
@@ -299,19 +347,19 @@ class _AppState extends ConsumerState<App> {
         );
       },
       '/recentlyPlayed': (context, state, data) => BeamPage(
-        key: const ValueKey('played-me'),
-        title: 'Recently Played',
-        child: HomePage(homeJunk: RecentlyPlayedPage()),
-      ),
+            key: const ValueKey('played-me'),
+            title: 'Recently Played',
+            child: HomePage(homeJunk: RecentlyPlayedPage()),
+          ),
       '/recentlyPlayed/:user': (context, state, data) {
         final user = state.uri
-          .toString()
-          .split("/recentlyPlayed/")
-          .last
-          .split("/")
-          .first
-          .split("?")
-          .first;
+            .toString()
+            .split("/recentlyPlayed/")
+            .last
+            .split("/")
+            .first
+            .split("?")
+            .first;
         return BeamPage(
           key: ValueKey('played-${user}'),
           title: 'Recently Played',
@@ -365,10 +413,12 @@ class _AppState extends ConsumerState<App> {
         ),
         routerDelegate: routerDelegate,
         routeInformationParser: BeamerParser(),
-        backButtonDispatcher: BeamerBackButtonDispatcher(delegate: routerDelegate, alwaysBeamBack: true),
+        backButtonDispatcher: BeamerBackButtonDispatcher(
+            delegate: routerDelegate, alwaysBeamBack: true),
       );
     });
   }
+
   @override
   void initState() {
     super.initState();

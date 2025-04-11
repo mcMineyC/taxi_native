@@ -6,7 +6,7 @@ import 'mobile/settings.dart';
 class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context){
-    print("USING MOBILE SETTINGS PAGE");
+    print("USING MOBILE SETTINGS PAGE: ${isMobile(context)}");
     return isMobile(context) ? MobileSettingsPage() : DesktopSettingsPage();
   }
 }

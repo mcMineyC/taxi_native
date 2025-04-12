@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:context_menus/context_menus.dart';
 import 'package:provider/provider.dart' as prov;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taxi_native/helpers/utilities.dart';
 import 'helpers/service_locator.dart';
 import 'providers/data/preferences_provider.dart';
 import "providers/services/audio_handler.dart";
@@ -194,49 +195,70 @@ class _AppState extends ConsumerState<App> {
       //   );
       // },
       '/artist/:artistId': (context, state, data) {
-        print(
-            "Artist ID: ${state.pathParameters["artistId"] ?? "not here :("}");
-        final artistId = state.uri
-            .toString()
-            .split("/artist/")
-            .last
-            .split("?")
-            .first;
-        print("Artist ID: $artistId");
-        if(artistId.contains("/")) {
-          List<String> parts = artistId.split("/");
-          print("Parts: $parts");
-          String id = parts.first;
-          String type = parts.last;
+        String artistId = state.uri.pathSegments[1];
+        if(state.uri.pathSegments.length == 3){
+          String type = state.uri.pathSegments[2]; // /artist/:artistId/:type
           switch(type){
             case "albums":
               return BeamPage(
                 key: ValueKey("albums-by-artist-$artistId"),
-                title: "Albums by Artist",
+                title:  "Albums by ${state.uri.queryParameters["name"] ?? "Artist"}",
                 // popToNamed: '/home',
-                child: HomePage(homeJunk: AlbumsByArtistPage(artistId: id, private: !id.contains("bible"))),
+                child: HomePage(homeJunk: AlbumsByArtistPage(artistId: artistId, private: !artistId.contains("bible"))),
               );
             case "singles":
               return BeamPage(
                 key: ValueKey("singles-by-artist-$artistId"),
-                title: "Singles by Artist",
-                child: HomePage(homeJunk: SinglesByArtistPage(artistId: id, private: !id.contains("bible"))),
+                title: "Singles by ${state.uri.queryParameters["name"] ?? "Artist"}",
+                child: HomePage(homeJunk: SinglesByArtistPage(artistId: artistId, private: !artistId.contains("bible"))),
               );
             case "songs":
               return BeamPage(
                 key: ValueKey("songs-by-artist-$artistId"),
-                title: "Songs by Artist",
-                child: HomePage(homeJunk: SongsByArtistPage(artistId: id, private: !id.contains("bible"))),
+                title: "Songs by ${state.uri.queryParameters["name"] ?? "Artist"}",
+                child: HomePage(homeJunk: SongsByArtistPage(artistId: artistId, private: !artistId.contains("bible"))),
               );
-            default:
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("What's this??? Debug info: artistViewRoute:${type}/${id}")));
-          };
+          }
         }
         return BeamPage(
-          key: ValueKey("artist-view-$artistId"),
-          title: "Artist",
+          key: ValueKey("artist-view-$artistId${state.uri.queryParameters.keys.firstWhereOrNull((k) => k == "name") != null ? "-named" : ""}"),
+          title: state.uri.queryParameters["name"] ?? "Artist",
           child: HomePage(homeJunk: ArtistPage(id: artistId)),
         );
+
+        // if(artistId.contains("/")) {
+        //   List<String> parts = artistId.split("/");
+        //   print("Parts: $parts");
+        //   String id = parts.first;
+        //   String type = parts.last.split("?").first;
+        //   List<String> paramList = parts.last.split("?").last.split("&");
+        //   Map<String, String> params = {};
+        //   paramList.forEach((v) => params[v.split("=").first] = Uri.decodeFull(v.split("=").last));
+        //   switch(type){
+        //     case "albums":
+        //       return BeamPage(
+        //         key: ValueKey("albums-by-artist-$artistId"),
+        //         title:  "Albums by ${params["name"] ?? "Artist"}",
+        //         // popToNamed: '/home',
+        //         child: HomePage(homeJunk: AlbumsByArtistPage(artistId: id, private: !id.contains("bible"))),
+        //       );
+        //     case "singles":
+        //       return BeamPage(
+        //         key: ValueKey("singles-by-artist-$artistId"),
+        //         title: "Singles by ${params["name"] ?? "Artist"}",
+        //         child: HomePage(homeJunk: SinglesByArtistPage(artistId: id, private: !id.contains("bible"))),
+        //       );
+        //     case "songs":
+        //       return BeamPage(
+        //         key: ValueKey("songs-by-artist-$artistId"),
+        //         title: "Songs by ${params["name"] ?? "Artist"}",
+        //         child: HomePage(homeJunk: SongsByArtistPage(artistId: id, private: !id.contains("bible"))),
+        //       );
+        //     default:
+        //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("What's this??? Debug info: artistViewRoute:${type}/${id}")));
+        //   };
+        // }
+        
       },
       '/album/:albumId': (context, state, data) {
         final albumId = state.uri
@@ -248,8 +270,8 @@ class _AppState extends ConsumerState<App> {
             .split("?")
             .first;
         return BeamPage(
-          key: ValueKey("album-view-$albumId"),
-          title: "Album",
+          key: ValueKey("album-view-$albumId${state.uri.queryParameters.keys.firstWhereOrNull((k) => k == "name") != null ? "-named" : ""}"),
+          title: state.uri.queryParameters["name"] ?? "Album",
           // popToNamed: '/home',
           child: HomePage(homeJunk: AlbumPage(id: albumId)),
         );
@@ -306,8 +328,8 @@ class _AppState extends ConsumerState<App> {
             .split("?")
             .first;
         return BeamPage(
-          key: ValueKey("playlist-view-$playlistId"),
-          title: "Playlist",
+          key: ValueKey("playlist-view-$playlistId${state.uri.queryParameters.keys.firstWhereOrNull((k) => k == "name") != null ? "-named" : ""}"),
+          title: state.uri.queryParameters["name"] ?? "Playlist",
           // popToNamed: '/home',
           child: HomePage(homeJunk: PlaylistPage(id: playlistId)),
         );

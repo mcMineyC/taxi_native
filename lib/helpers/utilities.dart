@@ -1,3 +1,4 @@
+import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/data/fetched_data_provider.dart';
 import '../providers/data/playlist_provider.dart';
@@ -70,4 +71,27 @@ extension IterableExtensions<T> on Iterable<T> {
 String millisecondsToDurationString(int milliseconds) {
   final duration = Duration(milliseconds: milliseconds);
   return "${duration.inHours > 0 ? duration.inHours.toString() + ":" : ""}${duration.inHours > 0 ? (duration.inMinutes % 60).toString().padLeft(2, '0') : duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}";
+}
+
+
+void showErrorSnackBar({required BuildContext context, required String action, required String error, required String stackTrace}){
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text("Wuh oh!  I errored out ${action} :("),
+      action: SnackBarAction(
+        label: "See info", 
+        onPressed: () => showDialog(context: context, builder: (_) => 
+          AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(error, style: Theme.of(context).textTheme.bodyLarge),
+                Text(stackTrace)
+              ],
+            )
+          )
+        )
+      )
+    )
+  );
 }

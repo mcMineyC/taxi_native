@@ -44,4 +44,4 @@ extension on MediaQueryData{
   ScreenBreakpoint get breakpoint => ScreenBreakpoint.determine(this.size.width.toInt());
 }
 
-String kVersionString = "4.0.3";
+String kVersionString = "4.0.4";

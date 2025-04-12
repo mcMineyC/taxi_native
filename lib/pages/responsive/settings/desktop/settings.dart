@@ -8,6 +8,7 @@ import '../../../../providers/services/player.dart';
 import '../../../../helpers/platform_utils.dart';
 import '../../../../helpers/widgets/helper_widgets.dart';
 import '../../../../helpers/utilities.dart';
+import "../../../../helpers/constants.dart";
 import "../common.dart";
 import 'package:flex_color_picker/flex_color_picker.dart';
 
@@ -194,7 +195,7 @@ class DesktopSettingsPageState extends ConsumerState<DesktopSettingsPage> {
               children: <Widget>[
                 Container(
                   width: 372,
-                  child: 
+                  child:
                 ),
                 FilledButton(
                   child: const Text("Save"),
@@ -280,6 +281,10 @@ class DesktopSettingsPageState extends ConsumerState<DesktopSettingsPage> {
               ],
             ),
           ),
+          (
+            "Version",
+            Text(kVersionString)
+          )
         ],
       ),
     ];
@@ -298,7 +303,7 @@ class DesktopSettingsPageState extends ConsumerState<DesktopSettingsPage> {
           Expanded(child: Container()),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: _settings[index].$2.map((e) => 
+            children: _settings[index].$2.map((e) =>
               Row(
                 children: [
                   if(e.$1 != "") Container(

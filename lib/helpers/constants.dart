@@ -36,10 +36,12 @@ enum ScreenBreakpoint{
   bool operator >(other) => this.width > other.width;
   bool operator >=(other) => this.width >= other.width;
   bool operator <(other) => this.width < other.width;
-  bool operator <=(other) => this.width <= other.width; 
+  bool operator <=(other) => this.width <= other.width;
 }
 bool isMobile(BuildContext context) => ScreenBreakpoint.isMobile(context);
 
 extension on MediaQueryData{
   ScreenBreakpoint get breakpoint => ScreenBreakpoint.determine(this.size.width.toInt());
 }
+
+String kVersionString = "4.0.3";

@@ -887,8 +887,9 @@ class Player extends _$Player {
       }
 
       // Rest of your prefetching code...
-    } catch (e) {
+    } catch (e, stackTrace) {
       print("Error in playQueueItem: $e");
+      print(stackTrace);
       state = state.copyWith(thinking: false);
       // Try to recover by stopping completely
       await _audioHandler.stop();

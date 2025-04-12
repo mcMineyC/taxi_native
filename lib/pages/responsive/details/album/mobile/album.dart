@@ -110,11 +110,11 @@ class MobileAlbumPage extends ConsumerWidget {
             SliverToBoxAdapter(child: SizedBox(height: 16)),
           ],
         ),
-        loading: () => Expanded(child: Center(child:CircularProgressIndicator())),
-        error: (___, ____) => Expanded(child: Center(child: Icon(Icons.error_outline_rounded))),
+        loading: () => Center(child:CircularProgressIndicator()),
+        error: (___, ____) => Center(child: Icon(Icons.error_outline_rounded)),
       ),
-      loading: () => Expanded(child: Center(child:CircularProgressIndicator())),
-      error: (_, __) => Expanded(child: Center(child: Icon(Icons.error_outline_rounded))),
+      loading: () => Center(child:CircularProgressIndicator()),
+      error: (_, __) => Center(child: Icon(Icons.error_outline_rounded)),
     );
     // return Column(
     //   crossAxisAlignment: CrossAxisAlignment.stretch,

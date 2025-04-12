@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^1.2.1
+  audioplayers: ^6.4.0
   audio_service: ^0.18.17
   audio_service_mpris: ^0.1.4
   audioplayers_android_exo: any
@@ -76,7 +77,6 @@ dependencies:
   cached_network_image: ^3.3.1
   skeletonizer: ^1.4.3
   get_it: ^8.0.3
-  audioplayers: ^6.4.0
   #analyzer: ^0.38.2
   # just_audio_handlers:
   #   # git:

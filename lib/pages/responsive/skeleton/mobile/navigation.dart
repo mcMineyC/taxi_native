@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import "package:taxi_native/helpers/constants.dart";
 
 import "../common.dart";
 
@@ -8,16 +9,23 @@ class MobileNav extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     int width = MediaQuery.of(context).size.width.toInt();
+    ScreenBreakpoint size = ScreenBreakpoint.determine(width);
     int numThings = 1;
-    if(width >= 225){
+    print("width: $width");
+    print("size: $size");
+    if(size >= ScreenBreakpoint.small){
       numThings++;
     }
-    if(width >= 450){
+    if(size >= ScreenBreakpoint.medium){
+      numThings++;
       numThings++;
     }
-    if(width >= 700){
+    // if(width >= ScreenBreakpoint.medium.width+32){
+    //   numThings++;
+    // }
+    if(size >= ScreenBreakpoint.large){
       numThings++;
-    }
+    };
     return Container(
       margin: const EdgeInsets.only(bottom: 24),
       height: 58,

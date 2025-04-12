@@ -298,9 +298,12 @@ class MyAudioHandler extends BaseAudioHandler {
 
   @override
   Future<void> seek(Duration position) async {
-    await _player.seek(position);
+    print("Audio handler: pre-seek to $position");
+    _player.seek(position);
     positionNotifier.value = position; // Update immediately for smoother UI
     _updatePlaybackState(position: position);
+    print("Audio handler: seek to $position");
+    return;
   }
 
   @override

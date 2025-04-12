@@ -15,7 +15,7 @@ class DesktopBottomBar extends ConsumerWidget {
     persistenceFunction(player);
     return Container(
         color: Theme.of(context).colorScheme.surfaceContainer,
-        height: 96,
+        // height: MediaQuery.of(context).size.height * 0.1,
         child: Column(// Player controls
             children: [
           Container(
@@ -138,29 +138,37 @@ class DesktopBottomBar extends ConsumerWidget {
             ),
           ),
           Listener(
-            onPointerSignal: (event) {
-              if (player.thinking) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Currently thinking...")));
-                return;
-              }
-              if (event is PointerScrollEvent) {
-                if (event.scrollDelta.dy < 0) {
-                  ref.read(playerProvider.notifier).seekForward(3000);
-                } else {
-                  ref.read(playerProvider.notifier).seekBackward(3000);
-                }
-              }
-            },
+            // onPointerSignal: (event) {
+            //   if (player.thinking) {
+            //     ScaffoldMessenger.of(context).showSnackBar(
+            //         const SnackBar(content: Text("Currently thinking...")));
+            //     return;
+            //   }
+            //   if (event is PointerScrollEvent) {
+            //     if (event.scrollDelta.dy < 0) {
+            //       ref.read(playerProvider.notifier).seekForward(3000);
+            //     } else {
+            //       ref.read(playerProvider.notifier).seekBackward(3000);
+            //     }
+            //   }
+            // },
             child: Container(
-                margin: EdgeInsets.fromLTRB(16, 0, 12, 16),
-                child: LinearProgressIndicator(
-                  minHeight: 8,
-                  borderRadius: BorderRadius.circular(9999),
-                  value: player.duration == 0
-                      ? 0
-                      : player.position / player.duration,
-                )),
+                // margin: EdgeInsets.fromLTRB(16, 0, 12, 16),
+                child: SliderTheme(
+                  data: SliderTheme.of(context).copyWith(
+                      trackHeight: 12,
+                      thumbSize: MaterialStateProperty.all<Size>(Size(8, 32))
+                  ),
+                  child: Slider(
+                    value: player.duration == 0 ? 0 : player.position.toDouble(),
+                    onChanged: (value) => ref
+                        .read(playerProvider.notifier)
+                        .seek(Duration(milliseconds: value.toInt())),
+                    max: player.duration.toDouble(),
+                    min: 0,
+                  ),
+                ),
+            ),
           ),
         ]));
   }

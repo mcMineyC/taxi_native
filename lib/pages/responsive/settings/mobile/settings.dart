@@ -8,6 +8,7 @@ import '../../../../providers/services/player.dart';
 import '../../../../helpers/platform_utils.dart';
 import '../../../../helpers/widgets/helper_widgets.dart';
 import '../../../../helpers/utilities.dart';
+import "../../../../helpers/constants.dart";
 import "../common.dart";
 import 'package:flex_color_picker/flex_color_picker.dart';
 
@@ -185,7 +186,7 @@ class MobileSettingsPageState extends ConsumerState<MobileSettingsPage> {
               children: <Widget>[
                 Container(
                   width: 372,
-                  child: 
+                  child:
                 ),
                 FilledButton(
                   child: const Text("Save"),
@@ -273,6 +274,10 @@ class MobileSettingsPageState extends ConsumerState<MobileSettingsPage> {
               ],
             ),
           ),
+          (
+            "Version",
+            Text(kVersionString)
+          )
         ],
       ),
     ];
@@ -291,7 +296,7 @@ class MobileSettingsPageState extends ConsumerState<MobileSettingsPage> {
                   .textTheme
                   .bodyLarge
                   ?.copyWith(color: themeChanger.colorScheme?.onSurface, fontWeight: FontWeight.bold)),
-            ...(_settings[index].$2.map((e) => 
+            ...(_settings[index].$2.map((e) =>
               Container(
                 margin: e.$1 == "" ? null : EdgeInsets.only(left: 16),
                 child: Row(
@@ -325,7 +330,7 @@ class MobileSettingsPageState extends ConsumerState<MobileSettingsPage> {
               children: <Widget>[
                 Container(
                   width: 372,
-                  child: 
+                  child:
                 ),
                 FilledButton(
                   child: const Text("Save"),

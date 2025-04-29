@@ -34,7 +34,7 @@ class MyAudioHandler extends BaseAudioHandler {
     // Set up position tracking with more frequent updates
     _player.onPositionChanged.listen((Duration position) {
       if(PlatformUtils.isMacOS || PlatformUtils.isIOS)
-        position = Duration(milliseconds: position.inMilliseconds / 2);
+        position = Duration(milliseconds: position.inMilliseconds ~/ 2);
       // Make sure playback state is updated with current position
       _updatePlaybackState(position: position);
     });
@@ -42,7 +42,7 @@ class MyAudioHandler extends BaseAudioHandler {
     // Set up duration tracking with better handling for zero durations
     _player.onDurationChanged.listen((Duration duration) {
       if(PlatformUtils.isMacOS || PlatformUtils.isIOS)
-        duration = Duration(milliseconds: duration.inMilliseconds / 2);
+        duration = Duration(milliseconds: duration.inMilliseconds ~/ 2);
       // If we get a valid duration, store it
       if (duration > Duration.zero) {
         _lastKnownDuration = duration;

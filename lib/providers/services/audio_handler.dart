@@ -3,6 +3,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 import '../../helpers/service_locator.dart';
 import '../services/player.dart';
+import "../../helpers/platform_utils.dart";
 
 class MyAudioHandler extends BaseAudioHandler {
   final AudioPlayer _player = AudioPlayer();
@@ -32,14 +33,16 @@ class MyAudioHandler extends BaseAudioHandler {
 
     // Set up position tracking with more frequent updates
     _player.onPositionChanged.listen((Duration position) {
-      positionNotifier.value = position;
-
+      if(PlatformUtils.isMacOS || PlatformUtils.isIOS)
+        position = Duration(milliseconds: position.inMilliseconds / 2);
       // Make sure playback state is updated with current position
       _updatePlaybackState(position: position);
     });
 
     // Set up duration tracking with better handling for zero durations
     _player.onDurationChanged.listen((Duration duration) {
+      if(PlatformUtils.isMacOS || PlatformUtils.isIOS)
+        duration = Duration(milliseconds: duration.inMilliseconds / 2);
       // If we get a valid duration, store it
       if (duration > Duration.zero) {
         _lastKnownDuration = duration;

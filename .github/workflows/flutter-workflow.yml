@@ -80,15 +80,7 @@ jobs:
           channel: stable
       - run: flutter build macos
       - run: cp -rf build/macos/Build/Products/Release/taxi.app Taxi.app
-      - name: Write fixer
-        run: |
-          fixer=$(cat <<EOF
-            #!/bin/zsh\n
-            xattr -d com.apple.quarantine /Applications/Taxi.app
-          EOF)
-          echo $fixer > fix-taxi.command
-          # chmod a+x fix-taxi.command # Does nothing as macOS still quarantines everything
-      - run: tar --preserve-permissions -czvf taxi-mac.tar.gz Taxi.app fix-taxi.command
+      - run: tar --preserve-permissions -czvf taxi-mac.tar.gz Taxi.app
       - uses: actions/upload-artifact@v4
         with:
           name: taxi-mac.tar.gz

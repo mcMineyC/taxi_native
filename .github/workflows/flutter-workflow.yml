@@ -126,4 +126,4 @@ jobs:
           tag: ${{ steps.vars.outputs.sha_short }}
           makeLatest: true
           name: ${{ steps.date.outputs.date }}
-          bodyFile: "body.md"
+          bodyFile: ".github/workflows/body.md"

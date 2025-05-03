@@ -51,28 +51,29 @@ class Adder extends _$Adder {
   AddState build() {
     print("Adder: Build");
     return AddState(
-      id: "",
-      query: "",
-      searchType: SearchType.track,
-      searchSource: SearchSource.spotify,
-      state: "loading",
-      searchResults: [],
-      selectedSearchResults: [],
-      selectedSearchResultIds: [],
-      findResults: [],
-      addResult: AddResult(success: false, count: AddResultCount(artists: 0, albums: 0, songs: 0)),
-      done: false,
-      authed: false,
-      totalResults: 0,
-      completedResults: 0
-    ); 
+        id: "",
+        query: "",
+        searchType: SearchType.track,
+        searchSource: SearchSource.spotify,
+        state: "loading",
+        searchResults: [],
+        selectedSearchResults: [],
+        selectedSearchResultIds: [],
+        findResults: [],
+        addResult: AddResult(
+            success: false,
+            count: AddResultCount(artists: 0, albums: 0, songs: 0)),
+        done: false,
+        authed: false,
+        totalResults: 0,
+        completedResults: 0);
   }
 
   void init() async {
-    if(_isInit) return;
+    if (_isInit) return;
     String backendUrl = p.backendUrl;
     var optionBuilder = IO.OptionBuilder();
-    if(!PlatformUtils.isWeb) optionBuilder.setTransports(['websocket']);
+    if (!PlatformUtils.isWeb) optionBuilder.setTransports(['websocket']);
     var options = optionBuilder.build();
     socket = IO.io(backendUrl, options);
     socket.onConnect((_) {
@@ -83,12 +84,13 @@ class Adder extends _$Adder {
       print("Adder: Disconnected from backend");
     });
     socket.on('authprompt', (_) async {
-      socket.emit('auth', {"authtoken": await ref.read(authtokenProvider.future)});
+      socket.emit(
+          'auth', {"authtoken": await ref.read(authtokenProvider.future)});
     });
     socket.on('authresult', (data) async {
       print("Adder: Authresult ${data["success"]}");
       authed = data["success"];
-      if(!authed){
+      if (!authed) {
         print("Adder: Auth failed: ${data["error"]}");
         state = state.copyWith(state: "auth:fail", authed: false);
         return;
@@ -98,34 +100,35 @@ class Adder extends _$Adder {
     socket.on('searchresults', (data) {
       print("Adder: Search results");
       List<SearchResult> results = [];
-      results = data["results"].whereType<Map<String, dynamic>>()
-      .toList().
-      map<SearchResult>(
-        (element) => SearchResult.fromJson(element)
-      )
-      .toList();
+      results = data["results"]
+          .whereType<Map<String, dynamic>>()
+          .toList()
+          .map<SearchResult>((element) => SearchResult.fromJson(element))
+          .toList();
       state = state.copyWith(state: "search:results", searchResults: results);
       print("Adder: Search results: ${results.length}");
     });
 
     socket.on('findprogress', (data) {
-      state = state.copyWith(totalResults: data["total"], completedResults: data["completed"]);
+      state = state.copyWith(
+          totalResults: data["total"], completedResults: data["completed"]);
     });
 
     socket.on('findresults', (data) {
       print("Adder: Find results");
       print("Adder: Do we have a playlist? ${data["isPlaylist"]}");
-      if(data["isPlaylist"] == false){
+      if (data["isPlaylist"] == false) {
         //print(data["results"][0].toString());
         var found = List<FindResult>.empty(growable: true);
         data["results"].forEach((element) {
           found.add(FindResult.fromJson(element));
         });
         state = state.copyWith(state: "find:results", findResults: found);
-      }else{
+      } else {
         print("Adder: We have a playlist!!! Party town");
         FoundPlaylist playlist = FoundPlaylist.fromJson(data["results"][0]);
-        state = state.copyWith(state: "find:results:playlist", foundPlaylist: playlist);
+        state = state.copyWith(
+            state: "find:results:playlist", foundPlaylist: playlist);
       }
     });
 
@@ -143,27 +146,32 @@ class Adder extends _$Adder {
   }
 
   Future<void> retryAuth() async {
-    socket.emit('auth', {"authtoken": await ref.read(authtokenProvider.future)});
+    socket
+        .emit('auth', {"authtoken": await ref.read(authtokenProvider.future)});
   }
 
   void search(String query, SearchType type, SearchSource source) {
     print("Searcher: Searching ${query}");
-    state = state.copyWith(state: "loading:search", query: query, searchType: type);
-    socket.emit('search', {"query": query, "source": source.type, "mediaType": type.type});
+    state =
+        state.copyWith(state: "loading:search", query: query, searchType: type);
+    socket.emit('search',
+        {"query": query, "source": source.type, "mediaType": type.type});
   }
 
   void findVideosFor(List<SearchResult> results, SearchSource source) {
-    state = state.copyWith(state: "loading:find", totalResults: 0, completedResults: 0);
+    state = state.copyWith(
+        state: "loading:find", totalResults: 0, completedResults: 0);
     print("Adder: Find videos for ${results.length} results");
     socket.emit('find', {'selected': results, 'source': source.type});
   }
 
   void addFindResults(List<FindResult> results) {
-    throw("This function is deprecated");
+    throw ("This function is deprecated");
     state = state.copyWith(state: "loading:add");
     print("Adder: Add ${results.length} results");
     socket.emit('add', {"items": results});
   }
+
   void addHLVResults(List<HLVArtist> results) {
     state = state.copyWith(state: "loading:add");
     print("Adder: Add ${results.length} results");
@@ -171,42 +179,58 @@ class Adder extends _$Adder {
     socket.emit('add', {"hierarchy": results});
   }
 
+  void addPlaylist(FoundPlaylist list) {
+    state = state.copyWith(state: "loading:add");
+    print("Adder: Add playlist ${list.name}");
+    socket.emit('add', {"playlist": list});
+  }
+
   void setStep(String step) {
     state = state.copyWith(state: step);
   }
-  
+
   void cancel() {
-    state = state.copyWith(state: "auth:success", searchResults: [], selectedSearchResults: [], findResults: []);
-  }
-  void done() {
-    state = state.copyWith(state: "auth:success", searchResults: [], selectedSearchResults: [], findResults: []);
+    state = state.copyWith(
+        state: "auth:success",
+        searchResults: [],
+        selectedSearchResults: [],
+        findResults: []);
   }
 
+  void done() {
+    state = state.copyWith(
+        state: "auth:success",
+        searchResults: [],
+        selectedSearchResults: [],
+        findResults: []);
+  }
 
   void setSelectedSearchType(SearchType type) {
     state = state.copyWith(searchType: type);
   }
+
   void setSelectedSearchSource(SearchSource source) {
     state = state.copyWith(searchSource: source);
   }
-
 
   void selectSearchResult(SearchResult result) {
     state = state.copyWith(
       selectedSearchResults: [...state.selectedSearchResults, result],
     );
   }
+
   void deselectSearchResult(SearchResult result) {
     state = state.copyWith(
-      selectedSearchResults: state.selectedSearchResults.where(
-        (element) => element != result
-      ).toList(),
+      selectedSearchResults: state.selectedSearchResults
+          .where((element) => element != result)
+          .toList(),
     );
   }
-  void clearSelectedSearchResults(){
-    state = state.copyWith(selectedSearchResults: [], selectedSearchResultIds: []);
-  }
 
+  void clearSelectedSearchResults() {
+    state =
+        state.copyWith(selectedSearchResults: [], selectedSearchResultIds: []);
+  }
 
   void findVideosForSelectedSearchResults() {
     findVideosFor(state.selectedSearchResults, state.searchSource);

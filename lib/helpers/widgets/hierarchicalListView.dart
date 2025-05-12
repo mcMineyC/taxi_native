@@ -26,6 +26,7 @@ class HierarchicalListView extends StatelessWidget {
             padding: EdgeInsets.zero,
           );
   }
+  
 
   // Recursive function to build the hierarchical list view with indentation
   Widget _buildHLVArtist(HLVArtist artist, int level, BuildContext context) {
@@ -166,12 +167,12 @@ class HierarchicalListView extends StatelessWidget {
           "Open in browser",
           icon: Icon(Icons.link_rounded),
           onPressed: () {
-            launchUrl(Uri.parse(specialUrlToPlain(song.url)!));
+            launchUrl(Uri.parse(specialUrlToPlain(song.audioUrl)!));
           },
         ),
-        if (song.url.startsWith("http"))
+        if (song.audioUrl.startsWith("http"))
           ContextMenuButtonConfig(
-            "URL: ${song.url}",
+            "URL: ${song.audioUrl}",
             icon: Icon(Icons.language_rounded),
             onPressed: null,
           ),
@@ -244,7 +245,7 @@ List<HLVArtist> changeHLVArtist(
 }
 
 String getHLVSongSubtitle(HLVSong s) {
-  List<String> urlParts = s.url.split(":");
+  List<String> urlParts = s.audioUrl.split(":");
   switch (urlParts.first) {
     case "youtube":
       return "Youtube - ${urlParts[1]}";
@@ -275,7 +276,7 @@ class _HLVSongEditDialogState extends State<HLVSongEditDialog> {
   void initState() {
     this.song = widget.song;
     nameController.text = this.song.name;
-    urlController.text = this.song.url;
+    urlController.text = this.song.audioUrl;
     this.song = this.song.copyWith(visibleTo: ["all"]);
     super.initState();
   }
@@ -333,9 +334,9 @@ class _HLVSongEditDialogState extends State<HLVSongEditDialog> {
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
                 child: Row(children: [
                   Expanded(
-                    child: TextField(
+                    child: TextField( // NOTE: change this to a dropdown
                       onChanged: (value) {
-                        setState(() => song = song.copyWith(url: value));
+                        setState(() => song = song.copyWith(audioUrl: value));
                       },
                       controller: urlController,
                       decoration: InputDecoration(
@@ -350,9 +351,9 @@ class _HLVSongEditDialogState extends State<HLVSongEditDialog> {
                   ),
                   SpacerWidget(width: 8),
                   FilledButton(
-                    onPressed: specialUrlToPlain(song.url) != null
+                    onPressed: specialUrlToPlain(song.audioUrl) != null
                         ? () =>
-                            launchUrl(Uri.parse(specialUrlToPlain(song.url)!))
+                            launchUrl(Uri.parse(specialUrlToPlain(song.audioUrl)!))
                         : null,
                     child: Row(
                       children: [
@@ -390,7 +391,7 @@ class _HLVSongEditDialogState extends State<HLVSongEditDialog> {
 
   void saveChanges() {
     this.song =
-        song.copyWith(name: nameController.text, url: urlController.text);
+        song.copyWith(name: nameController.text, audioUrl: urlController.text);
   }
 }
 

@@ -54,6 +54,9 @@ class SearchResult with _$SearchResult {
     required String imageUrl,
     required String artistImageUrl,
     required String type,
+    List<String>? visibleTo,
+    List<String>? inLibrary,
+    Map<String, dynamic>? extra,
   }) = _SearchResult;
 
   get cardString => switch(type) {
@@ -71,6 +74,7 @@ class SearchResult with _$SearchResult {
 class FindResult with _$FindResult {
   const FindResult._();
   const factory FindResult({
+    // NOTE: the name is not used for type song
     required String name,
     required String artist,
     required String album,
@@ -143,7 +147,9 @@ class FoundPlaylist with _$FoundPlaylist {
 
 @freezed
 class FoundPlaylistSong with _$FoundPlaylistSong {
+  const FoundPlaylistSong._();
   const factory FoundPlaylistSong({
+    required String id,
     required String title,
     required String album, 
     required String artist,
@@ -158,6 +164,34 @@ class FoundPlaylistSong with _$FoundPlaylistSong {
 
   factory FoundPlaylistSong.fromJson(Map<String, dynamic> json) =>
       _$FoundPlaylistSongFromJson(json);
+
+  FindResult toFindResult() => FindResult(
+    name: title,
+    artist: artist,
+    album: album,
+    imageUrl: albumCoverURL,
+    artistImageUrl: artistImageUrl,
+    visibleTo: visibleTo,
+    inLibrary: inLibrary,
+    type: "song",
+    songs:[FindResultSong(
+      title: title,
+      url: url,
+      trackNumber: trackNumber
+    )]
+  );
+
+  SearchResult toSearchResult() => SearchResult(
+    id: id,
+    name: title,
+    artist: artist,
+    album: album,
+    imageUrl: albumCoverURL,
+    artistImageUrl: artistImageUrl,
+    type: type,
+    visibleTo: visibleTo,
+    inLibrary: inLibrary,
+  );
 }
 
 @freezed

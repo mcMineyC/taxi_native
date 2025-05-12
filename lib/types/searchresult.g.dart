@@ -61,6 +61,13 @@ _$SearchResultImpl _$$SearchResultImplFromJson(Map<String, dynamic> json) =>
       imageUrl: json['imageUrl'] as String,
       artistImageUrl: json['artistImageUrl'] as String,
       type: json['type'] as String,
+      visibleTo: (json['visibleTo'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      inLibrary: (json['inLibrary'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      extra: json['extra'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$$SearchResultImplToJson(_$SearchResultImpl instance) =>
@@ -72,6 +79,9 @@ Map<String, dynamic> _$$SearchResultImplToJson(_$SearchResultImpl instance) =>
       'imageUrl': instance.imageUrl,
       'artistImageUrl': instance.artistImageUrl,
       'type': instance.type,
+      'visibleTo': instance.visibleTo,
+      'inLibrary': instance.inLibrary,
+      'extra': instance.extra,
     };
 
 _$FindResultImpl _$$FindResultImplFromJson(Map<String, dynamic> json) =>
@@ -156,6 +166,7 @@ Map<String, dynamic> _$$FoundPlaylistImplToJson(_$FoundPlaylistImpl instance) =>
 _$FoundPlaylistSongImpl _$$FoundPlaylistSongImplFromJson(
         Map<String, dynamic> json) =>
     _$FoundPlaylistSongImpl(
+      id: json['id'] as String,
       title: json['title'] as String,
       album: json['album'] as String,
       artist: json['artist'] as String,
@@ -173,6 +184,7 @@ _$FoundPlaylistSongImpl _$$FoundPlaylistSongImplFromJson(
 Map<String, dynamic> _$$FoundPlaylistSongImplToJson(
         _$FoundPlaylistSongImpl instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'title': instance.title,
       'album': instance.album,
       'artist': instance.artist,

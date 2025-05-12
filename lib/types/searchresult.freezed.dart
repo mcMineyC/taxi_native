@@ -514,6 +514,9 @@ mixin _$SearchResult {
   String get imageUrl => throw _privateConstructorUsedError;
   String get artistImageUrl => throw _privateConstructorUsedError;
   String get type => throw _privateConstructorUsedError;
+  List<String>? get visibleTo => throw _privateConstructorUsedError;
+  List<String>? get inLibrary => throw _privateConstructorUsedError;
+  Map<String, dynamic>? get extra => throw _privateConstructorUsedError;
 
   /// Serializes this SearchResult to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -538,7 +541,10 @@ abstract class $SearchResultCopyWith<$Res> {
       String album,
       String imageUrl,
       String artistImageUrl,
-      String type});
+      String type,
+      List<String>? visibleTo,
+      List<String>? inLibrary,
+      Map<String, dynamic>? extra});
 }
 
 /// @nodoc
@@ -563,6 +569,9 @@ class _$SearchResultCopyWithImpl<$Res, $Val extends SearchResult>
     Object? imageUrl = null,
     Object? artistImageUrl = null,
     Object? type = null,
+    Object? visibleTo = freezed,
+    Object? inLibrary = freezed,
+    Object? extra = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -593,6 +602,18 @@ class _$SearchResultCopyWithImpl<$Res, $Val extends SearchResult>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
+      visibleTo: freezed == visibleTo
+          ? _value.visibleTo
+          : visibleTo // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      inLibrary: freezed == inLibrary
+          ? _value.inLibrary
+          : inLibrary // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      extra: freezed == extra
+          ? _value.extra
+          : extra // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
     ) as $Val);
   }
 }
@@ -612,7 +633,10 @@ abstract class _$$SearchResultImplCopyWith<$Res>
       String album,
       String imageUrl,
       String artistImageUrl,
-      String type});
+      String type,
+      List<String>? visibleTo,
+      List<String>? inLibrary,
+      Map<String, dynamic>? extra});
 }
 
 /// @nodoc
@@ -635,6 +659,9 @@ class __$$SearchResultImplCopyWithImpl<$Res>
     Object? imageUrl = null,
     Object? artistImageUrl = null,
     Object? type = null,
+    Object? visibleTo = freezed,
+    Object? inLibrary = freezed,
+    Object? extra = freezed,
   }) {
     return _then(_$SearchResultImpl(
       id: null == id
@@ -665,6 +692,18 @@ class __$$SearchResultImplCopyWithImpl<$Res>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as String,
+      visibleTo: freezed == visibleTo
+          ? _value._visibleTo
+          : visibleTo // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      inLibrary: freezed == inLibrary
+          ? _value._inLibrary
+          : inLibrary // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
+      extra: freezed == extra
+          ? _value._extra
+          : extra // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
     ));
   }
 }
@@ -679,8 +718,14 @@ class _$SearchResultImpl extends _SearchResult {
       required this.album,
       required this.imageUrl,
       required this.artistImageUrl,
-      required this.type})
-      : super._();
+      required this.type,
+      final List<String>? visibleTo,
+      final List<String>? inLibrary,
+      final Map<String, dynamic>? extra})
+      : _visibleTo = visibleTo,
+        _inLibrary = inLibrary,
+        _extra = extra,
+        super._();
 
   factory _$SearchResultImpl.fromJson(Map<String, dynamic> json) =>
       _$$SearchResultImplFromJson(json);
@@ -699,10 +744,39 @@ class _$SearchResultImpl extends _SearchResult {
   final String artistImageUrl;
   @override
   final String type;
+  final List<String>? _visibleTo;
+  @override
+  List<String>? get visibleTo {
+    final value = _visibleTo;
+    if (value == null) return null;
+    if (_visibleTo is EqualUnmodifiableListView) return _visibleTo;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<String>? _inLibrary;
+  @override
+  List<String>? get inLibrary {
+    final value = _inLibrary;
+    if (value == null) return null;
+    if (_inLibrary is EqualUnmodifiableListView) return _inLibrary;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final Map<String, dynamic>? _extra;
+  @override
+  Map<String, dynamic>? get extra {
+    final value = _extra;
+    if (value == null) return null;
+    if (_extra is EqualUnmodifiableMapView) return _extra;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
 
   @override
   String toString() {
-    return 'SearchResult(id: $id, name: $name, artist: $artist, album: $album, imageUrl: $imageUrl, artistImageUrl: $artistImageUrl, type: $type)';
+    return 'SearchResult(id: $id, name: $name, artist: $artist, album: $album, imageUrl: $imageUrl, artistImageUrl: $artistImageUrl, type: $type, visibleTo: $visibleTo, inLibrary: $inLibrary, extra: $extra)';
   }
 
   @override
@@ -718,13 +792,28 @@ class _$SearchResultImpl extends _SearchResult {
                 other.imageUrl == imageUrl) &&
             (identical(other.artistImageUrl, artistImageUrl) ||
                 other.artistImageUrl == artistImageUrl) &&
-            (identical(other.type, type) || other.type == type));
+            (identical(other.type, type) || other.type == type) &&
+            const DeepCollectionEquality()
+                .equals(other._visibleTo, _visibleTo) &&
+            const DeepCollectionEquality()
+                .equals(other._inLibrary, _inLibrary) &&
+            const DeepCollectionEquality().equals(other._extra, _extra));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, name, artist, album, imageUrl, artistImageUrl, type);
+      runtimeType,
+      id,
+      name,
+      artist,
+      album,
+      imageUrl,
+      artistImageUrl,
+      type,
+      const DeepCollectionEquality().hash(_visibleTo),
+      const DeepCollectionEquality().hash(_inLibrary),
+      const DeepCollectionEquality().hash(_extra));
 
   /// Create a copy of SearchResult
   /// with the given fields replaced by the non-null parameter values.
@@ -750,7 +839,10 @@ abstract class _SearchResult extends SearchResult {
       required final String album,
       required final String imageUrl,
       required final String artistImageUrl,
-      required final String type}) = _$SearchResultImpl;
+      required final String type,
+      final List<String>? visibleTo,
+      final List<String>? inLibrary,
+      final Map<String, dynamic>? extra}) = _$SearchResultImpl;
   const _SearchResult._() : super._();
 
   factory _SearchResult.fromJson(Map<String, dynamic> json) =
@@ -770,6 +862,12 @@ abstract class _SearchResult extends SearchResult {
   String get artistImageUrl;
   @override
   String get type;
+  @override
+  List<String>? get visibleTo;
+  @override
+  List<String>? get inLibrary;
+  @override
+  Map<String, dynamic>? get extra;
 
   /// Create a copy of SearchResult
   /// with the given fields replaced by the non-null parameter values.
@@ -785,6 +883,7 @@ FindResult _$FindResultFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$FindResult {
+// NOTE: the name is not used for type song
   String get name => throw _privateConstructorUsedError;
   String get artist => throw _privateConstructorUsedError;
   String get album => throw _privateConstructorUsedError;
@@ -994,6 +1093,7 @@ class _$FindResultImpl extends _FindResult {
   factory _$FindResultImpl.fromJson(Map<String, dynamic> json) =>
       _$$FindResultImplFromJson(json);
 
+// NOTE: the name is not used for type song
   @override
   final String name;
   @override
@@ -1101,6 +1201,7 @@ abstract class _FindResult extends FindResult {
   factory _FindResult.fromJson(Map<String, dynamic> json) =
       _$FindResultImpl.fromJson;
 
+// NOTE: the name is not used for type song
   @override
   String get name;
   @override
@@ -1700,6 +1801,7 @@ FoundPlaylistSong _$FoundPlaylistSongFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$FoundPlaylistSong {
+  String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get album => throw _privateConstructorUsedError;
   String get artist => throw _privateConstructorUsedError;
@@ -1728,7 +1830,8 @@ abstract class $FoundPlaylistSongCopyWith<$Res> {
       _$FoundPlaylistSongCopyWithImpl<$Res, FoundPlaylistSong>;
   @useResult
   $Res call(
-      {String title,
+      {String id,
+      String title,
       String album,
       String artist,
       String albumCoverURL,
@@ -1755,6 +1858,7 @@ class _$FoundPlaylistSongCopyWithImpl<$Res, $Val extends FoundPlaylistSong>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? title = null,
     Object? album = null,
     Object? artist = null,
@@ -1767,6 +1871,10 @@ class _$FoundPlaylistSongCopyWithImpl<$Res, $Val extends FoundPlaylistSong>
     Object? type = null,
   }) {
     return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -1820,7 +1928,8 @@ abstract class _$$FoundPlaylistSongImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String title,
+      {String id,
+      String title,
       String album,
       String artist,
       String albumCoverURL,
@@ -1845,6 +1954,7 @@ class __$$FoundPlaylistSongImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = null,
     Object? title = null,
     Object? album = null,
     Object? artist = null,
@@ -1857,6 +1967,10 @@ class __$$FoundPlaylistSongImplCopyWithImpl<$Res>
     Object? type = null,
   }) {
     return _then(_$FoundPlaylistSongImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -1903,9 +2017,10 @@ class __$$FoundPlaylistSongImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$FoundPlaylistSongImpl implements _FoundPlaylistSong {
+class _$FoundPlaylistSongImpl extends _FoundPlaylistSong {
   const _$FoundPlaylistSongImpl(
-      {required this.title,
+      {required this.id,
+      required this.title,
       required this.album,
       required this.artist,
       required this.albumCoverURL,
@@ -1916,11 +2031,14 @@ class _$FoundPlaylistSongImpl implements _FoundPlaylistSong {
       required this.trackNumber,
       required this.type})
       : _visibleTo = visibleTo,
-        _inLibrary = inLibrary;
+        _inLibrary = inLibrary,
+        super._();
 
   factory _$FoundPlaylistSongImpl.fromJson(Map<String, dynamic> json) =>
       _$$FoundPlaylistSongImplFromJson(json);
 
+  @override
+  final String id;
   @override
   final String title;
   @override
@@ -1956,7 +2074,7 @@ class _$FoundPlaylistSongImpl implements _FoundPlaylistSong {
 
   @override
   String toString() {
-    return 'FoundPlaylistSong(title: $title, album: $album, artist: $artist, albumCoverURL: $albumCoverURL, artistImageUrl: $artistImageUrl, visibleTo: $visibleTo, inLibrary: $inLibrary, url: $url, trackNumber: $trackNumber, type: $type)';
+    return 'FoundPlaylistSong(id: $id, title: $title, album: $album, artist: $artist, albumCoverURL: $albumCoverURL, artistImageUrl: $artistImageUrl, visibleTo: $visibleTo, inLibrary: $inLibrary, url: $url, trackNumber: $trackNumber, type: $type)';
   }
 
   @override
@@ -1964,6 +2082,7 @@ class _$FoundPlaylistSongImpl implements _FoundPlaylistSong {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FoundPlaylistSongImpl &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.album, album) || other.album == album) &&
             (identical(other.artist, artist) || other.artist == artist) &&
@@ -1985,6 +2104,7 @@ class _$FoundPlaylistSongImpl implements _FoundPlaylistSong {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
       title,
       album,
       artist,
@@ -2013,9 +2133,10 @@ class _$FoundPlaylistSongImpl implements _FoundPlaylistSong {
   }
 }
 
-abstract class _FoundPlaylistSong implements FoundPlaylistSong {
+abstract class _FoundPlaylistSong extends FoundPlaylistSong {
   const factory _FoundPlaylistSong(
-      {required final String title,
+      {required final String id,
+      required final String title,
       required final String album,
       required final String artist,
       required final String albumCoverURL,
@@ -2025,10 +2146,13 @@ abstract class _FoundPlaylistSong implements FoundPlaylistSong {
       required final String url,
       required final int trackNumber,
       required final String type}) = _$FoundPlaylistSongImpl;
+  const _FoundPlaylistSong._() : super._();
 
   factory _FoundPlaylistSong.fromJson(Map<String, dynamic> json) =
       _$FoundPlaylistSongImpl.fromJson;
 
+  @override
+  String get id;
   @override
   String get title;
   @override

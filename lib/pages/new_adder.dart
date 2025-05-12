@@ -39,6 +39,8 @@ class _AdderPageState extends ConsumerState {
   List<HLVArtist> hlvArtists = [];
   FoundPlaylist? foundPlaylist;
   TextEditingController foundPlaylistNameController = TextEditingController();
+  ///////////////////////
+  //////// State resuming
   void pullSearchResults(state) {
     print("Pulling search results");
     restoredSelectedSearchResults = false;
@@ -60,6 +62,11 @@ class _AdderPageState extends ConsumerState {
     });
     restoredSelectedSearchResults = true;
   }
+
+
+//////////////////////////////////////////////////////////////////////////////////
+///               PAGE SELECTION                     /////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 
   @override
   Widget build(BuildContext context) {
@@ -245,6 +252,10 @@ class _AdderPageState extends ConsumerState {
         )));
   }
 
+//////////////////////////////////////////////////////////////////////////////////
+///               FUNCTIONS                          /////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+
   void cancel() {
     //restoredSelectedSearchResults = false;
     pulledSearchResults = false;
@@ -283,10 +294,14 @@ class _AdderPageState extends ConsumerState {
       // print("Can't submit yet");
       // print(foundPlaylistNameController.value.text);
       // Reconstruct playlist
-      throw ("Reconstruct playlist first silly");
-      ref
-          .read(adderProvider.notifier)
-          .addPlaylist(FoundPlaylist()); // YOU LEFT OFF HERE
+      foundPlaylist = foundPlaylist!.copyWith(name: foundPlaylistNameController.value.text);
+      // First send the songs to server to be hydrated and put into hierarchy
+      // ref.read(adderProvider.notifier).setPlaylist(foundPlaylist!);
+      // ref.read(adderProvider.notifier).selectSearchResults(foundPlaylist!.songs.map((fps) => fps.toSearchResult()).toList());
+      // ref.read(adderProvider.notifier).findVideosForSelectedSearchResults();
+       ref
+           .read(adderProvider.notifier)
+           .addPlaylist(foundPlaylist!); // YOU LEFT OFF HERE
     } else if (extension == "") {
       ref.read(adderProvider.notifier).addHLVResults(hlvArtists);
     }
@@ -298,6 +313,10 @@ class _AdderPageState extends ConsumerState {
     refreshLibrary(ref);
     ref.read(adderProvider.notifier).done();
   }
+
+//////////////////////////////////////////////////////////////////////////////////
+///               PAGES                          /////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 
   Widget findPage(BuildContext context, List<FindResult> findResults) {
     return Container(
@@ -525,9 +544,9 @@ class _AdderPageState extends ConsumerState {
                   labelText: 'Playlist Name',
                   border: OutlineInputBorder(),
                 ),
-                //onChanged: (text) {
-                //  playlist = playlist.copyWith(name: text);
-                //},
+                onChanged: (text) {
+                 playlist = playlist.copyWith(name: text);
+                },
               ),
               SpacerWidget(height: 10),
               Row(children: [
@@ -650,6 +669,8 @@ class _AdderPageState extends ConsumerState {
     );
   }
 }
+
+/////    OTHER JUNK
 
 enum FoundPlaylistSongPopupMenuItems { edit, delete }
 

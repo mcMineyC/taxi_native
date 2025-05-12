@@ -31,7 +31,7 @@ class ArtistPage extends ConsumerWidget {
       data: (data) {
         BeamerDelegate b = Beamer.of(context);
         if(b.configuration.uri.queryParameters["name"] == null){
-          print("Setting artist name by beaming");
+          print("Setting artist name by beaming"); // BUG ugly on iOS
           WidgetsBinding.instance.addPostFrameCallback((_) => b.beamToReplacementNamed(Uri.encodeFull("${b.configuration.uri}?name=${data.displayName}")));
         }
       },

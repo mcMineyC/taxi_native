@@ -194,7 +194,8 @@ class Adder extends _$Adder {
         state: "auth:success",
         searchResults: [],
         selectedSearchResults: [],
-        findResults: []);
+        findResults: [],
+        foundPlaylist: null);
   }
 
   void done() {
@@ -202,7 +203,8 @@ class Adder extends _$Adder {
         state: "auth:success",
         searchResults: [],
         selectedSearchResults: [],
-        findResults: []);
+        findResults: [],
+        foundPlaylist: null);
   }
 
   void setSelectedSearchType(SearchType type) {
@@ -216,6 +218,12 @@ class Adder extends _$Adder {
   void selectSearchResult(SearchResult result) {
     state = state.copyWith(
       selectedSearchResults: [...state.selectedSearchResults, result],
+    );
+  }
+
+  void selectSearchResults(List<SearchResult> results) {
+    state = state.copyWith(
+      selectedSearchResults: [...state.selectedSearchResults, ...results],
     );
   }
 

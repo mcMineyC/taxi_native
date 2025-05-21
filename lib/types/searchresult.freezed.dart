@@ -1469,6 +1469,7 @@ FoundPlaylist _$FoundPlaylistFromJson(Map<String, dynamic> json) {
 mixin _$FoundPlaylist {
   String get externalId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
   String get owner => throw _privateConstructorUsedError;
   String get ownerImageUrl => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
@@ -1497,6 +1498,7 @@ abstract class $FoundPlaylistCopyWith<$Res> {
   $Res call(
       {String externalId,
       String name,
+      String description,
       String owner,
       String ownerImageUrl,
       String imageUrl,
@@ -1524,6 +1526,7 @@ class _$FoundPlaylistCopyWithImpl<$Res, $Val extends FoundPlaylist>
   $Res call({
     Object? externalId = null,
     Object? name = null,
+    Object? description = null,
     Object? owner = null,
     Object? ownerImageUrl = null,
     Object? imageUrl = null,
@@ -1541,6 +1544,10 @@ class _$FoundPlaylistCopyWithImpl<$Res, $Val extends FoundPlaylist>
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String,
       owner: null == owner
           ? _value.owner
@@ -1589,6 +1596,7 @@ abstract class _$$FoundPlaylistImplCopyWith<$Res>
   $Res call(
       {String externalId,
       String name,
+      String description,
       String owner,
       String ownerImageUrl,
       String imageUrl,
@@ -1614,6 +1622,7 @@ class __$$FoundPlaylistImplCopyWithImpl<$Res>
   $Res call({
     Object? externalId = null,
     Object? name = null,
+    Object? description = null,
     Object? owner = null,
     Object? ownerImageUrl = null,
     Object? imageUrl = null,
@@ -1631,6 +1640,10 @@ class __$$FoundPlaylistImplCopyWithImpl<$Res>
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String,
       owner: null == owner
           ? _value.owner
@@ -1674,6 +1687,7 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
   const _$FoundPlaylistImpl(
       {required this.externalId,
       required this.name,
+      required this.description,
       required this.owner,
       required this.ownerImageUrl,
       required this.imageUrl,
@@ -1695,6 +1709,8 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
   final String externalId;
   @override
   final String name;
+  @override
+  final String description;
   @override
   final String owner;
   @override
@@ -1738,7 +1754,7 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
 
   @override
   String toString() {
-    return 'FoundPlaylist(externalId: $externalId, name: $name, owner: $owner, ownerImageUrl: $ownerImageUrl, imageUrl: $imageUrl, visibleTo: $visibleTo, allowedCollaborators: $allowedCollaborators, inLibrary: $inLibrary, type: $type, songs: $songs)';
+    return 'FoundPlaylist(externalId: $externalId, name: $name, description: $description, owner: $owner, ownerImageUrl: $ownerImageUrl, imageUrl: $imageUrl, visibleTo: $visibleTo, allowedCollaborators: $allowedCollaborators, inLibrary: $inLibrary, type: $type, songs: $songs)';
   }
 
   @override
@@ -1749,6 +1765,8 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
             (identical(other.externalId, externalId) ||
                 other.externalId == externalId) &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
             (identical(other.owner, owner) || other.owner == owner) &&
             (identical(other.ownerImageUrl, ownerImageUrl) ||
                 other.ownerImageUrl == ownerImageUrl) &&
@@ -1770,6 +1788,7 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
       runtimeType,
       externalId,
       name,
+      description,
       owner,
       ownerImageUrl,
       imageUrl,
@@ -1799,6 +1818,7 @@ abstract class _FoundPlaylist extends FoundPlaylist {
   const factory _FoundPlaylist(
       {required final String externalId,
       required final String name,
+      required final String description,
       required final String owner,
       required final String ownerImageUrl,
       required final String imageUrl,
@@ -1816,6 +1836,8 @@ abstract class _FoundPlaylist extends FoundPlaylist {
   String get externalId;
   @override
   String get name;
+  @override
+  String get description;
   @override
   String get owner;
   @override

@@ -542,6 +542,7 @@ class _EditPlaylistDialogState extends State<EditPlaylistDialog> {
                       child: const Text('Create'),
                       onPressed: () {
                         current = current.copyWith(description: descriptionController.text, displayName: nameController.text);
+                        print(current);
                         Navigator.of(context)
                           .pop({"created": true, "value": current});
                       },
@@ -559,6 +560,7 @@ class _EditPlaylistDialogState extends State<EditPlaylistDialog> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   TextField(
+                    controller: nameController,
                     // onChanged: (value) => setState(
                     //     () => current = current.copyWith(displayName: value)),
                     decoration: const InputDecoration(
@@ -567,6 +569,7 @@ class _EditPlaylistDialogState extends State<EditPlaylistDialog> {
                     ),
                   ),
                   TextField(
+                    controller: descriptionController,
                     // onChanged: (value) => setState(
                     //     () => current = current.copyWith(description: value)),
                     decoration: const InputDecoration(
@@ -747,7 +750,7 @@ Future<void> playlistLogic(WidgetRef ref, BuildContext context, String thingId,
     var fp = FilledPlaylist(
         id: p.id,
         displayName: "",
-        description: "nil",
+        description: "",
         visibleTo: ["all"],
         inLibrary: [currentUser],
         allowedCollaborators: [currentUser],
@@ -760,7 +763,7 @@ Future<void> playlistLogic(WidgetRef ref, BuildContext context, String thingId,
         context: context, builder: (_) => createDialog);
     if (result2 != null && result2["created"]) {
       Playlist p = (result2["value"] as FilledPlaylist).toPlaylist(); // shenanagins because of type safety
-      print("AddPlaylistFlow: Creating playlist with name ${p.displayName}");
+      print("AddPlaylistFlow: Creating playlist with name ${p.displayName} and description ${p.description}");
       print(p);
       await ref.read(addPlaylistProvider(p).future);
       print("AddPlaylistFlow: Playlist created");

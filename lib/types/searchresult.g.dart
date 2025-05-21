@@ -137,6 +137,7 @@ _$FoundPlaylistImpl _$$FoundPlaylistImplFromJson(Map<String, dynamic> json) =>
     _$FoundPlaylistImpl(
       externalId: json['externalId'] as String,
       name: json['name'] as String,
+      description: json['description'] as String,
       owner: json['owner'] as String,
       ownerImageUrl: json['ownerImageUrl'] as String,
       imageUrl: json['imageUrl'] as String,
@@ -157,6 +158,7 @@ Map<String, dynamic> _$$FoundPlaylistImplToJson(_$FoundPlaylistImpl instance) =>
     <String, dynamic>{
       'externalId': instance.externalId,
       'name': instance.name,
+      'description': instance.description,
       'owner': instance.owner,
       'ownerImageUrl': instance.ownerImageUrl,
       'imageUrl': instance.imageUrl,

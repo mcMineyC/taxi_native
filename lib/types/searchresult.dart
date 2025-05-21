@@ -134,6 +134,7 @@ class FoundPlaylist with _$FoundPlaylist {
   const factory FoundPlaylist({
     required String externalId,
     required String name,
+    required String description,
     required String owner,
     required String ownerImageUrl,
     required String imageUrl,

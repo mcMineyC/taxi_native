@@ -566,7 +566,7 @@ class _FindBatchSongsProviderElement
 }
 
 String _$externalIdsToInternalHash() =>
-    r'bb487a0c43b32852c2c22ad4d84d5911ae6b702b';
+    r'be1140e2137b0cdc53fa6596d7535ca22f643ee2';
 
 /// See also [externalIdsToInternal].
 @ProviderFor(externalIdsToInternal)

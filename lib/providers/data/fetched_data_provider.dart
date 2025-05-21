@@ -144,7 +144,7 @@ Future<List<String>> externalIdsToInternal(ExternalIdsToInternalRef ref, List<St
   }
   desponse = desponse["results"];
   List<String> returning = [];
-  for (var i = externalIds.length - 1; i >= 0; i--) {
+  for (var i = 0; i < externalIds.length - 1; i++) {
     if (desponse.containsKey(externalIds[i])) {
       if (desponse[externalIds[i]] == null) {
         continue;

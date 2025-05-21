@@ -87,6 +87,7 @@ class DesktopPlaylistPageState extends ConsumerState<DesktopPlaylistPage> {
                         Text(data.displayName, style: Theme.of(context).textTheme.headlineLarge, overflow: TextOverflow.ellipsis),
                         Text(data.owner.substring(0, 1).toUpperCase() + data.owner.substring(1), style: Theme.of(context).textTheme.headlineSmall, overflow: TextOverflow.ellipsis),
                         Text("${data.songs.length} song${(data.songs.length > 1) ? "s" : ""}", style: Theme.of(context).textTheme.bodyLarge),
+                        Text(data.description, style: Theme.of(context).textTheme.bodyMedium, overflow: TextOverflow.ellipsis),
                       ],
                       if(loading) ...[
                         const Skeletonizer(enabled: true, child: Text("Loading")),

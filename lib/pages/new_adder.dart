@@ -39,6 +39,7 @@ class _AdderPageState extends ConsumerState {
   List<HLVArtist> hlvArtists = [];
   FoundPlaylist? foundPlaylist;
   TextEditingController foundPlaylistNameController = TextEditingController();
+  TextEditingController foundPlaylistDescriptionController = TextEditingController();
   ///////////////////////
   //////// State resuming
   void pullSearchResults(state) {
@@ -107,6 +108,7 @@ class _AdderPageState extends ConsumerState {
       if (!findResultsProcessed) {
         foundPlaylist = state.foundPlaylist;
         foundPlaylistNameController.text = foundPlaylist!.name;
+        foundPlaylistDescriptionController.text = foundPlaylist!.description;
         findResultsProcessed = true;
       }
       page = "find:results:playlist";
@@ -548,6 +550,17 @@ class _AdderPageState extends ConsumerState {
                 ),
                 onChanged: (text) {
                  playlist = playlist.copyWith(name: text);
+                },
+              ),
+              SpacerWidget(height: 10),
+              TextField(
+                controller: foundPlaylistDescriptionController,
+                decoration: InputDecoration(
+                  labelText: 'Playlist Description',
+                  border: OutlineInputBorder(),
+                ),
+                onChanged: (text) {
+                 playlist = playlist.copyWith(description: text);
                 },
               ),
               SpacerWidget(height: 10),

@@ -55,7 +55,7 @@ class FilledPlaylist with _$FilledPlaylist {
       id: id,
       owner: owner,
       displayName: displayName,
-      description: "nall", 
+      description: description, 
       visibleTo: visibleTo,
       inLibrary: inLibrary,
       allowedCollaborators: allowedCollaborators,

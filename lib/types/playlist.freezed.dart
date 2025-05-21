@@ -23,6 +23,7 @@ mixin _$Playlist {
   String get id => throw _privateConstructorUsedError;
   String get owner => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
   List<String> get visibleTo => throw _privateConstructorUsedError;
   List<String> get inLibrary => throw _privateConstructorUsedError;
   List<String> get allowedCollaborators => throw _privateConstructorUsedError;
@@ -48,6 +49,7 @@ abstract class $PlaylistCopyWith<$Res> {
       {String id,
       String owner,
       String displayName,
+      String description,
       List<String> visibleTo,
       List<String> inLibrary,
       List<String> allowedCollaborators,
@@ -73,6 +75,7 @@ class _$PlaylistCopyWithImpl<$Res, $Val extends Playlist>
     Object? id = null,
     Object? owner = null,
     Object? displayName = null,
+    Object? description = null,
     Object? visibleTo = null,
     Object? inLibrary = null,
     Object? allowedCollaborators = null,
@@ -91,6 +94,10 @@ class _$PlaylistCopyWithImpl<$Res, $Val extends Playlist>
       displayName: null == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String,
       visibleTo: null == visibleTo
           ? _value.visibleTo
@@ -128,6 +135,7 @@ abstract class _$$PlaylistImplCopyWith<$Res>
       {String id,
       String owner,
       String displayName,
+      String description,
       List<String> visibleTo,
       List<String> inLibrary,
       List<String> allowedCollaborators,
@@ -151,6 +159,7 @@ class __$$PlaylistImplCopyWithImpl<$Res>
     Object? id = null,
     Object? owner = null,
     Object? displayName = null,
+    Object? description = null,
     Object? visibleTo = null,
     Object? inLibrary = null,
     Object? allowedCollaborators = null,
@@ -169,6 +178,10 @@ class __$$PlaylistImplCopyWithImpl<$Res>
       displayName: null == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String,
       visibleTo: null == visibleTo
           ? _value._visibleTo
@@ -201,6 +214,7 @@ class _$PlaylistImpl extends _Playlist {
       {required this.id,
       required this.owner,
       required this.displayName,
+      required this.description,
       required final List<String> visibleTo,
       required final List<String> inLibrary,
       required final List<String> allowedCollaborators,
@@ -221,6 +235,8 @@ class _$PlaylistImpl extends _Playlist {
   final String owner;
   @override
   final String displayName;
+  @override
+  final String description;
   final List<String> _visibleTo;
   @override
   List<String> get visibleTo {
@@ -259,7 +275,7 @@ class _$PlaylistImpl extends _Playlist {
 
   @override
   String toString() {
-    return 'Playlist(id: $id, owner: $owner, displayName: $displayName, visibleTo: $visibleTo, inLibrary: $inLibrary, allowedCollaborators: $allowedCollaborators, songs: $songs, added: $added)';
+    return 'Playlist(id: $id, owner: $owner, displayName: $displayName, description: $description, visibleTo: $visibleTo, inLibrary: $inLibrary, allowedCollaborators: $allowedCollaborators, songs: $songs, added: $added)';
   }
 
   @override
@@ -271,6 +287,8 @@ class _$PlaylistImpl extends _Playlist {
             (identical(other.owner, owner) || other.owner == owner) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
             const DeepCollectionEquality()
                 .equals(other._visibleTo, _visibleTo) &&
             const DeepCollectionEquality()
@@ -288,6 +306,7 @@ class _$PlaylistImpl extends _Playlist {
       id,
       owner,
       displayName,
+      description,
       const DeepCollectionEquality().hash(_visibleTo),
       const DeepCollectionEquality().hash(_inLibrary),
       const DeepCollectionEquality().hash(_allowedCollaborators),
@@ -315,6 +334,7 @@ abstract class _Playlist extends Playlist {
       {required final String id,
       required final String owner,
       required final String displayName,
+      required final String description,
       required final List<String> visibleTo,
       required final List<String> inLibrary,
       required final List<String> allowedCollaborators,
@@ -331,6 +351,8 @@ abstract class _Playlist extends Playlist {
   String get owner;
   @override
   String get displayName;
+  @override
+  String get description;
   @override
   List<String> get visibleTo;
   @override
@@ -355,6 +377,7 @@ mixin _$FilledPlaylist {
   String get id => throw _privateConstructorUsedError;
   String get owner => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
   List<String> get visibleTo => throw _privateConstructorUsedError;
   List<String> get inLibrary => throw _privateConstructorUsedError;
   List<String> get allowedCollaborators => throw _privateConstructorUsedError;
@@ -378,6 +401,7 @@ abstract class $FilledPlaylistCopyWith<$Res> {
       {String id,
       String owner,
       String displayName,
+      String description,
       List<String> visibleTo,
       List<String> inLibrary,
       List<String> allowedCollaborators,
@@ -403,6 +427,7 @@ class _$FilledPlaylistCopyWithImpl<$Res, $Val extends FilledPlaylist>
     Object? id = null,
     Object? owner = null,
     Object? displayName = null,
+    Object? description = null,
     Object? visibleTo = null,
     Object? inLibrary = null,
     Object? allowedCollaborators = null,
@@ -421,6 +446,10 @@ class _$FilledPlaylistCopyWithImpl<$Res, $Val extends FilledPlaylist>
       displayName: null == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String,
       visibleTo: null == visibleTo
           ? _value.visibleTo
@@ -458,6 +487,7 @@ abstract class _$$FilledPlaylistImplCopyWith<$Res>
       {String id,
       String owner,
       String displayName,
+      String description,
       List<String> visibleTo,
       List<String> inLibrary,
       List<String> allowedCollaborators,
@@ -481,6 +511,7 @@ class __$$FilledPlaylistImplCopyWithImpl<$Res>
     Object? id = null,
     Object? owner = null,
     Object? displayName = null,
+    Object? description = null,
     Object? visibleTo = null,
     Object? inLibrary = null,
     Object? allowedCollaborators = null,
@@ -499,6 +530,10 @@ class __$$FilledPlaylistImplCopyWithImpl<$Res>
       displayName: null == displayName
           ? _value.displayName
           : displayName // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
               as String,
       visibleTo: null == visibleTo
           ? _value._visibleTo
@@ -531,6 +566,7 @@ class _$FilledPlaylistImpl extends _FilledPlaylist {
       {required this.id,
       required this.owner,
       required this.displayName,
+      required this.description,
       required final List<String> visibleTo,
       required final List<String> inLibrary,
       required final List<String> allowedCollaborators,
@@ -548,6 +584,8 @@ class _$FilledPlaylistImpl extends _FilledPlaylist {
   final String owner;
   @override
   final String displayName;
+  @override
+  final String description;
   final List<String> _visibleTo;
   @override
   List<String> get visibleTo {
@@ -586,7 +624,7 @@ class _$FilledPlaylistImpl extends _FilledPlaylist {
 
   @override
   String toString() {
-    return 'FilledPlaylist(id: $id, owner: $owner, displayName: $displayName, visibleTo: $visibleTo, inLibrary: $inLibrary, allowedCollaborators: $allowedCollaborators, songs: $songs, added: $added)';
+    return 'FilledPlaylist(id: $id, owner: $owner, displayName: $displayName, description: $description, visibleTo: $visibleTo, inLibrary: $inLibrary, allowedCollaborators: $allowedCollaborators, songs: $songs, added: $added)';
   }
 
   @override
@@ -598,6 +636,8 @@ class _$FilledPlaylistImpl extends _FilledPlaylist {
             (identical(other.owner, owner) || other.owner == owner) &&
             (identical(other.displayName, displayName) ||
                 other.displayName == displayName) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
             const DeepCollectionEquality()
                 .equals(other._visibleTo, _visibleTo) &&
             const DeepCollectionEquality()
@@ -614,6 +654,7 @@ class _$FilledPlaylistImpl extends _FilledPlaylist {
       id,
       owner,
       displayName,
+      description,
       const DeepCollectionEquality().hash(_visibleTo),
       const DeepCollectionEquality().hash(_inLibrary),
       const DeepCollectionEquality().hash(_allowedCollaborators),
@@ -635,6 +676,7 @@ abstract class _FilledPlaylist extends FilledPlaylist {
       {required final String id,
       required final String owner,
       required final String displayName,
+      required final String description,
       required final List<String> visibleTo,
       required final List<String> inLibrary,
       required final List<String> allowedCollaborators,
@@ -648,6 +690,8 @@ abstract class _FilledPlaylist extends FilledPlaylist {
   String get owner;
   @override
   String get displayName;
+  @override
+  String get description;
   @override
   List<String> get visibleTo;
   @override

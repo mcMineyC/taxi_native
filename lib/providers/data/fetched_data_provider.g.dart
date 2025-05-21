@@ -565,6 +565,141 @@ class _FindBatchSongsProviderElement
   bool get ignore => (origin as FindBatchSongsProvider).ignore;
 }
 
+String _$externalIdsToInternalHash() =>
+    r'bb487a0c43b32852c2c22ad4d84d5911ae6b702b';
+
+/// See also [externalIdsToInternal].
+@ProviderFor(externalIdsToInternal)
+const externalIdsToInternalProvider = ExternalIdsToInternalFamily();
+
+/// See also [externalIdsToInternal].
+class ExternalIdsToInternalFamily extends Family<AsyncValue<List<String>>> {
+  /// See also [externalIdsToInternal].
+  const ExternalIdsToInternalFamily();
+
+  /// See also [externalIdsToInternal].
+  ExternalIdsToInternalProvider call(
+    List<String> externalIds,
+  ) {
+    return ExternalIdsToInternalProvider(
+      externalIds,
+    );
+  }
+
+  @override
+  ExternalIdsToInternalProvider getProviderOverride(
+    covariant ExternalIdsToInternalProvider provider,
+  ) {
+    return call(
+      provider.externalIds,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'externalIdsToInternalProvider';
+}
+
+/// See also [externalIdsToInternal].
+class ExternalIdsToInternalProvider
+    extends AutoDisposeFutureProvider<List<String>> {
+  /// See also [externalIdsToInternal].
+  ExternalIdsToInternalProvider(
+    List<String> externalIds,
+  ) : this._internal(
+          (ref) => externalIdsToInternal(
+            ref as ExternalIdsToInternalRef,
+            externalIds,
+          ),
+          from: externalIdsToInternalProvider,
+          name: r'externalIdsToInternalProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$externalIdsToInternalHash,
+          dependencies: ExternalIdsToInternalFamily._dependencies,
+          allTransitiveDependencies:
+              ExternalIdsToInternalFamily._allTransitiveDependencies,
+          externalIds: externalIds,
+        );
+
+  ExternalIdsToInternalProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.externalIds,
+  }) : super.internal();
+
+  final List<String> externalIds;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<String>> Function(ExternalIdsToInternalRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: ExternalIdsToInternalProvider._internal(
+        (ref) => create(ref as ExternalIdsToInternalRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        externalIds: externalIds,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<String>> createElement() {
+    return _ExternalIdsToInternalProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ExternalIdsToInternalProvider &&
+        other.externalIds == externalIds;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, externalIds.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin ExternalIdsToInternalRef on AutoDisposeFutureProviderRef<List<String>> {
+  /// The parameter `externalIds` of this provider.
+  List<String> get externalIds;
+}
+
+class _ExternalIdsToInternalProviderElement
+    extends AutoDisposeFutureProviderElement<List<String>>
+    with ExternalIdsToInternalRef {
+  _ExternalIdsToInternalProviderElement(super.provider);
+
+  @override
+  List<String> get externalIds =>
+      (origin as ExternalIdsToInternalProvider).externalIds;
+}
+
 String _$findSongHash() => r'29445173cc04032ece1057dfab1e426fb0f373bd';
 
 /// See also [findSong].

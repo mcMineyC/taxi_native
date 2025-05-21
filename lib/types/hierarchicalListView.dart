@@ -89,6 +89,7 @@ List<HLVArtist> findResultsToHLVContent(List<FindResult> results){
     }
     if (result.type == "song") {
       int albumIndex = workingArtistAlbums.indexWhere((album) => album.name == result.album);
+      // BUG THIS IS DUPLICATED FOR SOME REASON
       if (albumIndex != -1) { // existing album
         HLVAlbum workingAlbum = workingArtistAlbums[albumIndex];
         workingArtistAlbums[albumIndex] = workingAlbum.copyWith(songs: [HLVSong(

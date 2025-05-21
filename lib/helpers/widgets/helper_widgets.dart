@@ -497,11 +497,14 @@ class _EditPlaylistDialogState extends State<EditPlaylistDialog> {
   late ThemeData theme;
   List<Song> songs = [];
   TextEditingController nameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   TextEditingController imageController = TextEditingController();
   @override
   void initState() {
     super.initState();
     current = widget.starter;
+    nameController.text = widget.starter.displayName;
+    descriptionController.text = widget.starter.description;
     songs = [...current.songs];
   }
 
@@ -537,8 +540,12 @@ class _EditPlaylistDialogState extends State<EditPlaylistDialog> {
                   margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
                   child: TextButton(
                       child: const Text('Create'),
-                      onPressed: () => Navigator.of(context)
-                          .pop({"created": true, "value": current})),
+                      onPressed: () {
+                        current = current.copyWith(description: descriptionController.text, displayName: nameController.text);
+                        Navigator.of(context)
+                          .pop({"created": true, "value": current});
+                      },
+                  )
                 ),
               ],
             ),
@@ -552,11 +559,19 @@ class _EditPlaylistDialogState extends State<EditPlaylistDialog> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   TextField(
-                    onChanged: (value) => setState(
-                        () => current = current.copyWith(displayName: value)),
+                    // onChanged: (value) => setState(
+                    //     () => current = current.copyWith(displayName: value)),
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Playlist name',
+                    ),
+                  ),
+                  TextField(
+                    // onChanged: (value) => setState(
+                    //     () => current = current.copyWith(description: value)),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Description',
                     ),
                   ),
                   //SpacerWidget(height: 10, width: 0),
@@ -732,6 +747,7 @@ Future<void> playlistLogic(WidgetRef ref, BuildContext context, String thingId,
     var fp = FilledPlaylist(
         id: p.id,
         displayName: "",
+        description: "nil",
         visibleTo: ["all"],
         inLibrary: [currentUser],
         allowedCollaborators: [currentUser],

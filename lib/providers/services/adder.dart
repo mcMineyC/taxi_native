@@ -2,7 +2,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import "package:shared_preferences/shared_preferences.dart";
+import 'package:taxi_native/providers/data/playlist_provider.dart';
 import 'dart:convert';
+import "../../helpers/utilities.dart";
 import '../../helpers/platform_utils.dart';
 import '../../helpers/service_locator.dart';
 
@@ -12,6 +15,8 @@ import '../data/fetched_data_provider.dart';
 
 import '../../types/searchresult.dart';
 import '../../types/hierarchicalListView.dart';
+import "../../types/song.dart";
+import "../../types/playlist.dart";
 
 part 'adder.g.dart';
 part 'adder.freezed.dart';
@@ -137,13 +142,25 @@ class Adder extends _$Adder {
     socket.on('addresult', (data) async {
       var result = AddResult.fromJson(data);
       if(state.foundPlaylist != null){
-
+        FoundPlaylist found = state.foundPlaylist!;
+        List<String> internalIds = await ref.read(externalIdsToInternalProvider(state.foundPlaylist!.songs.map((song) => song.externalId).toList()).future);
+        // var currentUser = (await SharedPreferences.getInstance()).getString("username")!;
+        var accompanying = Playlist(
+          id: "create",
+          displayName: found.name,
+          description: "nil",
+          visibleTo: found.visibleTo,
+          inLibrary: found.inLibrary,
+          allowedCollaborators: found.allowedCollaborators,
+          songs: internalIds,
+          added: DateTime.now().millisecondsSinceEpoch,
+          owner: found.owner
+        );  // okay, this is the magic
+        await ref.read(addPlaylistProvider(accompanying).future);
       }
       state = state.copyWith(state: "add:results", addResult: result);
       print("Got success message!!");
-      ref.refresh(fetchSongsProvider(ignore: false));
-      ref.refresh(fetchAlbumsProvider(ignore: false));
-      ref.refresh(fetchArtistsProvider(ignore: false));
+      refreshLibrary(ref);
     });
     _isInit = true;
 

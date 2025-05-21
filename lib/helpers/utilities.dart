@@ -24,7 +24,7 @@ void refreshChanges(WidgetRef ref) {
   ref.refresh(fetchLandingRecentlyPlayedProvider);
 }
 
-void refreshLibrary(WidgetRef ref) {
+void refreshLibrary(dynamic ref) {
   ref.refresh(fetchSongsProvider(ignore: true));
   ref.refresh(fetchAlbumsProvider(ignore: true));
   ref.refresh(fetchArtistsProvider(ignore: true));

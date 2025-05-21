@@ -127,6 +127,38 @@ Future<List<Song>> findBatchSongs(FindBatchSongsRef ref, List<String> ids,
   return returning;
 }
 
+@Riverpod(keepAlive: false)
+Future<List<String>> externalIdsToInternal(ExternalIdsToInternalRef ref, List<String> externalIds) async {
+  final _sp = await SharedPreferences.getInstance();
+  //print("REQUESTING: ${ids.map((e) => e.substring(e.length - 8))}");
+  var response = await http.post(
+      Uri.parse(
+          "${_p.backendUrl}/info/songs/batch"),
+      headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+      body: jsonEncode(
+          {'authtoken': (_sp.getString("token") ?? ""), 'externalIds': externalIds}));
+  var desponse = jsonDecode(response.body);
+  print("Response: $desponse");
+  if (desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
+  desponse = desponse["results"];
+  List<String> returning = [];
+  for (var i = externalIds.length - 1; i >= 0; i--) {
+    if (desponse.containsKey(externalIds[i])) {
+      if (desponse[externalIds[i]] == null) {
+        continue;
+      }
+      returning.add(desponse[externalIds[i]]);
+    } else {
+      continue;
+    }
+  }
+  //print("Returning: ${returning.map((e) => e.id.substring(e.id.length - 8))}");
+  //print("Got ${returning.length} out of ${ids.length}");
+  return returning;
+}
+
 @riverpod
 Future<Song> findSong(FindSongRef ref, String id, {bool ignore = false}) async {
   var _sp = await SharedPreferences.getInstance();

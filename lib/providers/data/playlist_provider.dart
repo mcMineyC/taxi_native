@@ -81,7 +81,7 @@ Future<bool> addPlaylist(AddPlaylistRef ref, Playlist playlist) async {
       'owner': playlist.owner,
       'visibleTo': playlist.visibleTo,
       'allowedCollaborators': playlist.allowedCollaborators,
-      'description': "nall",
+      'description': playlist.description,
       'songs': playlist.songs,
     }),
   );
@@ -252,6 +252,7 @@ Future<FilledPlaylist> findPlaylist(FindPlaylistRef ref, String id) async {
     id: playlist.id,
     displayName: playlist.displayName,
     owner: playlist.owner,
+    description: playlist.description,
     visibleTo: playlist.visibleTo,
     inLibrary: playlist.inLibrary,
     allowedCollaborators: playlist.allowedCollaborators,

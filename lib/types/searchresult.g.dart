@@ -133,9 +133,8 @@ Map<String, dynamic> _$$FindResultSongImplToJson(
       'externalId': instance.externalId,
     };
 
-_$FoundPlaylistImpl _$$FoundPlaylistImplFromJson(Map<String, dynamic> json) {
-  print(json);
-    return _$FoundPlaylistImpl(
+_$FoundPlaylistImpl _$$FoundPlaylistImplFromJson(Map<String, dynamic> json) =>
+    _$FoundPlaylistImpl(
       externalId: json['externalId'] as String,
       name: json['name'] as String,
       owner: json['owner'] as String,
@@ -153,7 +152,6 @@ _$FoundPlaylistImpl _$$FoundPlaylistImplFromJson(Map<String, dynamic> json) {
           .map((e) => FoundPlaylistSong.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
-}
 
 Map<String, dynamic> _$$FoundPlaylistImplToJson(_$FoundPlaylistImpl instance) =>
     <String, dynamic>{

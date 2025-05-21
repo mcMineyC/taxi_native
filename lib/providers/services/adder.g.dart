@@ -6,7 +6,7 @@ part of 'adder.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$adderHash() => r'9f7746b314987197c154e82d6b06c8d589014a3f';
+String _$adderHash() => r'ac4acbf796fc180087ba7220f7790c8d1a55e51f';
 
 /// See also [Adder].
 @ProviderFor(Adder)

@@ -14,343 +14,6 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-HLVPlaylist _$HLVPlaylistFromJson(Map<String, dynamic> json) {
-  return _HLVPlaylist.fromJson(json);
-}
-
-/// @nodoc
-mixin _$HLVPlaylist {
-  String get name => throw _privateConstructorUsedError;
-  String get owner => throw _privateConstructorUsedError;
-  String get ownerImageUrl => throw _privateConstructorUsedError;
-  List<String> get visibleTo => throw _privateConstructorUsedError;
-  List<String> get allowedCollaborators => throw _privateConstructorUsedError;
-  List<String> get inLibrary => throw _privateConstructorUsedError;
-  String get imageUrl => throw _privateConstructorUsedError;
-  List<HLVArtist> get artists => throw _privateConstructorUsedError;
-
-  /// Serializes this HLVPlaylist to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of HLVPlaylist
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $HLVPlaylistCopyWith<HLVPlaylist> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $HLVPlaylistCopyWith<$Res> {
-  factory $HLVPlaylistCopyWith(
-          HLVPlaylist value, $Res Function(HLVPlaylist) then) =
-      _$HLVPlaylistCopyWithImpl<$Res, HLVPlaylist>;
-  @useResult
-  $Res call(
-      {String name,
-      String owner,
-      String ownerImageUrl,
-      List<String> visibleTo,
-      List<String> allowedCollaborators,
-      List<String> inLibrary,
-      String imageUrl,
-      List<HLVArtist> artists});
-}
-
-/// @nodoc
-class _$HLVPlaylistCopyWithImpl<$Res, $Val extends HLVPlaylist>
-    implements $HLVPlaylistCopyWith<$Res> {
-  _$HLVPlaylistCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of HLVPlaylist
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? name = null,
-    Object? owner = null,
-    Object? ownerImageUrl = null,
-    Object? visibleTo = null,
-    Object? allowedCollaborators = null,
-    Object? inLibrary = null,
-    Object? imageUrl = null,
-    Object? artists = null,
-  }) {
-    return _then(_value.copyWith(
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      owner: null == owner
-          ? _value.owner
-          : owner // ignore: cast_nullable_to_non_nullable
-              as String,
-      ownerImageUrl: null == ownerImageUrl
-          ? _value.ownerImageUrl
-          : ownerImageUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      visibleTo: null == visibleTo
-          ? _value.visibleTo
-          : visibleTo // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      allowedCollaborators: null == allowedCollaborators
-          ? _value.allowedCollaborators
-          : allowedCollaborators // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      inLibrary: null == inLibrary
-          ? _value.inLibrary
-          : inLibrary // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      imageUrl: null == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      artists: null == artists
-          ? _value.artists
-          : artists // ignore: cast_nullable_to_non_nullable
-              as List<HLVArtist>,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$HLVPlaylistImplCopyWith<$Res>
-    implements $HLVPlaylistCopyWith<$Res> {
-  factory _$$HLVPlaylistImplCopyWith(
-          _$HLVPlaylistImpl value, $Res Function(_$HLVPlaylistImpl) then) =
-      __$$HLVPlaylistImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String name,
-      String owner,
-      String ownerImageUrl,
-      List<String> visibleTo,
-      List<String> allowedCollaborators,
-      List<String> inLibrary,
-      String imageUrl,
-      List<HLVArtist> artists});
-}
-
-/// @nodoc
-class __$$HLVPlaylistImplCopyWithImpl<$Res>
-    extends _$HLVPlaylistCopyWithImpl<$Res, _$HLVPlaylistImpl>
-    implements _$$HLVPlaylistImplCopyWith<$Res> {
-  __$$HLVPlaylistImplCopyWithImpl(
-      _$HLVPlaylistImpl _value, $Res Function(_$HLVPlaylistImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of HLVPlaylist
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? name = null,
-    Object? owner = null,
-    Object? ownerImageUrl = null,
-    Object? visibleTo = null,
-    Object? allowedCollaborators = null,
-    Object? inLibrary = null,
-    Object? imageUrl = null,
-    Object? artists = null,
-  }) {
-    return _then(_$HLVPlaylistImpl(
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      owner: null == owner
-          ? _value.owner
-          : owner // ignore: cast_nullable_to_non_nullable
-              as String,
-      ownerImageUrl: null == ownerImageUrl
-          ? _value.ownerImageUrl
-          : ownerImageUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      visibleTo: null == visibleTo
-          ? _value._visibleTo
-          : visibleTo // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      allowedCollaborators: null == allowedCollaborators
-          ? _value._allowedCollaborators
-          : allowedCollaborators // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      inLibrary: null == inLibrary
-          ? _value._inLibrary
-          : inLibrary // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      imageUrl: null == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      artists: null == artists
-          ? _value._artists
-          : artists // ignore: cast_nullable_to_non_nullable
-              as List<HLVArtist>,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$HLVPlaylistImpl extends _HLVPlaylist {
-  _$HLVPlaylistImpl(
-      {required this.name,
-      required this.owner,
-      required this.ownerImageUrl,
-      required final List<String> visibleTo,
-      required final List<String> allowedCollaborators,
-      required final List<String> inLibrary,
-      required this.imageUrl,
-      required final List<HLVArtist> artists})
-      : _visibleTo = visibleTo,
-        _allowedCollaborators = allowedCollaborators,
-        _inLibrary = inLibrary,
-        _artists = artists,
-        super._();
-
-  factory _$HLVPlaylistImpl.fromJson(Map<String, dynamic> json) =>
-      _$$HLVPlaylistImplFromJson(json);
-
-  @override
-  final String name;
-  @override
-  final String owner;
-  @override
-  final String ownerImageUrl;
-  final List<String> _visibleTo;
-  @override
-  List<String> get visibleTo {
-    if (_visibleTo is EqualUnmodifiableListView) return _visibleTo;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_visibleTo);
-  }
-
-  final List<String> _allowedCollaborators;
-  @override
-  List<String> get allowedCollaborators {
-    if (_allowedCollaborators is EqualUnmodifiableListView)
-      return _allowedCollaborators;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_allowedCollaborators);
-  }
-
-  final List<String> _inLibrary;
-  @override
-  List<String> get inLibrary {
-    if (_inLibrary is EqualUnmodifiableListView) return _inLibrary;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_inLibrary);
-  }
-
-  @override
-  final String imageUrl;
-  final List<HLVArtist> _artists;
-  @override
-  List<HLVArtist> get artists {
-    if (_artists is EqualUnmodifiableListView) return _artists;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_artists);
-  }
-
-  @override
-  String toString() {
-    return 'HLVPlaylist(name: $name, owner: $owner, ownerImageUrl: $ownerImageUrl, visibleTo: $visibleTo, allowedCollaborators: $allowedCollaborators, inLibrary: $inLibrary, imageUrl: $imageUrl, artists: $artists)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$HLVPlaylistImpl &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.owner, owner) || other.owner == owner) &&
-            (identical(other.ownerImageUrl, ownerImageUrl) ||
-                other.ownerImageUrl == ownerImageUrl) &&
-            const DeepCollectionEquality()
-                .equals(other._visibleTo, _visibleTo) &&
-            const DeepCollectionEquality()
-                .equals(other._allowedCollaborators, _allowedCollaborators) &&
-            const DeepCollectionEquality()
-                .equals(other._inLibrary, _inLibrary) &&
-            (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl) &&
-            const DeepCollectionEquality().equals(other._artists, _artists));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      name,
-      owner,
-      ownerImageUrl,
-      const DeepCollectionEquality().hash(_visibleTo),
-      const DeepCollectionEquality().hash(_allowedCollaborators),
-      const DeepCollectionEquality().hash(_inLibrary),
-      imageUrl,
-      const DeepCollectionEquality().hash(_artists));
-
-  /// Create a copy of HLVPlaylist
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$HLVPlaylistImplCopyWith<_$HLVPlaylistImpl> get copyWith =>
-      __$$HLVPlaylistImplCopyWithImpl<_$HLVPlaylistImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$HLVPlaylistImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _HLVPlaylist extends HLVPlaylist {
-  factory _HLVPlaylist(
-      {required final String name,
-      required final String owner,
-      required final String ownerImageUrl,
-      required final List<String> visibleTo,
-      required final List<String> allowedCollaborators,
-      required final List<String> inLibrary,
-      required final String imageUrl,
-      required final List<HLVArtist> artists}) = _$HLVPlaylistImpl;
-  _HLVPlaylist._() : super._();
-
-  factory _HLVPlaylist.fromJson(Map<String, dynamic> json) =
-      _$HLVPlaylistImpl.fromJson;
-
-  @override
-  String get name;
-  @override
-  String get owner;
-  @override
-  String get ownerImageUrl;
-  @override
-  List<String> get visibleTo;
-  @override
-  List<String> get allowedCollaborators;
-  @override
-  List<String> get inLibrary;
-  @override
-  String get imageUrl;
-  @override
-  List<HLVArtist> get artists;
-
-  /// Create a copy of HLVPlaylist
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$HLVPlaylistImplCopyWith<_$HLVPlaylistImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
 HLVArtist _$HLVArtistFromJson(Map<String, dynamic> json) {
   return _HLVArtist.fromJson(json);
 }
@@ -464,7 +127,7 @@ class __$$HLVArtistImplCopyWithImpl<$Res>
           : name // ignore: cast_nullable_to_non_nullable
               as String,
       visibleTo: null == visibleTo
-          ? _value._visibleTo
+          ? _value.visibleTo
           : visibleTo // ignore: cast_nullable_to_non_nullable
               as List<String>,
       imageUrl: null == imageUrl
@@ -472,7 +135,7 @@ class __$$HLVArtistImplCopyWithImpl<$Res>
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       albums: null == albums
-          ? _value._albums
+          ? _value.albums
           : albums // ignore: cast_nullable_to_non_nullable
               as List<HLVAlbum>,
     ));
@@ -484,35 +147,22 @@ class __$$HLVArtistImplCopyWithImpl<$Res>
 class _$HLVArtistImpl extends _HLVArtist {
   _$HLVArtistImpl(
       {required this.name,
-      required final List<String> visibleTo,
+      required this.visibleTo,
       required this.imageUrl,
-      required final List<HLVAlbum> albums})
-      : _visibleTo = visibleTo,
-        _albums = albums,
-        super._();
+      required this.albums})
+      : super._();
 
   factory _$HLVArtistImpl.fromJson(Map<String, dynamic> json) =>
       _$$HLVArtistImplFromJson(json);
 
   @override
   final String name;
-  final List<String> _visibleTo;
   @override
-  List<String> get visibleTo {
-    if (_visibleTo is EqualUnmodifiableListView) return _visibleTo;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_visibleTo);
-  }
-
+  final List<String> visibleTo;
   @override
   final String imageUrl;
-  final List<HLVAlbum> _albums;
   @override
-  List<HLVAlbum> get albums {
-    if (_albums is EqualUnmodifiableListView) return _albums;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_albums);
-  }
+  final List<HLVAlbum> albums;
 
   @override
   String toString() {
@@ -525,11 +175,10 @@ class _$HLVArtistImpl extends _HLVArtist {
         (other.runtimeType == runtimeType &&
             other is _$HLVArtistImpl &&
             (identical(other.name, name) || other.name == name) &&
-            const DeepCollectionEquality()
-                .equals(other._visibleTo, _visibleTo) &&
+            const DeepCollectionEquality().equals(other.visibleTo, visibleTo) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
-            const DeepCollectionEquality().equals(other._albums, _albums));
+            const DeepCollectionEquality().equals(other.albums, albums));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -537,9 +186,9 @@ class _$HLVArtistImpl extends _HLVArtist {
   int get hashCode => Object.hash(
       runtimeType,
       name,
-      const DeepCollectionEquality().hash(_visibleTo),
+      const DeepCollectionEquality().hash(visibleTo),
       imageUrl,
-      const DeepCollectionEquality().hash(_albums));
+      const DeepCollectionEquality().hash(albums));
 
   /// Create a copy of HLVArtist
   /// with the given fields replaced by the non-null parameter values.
@@ -591,6 +240,7 @@ HLVAlbum _$HLVAlbumFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$HLVAlbum {
+  String get externalId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   List<String> get visibleTo => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
@@ -613,7 +263,8 @@ abstract class $HLVAlbumCopyWith<$Res> {
       _$HLVAlbumCopyWithImpl<$Res, HLVAlbum>;
   @useResult
   $Res call(
-      {String name,
+      {String externalId,
+      String name,
       List<String> visibleTo,
       String imageUrl,
       String artistImageUrl,
@@ -635,6 +286,7 @@ class _$HLVAlbumCopyWithImpl<$Res, $Val extends HLVAlbum>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? externalId = null,
     Object? name = null,
     Object? visibleTo = null,
     Object? imageUrl = null,
@@ -642,6 +294,10 @@ class _$HLVAlbumCopyWithImpl<$Res, $Val extends HLVAlbum>
     Object? songs = null,
   }) {
     return _then(_value.copyWith(
+      externalId: null == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -675,7 +331,8 @@ abstract class _$$HLVAlbumImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String name,
+      {String externalId,
+      String name,
       List<String> visibleTo,
       String imageUrl,
       String artistImageUrl,
@@ -695,6 +352,7 @@ class __$$HLVAlbumImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? externalId = null,
     Object? name = null,
     Object? visibleTo = null,
     Object? imageUrl = null,
@@ -702,12 +360,16 @@ class __$$HLVAlbumImplCopyWithImpl<$Res>
     Object? songs = null,
   }) {
     return _then(_$HLVAlbumImpl(
+      externalId: null == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
       visibleTo: null == visibleTo
-          ? _value._visibleTo
+          ? _value.visibleTo
           : visibleTo // ignore: cast_nullable_to_non_nullable
               as List<String>,
       imageUrl: null == imageUrl
@@ -719,7 +381,7 @@ class __$$HLVAlbumImplCopyWithImpl<$Res>
           : artistImageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       songs: null == songs
-          ? _value._songs
+          ? _value.songs
           : songs // ignore: cast_nullable_to_non_nullable
               as List<HLVSong>,
     ));
@@ -730,43 +392,33 @@ class __$$HLVAlbumImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$HLVAlbumImpl extends _HLVAlbum {
   _$HLVAlbumImpl(
-      {required this.name,
-      required final List<String> visibleTo,
+      {required this.externalId,
+      required this.name,
+      required this.visibleTo,
       required this.imageUrl,
       required this.artistImageUrl,
-      required final List<HLVSong> songs})
-      : _visibleTo = visibleTo,
-        _songs = songs,
-        super._();
+      required this.songs})
+      : super._();
 
   factory _$HLVAlbumImpl.fromJson(Map<String, dynamic> json) =>
       _$$HLVAlbumImplFromJson(json);
 
   @override
-  final String name;
-  final List<String> _visibleTo;
+  final String externalId;
   @override
-  List<String> get visibleTo {
-    if (_visibleTo is EqualUnmodifiableListView) return _visibleTo;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_visibleTo);
-  }
-
+  final String name;
+  @override
+  final List<String> visibleTo;
   @override
   final String imageUrl;
   @override
   final String artistImageUrl;
-  final List<HLVSong> _songs;
   @override
-  List<HLVSong> get songs {
-    if (_songs is EqualUnmodifiableListView) return _songs;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_songs);
-  }
+  final List<HLVSong> songs;
 
   @override
   String toString() {
-    return 'HLVAlbum(name: $name, visibleTo: $visibleTo, imageUrl: $imageUrl, artistImageUrl: $artistImageUrl, songs: $songs)';
+    return 'HLVAlbum(externalId: $externalId, name: $name, visibleTo: $visibleTo, imageUrl: $imageUrl, artistImageUrl: $artistImageUrl, songs: $songs)';
   }
 
   @override
@@ -774,25 +426,27 @@ class _$HLVAlbumImpl extends _HLVAlbum {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$HLVAlbumImpl &&
+            (identical(other.externalId, externalId) ||
+                other.externalId == externalId) &&
             (identical(other.name, name) || other.name == name) &&
-            const DeepCollectionEquality()
-                .equals(other._visibleTo, _visibleTo) &&
+            const DeepCollectionEquality().equals(other.visibleTo, visibleTo) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.artistImageUrl, artistImageUrl) ||
                 other.artistImageUrl == artistImageUrl) &&
-            const DeepCollectionEquality().equals(other._songs, _songs));
+            const DeepCollectionEquality().equals(other.songs, songs));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      externalId,
       name,
-      const DeepCollectionEquality().hash(_visibleTo),
+      const DeepCollectionEquality().hash(visibleTo),
       imageUrl,
       artistImageUrl,
-      const DeepCollectionEquality().hash(_songs));
+      const DeepCollectionEquality().hash(songs));
 
   /// Create a copy of HLVAlbum
   /// with the given fields replaced by the non-null parameter values.
@@ -812,7 +466,8 @@ class _$HLVAlbumImpl extends _HLVAlbum {
 
 abstract class _HLVAlbum extends HLVAlbum {
   factory _HLVAlbum(
-      {required final String name,
+      {required final String externalId,
+      required final String name,
       required final List<String> visibleTo,
       required final String imageUrl,
       required final String artistImageUrl,
@@ -822,6 +477,8 @@ abstract class _HLVAlbum extends HLVAlbum {
   factory _HLVAlbum.fromJson(Map<String, dynamic> json) =
       _$HLVAlbumImpl.fromJson;
 
+  @override
+  String get externalId;
   @override
   String get name;
   @override
@@ -847,6 +504,7 @@ HLVSong _$HLVSongFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$HLVSong {
+  String get externalId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   List<String> get visibleTo => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
@@ -869,7 +527,8 @@ abstract class $HLVSongCopyWith<$Res> {
       _$HLVSongCopyWithImpl<$Res, HLVSong>;
   @useResult
   $Res call(
-      {String name,
+      {String externalId,
+      String name,
       List<String> visibleTo,
       String imageUrl,
       String artistImageUrl,
@@ -892,6 +551,7 @@ class _$HLVSongCopyWithImpl<$Res, $Val extends HLVSong>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? externalId = null,
     Object? name = null,
     Object? visibleTo = null,
     Object? imageUrl = null,
@@ -900,6 +560,10 @@ class _$HLVSongCopyWithImpl<$Res, $Val extends HLVSong>
     Object? trackNumber = null,
   }) {
     return _then(_value.copyWith(
+      externalId: null == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -936,7 +600,8 @@ abstract class _$$HLVSongImplCopyWith<$Res> implements $HLVSongCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String name,
+      {String externalId,
+      String name,
       List<String> visibleTo,
       String imageUrl,
       String artistImageUrl,
@@ -957,6 +622,7 @@ class __$$HLVSongImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? externalId = null,
     Object? name = null,
     Object? visibleTo = null,
     Object? imageUrl = null,
@@ -965,12 +631,16 @@ class __$$HLVSongImplCopyWithImpl<$Res>
     Object? trackNumber = null,
   }) {
     return _then(_$HLVSongImpl(
+      externalId: null == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
       visibleTo: null == visibleTo
-          ? _value._visibleTo
+          ? _value.visibleTo
           : visibleTo // ignore: cast_nullable_to_non_nullable
               as List<String>,
       imageUrl: null == imageUrl
@@ -997,28 +667,24 @@ class __$$HLVSongImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$HLVSongImpl extends _HLVSong {
   _$HLVSongImpl(
-      {required this.name,
-      required final List<String> visibleTo,
+      {required this.externalId,
+      required this.name,
+      required this.visibleTo,
       required this.imageUrl,
       required this.artistImageUrl,
       required this.audioUrl,
       required this.trackNumber})
-      : _visibleTo = visibleTo,
-        super._();
+      : super._();
 
   factory _$HLVSongImpl.fromJson(Map<String, dynamic> json) =>
       _$$HLVSongImplFromJson(json);
 
   @override
-  final String name;
-  final List<String> _visibleTo;
+  final String externalId;
   @override
-  List<String> get visibleTo {
-    if (_visibleTo is EqualUnmodifiableListView) return _visibleTo;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_visibleTo);
-  }
-
+  final String name;
+  @override
+  final List<String> visibleTo;
   @override
   final String imageUrl;
   @override
@@ -1030,7 +696,7 @@ class _$HLVSongImpl extends _HLVSong {
 
   @override
   String toString() {
-    return 'HLVSong(name: $name, visibleTo: $visibleTo, imageUrl: $imageUrl, artistImageUrl: $artistImageUrl, audioUrl: $audioUrl, trackNumber: $trackNumber)';
+    return 'HLVSong(externalId: $externalId, name: $name, visibleTo: $visibleTo, imageUrl: $imageUrl, artistImageUrl: $artistImageUrl, audioUrl: $audioUrl, trackNumber: $trackNumber)';
   }
 
   @override
@@ -1038,9 +704,10 @@ class _$HLVSongImpl extends _HLVSong {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$HLVSongImpl &&
+            (identical(other.externalId, externalId) ||
+                other.externalId == externalId) &&
             (identical(other.name, name) || other.name == name) &&
-            const DeepCollectionEquality()
-                .equals(other._visibleTo, _visibleTo) &&
+            const DeepCollectionEquality().equals(other.visibleTo, visibleTo) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.artistImageUrl, artistImageUrl) ||
@@ -1055,8 +722,9 @@ class _$HLVSongImpl extends _HLVSong {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      externalId,
       name,
-      const DeepCollectionEquality().hash(_visibleTo),
+      const DeepCollectionEquality().hash(visibleTo),
       imageUrl,
       artistImageUrl,
       audioUrl,
@@ -1080,7 +748,8 @@ class _$HLVSongImpl extends _HLVSong {
 
 abstract class _HLVSong extends HLVSong {
   factory _HLVSong(
-      {required final String name,
+      {required final String externalId,
+      required final String name,
       required final List<String> visibleTo,
       required final String imageUrl,
       required final String artistImageUrl,
@@ -1090,6 +759,8 @@ abstract class _HLVSong extends HLVSong {
 
   factory _HLVSong.fromJson(Map<String, dynamic> json) = _$HLVSongImpl.fromJson;
 
+  @override
+  String get externalId;
   @override
   String get name;
   @override

@@ -6,36 +6,6 @@ part of 'hierarchicalListView.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$HLVPlaylistImpl _$$HLVPlaylistImplFromJson(Map<String, dynamic> json) =>
-    _$HLVPlaylistImpl(
-      name: json['name'] as String,
-      owner: json['owner'] as String,
-      ownerImageUrl: json['ownerImageUrl'] as String,
-      visibleTo:
-          (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
-      allowedCollaborators: (json['allowedCollaborators'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
-      inLibrary:
-          (json['inLibrary'] as List<dynamic>).map((e) => e as String).toList(),
-      imageUrl: json['imageUrl'] as String,
-      artists: (json['artists'] as List<dynamic>)
-          .map((e) => HLVArtist.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-
-Map<String, dynamic> _$$HLVPlaylistImplToJson(_$HLVPlaylistImpl instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'owner': instance.owner,
-      'ownerImageUrl': instance.ownerImageUrl,
-      'visibleTo': instance.visibleTo,
-      'allowedCollaborators': instance.allowedCollaborators,
-      'inLibrary': instance.inLibrary,
-      'imageUrl': instance.imageUrl,
-      'artists': instance.artists,
-    };
-
 _$HLVArtistImpl _$$HLVArtistImplFromJson(Map<String, dynamic> json) =>
     _$HLVArtistImpl(
       name: json['name'] as String,
@@ -57,6 +27,7 @@ Map<String, dynamic> _$$HLVArtistImplToJson(_$HLVArtistImpl instance) =>
 
 _$HLVAlbumImpl _$$HLVAlbumImplFromJson(Map<String, dynamic> json) =>
     _$HLVAlbumImpl(
+      externalId: json['externalId'] as String,
       name: json['name'] as String,
       visibleTo:
           (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
@@ -69,6 +40,7 @@ _$HLVAlbumImpl _$$HLVAlbumImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$HLVAlbumImplToJson(_$HLVAlbumImpl instance) =>
     <String, dynamic>{
+      'externalId': instance.externalId,
       'name': instance.name,
       'visibleTo': instance.visibleTo,
       'imageUrl': instance.imageUrl,
@@ -78,6 +50,7 @@ Map<String, dynamic> _$$HLVAlbumImplToJson(_$HLVAlbumImpl instance) =>
 
 _$HLVSongImpl _$$HLVSongImplFromJson(Map<String, dynamic> json) =>
     _$HLVSongImpl(
+      externalId: json['externalId'] as String,
       name: json['name'] as String,
       visibleTo:
           (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
@@ -89,6 +62,7 @@ _$HLVSongImpl _$$HLVSongImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$HLVSongImplToJson(_$HLVSongImpl instance) =>
     <String, dynamic>{
+      'externalId': instance.externalId,
       'name': instance.name,
       'visibleTo': instance.visibleTo,
       'imageUrl': instance.imageUrl,

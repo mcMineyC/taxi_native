@@ -117,23 +117,28 @@ class Adder extends _$Adder {
     socket.on('findresults', (data) {
       print("Adder: Find results");
       print("Adder: Do we have a playlist? ${data["isPlaylist"]}");
-      if (data["isPlaylist"] == false) {
+      if ((data["isPlaylist"] ?? false) == true) {
+        print("Adder: We have a playlist!!! Party town");
+        FoundPlaylist playlist = FoundPlaylist.fromJson(data["results"][0]);
+        state = state.copyWith(
+            state: "find:results:playlist", foundPlaylist: playlist);
+      } else {
+        print("We do not have a playlist");
+        print(data);
         //print(data["results"][0].toString());
         var found = List<FindResult>.empty(growable: true);
         data["results"].forEach((element) {
           found.add(FindResult.fromJson(element));
         });
         state = state.copyWith(state: "find:results", findResults: found);
-      } else {
-        print("Adder: We have a playlist!!! Party town");
-        FoundPlaylist playlist = FoundPlaylist.fromJson(data["results"][0]);
-        state = state.copyWith(
-            state: "find:results:playlist", foundPlaylist: playlist);
       }
     });
 
-    socket.on('addresult', (data) {
+    socket.on('addresult', (data) async {
       var result = AddResult.fromJson(data);
+      if(state.foundPlaylist != null){
+
+      }
       state = state.copyWith(state: "add:results", addResult: result);
       print("Got success message!!");
       ref.refresh(fetchSongsProvider(ignore: false));
@@ -182,7 +187,7 @@ class Adder extends _$Adder {
   void addPlaylist(FoundPlaylist list) {
     state = state.copyWith(state: "loading:add");
     print("Adder: Add playlist ${list.name}");
-    socket.emit('add', {"playlist": list});
+    socket.emit('playlist', list);
   }
 
   void setStep(String step) {
@@ -228,10 +233,12 @@ class Adder extends _$Adder {
   }
 
   void deselectSearchResult(SearchResult result) {
+    print("Deselecting search type ${result.type}");
     state = state.copyWith(
       selectedSearchResults: state.selectedSearchResults
           .where((element) => element != result)
           .toList(),
+      foundPlaylist: result.type == "playlist" ? state.foundPlaylist : null,
     );
   }
 

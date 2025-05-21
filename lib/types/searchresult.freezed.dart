@@ -507,7 +507,7 @@ SearchResult _$SearchResultFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SearchResult {
-  String get id => throw _privateConstructorUsedError;
+  String get externalId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get artist => throw _privateConstructorUsedError;
   String get album => throw _privateConstructorUsedError;
@@ -535,7 +535,7 @@ abstract class $SearchResultCopyWith<$Res> {
       _$SearchResultCopyWithImpl<$Res, SearchResult>;
   @useResult
   $Res call(
-      {String id,
+      {String externalId,
       String name,
       String artist,
       String album,
@@ -562,7 +562,7 @@ class _$SearchResultCopyWithImpl<$Res, $Val extends SearchResult>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? externalId = null,
     Object? name = null,
     Object? artist = null,
     Object? album = null,
@@ -574,9 +574,9 @@ class _$SearchResultCopyWithImpl<$Res, $Val extends SearchResult>
     Object? extra = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      externalId: null == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
               as String,
       name: null == name
           ? _value.name
@@ -627,7 +627,7 @@ abstract class _$$SearchResultImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
+      {String externalId,
       String name,
       String artist,
       String album,
@@ -652,7 +652,7 @@ class __$$SearchResultImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? externalId = null,
     Object? name = null,
     Object? artist = null,
     Object? album = null,
@@ -664,9 +664,9 @@ class __$$SearchResultImplCopyWithImpl<$Res>
     Object? extra = freezed,
   }) {
     return _then(_$SearchResultImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      externalId: null == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
               as String,
       name: null == name
           ? _value.name
@@ -712,7 +712,7 @@ class __$$SearchResultImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SearchResultImpl extends _SearchResult {
   const _$SearchResultImpl(
-      {required this.id,
+      {required this.externalId,
       required this.name,
       required this.artist,
       required this.album,
@@ -731,7 +731,7 @@ class _$SearchResultImpl extends _SearchResult {
       _$$SearchResultImplFromJson(json);
 
   @override
-  final String id;
+  final String externalId;
   @override
   final String name;
   @override
@@ -776,7 +776,7 @@ class _$SearchResultImpl extends _SearchResult {
 
   @override
   String toString() {
-    return 'SearchResult(id: $id, name: $name, artist: $artist, album: $album, imageUrl: $imageUrl, artistImageUrl: $artistImageUrl, type: $type, visibleTo: $visibleTo, inLibrary: $inLibrary, extra: $extra)';
+    return 'SearchResult(externalId: $externalId, name: $name, artist: $artist, album: $album, imageUrl: $imageUrl, artistImageUrl: $artistImageUrl, type: $type, visibleTo: $visibleTo, inLibrary: $inLibrary, extra: $extra)';
   }
 
   @override
@@ -784,7 +784,8 @@ class _$SearchResultImpl extends _SearchResult {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SearchResultImpl &&
-            (identical(other.id, id) || other.id == id) &&
+            (identical(other.externalId, externalId) ||
+                other.externalId == externalId) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.artist, artist) || other.artist == artist) &&
             (identical(other.album, album) || other.album == album) &&
@@ -804,7 +805,7 @@ class _$SearchResultImpl extends _SearchResult {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      id,
+      externalId,
       name,
       artist,
       album,
@@ -833,7 +834,7 @@ class _$SearchResultImpl extends _SearchResult {
 
 abstract class _SearchResult extends SearchResult {
   const factory _SearchResult(
-      {required final String id,
+      {required final String externalId,
       required final String name,
       required final String artist,
       required final String album,
@@ -849,7 +850,7 @@ abstract class _SearchResult extends SearchResult {
       _$SearchResultImpl.fromJson;
 
   @override
-  String get id;
+  String get externalId;
   @override
   String get name;
   @override
@@ -884,6 +885,7 @@ FindResult _$FindResultFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$FindResult {
 // NOTE: the name is not used for type song
+  String get externalId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get artist => throw _privateConstructorUsedError;
   String get album => throw _privateConstructorUsedError;
@@ -911,7 +913,8 @@ abstract class $FindResultCopyWith<$Res> {
       _$FindResultCopyWithImpl<$Res, FindResult>;
   @useResult
   $Res call(
-      {String name,
+      {String externalId,
+      String name,
       String artist,
       String album,
       String imageUrl,
@@ -937,6 +940,7 @@ class _$FindResultCopyWithImpl<$Res, $Val extends FindResult>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? externalId = null,
     Object? name = null,
     Object? artist = null,
     Object? album = null,
@@ -948,6 +952,10 @@ class _$FindResultCopyWithImpl<$Res, $Val extends FindResult>
     Object? songs = null,
   }) {
     return _then(_value.copyWith(
+      externalId: null == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -997,7 +1005,8 @@ abstract class _$$FindResultImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String name,
+      {String externalId,
+      String name,
       String artist,
       String album,
       String imageUrl,
@@ -1021,6 +1030,7 @@ class __$$FindResultImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? externalId = null,
     Object? name = null,
     Object? artist = null,
     Object? album = null,
@@ -1032,6 +1042,10 @@ class __$$FindResultImplCopyWithImpl<$Res>
     Object? songs = null,
   }) {
     return _then(_$FindResultImpl(
+      externalId: null == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -1076,7 +1090,8 @@ class __$$FindResultImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$FindResultImpl extends _FindResult {
   const _$FindResultImpl(
-      {required this.name,
+      {required this.externalId,
+      required this.name,
       required this.artist,
       required this.album,
       required this.imageUrl,
@@ -1094,6 +1109,8 @@ class _$FindResultImpl extends _FindResult {
       _$$FindResultImplFromJson(json);
 
 // NOTE: the name is not used for type song
+  @override
+  final String externalId;
   @override
   final String name;
   @override
@@ -1132,7 +1149,7 @@ class _$FindResultImpl extends _FindResult {
 
   @override
   String toString() {
-    return 'FindResult(name: $name, artist: $artist, album: $album, imageUrl: $imageUrl, artistImageUrl: $artistImageUrl, visibleTo: $visibleTo, inLibrary: $inLibrary, type: $type, songs: $songs)';
+    return 'FindResult(externalId: $externalId, name: $name, artist: $artist, album: $album, imageUrl: $imageUrl, artistImageUrl: $artistImageUrl, visibleTo: $visibleTo, inLibrary: $inLibrary, type: $type, songs: $songs)';
   }
 
   @override
@@ -1140,6 +1157,8 @@ class _$FindResultImpl extends _FindResult {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FindResultImpl &&
+            (identical(other.externalId, externalId) ||
+                other.externalId == externalId) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.artist, artist) || other.artist == artist) &&
             (identical(other.album, album) || other.album == album) &&
@@ -1159,6 +1178,7 @@ class _$FindResultImpl extends _FindResult {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      externalId,
       name,
       artist,
       album,
@@ -1187,7 +1207,8 @@ class _$FindResultImpl extends _FindResult {
 
 abstract class _FindResult extends FindResult {
   const factory _FindResult(
-      {required final String name,
+      {required final String externalId,
+      required final String name,
       required final String artist,
       required final String album,
       required final String imageUrl,
@@ -1202,6 +1223,8 @@ abstract class _FindResult extends FindResult {
       _$FindResultImpl.fromJson;
 
 // NOTE: the name is not used for type song
+  @override
+  String get externalId;
   @override
   String get name;
   @override
@@ -1238,6 +1261,7 @@ mixin _$FindResultSong {
   String get title => throw _privateConstructorUsedError;
   String get url => throw _privateConstructorUsedError;
   int get trackNumber => throw _privateConstructorUsedError;
+  String get externalId => throw _privateConstructorUsedError;
 
   /// Serializes this FindResultSong to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1255,7 +1279,7 @@ abstract class $FindResultSongCopyWith<$Res> {
           FindResultSong value, $Res Function(FindResultSong) then) =
       _$FindResultSongCopyWithImpl<$Res, FindResultSong>;
   @useResult
-  $Res call({String title, String url, int trackNumber});
+  $Res call({String title, String url, int trackNumber, String externalId});
 }
 
 /// @nodoc
@@ -1276,6 +1300,7 @@ class _$FindResultSongCopyWithImpl<$Res, $Val extends FindResultSong>
     Object? title = null,
     Object? url = null,
     Object? trackNumber = null,
+    Object? externalId = null,
   }) {
     return _then(_value.copyWith(
       title: null == title
@@ -1290,6 +1315,10 @@ class _$FindResultSongCopyWithImpl<$Res, $Val extends FindResultSong>
           ? _value.trackNumber
           : trackNumber // ignore: cast_nullable_to_non_nullable
               as int,
+      externalId: null == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -1302,7 +1331,7 @@ abstract class _$$FindResultSongImplCopyWith<$Res>
       __$$FindResultSongImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String title, String url, int trackNumber});
+  $Res call({String title, String url, int trackNumber, String externalId});
 }
 
 /// @nodoc
@@ -1321,6 +1350,7 @@ class __$$FindResultSongImplCopyWithImpl<$Res>
     Object? title = null,
     Object? url = null,
     Object? trackNumber = null,
+    Object? externalId = null,
   }) {
     return _then(_$FindResultSongImpl(
       title: null == title
@@ -1335,6 +1365,10 @@ class __$$FindResultSongImplCopyWithImpl<$Res>
           ? _value.trackNumber
           : trackNumber // ignore: cast_nullable_to_non_nullable
               as int,
+      externalId: null == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -1343,7 +1377,10 @@ class __$$FindResultSongImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$FindResultSongImpl implements _FindResultSong {
   const _$FindResultSongImpl(
-      {required this.title, required this.url, required this.trackNumber});
+      {required this.title,
+      required this.url,
+      required this.trackNumber,
+      required this.externalId});
 
   factory _$FindResultSongImpl.fromJson(Map<String, dynamic> json) =>
       _$$FindResultSongImplFromJson(json);
@@ -1354,10 +1391,12 @@ class _$FindResultSongImpl implements _FindResultSong {
   final String url;
   @override
   final int trackNumber;
+  @override
+  final String externalId;
 
   @override
   String toString() {
-    return 'FindResultSong(title: $title, url: $url, trackNumber: $trackNumber)';
+    return 'FindResultSong(title: $title, url: $url, trackNumber: $trackNumber, externalId: $externalId)';
   }
 
   @override
@@ -1368,12 +1407,15 @@ class _$FindResultSongImpl implements _FindResultSong {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.url, url) || other.url == url) &&
             (identical(other.trackNumber, trackNumber) ||
-                other.trackNumber == trackNumber));
+                other.trackNumber == trackNumber) &&
+            (identical(other.externalId, externalId) ||
+                other.externalId == externalId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, title, url, trackNumber);
+  int get hashCode =>
+      Object.hash(runtimeType, title, url, trackNumber, externalId);
 
   /// Create a copy of FindResultSong
   /// with the given fields replaced by the non-null parameter values.
@@ -1396,7 +1438,8 @@ abstract class _FindResultSong implements FindResultSong {
   const factory _FindResultSong(
       {required final String title,
       required final String url,
-      required final int trackNumber}) = _$FindResultSongImpl;
+      required final int trackNumber,
+      required final String externalId}) = _$FindResultSongImpl;
 
   factory _FindResultSong.fromJson(Map<String, dynamic> json) =
       _$FindResultSongImpl.fromJson;
@@ -1407,6 +1450,8 @@ abstract class _FindResultSong implements FindResultSong {
   String get url;
   @override
   int get trackNumber;
+  @override
+  String get externalId;
 
   /// Create a copy of FindResultSong
   /// with the given fields replaced by the non-null parameter values.
@@ -1422,8 +1467,8 @@ FoundPlaylist _$FoundPlaylistFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$FoundPlaylist {
+  String get externalId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String get id => throw _privateConstructorUsedError;
   String get owner => throw _privateConstructorUsedError;
   String get ownerImageUrl => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
@@ -1450,8 +1495,8 @@ abstract class $FoundPlaylistCopyWith<$Res> {
       _$FoundPlaylistCopyWithImpl<$Res, FoundPlaylist>;
   @useResult
   $Res call(
-      {String name,
-      String id,
+      {String externalId,
+      String name,
       String owner,
       String ownerImageUrl,
       String imageUrl,
@@ -1477,8 +1522,8 @@ class _$FoundPlaylistCopyWithImpl<$Res, $Val extends FoundPlaylist>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? externalId = null,
     Object? name = null,
-    Object? id = null,
     Object? owner = null,
     Object? ownerImageUrl = null,
     Object? imageUrl = null,
@@ -1489,13 +1534,13 @@ class _$FoundPlaylistCopyWithImpl<$Res, $Val extends FoundPlaylist>
     Object? songs = null,
   }) {
     return _then(_value.copyWith(
+      externalId: null == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
               as String,
       owner: null == owner
           ? _value.owner
@@ -1542,8 +1587,8 @@ abstract class _$$FoundPlaylistImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String name,
-      String id,
+      {String externalId,
+      String name,
       String owner,
       String ownerImageUrl,
       String imageUrl,
@@ -1567,8 +1612,8 @@ class __$$FoundPlaylistImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? externalId = null,
     Object? name = null,
-    Object? id = null,
     Object? owner = null,
     Object? ownerImageUrl = null,
     Object? imageUrl = null,
@@ -1579,13 +1624,13 @@ class __$$FoundPlaylistImplCopyWithImpl<$Res>
     Object? songs = null,
   }) {
     return _then(_$FoundPlaylistImpl(
+      externalId: null == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
               as String,
       owner: null == owner
           ? _value.owner
@@ -1627,8 +1672,8 @@ class __$$FoundPlaylistImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$FoundPlaylistImpl extends _FoundPlaylist {
   const _$FoundPlaylistImpl(
-      {required this.name,
-      required this.id,
+      {required this.externalId,
+      required this.name,
       required this.owner,
       required this.ownerImageUrl,
       required this.imageUrl,
@@ -1647,9 +1692,9 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
       _$$FoundPlaylistImplFromJson(json);
 
   @override
-  final String name;
+  final String externalId;
   @override
-  final String id;
+  final String name;
   @override
   final String owner;
   @override
@@ -1693,7 +1738,7 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
 
   @override
   String toString() {
-    return 'FoundPlaylist(name: $name, id: $id, owner: $owner, ownerImageUrl: $ownerImageUrl, imageUrl: $imageUrl, visibleTo: $visibleTo, allowedCollaborators: $allowedCollaborators, inLibrary: $inLibrary, type: $type, songs: $songs)';
+    return 'FoundPlaylist(externalId: $externalId, name: $name, owner: $owner, ownerImageUrl: $ownerImageUrl, imageUrl: $imageUrl, visibleTo: $visibleTo, allowedCollaborators: $allowedCollaborators, inLibrary: $inLibrary, type: $type, songs: $songs)';
   }
 
   @override
@@ -1701,8 +1746,9 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FoundPlaylistImpl &&
+            (identical(other.externalId, externalId) ||
+                other.externalId == externalId) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.id, id) || other.id == id) &&
             (identical(other.owner, owner) || other.owner == owner) &&
             (identical(other.ownerImageUrl, ownerImageUrl) ||
                 other.ownerImageUrl == ownerImageUrl) &&
@@ -1722,8 +1768,8 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      externalId,
       name,
-      id,
       owner,
       ownerImageUrl,
       imageUrl,
@@ -1751,8 +1797,8 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
 
 abstract class _FoundPlaylist extends FoundPlaylist {
   const factory _FoundPlaylist(
-      {required final String name,
-      required final String id,
+      {required final String externalId,
+      required final String name,
       required final String owner,
       required final String ownerImageUrl,
       required final String imageUrl,
@@ -1767,9 +1813,9 @@ abstract class _FoundPlaylist extends FoundPlaylist {
       _$FoundPlaylistImpl.fromJson;
 
   @override
-  String get name;
+  String get externalId;
   @override
-  String get id;
+  String get name;
   @override
   String get owner;
   @override
@@ -1801,7 +1847,7 @@ FoundPlaylistSong _$FoundPlaylistSongFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$FoundPlaylistSong {
-  String get id => throw _privateConstructorUsedError;
+  String get externalId => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get album => throw _privateConstructorUsedError;
   String get artist => throw _privateConstructorUsedError;
@@ -1830,7 +1876,7 @@ abstract class $FoundPlaylistSongCopyWith<$Res> {
       _$FoundPlaylistSongCopyWithImpl<$Res, FoundPlaylistSong>;
   @useResult
   $Res call(
-      {String id,
+      {String externalId,
       String title,
       String album,
       String artist,
@@ -1858,7 +1904,7 @@ class _$FoundPlaylistSongCopyWithImpl<$Res, $Val extends FoundPlaylistSong>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? externalId = null,
     Object? title = null,
     Object? album = null,
     Object? artist = null,
@@ -1871,9 +1917,9 @@ class _$FoundPlaylistSongCopyWithImpl<$Res, $Val extends FoundPlaylistSong>
     Object? type = null,
   }) {
     return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      externalId: null == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
               as String,
       title: null == title
           ? _value.title
@@ -1928,7 +1974,7 @@ abstract class _$$FoundPlaylistSongImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
+      {String externalId,
       String title,
       String album,
       String artist,
@@ -1954,7 +2000,7 @@ class __$$FoundPlaylistSongImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? externalId = null,
     Object? title = null,
     Object? album = null,
     Object? artist = null,
@@ -1967,9 +2013,9 @@ class __$$FoundPlaylistSongImplCopyWithImpl<$Res>
     Object? type = null,
   }) {
     return _then(_$FoundPlaylistSongImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
+      externalId: null == externalId
+          ? _value.externalId
+          : externalId // ignore: cast_nullable_to_non_nullable
               as String,
       title: null == title
           ? _value.title
@@ -2019,7 +2065,7 @@ class __$$FoundPlaylistSongImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$FoundPlaylistSongImpl extends _FoundPlaylistSong {
   const _$FoundPlaylistSongImpl(
-      {required this.id,
+      {required this.externalId,
       required this.title,
       required this.album,
       required this.artist,
@@ -2038,7 +2084,7 @@ class _$FoundPlaylistSongImpl extends _FoundPlaylistSong {
       _$$FoundPlaylistSongImplFromJson(json);
 
   @override
-  final String id;
+  final String externalId;
   @override
   final String title;
   @override
@@ -2074,7 +2120,7 @@ class _$FoundPlaylistSongImpl extends _FoundPlaylistSong {
 
   @override
   String toString() {
-    return 'FoundPlaylistSong(id: $id, title: $title, album: $album, artist: $artist, albumCoverURL: $albumCoverURL, artistImageUrl: $artistImageUrl, visibleTo: $visibleTo, inLibrary: $inLibrary, url: $url, trackNumber: $trackNumber, type: $type)';
+    return 'FoundPlaylistSong(externalId: $externalId, title: $title, album: $album, artist: $artist, albumCoverURL: $albumCoverURL, artistImageUrl: $artistImageUrl, visibleTo: $visibleTo, inLibrary: $inLibrary, url: $url, trackNumber: $trackNumber, type: $type)';
   }
 
   @override
@@ -2082,7 +2128,8 @@ class _$FoundPlaylistSongImpl extends _FoundPlaylistSong {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FoundPlaylistSongImpl &&
-            (identical(other.id, id) || other.id == id) &&
+            (identical(other.externalId, externalId) ||
+                other.externalId == externalId) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.album, album) || other.album == album) &&
             (identical(other.artist, artist) || other.artist == artist) &&
@@ -2104,7 +2151,7 @@ class _$FoundPlaylistSongImpl extends _FoundPlaylistSong {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      id,
+      externalId,
       title,
       album,
       artist,
@@ -2135,7 +2182,7 @@ class _$FoundPlaylistSongImpl extends _FoundPlaylistSong {
 
 abstract class _FoundPlaylistSong extends FoundPlaylistSong {
   const factory _FoundPlaylistSong(
-      {required final String id,
+      {required final String externalId,
       required final String title,
       required final String album,
       required final String artist,
@@ -2152,7 +2199,7 @@ abstract class _FoundPlaylistSong extends FoundPlaylistSong {
       _$FoundPlaylistSongImpl.fromJson;
 
   @override
-  String get id;
+  String get externalId;
   @override
   String get title;
   @override

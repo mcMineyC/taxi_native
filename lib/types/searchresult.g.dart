@@ -54,7 +54,7 @@ Map<String, dynamic> _$$LocalSearchResultImplToJson(
 
 _$SearchResultImpl _$$SearchResultImplFromJson(Map<String, dynamic> json) =>
     _$SearchResultImpl(
-      id: json['id'] as String,
+      externalId: json['externalId'] as String,
       name: json['name'] as String,
       artist: json['artist'] as String,
       album: json['album'] as String,
@@ -72,7 +72,7 @@ _$SearchResultImpl _$$SearchResultImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$SearchResultImplToJson(_$SearchResultImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'externalId': instance.externalId,
       'name': instance.name,
       'artist': instance.artist,
       'album': instance.album,
@@ -86,6 +86,7 @@ Map<String, dynamic> _$$SearchResultImplToJson(_$SearchResultImpl instance) =>
 
 _$FindResultImpl _$$FindResultImplFromJson(Map<String, dynamic> json) =>
     _$FindResultImpl(
+      externalId: json['externalId'] as String,
       name: json['name'] as String,
       artist: json['artist'] as String,
       album: json['album'] as String,
@@ -103,6 +104,7 @@ _$FindResultImpl _$$FindResultImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$FindResultImplToJson(_$FindResultImpl instance) =>
     <String, dynamic>{
+      'externalId': instance.externalId,
       'name': instance.name,
       'artist': instance.artist,
       'album': instance.album,
@@ -119,6 +121,7 @@ _$FindResultSongImpl _$$FindResultSongImplFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       url: json['url'] as String,
       trackNumber: (json['trackNumber'] as num).toInt(),
+      externalId: json['externalId'] as String,
     );
 
 Map<String, dynamic> _$$FindResultSongImplToJson(
@@ -127,12 +130,14 @@ Map<String, dynamic> _$$FindResultSongImplToJson(
       'title': instance.title,
       'url': instance.url,
       'trackNumber': instance.trackNumber,
+      'externalId': instance.externalId,
     };
 
-_$FoundPlaylistImpl _$$FoundPlaylistImplFromJson(Map<String, dynamic> json) =>
-    _$FoundPlaylistImpl(
+_$FoundPlaylistImpl _$$FoundPlaylistImplFromJson(Map<String, dynamic> json) {
+  print(json);
+    return _$FoundPlaylistImpl(
+      externalId: json['externalId'] as String,
       name: json['name'] as String,
-      id: json['id'] as String,
       owner: json['owner'] as String,
       ownerImageUrl: json['ownerImageUrl'] as String,
       imageUrl: json['imageUrl'] as String,
@@ -148,11 +153,12 @@ _$FoundPlaylistImpl _$$FoundPlaylistImplFromJson(Map<String, dynamic> json) =>
           .map((e) => FoundPlaylistSong.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
+}
 
 Map<String, dynamic> _$$FoundPlaylistImplToJson(_$FoundPlaylistImpl instance) =>
     <String, dynamic>{
+      'externalId': instance.externalId,
       'name': instance.name,
-      'id': instance.id,
       'owner': instance.owner,
       'ownerImageUrl': instance.ownerImageUrl,
       'imageUrl': instance.imageUrl,
@@ -166,7 +172,7 @@ Map<String, dynamic> _$$FoundPlaylistImplToJson(_$FoundPlaylistImpl instance) =>
 _$FoundPlaylistSongImpl _$$FoundPlaylistSongImplFromJson(
         Map<String, dynamic> json) =>
     _$FoundPlaylistSongImpl(
-      id: json['id'] as String,
+      externalId: json['externalId'] as String,
       title: json['title'] as String,
       album: json['album'] as String,
       artist: json['artist'] as String,
@@ -184,7 +190,7 @@ _$FoundPlaylistSongImpl _$$FoundPlaylistSongImplFromJson(
 Map<String, dynamic> _$$FoundPlaylistSongImplToJson(
         _$FoundPlaylistSongImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'externalId': instance.externalId,
       'title': instance.title,
       'album': instance.album,
       'artist': instance.artist,

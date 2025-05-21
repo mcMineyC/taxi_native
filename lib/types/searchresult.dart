@@ -47,7 +47,7 @@ class LocalSearchResult with _$LocalSearchResult {
 class SearchResult with _$SearchResult {
   const SearchResult._();
   const factory SearchResult({
-    required String id,
+    required String externalId,
     required String name,
     required String artist,
     required String album,
@@ -75,6 +75,7 @@ class FindResult with _$FindResult {
   const FindResult._();
   const factory FindResult({
     // NOTE: the name is not used for type song
+    required String externalId,
     required String name,
     required String artist,
     required String album,
@@ -99,6 +100,7 @@ class FindResult with _$FindResult {
       _$FindResultFromJson(json);
 
   factory FindResult.fromSong(Song song) => FindResult(
+    externalId: "",
     type: "song",
     name: song.displayName,
     album: song.albumDisplayName,
@@ -107,7 +109,7 @@ class FindResult with _$FindResult {
     artistImageUrl: song.imageUrl,
     visibleTo: song.visibleTo,
     inLibrary: song.inLibrary,
-    songs: [FindResultSong(title: song.displayName, url: song.audioUrl, trackNumber: 0)],
+    songs: [FindResultSong(title: song.displayName, url: song.audioUrl, trackNumber: 0, externalId: "",)],
     );
 
 }
@@ -118,6 +120,7 @@ class FindResultSong with _$FindResultSong {
     required String title,
     required String url, 
     required int trackNumber,
+    required String externalId,
   }) = _FindResultSong;
 
   factory FindResultSong.fromJson(Map<String, dynamic> json) =>
@@ -129,8 +132,8 @@ class FindResultSong with _$FindResultSong {
 class FoundPlaylist with _$FoundPlaylist {
   const FoundPlaylist._();
   const factory FoundPlaylist({
+    required String externalId,
     required String name,
-    required String id,
     required String owner,
     required String ownerImageUrl,
     required String imageUrl,
@@ -149,7 +152,7 @@ class FoundPlaylist with _$FoundPlaylist {
 class FoundPlaylistSong with _$FoundPlaylistSong {
   const FoundPlaylistSong._();
   const factory FoundPlaylistSong({
-    required String id,
+    required String externalId,
     required String title,
     required String album, 
     required String artist,
@@ -166,6 +169,7 @@ class FoundPlaylistSong with _$FoundPlaylistSong {
       _$FoundPlaylistSongFromJson(json);
 
   FindResult toFindResult() => FindResult(
+    externalId: externalId,
     name: title,
     artist: artist,
     album: album,
@@ -177,12 +181,13 @@ class FoundPlaylistSong with _$FoundPlaylistSong {
     songs:[FindResultSong(
       title: title,
       url: url,
-      trackNumber: trackNumber
+      trackNumber: trackNumber,
+      externalId: externalId,
     )]
   );
 
   SearchResult toSearchResult() => SearchResult(
-    id: id,
+    externalId: externalId,
     name: title,
     artist: artist,
     album: album,

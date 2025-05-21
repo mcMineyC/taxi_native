@@ -53,10 +53,10 @@ class _AdderPageState extends ConsumerState {
     selectedSearchResults = state.selectedSearchResults.toList();
     print("Restoring search results: ${selectedSearchResults.length}");
     List<String> searchResultIds =
-        searchResults.map((result) => "${result.type}:${result.id}").toList();
+        searchResults.map((result) => "${result.type}:${result.externalId}").toList();
     selectedSearchResults.forEach((result) {
-      print("Restoring search result ${result.type}:${result.id}");
-      if (!searchResultIds.contains("${result.type}:${result.id}")) {
+      print("Restoring search result ${result.type}:${result.externalId}");
+      if (!searchResultIds.contains("${result.type}:${result.externalId}")) {
         searchResults = [result, ...searchResults];
       }
     });
@@ -114,7 +114,7 @@ class _AdderPageState extends ConsumerState {
       SchedulerBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text(
-                "Adder login failed!  If this issue, persists, please contact the developer.")));
+                "Adder login failed!  If this issue persists, please contact the developer.")));
         Beamer.of(context).beamToNamed("/login");
       });
       return Container();
@@ -294,6 +294,7 @@ class _AdderPageState extends ConsumerState {
       // print("Can't submit yet");
       // print(foundPlaylistNameController.value.text);
       // Reconstruct playlist
+      
       foundPlaylist = foundPlaylist!.copyWith(name: foundPlaylistNameController.value.text);
       // First send the songs to server to be hydrated and put into hierarchy
       // ref.read(adderProvider.notifier).setPlaylist(foundPlaylist!);
@@ -302,6 +303,7 @@ class _AdderPageState extends ConsumerState {
        ref
            .read(adderProvider.notifier)
            .addPlaylist(foundPlaylist!); // YOU LEFT OFF HERE
+      findResultsProcessed = false;
     } else if (extension == "") {
       ref.read(adderProvider.notifier).addHLVResults(hlvArtists);
     }

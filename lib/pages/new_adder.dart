@@ -305,7 +305,7 @@ class _AdderPageState extends ConsumerState {
        ref
            .read(adderProvider.notifier)
            .addPlaylist(foundPlaylist!); // YOU LEFT OFF HERE
-      findResultsProcessed = false;
+      findResultsProcessed = false; // Otherwise the hierarchy won't be pulled
     } else if (extension == "") {
       ref.read(adderProvider.notifier).addHLVResults(hlvArtists);
     }
@@ -422,6 +422,10 @@ class _AdderPageState extends ConsumerState {
                 hintText: 'Enter a search term',
               ),
             ),
+          ),
+          TextButton(
+            child: Text("Example"),
+            onPressed: () {queryController.text = "https://open.spotify.com/playlist/1szfdkjp18T3lMhS0xABrJ?si=0e8820b5c9f84e40";setState((){selectedSearchType=SearchType.url;nextable=true;query=queryController.text;});},
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 10),
@@ -582,6 +586,10 @@ class _AdderPageState extends ConsumerState {
                 ]),
                 Expanded(child: Container()),
                 TextButton(
+                  child: Text("Print"),
+                  onPressed: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${playlist.visibleTo} --- ${playlist.songs.fold([], (a, b) => [...a, ...b.visibleTo]).toSet().toList()}"))),
+                ),
+                TextButton(
                   child: Text("Edit..."),
                   onPressed: () async {
                     var result = await getVisibleToFieldDialog(
@@ -619,20 +627,21 @@ class _AdderPageState extends ConsumerState {
                           playlist.allowedCollaborators,
                           "Allowed collaborators",
                           context);
-                      setState(() {
-                        foundPlaylist =
-                            playlist.copyWith(allowedCollaborators: result);
-                        List<String> toAdd = [];
-                        result.forEach((c) {
-                          if (!playlist.visibleTo.contains(c) &&
-                              playlist.visibleTo != ["all"]) {
-                              toAdd.add(c);
-                              }
-                        });
-                        foundPlaylist = playlist.copyWith(
-                          visibleTo: [...playlist.visibleTo, ...toAdd]);
-                        foundPlaylist = playlist.copyWith(songs: foundPlaylist!.songs.map((s) => s.copyWith(visibleTo: [...playlist.visibleTo, ...toAdd])).toList());
+                      List<String> toAdd = [];
+                      result.forEach((c) {
+                        if (!playlist.visibleTo.contains(c) &&
+                            playlist.visibleTo != ["all"]) {
+                            toAdd.add(c);
+                        }
                       });
+                      print("We need to update visibleto bc colab: "+toAdd.toString());
+                      foundPlaylist = playlist.copyWith(
+                        allowedCollaborators: result,
+                        visibleTo: [...playlist.visibleTo, ...toAdd],
+                        songs: foundPlaylist!.songs.map((s) => s.copyWith(visibleTo: [...playlist.visibleTo, ...toAdd])).toList()
+                      );
+                      print("vibisle to: ${foundPlaylist!.songs[0].visibleTo}");
+                      setState(() {});
                     },
                   ),
                   //Switch(

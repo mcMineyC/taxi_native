@@ -55,7 +55,7 @@ List<HLVArtist> findResultsToHLVContent(List<FindResult> results){
   for (var result in results) {
     List<HLVAlbum> workingArtistAlbums = [];
     if (!artists.map((e) => e.name).contains(result.artist)) {
-      print("Artist: " + result.artistImageUrl);
+      print("Artist: " + result.artist + " " + result.visibleTo.toString());
       artists.add(HLVArtist(
           name: result.artist, visibleTo: result.visibleTo, imageUrl: result.artistImageUrl, albums: []));
       artistIndices[result.artist] = artistIndex++; // post increment
@@ -90,6 +90,7 @@ List<HLVArtist> findResultsToHLVContent(List<FindResult> results){
     if (result.type == "song") {
       int albumIndex = workingArtistAlbums.indexWhere((album) => album.name == result.album);
       // BUG THIS IS DUPLICATED FOR SOME REASON
+      print("This is 93: ${result.visibleTo}");
       if (albumIndex != -1) { // existing album
         HLVAlbum workingAlbum = workingArtistAlbums[albumIndex];
         workingArtistAlbums[albumIndex] = workingAlbum.copyWith(songs: [HLVSong(

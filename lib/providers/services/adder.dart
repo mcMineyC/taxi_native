@@ -145,6 +145,7 @@ class Adder extends _$Adder {
         FoundPlaylist found = state.foundPlaylist!;
         List<String> internalIds = await ref.read(externalIdsToInternalProvider(state.foundPlaylist!.songs.map((song) => song.externalId).toList()).future);
         // var currentUser = (await SharedPreferences.getInstance()).getString("username")!;
+        print("Adder: addresult:playlist ${found.visibleTo}");
         var accompanying = Playlist(
           id: "create",
           displayName: found.name,
@@ -187,13 +188,6 @@ class Adder extends _$Adder {
     socket.emit('find', {'selected': results, 'source': source.type});
   }
 
-  void addFindResults(List<FindResult> results) {
-    throw ("This function is deprecated");
-    state = state.copyWith(state: "loading:add");
-    print("Adder: Add ${results.length} results");
-    socket.emit('add', {"items": results});
-  }
-
   void addHLVResults(List<HLVArtist> results) {
     state = state.copyWith(state: "loading:add");
     print("Adder: Add ${results.length} results");
@@ -202,7 +196,7 @@ class Adder extends _$Adder {
   }
 
   void addPlaylist(FoundPlaylist list) {
-    state = state.copyWith(state: "loading:add");
+    state = state.copyWith(state: "loading:add", foundPlaylist: list);
     print("Adder: Add playlist ${list.name}");
     socket.emit('playlist', list);
   }

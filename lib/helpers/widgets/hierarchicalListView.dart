@@ -277,7 +277,7 @@ class _HLVSongEditDialogState extends State<HLVSongEditDialog> {
     this.song = widget.song;
     nameController.text = this.song.name;
     urlController.text = this.song.audioUrl;
-    this.song = this.song.copyWith(visibleTo: ["all"]);
+    // this.song = this.song.copyWith(visibleTo: ["all"]);
     super.initState();
   }
 
@@ -422,7 +422,7 @@ class _HLVAlbumEditDialogState extends State<HLVAlbumEditDialog> {
     nameController.text = this.album.name;
     imageUrlController.text = this.album.imageUrl;
     print(this.album.imageUrl);
-    this.album = this.album.copyWith(visibleTo: ["all"]);
+    // this.album = this.album.copyWith(visibleTo: ["all"]);
     super.initState();
   }
 
@@ -578,7 +578,7 @@ class _HLVArtistEditDialogState extends State<HLVArtistEditDialog> {
     nameController.text = this.artist.name;
     imageUrlController.text = this.artist.imageUrl;
     print(this.artist.imageUrl);
-    this.artist = this.artist.copyWith(visibleTo: ["all"]);
+    // this.artist = this.artist.copyWith(visibleTo: ["all"]);
     super.initState();
   }
 

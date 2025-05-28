@@ -20,7 +20,7 @@ class ErrorPage extends StatelessWidget {
                 style: TextStyle(fontSize: 16),
               ),
               Text(
-                "Beamer: ${Beamer.of(context).currentPages}",
+                "Beamer: ${Beamer.of(context).currentPages.map((p) => p.name).toList()}",
                 style: const TextStyle(fontSize: 16),
               ),
               IconButton.filledTonal(

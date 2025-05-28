@@ -10,7 +10,6 @@ Bugs
 
 TODO before announcing:
 - remove debug buttons and prints
-- add padding to text boxes in playlist creation flow
 - add playlist description to mobile
 - playlist grid view w/ toggle
   - extend this to all tabs of the library

@@ -405,7 +405,7 @@ Future<bool> deleteItem(
 @Riverpod(keepAlive: true)
 Future<List<String>> fetchUsernames(FetchUsernamesRef ref) async {
   final _sp = await SharedPreferences.getInstance();
-  var response = await http.post(Uri.parse("${_p.backendUrl}/info/usernames"),
+  var response = await http.post(Uri.parse("${_p.backendUrl}/info/users"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -414,8 +414,8 @@ Future<List<String>> fetchUsernames(FetchUsernamesRef ref) async {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
   List<String> listThings = [];
-  desponse["usernames"]
-      .forEach((element) => listThings.add(element.toString()));
+  desponse["users"]
+      .forEach((element) => listThings.add(element["loginName"].toString()));
   return listThings;
 }
 
@@ -486,4 +486,27 @@ Future<bool> removeFromLibrary(RemoveFromLibraryRef ref, String id, String type)
   }
   Map<String, dynamic> data = jsonDecode(response.body);
   return data["success"] ?? false;
+}
+
+
+
+@riverpod
+Future<String> getArtistImageUrlFromName(Ref ref, String query) async {
+  var _sp = await SharedPreferences.getInstance();
+  var response = await http.post(
+    Uri.parse(
+      "${_p.backendUrl}/utils/getArtistImageFromName"),
+    headers: Map<String, String>.from({'Content-Type': 'application/json'}),
+    body: jsonEncode(<String, String>
+      {
+        'authtoken': (_sp.getString("token") ?? ""),
+        'query': query,
+      }
+    )
+  );
+  var desponse = jsonDecode(response.body);
+  if (desponse["authed"] == false) {
+    return Future.error({"code": 401, "error": "Not authenticated"});
+  }
+  return desponse["url"];
 }

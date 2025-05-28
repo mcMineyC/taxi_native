@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:taxi_native/providers/data/fetched_data_provider.dart';
 import '../../types/hierarchicalListView.dart';
 import 'helper_widgets.dart';
 import 'package:context_menus/context_menus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
+import "package:riverpod/riverpod.dart";
 
 class HierarchicalListView extends StatelessWidget {
   final List<HLVArtist> data;
@@ -561,17 +564,18 @@ Future<HLVAlbum> showHLVAlbumEditDialog(
   return result;
 }
 
-class HLVArtistEditDialog extends StatefulWidget {
+class HLVArtistEditDialog extends ConsumerStatefulWidget {
   final HLVArtist artist;
   final Function(HLVArtist) onSaved;
   const HLVArtistEditDialog({required this.artist, required this.onSaved});
   _HLVArtistEditDialogState createState() => _HLVArtistEditDialogState();
 }
 
-class _HLVArtistEditDialogState extends State<HLVArtistEditDialog> {
+class _HLVArtistEditDialogState extends ConsumerState<HLVArtistEditDialog> {
   late HLVArtist artist;
   TextEditingController nameController = TextEditingController();
   TextEditingController imageUrlController = TextEditingController();
+  String findState = "data";
   @override
   void initState() {
     this.artist = widget.artist;
@@ -647,6 +651,17 @@ class _HLVArtistEditDialogState extends State<HLVArtistEditDialog> {
                           labelText: "Image URL"),
                     ),
                   ),
+                  TextButton(
+                    child: Text("Find"),
+                    onPressed: () async {
+                      setState(() => findState = "loading");
+                      ref.read(getArtistImageUrlFromNameProvider(nameController.text).future).then((url) => setState(() {
+                        findState = "data";
+                        artist = artist.copyWith(imageUrl: url);
+                        imageUrlController.text = url;
+                      }));
+                    },
+                  )
                   //SpacerWidget(width: 8),
                   //FilledButton(
                   //  onPressed: ,
@@ -673,7 +688,7 @@ class _HLVArtistEditDialogState extends State<HLVArtistEditDialog> {
             Container(
               margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
               constraints: BoxConstraints(maxHeight: 512, maxWidth: 512),
-              child: FadeInImage.memoryNetwork(
+              child: findState == "data" ? FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
                 image: artist.imageUrl,
                 imageErrorBuilder: (context, error, stackTrace) =>
@@ -682,20 +697,20 @@ class _HLVArtistEditDialogState extends State<HLVArtistEditDialog> {
                   SpacerWidget(width: 8),
                   Text("Failed to load image")
                 ]),
-              ),
+              ) : CircularProgressIndicator(),
             ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Wrap(children: [
-                    Icon(Icons.info_outlined),
-                    SpacerWidget(width: 4),
-                    Text(
-                        "To edit the artist name, edit the corresponding entry on the previous page",
-                        softWrap: true),
-                  ])),
-            )
+            // Container(
+            //   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+            //   child: Align(
+            //       alignment: Alignment.centerLeft,
+            //       child: Wrap(children: [
+            //         Icon(Icons.info_outlined),
+            //         SpacerWidget(width: 4),
+            //         Text(
+            //             "To edit the artist name, edit the corresponding entry on the previous page",
+            //             softWrap: true),
+            //       ])),
+            // )
           ],
         ),
       ),

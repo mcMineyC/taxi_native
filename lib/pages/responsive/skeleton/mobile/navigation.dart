@@ -9,9 +9,10 @@ class MobileNav extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     int width = MediaQuery.of(context).size.width.toInt();
+    int height MediaQuery.of(context).size.height.toInt();
     ScreenBreakpoint size = ScreenBreakpoint.determine(width);
     int numThings = 1;
-    print("width: $width");
+    print("size: ${width}x${height}");
     print("size: $size");
     if(size >= ScreenBreakpoint.small){
       numThings++;

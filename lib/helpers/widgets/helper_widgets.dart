@@ -568,6 +568,7 @@ class _EditPlaylistDialogState extends State<EditPlaylistDialog> {
                       labelText: 'Playlist name',
                     ),
                   ),
+                  SpacerWidget(height: 8, width: 0),
                   TextField(
                     controller: descriptionController,
                     // onChanged: (value) => setState(
@@ -711,6 +712,10 @@ Future<void> playlistLogic(WidgetRef ref, BuildContext context, String thingId,
             .toList();
         print("Adding ${oldSongs.length} songs from artist");
         break;
+      case "playlist":
+        oldSongs = (await ref.read(findSongsByPlaylistProvider(thingId).future))
+            .map((s) => s.id)
+            .toList();
       case "songids":
         oldSongs = thingId.split(",");
         break;
@@ -750,7 +755,7 @@ Future<void> playlistLogic(WidgetRef ref, BuildContext context, String thingId,
     var fp = FilledPlaylist(
         id: p.id,
         displayName: "",
-        description: "nil (from playlistLogic)",
+        description: "",
         visibleTo: ["all"],
         inLibrary: [currentUser],
         allowedCollaborators: [currentUser],

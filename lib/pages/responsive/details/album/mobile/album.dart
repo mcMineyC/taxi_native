@@ -85,7 +85,7 @@ class MobileAlbumPage extends ConsumerWidget {
                     IconButton.outlined(
                       icon: Icon(Icons.library_add_rounded),
                       tooltip: "Add to queue",
-                      onPressed: () async => await playlistLogic(ref, context, album.id, "album"),
+                      onPressed: () => ref.read(playerProvider.notifier).addAlbumToQueue(id),
                     ),
                     IconButton.outlined(
                       tooltip: "Add to playlist",

@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taxi_native/helpers/extensions/uppercase_extension.dart';
 import 'package:taxi_native/helpers/widgets/helper_widgets.dart';
 import 'package:taxi_native/helpers/constants.dart';
+import 'package:taxi_native/helpers/widgets/marque.dart';
 
 import '../../../../providers/error_watcher.dart';
 import '../../../../providers/data/playlist_provider.dart';
@@ -79,6 +80,24 @@ class MobilePlaylistPageState extends ConsumerState<MobilePlaylistPage> {
                     child: PlaylistImage(playlistId: id),
                   ),
                 ),
+              )
+            ),
+            SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  MarqueeTextWidget(text: data.displayName, fontColor: Theme.of(context).colorScheme.onSurface, fontSize: 26, fontWeight: FontWeight.w900),
+                  if(data.description != "") MarqueeTextWidget(text: data.description, fontColor: Theme.of(context).colorScheme.onSurface, fontSize: 22, fontWeight: FontWeight.w500),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(data.owner, style: Theme.of(context).textTheme.titleLarge),
+                      SpacerWidget(width:6),
+                      Icon(Icons.circle, size: 12),
+                      SpacerWidget(width:6),
+                      Text("${songs.length} song${songs.length == 1 ? "" : "s"}", style: Theme.of(context).textTheme.titleLarge, overflow: TextOverflow.fade),
+                    ]
+                  )
+                ],
               )
             ),
         //     child: 

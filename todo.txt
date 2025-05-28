@@ -10,7 +10,6 @@ Bugs
 
 TODO before announcing:
 - remove debug buttons and prints
-- add playlist description to mobile
 - playlist grid view w/ toggle
   - extend this to all tabs of the library
   - move it into a pill button so that it fits onscreen on mobile

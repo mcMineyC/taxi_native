@@ -586,8 +586,11 @@ class _AdderPageState extends ConsumerState {
                   onPressed: () async {
                     var result = await getVisibleToFieldDialog(
                         playlist.visibleTo, "Visible to", context);
-                    setState(() =>
-                        foundPlaylist = playlist.copyWith(visibleTo: result));
+                    setState(() {
+                      foundPlaylist = playlist.copyWith(
+                        visibleTo: result,
+                        songs: foundPlaylist!.songs.map((s) => s.copyWith(visibleTo: result)).toList());
+                    });
                   },
                 ),
                 //VisibleToField(
@@ -619,13 +622,16 @@ class _AdderPageState extends ConsumerState {
                       setState(() {
                         foundPlaylist =
                             playlist.copyWith(allowedCollaborators: result);
+                        List<String> toAdd = [];
                         result.forEach((c) {
                           if (!playlist.visibleTo.contains(c) &&
                               playlist.visibleTo != ["all"]) {
-                            foundPlaylist = playlist.copyWith(
-                                visibleTo: [...playlist.visibleTo, c]);
-                          }
+                              toAdd.add(c);
+                              }
                         });
+                        foundPlaylist = playlist.copyWith(
+                          visibleTo: [...playlist.visibleTo, ...toAdd]);
+                        foundPlaylist = playlist.copyWith(songs: foundPlaylist!.songs.map((s) => s.copyWith(visibleTo: [...playlist.visibleTo, ...toAdd])).toList());
                       });
                     },
                   ),
@@ -644,23 +650,25 @@ class _AdderPageState extends ConsumerState {
         Expanded(
           child: ListView(
             children: playlist.songs
-                .map(
-                  (song) => ListTile(
+              .asMap().entries.map((entry) {
+                int index = entry.key;
+                FoundPlaylistSong song = entry.value;
+                  return ListTile(
                     title: Text(song.title),
                     subtitle: Text(song.artist),
                     trailing: PopupMenuButton<void Function()>(
                       itemBuilder: (context) {
                         return [
-                          PopupMenuItem(
-                            value: () {
-                              print("Edit playlist song ${song.title}");
-                            },
-                            child: Row(children: [
-                              Icon(Icons.edit),
-                              SpacerWidget(width: 4),
-                              Text("Edit")
-                            ]),
-                          ),
+                          // PopupMenuItem(
+                          //   value: () {
+                          //     print("Edit playlist song ${song.title}");
+                          //   },
+                          //   child: Row(children: [
+                          //     Icon(Icons.edit),
+                          //     SpacerWidget(width: 4),
+                          //     Text("Edit")
+                          //   ]),
+                          // ),
                           PopupMenuItem(
                             value: () {
                               print("Delete playlist song ${song.title}");
@@ -673,11 +681,14 @@ class _AdderPageState extends ConsumerState {
                           ),
                         ];
                       },
-                      onSelected: (fn) => fn(),
+                      onSelected: (_) {
+                        setState(() => playlist.songs.removeAt(index));
+                      },
                     ),
-                  ),
-                )
-                .toList(),
+                  );
+              }
+            )
+            .toList(),
           ),
         ),
       ],

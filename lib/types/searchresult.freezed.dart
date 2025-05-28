@@ -1658,15 +1658,15 @@ class __$$FoundPlaylistImplCopyWithImpl<$Res>
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
       visibleTo: null == visibleTo
-          ? _value._visibleTo
+          ? _value.visibleTo
           : visibleTo // ignore: cast_nullable_to_non_nullable
               as List<String>,
       allowedCollaborators: null == allowedCollaborators
-          ? _value._allowedCollaborators
+          ? _value.allowedCollaborators
           : allowedCollaborators // ignore: cast_nullable_to_non_nullable
               as List<String>,
       inLibrary: null == inLibrary
-          ? _value._inLibrary
+          ? _value.inLibrary
           : inLibrary // ignore: cast_nullable_to_non_nullable
               as List<String>,
       type: null == type
@@ -1674,7 +1674,7 @@ class __$$FoundPlaylistImplCopyWithImpl<$Res>
           : type // ignore: cast_nullable_to_non_nullable
               as String,
       songs: null == songs
-          ? _value._songs
+          ? _value.songs
           : songs // ignore: cast_nullable_to_non_nullable
               as List<FoundPlaylistSong>,
     ));
@@ -1691,16 +1691,12 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
       required this.owner,
       required this.ownerImageUrl,
       required this.imageUrl,
-      required final List<String> visibleTo,
-      required final List<String> allowedCollaborators,
-      required final List<String> inLibrary,
+      required this.visibleTo,
+      required this.allowedCollaborators,
+      required this.inLibrary,
       required this.type,
-      required final List<FoundPlaylistSong> songs})
-      : _visibleTo = visibleTo,
-        _allowedCollaborators = allowedCollaborators,
-        _inLibrary = inLibrary,
-        _songs = songs,
-        super._();
+      required this.songs})
+      : super._();
 
   factory _$FoundPlaylistImpl.fromJson(Map<String, dynamic> json) =>
       _$$FoundPlaylistImplFromJson(json);
@@ -1717,40 +1713,16 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
   final String ownerImageUrl;
   @override
   final String imageUrl;
-  final List<String> _visibleTo;
   @override
-  List<String> get visibleTo {
-    if (_visibleTo is EqualUnmodifiableListView) return _visibleTo;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_visibleTo);
-  }
-
-  final List<String> _allowedCollaborators;
+  final List<String> visibleTo;
   @override
-  List<String> get allowedCollaborators {
-    if (_allowedCollaborators is EqualUnmodifiableListView)
-      return _allowedCollaborators;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_allowedCollaborators);
-  }
-
-  final List<String> _inLibrary;
+  final List<String> allowedCollaborators;
   @override
-  List<String> get inLibrary {
-    if (_inLibrary is EqualUnmodifiableListView) return _inLibrary;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_inLibrary);
-  }
-
+  final List<String> inLibrary;
   @override
   final String type;
-  final List<FoundPlaylistSong> _songs;
   @override
-  List<FoundPlaylistSong> get songs {
-    if (_songs is EqualUnmodifiableListView) return _songs;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_songs);
-  }
+  final List<FoundPlaylistSong> songs;
 
   @override
   String toString() {
@@ -1772,14 +1744,12 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
                 other.ownerImageUrl == ownerImageUrl) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
+            const DeepCollectionEquality().equals(other.visibleTo, visibleTo) &&
             const DeepCollectionEquality()
-                .equals(other._visibleTo, _visibleTo) &&
-            const DeepCollectionEquality()
-                .equals(other._allowedCollaborators, _allowedCollaborators) &&
-            const DeepCollectionEquality()
-                .equals(other._inLibrary, _inLibrary) &&
+                .equals(other.allowedCollaborators, allowedCollaborators) &&
+            const DeepCollectionEquality().equals(other.inLibrary, inLibrary) &&
             (identical(other.type, type) || other.type == type) &&
-            const DeepCollectionEquality().equals(other._songs, _songs));
+            const DeepCollectionEquality().equals(other.songs, songs));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1792,11 +1762,11 @@ class _$FoundPlaylistImpl extends _FoundPlaylist {
       owner,
       ownerImageUrl,
       imageUrl,
-      const DeepCollectionEquality().hash(_visibleTo),
-      const DeepCollectionEquality().hash(_allowedCollaborators),
-      const DeepCollectionEquality().hash(_inLibrary),
+      const DeepCollectionEquality().hash(visibleTo),
+      const DeepCollectionEquality().hash(allowedCollaborators),
+      const DeepCollectionEquality().hash(inLibrary),
       type,
-      const DeepCollectionEquality().hash(_songs));
+      const DeepCollectionEquality().hash(songs));
 
   /// Create a copy of FoundPlaylist
   /// with the given fields replaced by the non-null parameter values.

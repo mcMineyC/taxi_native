@@ -128,7 +128,7 @@ class FindResultSong with _$FindResultSong {
 
 }
 
-@freezed
+@Freezed(makeCollectionsUnmodifiable: false)
 class FoundPlaylist with _$FoundPlaylist {
   const FoundPlaylist._();
   const factory FoundPlaylist({

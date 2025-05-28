@@ -125,11 +125,11 @@ class Adder extends _$Adder {
       if ((data["isPlaylist"] ?? false) == true) {
         print("Adder: We have a playlist!!! Party town");
         FoundPlaylist playlist = FoundPlaylist.fromJson(data["results"][0]);
+        print(playlist.toJson());
         state = state.copyWith(
             state: "find:results:playlist", foundPlaylist: playlist);
       } else {
         print("We do not have a playlist");
-        print(data);
         //print(data["results"][0].toString());
         var found = List<FindResult>.empty(growable: true);
         data["results"].forEach((element) {
@@ -148,7 +148,7 @@ class Adder extends _$Adder {
         var accompanying = Playlist(
           id: "create",
           displayName: found.name,
-          description: "nil",
+          description: found.description,
           visibleTo: found.visibleTo,
           inLibrary: found.inLibrary,
           allowedCollaborators: found.allowedCollaborators,

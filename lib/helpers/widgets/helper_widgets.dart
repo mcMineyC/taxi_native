@@ -750,7 +750,7 @@ Future<void> playlistLogic(WidgetRef ref, BuildContext context, String thingId,
     var fp = FilledPlaylist(
         id: p.id,
         displayName: "",
-        description: "",
+        description: "nil (from playlistLogic)",
         visibleTo: ["all"],
         inLibrary: [currentUser],
         allowedCollaborators: [currentUser],

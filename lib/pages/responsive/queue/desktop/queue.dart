@@ -76,6 +76,7 @@ class DesktopQueuePage extends ConsumerWidget {
               ),
               trailing: IconButton(
                 icon: Icon(Icons.more_horiz_rounded),
+                color: playingIndex == index ? colorScheme.onPrimary : null,
                 onPressed: (){
                   context.contextMenuOverlay.show(GenericContextMenu(
                     buttonConfigs: buildContextMenuConfig(context, ref, queue[index].toSong(), index),

@@ -3,7 +3,6 @@ Bugs
 - search doesn't work for anything but songs
   - check ts_mod.js
 - cancel doesn't do anything in the loading state
-- fix contrast on queue pill button
 - fix server url box overflow in settings
 - make debug switch do something
   - show quick-test buttons

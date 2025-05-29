@@ -38,8 +38,8 @@ class MediaCard extends ConsumerWidget {
       required this.addedBy,
       required this.inLibrary});
 
-  List<ContextMenuButtonConfig> buildMenuButtons(
-      BuildContext context, WidgetRef ref) {
+  static List<ContextMenuButtonConfig> buildMenuButtons(
+      BuildContext context, WidgetRef ref, String thingType, String thingId, String addedBy, bool inLibrary) {
     List<ContextMenuButtonConfig> buttons = [];
     switch (thingType) {
       case "song":
@@ -190,7 +190,7 @@ class MediaCard extends ConsumerWidget {
       ),
       child: ContextMenuRegion(
         contextMenu: GenericContextMenu(
-          buttonConfigs: buildMenuButtons(context, ref),
+          buttonConfigs: buildMenuButtons(context, ref, thingType, thingId, addedBy, inLibrary),
         ),
         child: Container(
             width: width,
@@ -1191,4 +1191,3 @@ String? specialUrlToPlain(String url){
       return null;
   }
 }
-

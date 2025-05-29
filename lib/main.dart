@@ -34,6 +34,7 @@ import 'pages/responsive/playlist/playlist.dart';
 import 'pages/responsive/settings/settings.dart';
 import 'pages/checklist.dart';
 import 'pages/responsive/library/library.dart';
+import "pages/responsive/library/common.dart";
 import 'pages/recently_played.dart';
 
 import 'pages/admin/dashboard.dart';
@@ -216,7 +217,7 @@ class _AppState extends ConsumerState<App> {
               return BeamPage(
                 key: ValueKey("songs-by-artist-$artistId"),
                 title: "Songs by ${state.uri.queryParameters["name"] ?? "Artist"}",
-                child: HomePage(homeJunk: SongsByArtistPage(artistId: artistId, private: !artistId.contains("bible"))),
+                child: HomePage(homeJunk: SongsByArtistPage(artistId: artistId, private: !artistId.contains("bible"), type: ViewType.grid)),
               );
           }
         }
@@ -280,19 +281,19 @@ class _AppState extends ConsumerState<App> {
             key: const ValueKey('artists'),
             title: 'Artists',
             // popToNamed: '/home',
-            child: HomePage(homeJunk: ArtistsPage(private: true)),
+            child: HomePage(homeJunk: ArtistsPage(private: true, type: ViewType.grid)), // BUG Update this with the persisted state
           ),
       '/albums': (context, state, data) => BeamPage(
             key: const ValueKey('albums'),
             title: 'Albums',
             // popToNamed: '/home',
-            child: HomePage(homeJunk: AlbumsPage(private: true)),
+            child: HomePage(homeJunk: AlbumsPage(private: true, type: ViewType.grid)),
           ),
       '/songs': (context, state, data) => BeamPage(
             key: const ValueKey('songs'),
             title: 'Songs',
             // popToNamed: '/home',
-            child: HomePage(homeJunk: SongsPage(private: true)),
+            child: HomePage(homeJunk: SongsPage(private: true, type: ViewType.grid)),
           ),
       '/queue': (context, state, data) => BeamPage(
             key: const ValueKey('queue'),
@@ -316,7 +317,7 @@ class _AppState extends ConsumerState<App> {
             key: const ValueKey('playlists'),
             title: 'Playlists',
             // popToNamed: '/home',
-            child: HomePage(homeJunk: PlaylistsPage(private: true)),
+            child: HomePage(homeJunk: PlaylistsPage(private: true, type: ViewType.list)),
           ),
       '/playlist/:playlistId': (context, state, data) {
         final playlistId = state.uri

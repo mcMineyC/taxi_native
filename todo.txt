@@ -9,9 +9,9 @@ Bugs
 
 TODO before announcing:
 - remove debug buttons and prints
-- playlist grid view w/ toggle
-  - extend this to all tabs of the library
-  - move it into a pill button so that it fits onscreen on mobile
+- fix library options
+  - move segmented button out if possible (size) on mobile
+  - add view type to desktop
 
 Longterm goals:
 - migrate to using slivers for most things to implement edge-to-edge

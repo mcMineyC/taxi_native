@@ -12,18 +12,23 @@ if (localPropertiesFile.exists()) {
     }
 }
 
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
+// Read version from pubspec.yaml
+def pubspecFile = file('../../pubspec.yaml')
+def pubspecText = pubspecFile.text
+def versionMatch = pubspecText =~ /version:\s*(\d+\.\d+\.\d+)/
+def flutterVersionName = versionMatch ? versionMatch[0][1] : '1.0.0'
 
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
-}
+// Generate versionCode from version string (e.g., 4.1.7 -> 40107)
+def versionParts = flutterVersionName.split('\\.')
+def major = versionParts.size() > 0 ? versionParts[0].toInteger() : 1
+def minor = versionParts.size() > 1 ? versionParts[1].toInteger() : 0
+def patch = versionParts.size() > 2 ? versionParts[2].toInteger() : 0
+def flutterVersionCode = (major * 10000) + (minor * 100) + patch
+
+println "Using version: $flutterVersionName (code: $flutterVersionCode)"
 
 android {
-    namespace "com.example.taxi_native"
+    namespace "com.forkleserver.taxi_native"
     compileSdk 35
     ndkVersion "26.1.10909125"
 
@@ -42,7 +47,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.taxi_native"
+        applicationId "com.forkleserver.taxi_native"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion flutter.minSdkVersion

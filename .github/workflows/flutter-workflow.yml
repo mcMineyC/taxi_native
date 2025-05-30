@@ -94,6 +94,12 @@ jobs:
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d %I:%M')"
+      - name: Extract version from constants.dart
+        id: version
+        run: |
+          VERSION=$(grep -o 'kVersionString = "[^"]*"' lib/helpers/constants.dart | sed 's/kVersionString = "\(.*\)"/\1/')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Found version: $VERSION"
       - name: Set outputs
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
@@ -123,7 +129,7 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "taxi-android.apk,taxi-linux_x64.tar.gz,taxi-mac.tar.gz,taxi-windows.exe"
-          tag: ${{ steps.vars.outputs.sha_short }}
+          tag: v${{ steps.version.outputs.version }}
           makeLatest: true
-          name: ${{ steps.date.outputs.date }}
+          name: "Release v${{ steps.version.outputs.version }} - ${{ steps.date.outputs.date }}"
           bodyFile: ".github/workflows/body.md"

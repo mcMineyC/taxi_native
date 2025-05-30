@@ -7,7 +7,7 @@ Bugs
   - mislabeled singles
   - improper visibleTo application
 - album song order (suspect trackNumber)
-- terminate websocket connection when server url is updated
+- terminate websocket connection when server url is updated or logout occurs
 
 
 - Visual bugs

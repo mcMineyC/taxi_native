@@ -5,7 +5,7 @@ Refer to the table for which file to download.  Make sure to read the install in
 # Install Instructions
 ## Android
 Simply download the APK and open it.  If you've sideloaded before, you won't need to take any additional steps.  Otherwise, follow the dialog prompts to allow sideloading.  If you have trouble, do a quick Google search.
-A note on updating Taxi: If you've installed Taxi previously, you will need to uninstall the old version first.  I've tried to fix this but so far have been unsuccessful.
+If you have a previous version of Taxi installed, the new version should update automatically without needing to uninstall first.
 
 ## Linux
 Unfortunately, I don't currently have the time to develop dedicated packages for each distro, so you are left with a plain archive for now.  I assume you know the drill.

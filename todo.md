@@ -2,7 +2,6 @@ Bugs
 - search doesn't work for anything but songs
   - check ts_mod.js
 - cancel doesn't do anything in the loading state
-- adding playlist but deleting song messes up the artist assignment
 - durations for songs
 - Fix fake-albums
   - mislabeled singles

@@ -220,11 +220,22 @@ List<HLVArtist> changeHLVAlbum(HLVAlbum album, HLVArtist artist,
   int artistIndex = list.indexOf(artist);
   HLVArtist foundArtist = list[artistIndex];
   HLVAlbum foundAlbum = foundArtist.albums[album.name]!;
+  HLVAlbum? existingAlbum = foundArtist.albums[newAlbum?.name ?? ""];
 
   if (newAlbum == null)
     foundArtist.albums.remove(album.name);
   else
-    foundArtist.albums[album.name] = newAlbum;
+    foundArtist.albums.update(
+      newAlbum.name,
+      (HLVAlbum existingValue) {
+        Map<String, HLVSong> values = existingValue.songs;
+        values.addEntries(newAlbum.songs.entries);
+        HLVAlbum returnVal = existingValue.copyWith(songs: values);
+        foundArtist.albums.remove(album.name);
+        return returnVal;
+      },
+      ifAbsent: () => newAlbum,
+    );
 
   if (foundArtist.albums.isEmpty)
     list.removeAt(artistIndex);
@@ -233,22 +244,6 @@ List<HLVArtist> changeHLVAlbum(HLVAlbum album, HLVArtist artist,
   //printHLVContent(list);
   return list;
 }
-// List<HLVArtist> list = listt;
-// int artistIndex = list.indexOf(artist);
-// HLVArtist foundArtist = list[artistIndex];
-// int albumIndex = foundArtist.albums.indexOf(album);
-// if (newAlbum != null)
-//   foundArtist.albums[albumIndex] = newAlbum;
-// else
-//   list.removeAt(artistIndex);
-
-// if (foundArtist.albums.isEmpty)
-//   list.removeAt(artistIndex);
-// else
-//   list[artistIndex] = foundArtist;
-
-//   return listt;
-// }
 
 List<HLVArtist> changeHLVArtist(
     HLVArtist artist, HLVArtist? newArtist, List<HLVArtist> listt) {

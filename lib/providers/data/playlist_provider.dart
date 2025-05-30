@@ -81,7 +81,7 @@ Future<bool> addPlaylist(AddPlaylistRef ref, Playlist playlist) async {
       'owner': playlist.owner,
       'visibleTo': playlist.visibleTo,
       'allowedCollaborators': playlist.allowedCollaborators,
-      'description': "nall",
+      'description': playlist.description,
       'songs': playlist.songs,
     }),
   );
@@ -117,9 +117,9 @@ Future<bool> addIdToPlaylist(
       'authtoken': _sp.getString("token") ?? "",
       'name': playlist.displayName,
       'owner': playlist.owner,
-      'visibleTo': playlist.visibleTo,
-      'allowedCollaborators': playlist.allowedCollaborators,
-      'description': "nall",
+      // 'visibleTo': playlist.visibleTo,
+      // 'allowedCollaborators': playlist.allowedCollaborators,
+      // 'description': playlist.description,
       'songs': newSongs,
     }),
   );
@@ -143,20 +143,21 @@ Future<bool> addIdsToPlaylist(
   List<String> newSongs = [];
   playlist.songs.forEach((el) => newSongs.add(el));
   newSongs.addAll(ids);
+  String body = jsonEncode({
+      'authtoken': _sp.getString("token") ?? "",
+      'name': playlist.displayName,
+      'owner': playlist.owner,
+      // 'visibleTo': playlist.visibleTo,
+      // 'allowedCollaborators': playlist.allowedCollaborators,
+      // 'description': "nall",
+      'songs': newSongs,
+    });
   var response = await http.post(
     Uri.parse("${p.backendUrl}/playlists/modify/$playlistId/"),
     headers: Map<String, String>.from({
       'Content-Type': 'application/json',
     }),
-    body: jsonEncode({
-      'authtoken': _sp.getString("token") ?? "",
-      'name': playlist.displayName,
-      'owner': playlist.owner,
-      'visibleTo': playlist.visibleTo,
-      'allowedCollaborators': playlist.allowedCollaborators,
-      'description': "nall",
-      'songs': newSongs,
-    }),
+    body: body,
   );
   var desponse = jsonDecode(response.body);
   if (desponse["authed"] == false) {
@@ -187,9 +188,9 @@ Future<bool> deleteIndexFromPlaylist(
       'authtoken': _sp.getString("token") ?? "",
       'name': playlist.displayName,
       'owner': playlist.owner,
-      'visibleTo': playlist.visibleTo,
-      'allowedCollaborators': playlist.allowedCollaborators,
-      'description': "nall",
+      // 'visibleTo': playlist.visibleTo,
+      // 'allowedCollaborators': playlist.allowedCollaborators,
+      // 'description': "nall",
       'songs': newSongs,
     }),
   );
@@ -252,6 +253,7 @@ Future<FilledPlaylist> findPlaylist(FindPlaylistRef ref, String id) async {
     id: playlist.id,
     displayName: playlist.displayName,
     owner: playlist.owner,
+    description: playlist.description,
     visibleTo: playlist.visibleTo,
     inLibrary: playlist.inLibrary,
     allowedCollaborators: playlist.allowedCollaborators,

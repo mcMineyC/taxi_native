@@ -38,8 +38,8 @@ class MediaCard extends ConsumerWidget {
       required this.addedBy,
       required this.inLibrary});
 
-  List<ContextMenuButtonConfig> buildMenuButtons(
-      BuildContext context, WidgetRef ref) {
+  static List<ContextMenuButtonConfig> buildMenuButtons(
+      BuildContext context, WidgetRef ref, String thingType, String thingId, String addedBy, bool inLibrary) {
     List<ContextMenuButtonConfig> buttons = [];
     switch (thingType) {
       case "song":
@@ -190,7 +190,7 @@ class MediaCard extends ConsumerWidget {
       ),
       child: ContextMenuRegion(
         contextMenu: GenericContextMenu(
-          buttonConfigs: buildMenuButtons(context, ref),
+          buttonConfigs: buildMenuButtons(context, ref, thingType, thingId, addedBy, inLibrary),
         ),
         child: Container(
             width: width,
@@ -497,11 +497,14 @@ class _EditPlaylistDialogState extends State<EditPlaylistDialog> {
   late ThemeData theme;
   List<Song> songs = [];
   TextEditingController nameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   TextEditingController imageController = TextEditingController();
   @override
   void initState() {
     super.initState();
     current = widget.starter;
+    nameController.text = widget.starter.displayName;
+    descriptionController.text = widget.starter.description;
     songs = [...current.songs];
   }
 
@@ -537,8 +540,13 @@ class _EditPlaylistDialogState extends State<EditPlaylistDialog> {
                   margin: EdgeInsets.fromLTRB(16, 0, 16, 0),
                   child: TextButton(
                       child: const Text('Create'),
-                      onPressed: () => Navigator.of(context)
-                          .pop({"created": true, "value": current})),
+                      onPressed: () {
+                        current = current.copyWith(description: descriptionController.text, displayName: nameController.text);
+                        print(current);
+                        Navigator.of(context)
+                          .pop({"created": true, "value": current});
+                      },
+                  )
                 ),
               ],
             ),
@@ -552,11 +560,22 @@ class _EditPlaylistDialogState extends State<EditPlaylistDialog> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   TextField(
-                    onChanged: (value) => setState(
-                        () => current = current.copyWith(displayName: value)),
+                    controller: nameController,
+                    // onChanged: (value) => setState(
+                    //     () => current = current.copyWith(displayName: value)),
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Playlist name',
+                    ),
+                  ),
+                  SpacerWidget(height: 8, width: 0),
+                  TextField(
+                    controller: descriptionController,
+                    // onChanged: (value) => setState(
+                    //     () => current = current.copyWith(description: value)),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Description',
                     ),
                   ),
                   //SpacerWidget(height: 10, width: 0),
@@ -693,6 +712,10 @@ Future<void> playlistLogic(WidgetRef ref, BuildContext context, String thingId,
             .toList();
         print("Adding ${oldSongs.length} songs from artist");
         break;
+      case "playlist":
+        oldSongs = (await ref.read(findSongsByPlaylistProvider(thingId).future))
+            .map((s) => s.id)
+            .toList();
       case "songids":
         oldSongs = thingId.split(",");
         break;
@@ -732,6 +755,7 @@ Future<void> playlistLogic(WidgetRef ref, BuildContext context, String thingId,
     var fp = FilledPlaylist(
         id: p.id,
         displayName: "",
+        description: "",
         visibleTo: ["all"],
         inLibrary: [currentUser],
         allowedCollaborators: [currentUser],
@@ -744,7 +768,7 @@ Future<void> playlistLogic(WidgetRef ref, BuildContext context, String thingId,
         context: context, builder: (_) => createDialog);
     if (result2 != null && result2["created"]) {
       Playlist p = (result2["value"] as FilledPlaylist).toPlaylist(); // shenanagins because of type safety
-      print("AddPlaylistFlow: Creating playlist with name ${p.displayName}");
+      print("AddPlaylistFlow: Creating playlist with name ${p.displayName} and description ${p.description}");
       print(p);
       await ref.read(addPlaylistProvider(p).future);
       print("AddPlaylistFlow: Playlist created");
@@ -1167,4 +1191,3 @@ String? specialUrlToPlain(String url){
       return null;
   }
 }
-

@@ -6,52 +6,31 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../providers/data/playlist_provider.dart'; 
 import '../providers/error_watcher.dart';
 import '../types/playlist.dart';
+import 'cards.dart';
+import "responsive/library/common.dart";
 
 class PlaylistsPage extends ConsumerWidget {
   final bool private;
-  PlaylistsPage({required this.private});
+  final ViewType type;
+  PlaylistsPage({required this.private, required this.type});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var playlistProvider = fetchPlaylistsProvider(editable: false, ignore: private);
-    final AsyncValue<List<Playlist>> playlists = ref.watch(playlistProvider);
-    handleError(ref, playlistProvider, Beamer.of(context));
-    return Container(
-      margin: EdgeInsets.all(24),
-      child: playlists.when(
-        data: (data) => ListView.separated(
-          separatorBuilder: (context, index) => Divider(),
-          itemCount: data.length,
-          itemBuilder: (context, index) => GestureDetector(
-            onTap: () => Beamer.of(context).beamToNamed('/playlist/${data[index].id}'),
-            child: ListTile(
-              title: Text(data[index].displayName),
-              subtitle: Text(data[index].owner),
-            ),
-          ),
-        ),
-        loading: () => ListView.separated(
-          separatorBuilder: (context, index) => Divider(),
-          itemCount: 20,
-          itemBuilder: (context, index) => Skeletonizer(
-            enabled: true,
-            child: const ListTile(
-              title: const Text('Loading...'),
-              subtitle: const Text('Loading...'),
-            ),
-          )
-        ),
-        error: (_, __) => ListView.separated(
-          separatorBuilder: (context, index) => Divider(),
-          itemCount: 20,
-          itemBuilder: (context, index) => Skeletonizer(
-            enabled: true,
-            child: ListTile(
-              title: Text('Loading...'),
-              subtitle: Text('Loading...'),
-            ),
-          ),
-        ),
-      ),
+    final AsyncValue<List<Playlist>> songs = ref.watch(fetchPlaylistsProvider(ignore: private));
+    handleError(ref, fetchPlaylistsProvider(ignore: private), Beamer.of(context));
+    return songs.when(
+      data: (data) {
+        List<Map<String, dynamic>> cardList = data.map((e) => {
+          "text": "${e.displayName}\n${e.owner}\n${e.description}",
+          "image": "nada",
+          "id": e.id,
+          "type": "playlist",
+          "addedBy": e.owner,
+          "inLibrary": e.isInLibrary,
+        }).toList();
+        return type == ViewType.grid ? CardView(cardList: cardList) : ItemListView(list: cardList);
+      },
+      loading: () => LoadingCardView(),
+      error: (error, stack) => LoadingCardView(),
     );
   }
 }

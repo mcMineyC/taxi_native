@@ -191,7 +191,7 @@ final fetchNewPlaylistsProvider = FutureProvider<List<Playlist>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FetchNewPlaylistsRef = FutureProviderRef<List<Playlist>>;
-String _$addPlaylistHash() => r'5aed04aa799b2284be7916aa3a3cb29d2e7ddeae';
+String _$addPlaylistHash() => r'4e232dd201b77ce89a5cfd8c91f77ab98a59d66d';
 
 /// See also [addPlaylist].
 @ProviderFor(addPlaylist)
@@ -895,7 +895,7 @@ class _DeletePlaylistProviderElement
   String get playlistId => (origin as DeletePlaylistProvider).playlistId;
 }
 
-String _$findPlaylistHash() => r'3e7cb7c788c204b99d02c7139e8bf1e0d2f3e5c8';
+String _$findPlaylistHash() => r'22e6f12e8a5d4fb77200a0eacad41b649ceca969';
 
 /// See also [findPlaylist].
 @ProviderFor(findPlaylist)

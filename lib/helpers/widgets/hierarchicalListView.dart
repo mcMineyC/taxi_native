@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:taxi_native/providers/data/fetched_data_provider.dart';
 import '../../types/hierarchicalListView.dart';
 import 'helper_widgets.dart';
 import 'package:context_menus/context_menus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
+import "package:riverpod/riverpod.dart";
 
 class HierarchicalListView extends StatelessWidget {
   final List<HLVArtist> data;
@@ -26,6 +29,7 @@ class HierarchicalListView extends StatelessWidget {
             padding: EdgeInsets.zero,
           );
   }
+  
 
   // Recursive function to build the hierarchical list view with indentation
   Widget _buildHLVArtist(HLVArtist artist, int level, BuildContext context) {
@@ -166,12 +170,12 @@ class HierarchicalListView extends StatelessWidget {
           "Open in browser",
           icon: Icon(Icons.link_rounded),
           onPressed: () {
-            launchUrl(Uri.parse(specialUrlToPlain(song.url)!));
+            launchUrl(Uri.parse(specialUrlToPlain(song.audioUrl)!));
           },
         ),
-        if (song.url.startsWith("http"))
+        if (song.audioUrl.startsWith("http"))
           ContextMenuButtonConfig(
-            "URL: ${song.url}",
+            "URL: ${song.audioUrl}",
             icon: Icon(Icons.language_rounded),
             onPressed: null,
           ),
@@ -244,7 +248,7 @@ List<HLVArtist> changeHLVArtist(
 }
 
 String getHLVSongSubtitle(HLVSong s) {
-  List<String> urlParts = s.url.split(":");
+  List<String> urlParts = s.audioUrl.split(":");
   switch (urlParts.first) {
     case "youtube":
       return "Youtube - ${urlParts[1]}";
@@ -275,8 +279,8 @@ class _HLVSongEditDialogState extends State<HLVSongEditDialog> {
   void initState() {
     this.song = widget.song;
     nameController.text = this.song.name;
-    urlController.text = this.song.url;
-    this.song = this.song.copyWith(visibleTo: ["all"]);
+    urlController.text = this.song.audioUrl;
+    // this.song = this.song.copyWith(visibleTo: ["all"]);
     super.initState();
   }
 
@@ -333,9 +337,9 @@ class _HLVSongEditDialogState extends State<HLVSongEditDialog> {
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
                 child: Row(children: [
                   Expanded(
-                    child: TextField(
+                    child: TextField( // NOTE: change this to a dropdown
                       onChanged: (value) {
-                        setState(() => song = song.copyWith(url: value));
+                        setState(() => song = song.copyWith(audioUrl: value));
                       },
                       controller: urlController,
                       decoration: InputDecoration(
@@ -350,9 +354,9 @@ class _HLVSongEditDialogState extends State<HLVSongEditDialog> {
                   ),
                   SpacerWidget(width: 8),
                   FilledButton(
-                    onPressed: specialUrlToPlain(song.url) != null
+                    onPressed: specialUrlToPlain(song.audioUrl) != null
                         ? () =>
-                            launchUrl(Uri.parse(specialUrlToPlain(song.url)!))
+                            launchUrl(Uri.parse(specialUrlToPlain(song.audioUrl)!))
                         : null,
                     child: Row(
                       children: [
@@ -390,7 +394,7 @@ class _HLVSongEditDialogState extends State<HLVSongEditDialog> {
 
   void saveChanges() {
     this.song =
-        song.copyWith(name: nameController.text, url: urlController.text);
+        song.copyWith(name: nameController.text, audioUrl: urlController.text);
   }
 }
 
@@ -421,7 +425,7 @@ class _HLVAlbumEditDialogState extends State<HLVAlbumEditDialog> {
     nameController.text = this.album.name;
     imageUrlController.text = this.album.imageUrl;
     print(this.album.imageUrl);
-    this.album = this.album.copyWith(visibleTo: ["all"]);
+    // this.album = this.album.copyWith(visibleTo: ["all"]);
     super.initState();
   }
 
@@ -560,24 +564,25 @@ Future<HLVAlbum> showHLVAlbumEditDialog(
   return result;
 }
 
-class HLVArtistEditDialog extends StatefulWidget {
+class HLVArtistEditDialog extends ConsumerStatefulWidget {
   final HLVArtist artist;
   final Function(HLVArtist) onSaved;
   const HLVArtistEditDialog({required this.artist, required this.onSaved});
   _HLVArtistEditDialogState createState() => _HLVArtistEditDialogState();
 }
 
-class _HLVArtistEditDialogState extends State<HLVArtistEditDialog> {
+class _HLVArtistEditDialogState extends ConsumerState<HLVArtistEditDialog> {
   late HLVArtist artist;
   TextEditingController nameController = TextEditingController();
   TextEditingController imageUrlController = TextEditingController();
+  String findState = "data";
   @override
   void initState() {
     this.artist = widget.artist;
     nameController.text = this.artist.name;
     imageUrlController.text = this.artist.imageUrl;
     print(this.artist.imageUrl);
-    this.artist = this.artist.copyWith(visibleTo: ["all"]);
+    // this.artist = this.artist.copyWith(visibleTo: ["all"]);
     super.initState();
   }
 
@@ -646,6 +651,17 @@ class _HLVArtistEditDialogState extends State<HLVArtistEditDialog> {
                           labelText: "Image URL"),
                     ),
                   ),
+                  TextButton(
+                    child: Text("Find"),
+                    onPressed: () async {
+                      setState(() => findState = "loading");
+                      ref.read(getArtistImageUrlFromNameProvider(nameController.text).future).then((url) => setState(() {
+                        findState = "data";
+                        artist = artist.copyWith(imageUrl: url);
+                        imageUrlController.text = url;
+                      }));
+                    },
+                  )
                   //SpacerWidget(width: 8),
                   //FilledButton(
                   //  onPressed: ,
@@ -672,7 +688,7 @@ class _HLVArtistEditDialogState extends State<HLVArtistEditDialog> {
             Container(
               margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
               constraints: BoxConstraints(maxHeight: 512, maxWidth: 512),
-              child: FadeInImage.memoryNetwork(
+              child: findState == "data" ? FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
                 image: artist.imageUrl,
                 imageErrorBuilder: (context, error, stackTrace) =>
@@ -681,20 +697,20 @@ class _HLVArtistEditDialogState extends State<HLVArtistEditDialog> {
                   SpacerWidget(width: 8),
                   Text("Failed to load image")
                 ]),
-              ),
+              ) : CircularProgressIndicator(),
             ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-              child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Wrap(children: [
-                    Icon(Icons.info_outlined),
-                    SpacerWidget(width: 4),
-                    Text(
-                        "To edit the artist name, edit the corresponding entry on the previous page",
-                        softWrap: true),
-                  ])),
-            )
+            // Container(
+            //   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+            //   child: Align(
+            //       alignment: Alignment.centerLeft,
+            //       child: Wrap(children: [
+            //         Icon(Icons.info_outlined),
+            //         SpacerWidget(width: 4),
+            //         Text(
+            //             "To edit the artist name, edit the corresponding entry on the previous page",
+            //             softWrap: true),
+            //       ])),
+            // )
           ],
         ),
       ),

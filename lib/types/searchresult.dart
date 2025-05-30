@@ -47,13 +47,16 @@ class LocalSearchResult with _$LocalSearchResult {
 class SearchResult with _$SearchResult {
   const SearchResult._();
   const factory SearchResult({
-    required String id,
+    required String externalId,
     required String name,
     required String artist,
     required String album,
     required String imageUrl,
     required String artistImageUrl,
     required String type,
+    List<String>? visibleTo,
+    List<String>? inLibrary,
+    Map<String, dynamic>? extra,
   }) = _SearchResult;
 
   get cardString => switch(type) {
@@ -71,6 +74,8 @@ class SearchResult with _$SearchResult {
 class FindResult with _$FindResult {
   const FindResult._();
   const factory FindResult({
+    // NOTE: the name is not used for type song
+    required String externalId,
     required String name,
     required String artist,
     required String album,
@@ -95,6 +100,7 @@ class FindResult with _$FindResult {
       _$FindResultFromJson(json);
 
   factory FindResult.fromSong(Song song) => FindResult(
+    externalId: "",
     type: "song",
     name: song.displayName,
     album: song.albumDisplayName,
@@ -103,7 +109,7 @@ class FindResult with _$FindResult {
     artistImageUrl: song.imageUrl,
     visibleTo: song.visibleTo,
     inLibrary: song.inLibrary,
-    songs: [FindResultSong(title: song.displayName, url: song.audioUrl, trackNumber: 0)],
+    songs: [FindResultSong(title: song.displayName, url: song.audioUrl, trackNumber: 0, externalId: "",)],
     );
 
 }
@@ -114,6 +120,7 @@ class FindResultSong with _$FindResultSong {
     required String title,
     required String url, 
     required int trackNumber,
+    required String externalId,
   }) = _FindResultSong;
 
   factory FindResultSong.fromJson(Map<String, dynamic> json) =>
@@ -121,12 +128,13 @@ class FindResultSong with _$FindResultSong {
 
 }
 
-@freezed
+@Freezed(makeCollectionsUnmodifiable: false)
 class FoundPlaylist with _$FoundPlaylist {
   const FoundPlaylist._();
   const factory FoundPlaylist({
+    required String externalId,
     required String name,
-    required String id,
+    required String description,
     required String owner,
     required String ownerImageUrl,
     required String imageUrl,
@@ -143,7 +151,9 @@ class FoundPlaylist with _$FoundPlaylist {
 
 @freezed
 class FoundPlaylistSong with _$FoundPlaylistSong {
+  const FoundPlaylistSong._();
   const factory FoundPlaylistSong({
+    required String externalId,
     required String title,
     required String album, 
     required String artist,
@@ -158,6 +168,36 @@ class FoundPlaylistSong with _$FoundPlaylistSong {
 
   factory FoundPlaylistSong.fromJson(Map<String, dynamic> json) =>
       _$FoundPlaylistSongFromJson(json);
+
+  FindResult toFindResult() => FindResult(
+    externalId: externalId,
+    name: title,
+    artist: artist,
+    album: album,
+    imageUrl: albumCoverURL,
+    artistImageUrl: artistImageUrl,
+    visibleTo: visibleTo,
+    inLibrary: inLibrary,
+    type: "song",
+    songs:[FindResultSong(
+      title: title,
+      url: url,
+      trackNumber: trackNumber,
+      externalId: externalId,
+    )]
+  );
+
+  SearchResult toSearchResult() => SearchResult(
+    externalId: externalId,
+    name: title,
+    artist: artist,
+    album: album,
+    imageUrl: albumCoverURL,
+    artistImageUrl: artistImageUrl,
+    type: type,
+    visibleTo: visibleTo,
+    inLibrary: inLibrary,
+  );
 }
 
 @freezed

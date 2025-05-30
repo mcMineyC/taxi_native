@@ -54,28 +54,39 @@ Map<String, dynamic> _$$LocalSearchResultImplToJson(
 
 _$SearchResultImpl _$$SearchResultImplFromJson(Map<String, dynamic> json) =>
     _$SearchResultImpl(
-      id: json['id'] as String,
+      externalId: json['externalId'] as String,
       name: json['name'] as String,
       artist: json['artist'] as String,
       album: json['album'] as String,
       imageUrl: json['imageUrl'] as String,
       artistImageUrl: json['artistImageUrl'] as String,
       type: json['type'] as String,
+      visibleTo: (json['visibleTo'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      inLibrary: (json['inLibrary'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
+      extra: json['extra'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$$SearchResultImplToJson(_$SearchResultImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'externalId': instance.externalId,
       'name': instance.name,
       'artist': instance.artist,
       'album': instance.album,
       'imageUrl': instance.imageUrl,
       'artistImageUrl': instance.artistImageUrl,
       'type': instance.type,
+      'visibleTo': instance.visibleTo,
+      'inLibrary': instance.inLibrary,
+      'extra': instance.extra,
     };
 
 _$FindResultImpl _$$FindResultImplFromJson(Map<String, dynamic> json) =>
     _$FindResultImpl(
+      externalId: json['externalId'] as String,
       name: json['name'] as String,
       artist: json['artist'] as String,
       album: json['album'] as String,
@@ -93,6 +104,7 @@ _$FindResultImpl _$$FindResultImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$FindResultImplToJson(_$FindResultImpl instance) =>
     <String, dynamic>{
+      'externalId': instance.externalId,
       'name': instance.name,
       'artist': instance.artist,
       'album': instance.album,
@@ -109,6 +121,7 @@ _$FindResultSongImpl _$$FindResultSongImplFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       url: json['url'] as String,
       trackNumber: (json['trackNumber'] as num).toInt(),
+      externalId: json['externalId'] as String,
     );
 
 Map<String, dynamic> _$$FindResultSongImplToJson(
@@ -117,12 +130,14 @@ Map<String, dynamic> _$$FindResultSongImplToJson(
       'title': instance.title,
       'url': instance.url,
       'trackNumber': instance.trackNumber,
+      'externalId': instance.externalId,
     };
 
 _$FoundPlaylistImpl _$$FoundPlaylistImplFromJson(Map<String, dynamic> json) =>
     _$FoundPlaylistImpl(
+      externalId: json['externalId'] as String,
       name: json['name'] as String,
-      id: json['id'] as String,
+      description: json['description'] as String,
       owner: json['owner'] as String,
       ownerImageUrl: json['ownerImageUrl'] as String,
       imageUrl: json['imageUrl'] as String,
@@ -141,8 +156,9 @@ _$FoundPlaylistImpl _$$FoundPlaylistImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$FoundPlaylistImplToJson(_$FoundPlaylistImpl instance) =>
     <String, dynamic>{
+      'externalId': instance.externalId,
       'name': instance.name,
-      'id': instance.id,
+      'description': instance.description,
       'owner': instance.owner,
       'ownerImageUrl': instance.ownerImageUrl,
       'imageUrl': instance.imageUrl,
@@ -156,6 +172,7 @@ Map<String, dynamic> _$$FoundPlaylistImplToJson(_$FoundPlaylistImpl instance) =>
 _$FoundPlaylistSongImpl _$$FoundPlaylistSongImplFromJson(
         Map<String, dynamic> json) =>
     _$FoundPlaylistSongImpl(
+      externalId: json['externalId'] as String,
       title: json['title'] as String,
       album: json['album'] as String,
       artist: json['artist'] as String,
@@ -173,6 +190,7 @@ _$FoundPlaylistSongImpl _$$FoundPlaylistSongImplFromJson(
 Map<String, dynamic> _$$FoundPlaylistSongImplToJson(
         _$FoundPlaylistSongImpl instance) =>
     <String, dynamic>{
+      'externalId': instance.externalId,
       'title': instance.title,
       'album': instance.album,
       'artist': instance.artist,

@@ -565,6 +565,141 @@ class _FindBatchSongsProviderElement
   bool get ignore => (origin as FindBatchSongsProvider).ignore;
 }
 
+String _$externalIdsToInternalHash() =>
+    r'be1140e2137b0cdc53fa6596d7535ca22f643ee2';
+
+/// See also [externalIdsToInternal].
+@ProviderFor(externalIdsToInternal)
+const externalIdsToInternalProvider = ExternalIdsToInternalFamily();
+
+/// See also [externalIdsToInternal].
+class ExternalIdsToInternalFamily extends Family<AsyncValue<List<String>>> {
+  /// See also [externalIdsToInternal].
+  const ExternalIdsToInternalFamily();
+
+  /// See also [externalIdsToInternal].
+  ExternalIdsToInternalProvider call(
+    List<String> externalIds,
+  ) {
+    return ExternalIdsToInternalProvider(
+      externalIds,
+    );
+  }
+
+  @override
+  ExternalIdsToInternalProvider getProviderOverride(
+    covariant ExternalIdsToInternalProvider provider,
+  ) {
+    return call(
+      provider.externalIds,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'externalIdsToInternalProvider';
+}
+
+/// See also [externalIdsToInternal].
+class ExternalIdsToInternalProvider
+    extends AutoDisposeFutureProvider<List<String>> {
+  /// See also [externalIdsToInternal].
+  ExternalIdsToInternalProvider(
+    List<String> externalIds,
+  ) : this._internal(
+          (ref) => externalIdsToInternal(
+            ref as ExternalIdsToInternalRef,
+            externalIds,
+          ),
+          from: externalIdsToInternalProvider,
+          name: r'externalIdsToInternalProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$externalIdsToInternalHash,
+          dependencies: ExternalIdsToInternalFamily._dependencies,
+          allTransitiveDependencies:
+              ExternalIdsToInternalFamily._allTransitiveDependencies,
+          externalIds: externalIds,
+        );
+
+  ExternalIdsToInternalProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.externalIds,
+  }) : super.internal();
+
+  final List<String> externalIds;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<String>> Function(ExternalIdsToInternalRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: ExternalIdsToInternalProvider._internal(
+        (ref) => create(ref as ExternalIdsToInternalRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        externalIds: externalIds,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<String>> createElement() {
+    return _ExternalIdsToInternalProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ExternalIdsToInternalProvider &&
+        other.externalIds == externalIds;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, externalIds.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin ExternalIdsToInternalRef on AutoDisposeFutureProviderRef<List<String>> {
+  /// The parameter `externalIds` of this provider.
+  List<String> get externalIds;
+}
+
+class _ExternalIdsToInternalProviderElement
+    extends AutoDisposeFutureProviderElement<List<String>>
+    with ExternalIdsToInternalRef {
+  _ExternalIdsToInternalProviderElement(super.provider);
+
+  @override
+  List<String> get externalIds =>
+      (origin as ExternalIdsToInternalProvider).externalIds;
+}
+
 String _$findSongHash() => r'29445173cc04032ece1057dfab1e426fb0f373bd';
 
 /// See also [findSong].
@@ -2318,7 +2453,7 @@ class _DeleteItemProviderElement extends AutoDisposeFutureProviderElement<bool>
   String get extraParams => (origin as DeleteItemProvider).extraParams;
 }
 
-String _$fetchUsernamesHash() => r'3e90f4ed468ed1b9932e141a8aaefba61a7db6b9';
+String _$fetchUsernamesHash() => r'2c6470db956f7f58beb7d98090a4815325dcc7ad';
 
 /// See also [fetchUsernames].
 @ProviderFor(fetchUsernames)
@@ -2791,6 +2926,139 @@ class _RemoveFromLibraryProviderElement
   String get id => (origin as RemoveFromLibraryProvider).id;
   @override
   String get type => (origin as RemoveFromLibraryProvider).type;
+}
+
+String _$getArtistImageUrlFromNameHash() =>
+    r'669673fd8b6e2f573c04ea70efa55cd35c103d7f';
+
+/// See also [getArtistImageUrlFromName].
+@ProviderFor(getArtistImageUrlFromName)
+const getArtistImageUrlFromNameProvider = GetArtistImageUrlFromNameFamily();
+
+/// See also [getArtistImageUrlFromName].
+class GetArtistImageUrlFromNameFamily extends Family<AsyncValue<String>> {
+  /// See also [getArtistImageUrlFromName].
+  const GetArtistImageUrlFromNameFamily();
+
+  /// See also [getArtistImageUrlFromName].
+  GetArtistImageUrlFromNameProvider call(
+    String query,
+  ) {
+    return GetArtistImageUrlFromNameProvider(
+      query,
+    );
+  }
+
+  @override
+  GetArtistImageUrlFromNameProvider getProviderOverride(
+    covariant GetArtistImageUrlFromNameProvider provider,
+  ) {
+    return call(
+      provider.query,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getArtistImageUrlFromNameProvider';
+}
+
+/// See also [getArtistImageUrlFromName].
+class GetArtistImageUrlFromNameProvider
+    extends AutoDisposeFutureProvider<String> {
+  /// See also [getArtistImageUrlFromName].
+  GetArtistImageUrlFromNameProvider(
+    String query,
+  ) : this._internal(
+          (ref) => getArtistImageUrlFromName(
+            ref as GetArtistImageUrlFromNameRef,
+            query,
+          ),
+          from: getArtistImageUrlFromNameProvider,
+          name: r'getArtistImageUrlFromNameProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getArtistImageUrlFromNameHash,
+          dependencies: GetArtistImageUrlFromNameFamily._dependencies,
+          allTransitiveDependencies:
+              GetArtistImageUrlFromNameFamily._allTransitiveDependencies,
+          query: query,
+        );
+
+  GetArtistImageUrlFromNameProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.query,
+  }) : super.internal();
+
+  final String query;
+
+  @override
+  Override overrideWith(
+    FutureOr<String> Function(GetArtistImageUrlFromNameRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetArtistImageUrlFromNameProvider._internal(
+        (ref) => create(ref as GetArtistImageUrlFromNameRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        query: query,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<String> createElement() {
+    return _GetArtistImageUrlFromNameProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetArtistImageUrlFromNameProvider && other.query == query;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, query.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin GetArtistImageUrlFromNameRef on AutoDisposeFutureProviderRef<String> {
+  /// The parameter `query` of this provider.
+  String get query;
+}
+
+class _GetArtistImageUrlFromNameProviderElement
+    extends AutoDisposeFutureProviderElement<String>
+    with GetArtistImageUrlFromNameRef {
+  _GetArtistImageUrlFromNameProviderElement(super.provider);
+
+  @override
+  String get query => (origin as GetArtistImageUrlFromNameProvider).query;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

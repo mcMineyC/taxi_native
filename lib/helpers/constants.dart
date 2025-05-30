@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 enum ScreenBreakpoint{
-  small(width: 352),
+  small(width: 458),
   medium(width: 580),
   large(width: 840),
   huge(width: 840),
@@ -44,4 +44,4 @@ extension on MediaQueryData{
   ScreenBreakpoint get breakpoint => ScreenBreakpoint.determine(this.size.width.toInt());
 }
 
-String kVersionString = "4.0.4";
+String kVersionString = "4.1.3";

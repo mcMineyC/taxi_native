@@ -73,6 +73,7 @@ class _CompactBrightnessModeSwitchState
       init = true;
     }
     return DropdownMenu<BrightnessModes>(
+      requestFocusOnTap: false,
       dropdownMenuEntries: [
         DropdownMenuEntry<BrightnessModes>(
           value: BrightnessModes.auto,
@@ -185,6 +186,7 @@ class _CompactColorSourceModeSwitchState
       init = true;
     }
     return DropdownMenu<ColorSourceMode>(
+      requestFocusOnTap: false,
       dropdownMenuEntries: [
         DropdownMenuEntry<ColorSourceMode>(
           value: ColorSourceMode.dynamic,

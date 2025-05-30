@@ -2,14 +2,14 @@ Bugs
 - scrollability (artist)
 - search doesn't work for anything but songs
   - check ts_mod.js
+- cancel doesn't do anything in the loading state
+- make debug switch do something
+  - show quick-test buttons
 
-TODO before announcing:
-- finish playlist support
-  - make dialog that edits the songs
-  - implement deletion logic
-  - possibly do rearrangement
-  - send the stuff to the backend (new topic, don't coerce into old HLV type)
-  - handle the stuff on the backend
-    - maybe modularize playlist creation function or at least copy it
-    - need to "add" songs before playlist is created since playlist stores the ids
-    - easy fix: hash the song ids using a map() call
+TODO:
+- edit settings to align with new M3X (ModernListItem style)
+
+Longterm goals:
+- migrate to using slivers for most things to implement edge-to-edge
+- finish mobilizing the different views
+- use colors differently

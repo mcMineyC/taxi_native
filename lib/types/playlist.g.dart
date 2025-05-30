@@ -11,6 +11,7 @@ _$PlaylistImpl _$$PlaylistImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       owner: json['owner'] as String,
       displayName: json['displayName'] as String,
+      description: json['description'] as String,
       visibleTo:
           (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
       inLibrary:
@@ -27,6 +28,7 @@ Map<String, dynamic> _$$PlaylistImplToJson(_$PlaylistImpl instance) =>
       'id': instance.id,
       'owner': instance.owner,
       'displayName': instance.displayName,
+      'description': instance.description,
       'visibleTo': instance.visibleTo,
       'inLibrary': instance.inLibrary,
       'allowedCollaborators': instance.allowedCollaborators,

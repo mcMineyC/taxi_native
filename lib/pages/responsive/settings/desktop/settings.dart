@@ -153,16 +153,16 @@ class DesktopSettingsPageState extends ConsumerState<DesktopSettingsPage> {
       (
         "Development",
         [
-          (
-            "Debug mode",
-            Switch(
-              value: prefProvider.debugMode,
-              onChanged: (value) => prefProvider.debugMode = value,
-            ),
-          ),
+          // (
+          //   "Debug mode",
+          //   Switch(
+          //     value: prefProvider.debugMode,
+          //     onChanged: (value) => prefProvider.debugMode = value,
+          //   ),
+          // ),
           (
             "Server url",
-            Container(constraints: const BoxConstraints(maxWidth: 4000), child: TextField(
+            Container(constraints: const BoxConstraints(maxWidth: 512), child: TextField(
               controller: _serverUrlController,
               decoration: const InputDecoration(
                 labelText: "Server URL",
@@ -304,14 +304,17 @@ class DesktopSettingsPageState extends ConsumerState<DesktopSettingsPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: _settings[index].$2.map((e) =>
-              Row(
-                children: [
-                  if(e.$1 != "") Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    child: Text(e.$1),
-                  ),
-                  e.$2
-                ],
+              Container(
+                margin: EdgeInsets.only(top: 4, bottom: 4),
+                child: Row(
+                  children: [
+                    if(e.$1 != "") Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      child: Text(e.$1),
+                    ),
+                    e.$2
+                  ],
+                ),
               ),
             ).toList(),
           )

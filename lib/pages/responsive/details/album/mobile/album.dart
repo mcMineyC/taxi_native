@@ -53,8 +53,17 @@ class MobileAlbumPage extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     MarqueeTextWidget(text: album.displayName, fontColor: Theme.of(context).colorScheme.onSurface, fontSize: 26, fontWeight: FontWeight.w900),
-                    MarqueeTextWidget(text: album.artistDisplayName, fontColor: Theme.of(context).colorScheme.onSurface, fontSize: 22, fontWeight: FontWeight.bold),
-                    Text("${songs.length} songs", style: Theme.of(context).textTheme.headlineSmall, overflow: TextOverflow.fade),
+                    // MarqueeTextWidget(text: album.artistDisplayName, fontColor: Theme.of(context).colorScheme.onSurface, fontSize: 22, fontWeight: FontWeight.bold),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(album.artistDisplayName, style: Theme.of(context).textTheme.titleLarge),
+                        SpacerWidget(width:6),
+                        Icon(Icons.circle, size: 12),
+                        SpacerWidget(width:6),
+                        Text("${songs.length} song${songs.length == 1 ? "" : "s"}", style: Theme.of(context).textTheme.titleLarge, overflow: TextOverflow.fade),
+                      ]
+                    )
                   ]
                 ),
               )
@@ -76,7 +85,7 @@ class MobileAlbumPage extends ConsumerWidget {
                     IconButton.outlined(
                       icon: Icon(Icons.library_add_rounded),
                       tooltip: "Add to queue",
-                      onPressed: () async => await playlistLogic(ref, context, album.id, "album"),
+                      onPressed: () => ref.read(playerProvider.notifier).addAlbumToQueue(id),
                     ),
                     IconButton.outlined(
                       tooltip: "Add to playlist",

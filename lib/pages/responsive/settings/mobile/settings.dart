@@ -204,6 +204,10 @@ class MobileSettingsPageState extends ConsumerState<MobileSettingsPage> {
         "",
         [
           (
+            "Version",
+            Text(kVersionString)
+          ),
+          (
             "",
             Row(
               mainAxisSize: MainAxisSize.max,
@@ -274,10 +278,6 @@ class MobileSettingsPageState extends ConsumerState<MobileSettingsPage> {
               ],
             ),
           ),
-          (
-            "Version",
-            Text(kVersionString)
-          )
         ],
       ),
     ];
@@ -298,7 +298,7 @@ class MobileSettingsPageState extends ConsumerState<MobileSettingsPage> {
                   ?.copyWith(color: themeChanger.colorScheme?.onSurface, fontWeight: FontWeight.bold)),
             ...(_settings[index].$2.map((e) =>
               Container(
-                margin: e.$1 == "" ? null : EdgeInsets.only(left: 16),
+                margin: EdgeInsets.only(left: 16, top: 4, bottom: 4),
                 child: Row(
                   children: [
                     if(e.$1 != "") Container(

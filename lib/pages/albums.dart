@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:beamer/beamer.dart';
+import 'package:taxi_native/pages/responsive/library/common.dart';
 
 import 'cards.dart';
 import '../providers/data/fetched_data_provider.dart'; 
@@ -11,7 +12,8 @@ import '../types/song.dart';
 
 class AlbumsPage extends ConsumerWidget {
   final bool private;
-  AlbumsPage({required this.private});
+  ViewType type;
+  AlbumsPage({required this.private, required this.type});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final AsyncValue<List<Album>> albums = ref.watch(fetchAlbumsProvider(ignore: private));
@@ -19,14 +21,14 @@ class AlbumsPage extends ConsumerWidget {
     return albums.when(
       data: (data) {
         var cardList = data.map((e) => {
-          "text": e.displayName,
+          "text": "${e.displayName}\n${e.artistDisplayName}",
           "image": e.imageUrl,
           "id": e.id,
           "type": "album",
           "addedBy": e.addedBy,
           "inLibrary": e.isInLibrary,
         }).toList();
-        return CardView(cardList: cardList);
+        return type == ViewType.grid ? CardView(cardList: cardList) : ItemListView(list: cardList);
       },
       loading: () => LoadingCardView(),
       error: (error, stack) => LoadingCardView(),

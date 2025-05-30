@@ -227,7 +227,7 @@ List<HLVArtist> changeHLVAlbum(HLVAlbum album, HLVArtist artist,
       (HLVAlbum existingValue) {
         Map<String, HLVSong> values = existingValue.songs;
         values.addEntries(newAlbum.songs.entries);
-        HLVAlbum returnVal = existingValue.copyWith(songs: values);
+        HLVAlbum returnVal = newAlbum.copyWith(songs: values);
         foundArtist.albums.remove(album.name);
         return returnVal;
       },

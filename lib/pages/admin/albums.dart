@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import 'package:cached_network_image/cached_network_image.dart';
+import "package:taxi_native/helpers/utilities.dart";
 
 import "../../providers/data/fetched_data_provider.dart";
 import "../../providers/data/info_provider.dart";
@@ -278,16 +279,8 @@ class _AlbumPane2State extends ConsumerState<AlbumsPane2> {
   }
 
   void refreshChanges() {
-    ref.read(playerProvider.notifier).clear();
-    ref.refresh(fetchSongsProvider(ignore: false));
-    ref.refresh(fetchAlbumsProvider(ignore: false));
-    ref.refresh(fetchArtistsProvider(ignore: false));
-    ref.refresh(fetchSongsProvider(ignore: true));
-    ref.refresh(fetchAlbumsProvider(ignore: true));
-    ref.refresh(fetchArtistsProvider(ignore: true));
+    refreshLibrary(ref);
     ref.read(searchProvider.notifier).search(ref.read(searchProvider.notifier).query, "album", ignore: true);
-    ref.refresh(fetchPlaylistsProvider(editable: false));
-    ref.refresh(fetchPlaylistsProvider(editable: true));
     ref.refresh(fetchRecentlyPlayedProvider);
     setState(() {
       selected = currentSong;

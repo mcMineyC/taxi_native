@@ -7,8 +7,6 @@ Bugs
   - mislabeled singles
   - improper visibleTo application
 - album song order (suspect trackNumber)
-- artists randomly don't show up
-  - Based on if user has DIRECTLY added a song
 - terminate websocket connection when server url is updated
 
 
@@ -26,4 +24,5 @@ TODO:
 Longterm goals:
 - migrate to using slivers for most things to implement edge-to-edge
 - finish mobilizing the different views
+  - Artist is not mobilized
 - use colors differently

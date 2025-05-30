@@ -898,9 +898,9 @@ class _VisibleToFieldState extends ConsumerState<VisibleToField> {
                     ScaffoldMessenger.of(context)
                         .showSnackBar(const SnackBar(content: Text("Saved")));
                     if (!widget.shouldRefresh) return;
-                    ref.refresh(fetchSongsProvider(ignore: true));
-                    ref.refresh(fetchAlbumsProvider(ignore: true));
-                    ref.refresh(fetchArtistsProvider(ignore: true));
+                    ref.refresh(fetchSongsProvider(personal: true));
+                    ref.refresh(fetchAlbumsProvider(personal: true));
+                    ref.refresh(fetchArtistsProvider(personal: true));
                   }),
                 ),
               ]));

@@ -7,12 +7,12 @@ import '../providers/services/player.dart';
 import '../providers/data/info_provider.dart';
 
 void refreshLibrary(dynamic ref) {
-  ref.refresh(fetchSongsProvider(ignore: true));
-  ref.refresh(fetchAlbumsProvider(ignore: true));
-  ref.refresh(fetchArtistsProvider(ignore: true));
-  ref.refresh(fetchSongsProvider(ignore: false));
-  ref.refresh(fetchAlbumsProvider(ignore: false));
-  ref.refresh(fetchArtistsProvider(ignore: false));
+  ref.refresh(fetchSongsProvider(personal: true));
+  ref.refresh(fetchAlbumsProvider(personal: true));
+  ref.refresh(fetchArtistsProvider(personal: true));
+  ref.refresh(fetchSongsProvider(personal: false));
+  ref.refresh(fetchAlbumsProvider(personal: false));
+  ref.refresh(fetchArtistsProvider(personal: false));
   ref.refresh(fetchPlaylistsProvider(editable: false));
   ref.refresh(fetchPlaylistsProvider(editable: true));
   ref.refresh(fetchPlaylistsProvider(ignore: true));
@@ -24,12 +24,12 @@ void refreshLibrary(dynamic ref) {
 }
 
 void invalidateProviders(WidgetRef ref) {
-  ref.invalidate(fetchSongsProvider(ignore: true));
-  ref.invalidate(fetchAlbumsProvider(ignore: true));
-  ref.invalidate(fetchArtistsProvider(ignore: true));
-  ref.invalidate(fetchSongsProvider(ignore: false));
-  ref.invalidate(fetchAlbumsProvider(ignore: false));
-  ref.invalidate(fetchArtistsProvider(ignore: false));
+  ref.invalidate(fetchSongsProvider(personal: true));
+  ref.invalidate(fetchAlbumsProvider(personal: true));
+  ref.invalidate(fetchArtistsProvider(personal: true));
+  ref.invalidate(fetchSongsProvider(personal: false));
+  ref.invalidate(fetchAlbumsProvider(personal: false));
+  ref.invalidate(fetchArtistsProvider(personal: false));
   ref.invalidate(fetchPlaylistsProvider(editable: false));
   ref.invalidate(fetchPlaylistsProvider(editable: true));
   ref.invalidate(fetchPlaylistsProvider(ignore: true));

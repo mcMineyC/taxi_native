@@ -17,11 +17,11 @@ part 'fetched_data_provider.g.dart';
 PreferencesProvider _p = ServiceLocator().get<PreferencesProvider>();
 
 @Riverpod(keepAlive: true)
-Future<List<Song>> fetchSongs(FetchSongsRef ref, {bool? ignore = false}) async {
+Future<List<Song>> fetchSongs(FetchSongsRef ref, {bool? personal = false}) async {
   final _sp = await SharedPreferences.getInstance();
-  print("IGNORING: $ignore");
+  print("IGNORING: $personal");
   var response = await http.post(
-      Uri.parse("${_p.backendUrl}/info/songs${ignore ?? false ? "?mine=true" : ""}"),
+      Uri.parse("${_p.backendUrl}/info/songs${personal ?? false ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -29,7 +29,7 @@ Future<List<Song>> fetchSongs(FetchSongsRef ref, {bool? ignore = false}) async {
   if (desponse["authed"] == false) {
     return Future.error({"code": 401, "error": "Not authenticated"});
   }
-  print("fetchSongs: ${desponse["songs"].length}, $ignore");
+  print("fetchSongs: ${desponse["songs"].length}, $personal");
   // print(desponse);
   desponse = desponse["songs"];
   var listThings = <Song>[];
@@ -38,7 +38,7 @@ Future<List<Song>> fetchSongs(FetchSongsRef ref, {bool? ignore = false}) async {
     var outStr = jsonEncode(element);
     var song = Song.fromJson(jsonDecode(outStr));
     if (song.artistDisplayName == "Megadeth") {
-      print("Well, has megadeth: ${song.displayName} ignoring = $ignore");
+      print("Well, has megadeth: ${song.displayName} ignoring = $personal");
     }
     listThings.add(song);
   });
@@ -47,10 +47,10 @@ Future<List<Song>> fetchSongs(FetchSongsRef ref, {bool? ignore = false}) async {
 
 @Riverpod(keepAlive: true)
 Future<List<Album>> fetchAlbums(FetchAlbumsRef ref,
-    {bool ignore = false}) async {
+    {bool personal = false}) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
-      Uri.parse("${_p.backendUrl}/info/albums${ignore ? "?mine=true" : ""}"),
+      Uri.parse("${_p.backendUrl}/info/albums${personal ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -70,12 +70,12 @@ Future<List<Album>> fetchAlbums(FetchAlbumsRef ref,
 
 @Riverpod(keepAlive: true)
 Future<List<Artist>> fetchArtists(FetchArtistsRef ref,
-    {bool ignore = false}) async {
+    {bool personal = false}) async {
   final _sp = await SharedPreferences.getInstance();
   print("TOKEN:\n\t" + (_sp.getString("token") ?? ""));
-  print("IGNORING: $ignore");
+  print("IGNORING: $personal");
   var response = await http.post(
-      Uri.parse("${_p.backendUrl}/info/artists${ignore ? "?mine=true" : ""}"),
+      Uri.parse("${_p.backendUrl}/info/artists${personal ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -96,12 +96,12 @@ Future<List<Artist>> fetchArtists(FetchArtistsRef ref,
 
 @Riverpod(keepAlive: false)
 Future<List<Song>> findBatchSongs(FindBatchSongsRef ref, List<String> ids,
-    {bool ignore = false}) async {
+    {bool personal = false}) async {
   final _sp = await SharedPreferences.getInstance();
   //print("REQUESTING: ${ids.map((e) => e.substring(e.length - 8))}");
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/songs/batch${ignore ? "?mine=true" : ""}"),
+          "${_p.backendUrl}/info/songs/batch${personal ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           {'authtoken': (_sp.getString("token") ?? ""), 'ids': ids}));
@@ -160,11 +160,11 @@ Future<List<String>> externalIdsToInternal(ExternalIdsToInternalRef ref, List<St
 }
 
 @riverpod
-Future<Song> findSong(FindSongRef ref, String id, {bool ignore = false}) async {
+Future<Song> findSong(FindSongRef ref, String id, {bool personal = false}) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/songs/$id${ignore ? "?mine=true" : ""}"),
+          "${_p.backendUrl}/info/songs/$id${personal ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': (_sp.getString("token") ?? "")}));
@@ -177,11 +177,11 @@ Future<Song> findSong(FindSongRef ref, String id, {bool ignore = false}) async {
 
 @riverpod
 Future<List<Song>> findSongsByAlbum(FindSongsByAlbumRef ref, String id,
-    {bool ignore = false}) async {
+    {bool personal = false}) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/songs/by/album/$id${ignore ? "?mine=true" : ""}"),
+          "${_p.backendUrl}/info/songs/by/album/$id${personal ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': (_sp.getString("token") ?? "")}));
@@ -196,11 +196,11 @@ Future<List<Song>> findSongsByAlbum(FindSongsByAlbumRef ref, String id,
 
 @riverpod
 Future<List<Song>> findSongsByArtist(FindSongsByArtistRef ref, String id,
-    {bool ignore = false}) async {
+    {bool personal = false}) async {
   var _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/songs/by/artist/$id${ignore ? "?mine=true" : ""}"),
+          "${_p.backendUrl}/info/songs/by/artist/$id${personal ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': (_sp.getString("token") ?? "")}));
@@ -240,11 +240,11 @@ Future<List<Album>> findAlbumsByArtist(FindAlbumsByArtistRef ref, String id,
 @riverpod
 Future<List<Album>> findNoSinglesByArtist(
     FindNoSinglesByArtistRef ref, String id,
-    {bool ignore = false}) async {
+    {bool personal = false}) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/albums/by/artist/$id?excludeSingles=true${ignore ? "&mine=true" : ""}"),
+          "${_p.backendUrl}/info/albums/by/artist/$id?excludeSingles=true${personal ? "&mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -264,11 +264,11 @@ Future<List<Album>> findNoSinglesByArtist(
 
 @riverpod
 Future<List<Song>> findSinglesByArtist(FindSinglesByArtistRef ref, String id,
-    {bool ignore = false}) async {
+    {bool personal = false}) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/singles/by/artist/$id${ignore ? "?mine=true" : ""}"),
+          "${_p.backendUrl}/info/singles/by/artist/$id${personal ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -288,11 +288,11 @@ Future<List<Song>> findSinglesByArtist(FindSinglesByArtistRef ref, String id,
 
 @riverpod
 Future<Album> findAlbum(FindAlbumRef ref, String id,
-    {bool ignore = false}) async {
+    {bool personal = false}) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/album/$id${ignore ? "?mine=true" : ""}"),
+          "${_p.backendUrl}/info/album/$id${personal ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -306,11 +306,11 @@ Future<Album> findAlbum(FindAlbumRef ref, String id,
 
 @riverpod
 Future<Artist> findArtist(FindArtistRef ref, String id,
-    {bool ignore = false}) async {
+    {bool personal = false}) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/artist/$id${ignore ? "?mine=true" : ""}"),
+          "${_p.backendUrl}/info/artist/$id${personal ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));
@@ -437,10 +437,10 @@ Future<bool> editItemVisibility(EditItemVisibilityRef ref, String type,
       (desponse["success"] ?? false) && desponse["data"]["visibleTo"] == users;
   if (clearCondition) {
     if (type == "song" || type == "album" || type == "artist")
-      ref.refresh(fetchSongsProvider(ignore: false));
+      ref.refresh(fetchSongsProvider(personal: false));
     if (type == "album" || type == "artist")
-      ref.refresh(fetchAlbumsProvider(ignore: false));
-    if (type == "artist") ref.refresh(fetchArtistsProvider(ignore: false));
+      ref.refresh(fetchAlbumsProvider(personal: false));
+    if (type == "artist") ref.refresh(fetchArtistsProvider(personal: false));
   }
   return clearCondition;
 }

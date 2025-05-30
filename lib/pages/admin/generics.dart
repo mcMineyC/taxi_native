@@ -25,24 +25,24 @@ class _SearchableTypedViewState extends ConsumerState<SearchableTypedView> {
     SearchInfo searchInfo = ref.watch(searchProvider);
     //AsyncValue<List<dynamic>> datas = ref.watch(
     //  switch(widget.type) {
-    //    "songs" => fetchSongsProvider(ignore: true),
-    //    "albums" => fetchAlbumsProvider(ignore: true),
-    //    "artists" => fetchArtistsProvider(ignore: true),
+    //    "songs" => fetchSongsProvider(personal: true),
+    //    "albums" => fetchAlbumsProvider(personal: true),
+    //    "artists" => fetchArtistsProvider(personal: true),
     //    //"playlists" => fetchPlaylistsProvider,
-    //    _ => fetchSongsProvider(ignore: true),
+    //    _ => fetchSongsProvider(personal: true),
     //  }
     //);
     print("Rebuilding SearchableTypedView");
     AsyncValue<List<dynamic>> datas;
     switch(widget.type) {
       case "songs":
-        datas = ref.watch(fetchSongsProvider(ignore: true));
+        datas = ref.watch(fetchSongsProvider(personal: true));
         break;
       case "albums":
-        datas = ref.watch(fetchAlbumsProvider(ignore: true));
+        datas = ref.watch(fetchAlbumsProvider(personal: true));
         break;
       case "artists":
-        datas = ref.watch(fetchArtistsProvider(ignore: true));
+        datas = ref.watch(fetchArtistsProvider(personal: true));
         break;
       case "playlists":
         datas = ref.watch(fetchPlaylistsProvider(editable: false));

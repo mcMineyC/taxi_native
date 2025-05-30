@@ -20,16 +20,16 @@ import 'package:dynamic_color/dynamic_color.dart';
 
 import 'pages/error.dart';
 import 'pages/responsive/skeleton/skeleton.dart';
-import 'pages/artists.dart';
-import 'pages/artist.dart';
-import 'pages/albums.dart';
+import 'pages/lists/artists.dart';
+import 'pages/responsive/details/artist/artist.dart';
+import 'pages/lists/albums.dart';
 import 'pages/responsive/details/album/album.dart';
-import 'pages/songs.dart';
+import 'pages/lists/songs.dart';
 import 'pages/new_adder.dart';
 import 'pages/responsive/queue/queue.dart';
 import 'pages/landing.dart';
 import 'pages/search.dart';
-import 'pages/playlists.dart';
+import 'pages/lists/playlists.dart';
 import 'pages/responsive/playlist/playlist.dart';
 import 'pages/responsive/settings/settings.dart';
 import 'pages/checklist.dart';
@@ -192,7 +192,7 @@ class _AppState extends ConsumerState<App> {
       //     title: "Albums by Artist",
       //     // popToNamed: '/home',
       //     child: HomePage(
-      //         homeJunk: AlbumsByArtistPage(artistId: artistId, private: true)),
+      //         homeJunk: AlbumsByArtistPage(artistId: artistId, personal: true)),
       //   );
       // },
       '/artist/:artistId': (context, state, data) {
@@ -211,13 +211,13 @@ class _AppState extends ConsumerState<App> {
               return BeamPage(
                 key: ValueKey("singles-by-artist-$artistId"),
                 title: "Singles by ${state.uri.queryParameters["name"] ?? "Artist"}",
-                child: HomePage(homeJunk: SinglesByArtistPage(artistId: artistId, private: !artistId.contains("bible"))),
+                child: HomePage(homeJunk: SinglesByArtistPage(artistId: artistId, personal: !artistId.contains("bible"))),
               );
             case "songs":
               return BeamPage(
                 key: ValueKey("songs-by-artist-$artistId"),
                 title: "Songs by ${state.uri.queryParameters["name"] ?? "Artist"}",
-                child: HomePage(homeJunk: SongsByArtistPage(artistId: artistId, private: !artistId.contains("bible"), type: ViewType.grid)),
+                child: HomePage(homeJunk: SongsByArtistPage(artistId: artistId, personal: !artistId.contains("bible"), type: ViewType.grid)),
               );
           }
         }
@@ -241,19 +241,19 @@ class _AppState extends ConsumerState<App> {
         //         key: ValueKey("albums-by-artist-$artistId"),
         //         title:  "Albums by ${params["name"] ?? "Artist"}",
         //         // popToNamed: '/home',
-        //         child: HomePage(homeJunk: AlbumsByArtistPage(artistId: id, private: !id.contains("bible"))),
+        //         child: HomePage(homeJunk: AlbumsByArtistPage(artistId: id, personal: !id.contains("bible"))),
         //       );
         //     case "singles":
         //       return BeamPage(
         //         key: ValueKey("singles-by-artist-$artistId"),
         //         title: "Singles by ${params["name"] ?? "Artist"}",
-        //         child: HomePage(homeJunk: SinglesByArtistPage(artistId: id, private: !id.contains("bible"))),
+        //         child: HomePage(homeJunk: SinglesByArtistPage(artistId: id, personal: !id.contains("bible"))),
         //       );
         //     case "songs":
         //       return BeamPage(
         //         key: ValueKey("songs-by-artist-$artistId"),
         //         title: "Songs by ${params["name"] ?? "Artist"}",
-        //         child: HomePage(homeJunk: SongsByArtistPage(artistId: id, private: !id.contains("bible"))),
+        //         child: HomePage(homeJunk: SongsByArtistPage(artistId: id, personal: !id.contains("bible"))),
         //       );
         //     default:
         //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("What's this??? Debug info: artistViewRoute:${type}/${id}")));
@@ -281,19 +281,19 @@ class _AppState extends ConsumerState<App> {
             key: const ValueKey('artists'),
             title: 'Artists',
             // popToNamed: '/home',
-            child: HomePage(homeJunk: ArtistsPage(private: true, type: ViewType.grid)), // BUG Update this with the persisted state
+            child: HomePage(homeJunk: ArtistsPage(personal: true, type: ViewType.grid)), // BUG Update this with the persisted state
           ),
       '/albums': (context, state, data) => BeamPage(
             key: const ValueKey('albums'),
             title: 'Albums',
             // popToNamed: '/home',
-            child: HomePage(homeJunk: AlbumsPage(private: true, type: ViewType.grid)),
+            child: HomePage(homeJunk: AlbumsPage(personal: true, type: ViewType.grid)),
           ),
       '/songs': (context, state, data) => BeamPage(
             key: const ValueKey('songs'),
             title: 'Songs',
             // popToNamed: '/home',
-            child: HomePage(homeJunk: SongsPage(private: true, type: ViewType.grid)),
+            child: HomePage(homeJunk: SongsPage(personal: true, type: ViewType.grid)),
           ),
       '/queue': (context, state, data) => BeamPage(
             key: const ValueKey('queue'),
@@ -317,7 +317,7 @@ class _AppState extends ConsumerState<App> {
             key: const ValueKey('playlists'),
             title: 'Playlists',
             // popToNamed: '/home',
-            child: HomePage(homeJunk: PlaylistsPage(private: true, type: ViewType.list)),
+            child: HomePage(homeJunk: PlaylistsPage(personal: true, type: ViewType.list)),
           ),
       '/playlist/:playlistId': (context, state, data) {
         final playlistId = state.uri

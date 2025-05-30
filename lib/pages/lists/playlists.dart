@@ -4,20 +4,20 @@ import 'package:beamer/beamer.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:taxi_native/types/generic.dart';
 
-import '../providers/data/playlist_provider.dart'; 
-import '../providers/error_watcher.dart';
-import '../types/playlist.dart';
-import 'cards.dart';
-import "responsive/library/common.dart";
+import '../../providers/data/playlist_provider.dart'; 
+import '../../providers/error_watcher.dart';
+import '../../types/playlist.dart';
+import '../cards.dart';
+import "../responsive/library/common.dart";
 
 class PlaylistsPage extends ConsumerWidget {
-  final bool private;
+  final bool personal;
   final ViewType type;
-  PlaylistsPage({required this.private, required this.type});
+  PlaylistsPage({required this.personal, required this.type});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<Playlist>> songs = ref.watch(fetchPlaylistsProvider(ignore: private));
-    handleError(ref, fetchPlaylistsProvider(ignore: private), Beamer.of(context));
+    final AsyncValue<List<Playlist>> songs = ref.watch(fetchPlaylistsProvider(ignore: personal));
+    handleError(ref, fetchPlaylistsProvider(ignore: personal), Beamer.of(context));
     return songs.when(
       data: (data) {
         List<GenericItem> cardList = data.map((e) => GenericItem.fromPlaylist(e)).toList();

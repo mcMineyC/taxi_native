@@ -4,10 +4,10 @@ import "package:shared_preferences/shared_preferences.dart";
 import "common.dart";
 import "../../../helpers/service_locator.dart";
 import "../../../helpers/widgets/helper_widgets.dart";
-import "../../songs.dart";
-import "../../albums.dart";
-import "../../artists.dart";
-import "../../playlists.dart";
+import "../../lists/songs.dart";
+import "../../lists/albums.dart";
+import "../../lists/artists.dart";
+import "../../lists/playlists.dart";
 import "package:taxi_native/helpers/constants.dart";
 
 class LibraryPage extends StatefulWidget {
@@ -119,10 +119,10 @@ class _LibraryPageState extends State<LibraryPage> {
         
         Expanded(
           child: switch(currentTab) {
-            TabList.songs => SongsPage(private: private, type: viewType),
-            TabList.albums => AlbumsPage(private: private, type: viewType),
-            TabList.artists => ArtistsPage(private: private, type: viewType),
-            TabList.playlists => PlaylistsPage(private: private, type: viewType),
+            TabList.songs => SongsPage(personal: private, type: viewType),
+            TabList.albums => AlbumsPage(personal: private, type: viewType),
+            TabList.artists => ArtistsPage(personal: private, type: viewType),
+            TabList.playlists => PlaylistsPage(personal: private, type: viewType),
           },
         ),
       ],

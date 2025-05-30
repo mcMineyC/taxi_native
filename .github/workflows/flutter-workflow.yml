@@ -5,7 +5,7 @@ on:
     branches:
       - main
 permissions:
-  contents: write 
+  contents: write
 
 jobs:
   build-android:
@@ -19,8 +19,8 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu' # See 'Supported distributions' for available options
-          java-version: '21'
+          distribution: "zulu" # See 'Supported distributions' for available options
+          java-version: "21"
       - run: flutter build apk
       - run: cp build/app/outputs/apk/release/app-release.apk taxi-android.apk
       - uses: actions/upload-artifact@v4
@@ -38,7 +38,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install libunwind-dev 
+          sudo apt-get install libunwind-dev
           sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
           sudo apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-good gstreamer1.0-plugins-bad
       - run: flutter build linux
@@ -88,7 +88,7 @@ jobs:
   release:
     runs-on: ubuntu-22.04
     # needs: [build-linux]
-    needs: [build-macos, build-linux, build-windows, build-android] 
+    needs: [build-macos, build-linux, build-windows, build-android]
     steps:
       - uses: actions/checkout@v4
       - name: Get current date
@@ -100,6 +100,17 @@ jobs:
           VERSION=$(grep -o 'kVersionString = "[^"]*"' lib/helpers/constants.dart | sed 's/kVersionString = "\(.*\)"/\1/')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Found version: $VERSION"
+      - name: Check if tag exists
+        id: tag_check
+        run: |
+          if git rev-parse "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "Tag v${{ steps.version.outputs.version }} already exists"
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Tag v${{ steps.version.outputs.version }} does not exist"
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Set outputs
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
@@ -125,11 +136,17 @@ jobs:
           mv taxi.exe taxi-windows.exe
       - name: List downloaded artifacts
         run: ls -R .
-        
+
       - uses: ncipollo/release-action@v1
+        if: steps.tag_check.outputs.exists == 'false'
         with:
           artifacts: "taxi-android.apk,taxi-linux_x64.tar.gz,taxi-mac.tar.gz,taxi-windows.exe"
           tag: v${{ steps.version.outputs.version }}
           makeLatest: true
           name: "Release v${{ steps.version.outputs.version }} - ${{ steps.date.outputs.date }}"
           bodyFile: ".github/workflows/body.md"
+      - name: Skip release - tag exists
+        if: steps.tag_check.outputs.exists == 'true'
+        run: |
+          echo "::warning::Skipping release creation because tag v${{ steps.version.outputs.version }} already exists"
+          echo "To create a new release, update the version in lib/helpers/constants.dart"

@@ -12,9 +12,9 @@ _$HLVArtistImpl _$$HLVArtistImplFromJson(Map<String, dynamic> json) =>
       visibleTo:
           (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
       imageUrl: json['imageUrl'] as String,
-      albums: (json['albums'] as List<dynamic>)
-          .map((e) => HLVAlbum.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      albums: (json['albums'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(k, HLVAlbum.fromJson(e as Map<String, dynamic>)),
+      ),
     );
 
 Map<String, dynamic> _$$HLVArtistImplToJson(_$HLVArtistImpl instance) =>
@@ -33,9 +33,9 @@ _$HLVAlbumImpl _$$HLVAlbumImplFromJson(Map<String, dynamic> json) =>
           (json['visibleTo'] as List<dynamic>).map((e) => e as String).toList(),
       imageUrl: json['imageUrl'] as String,
       artistImageUrl: json['artistImageUrl'] as String,
-      songs: (json['songs'] as List<dynamic>)
-          .map((e) => HLVSong.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      songs: (json['songs'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(k, HLVSong.fromJson(e as Map<String, dynamic>)),
+      ),
     );
 
 Map<String, dynamic> _$$HLVAlbumImplToJson(_$HLVAlbumImpl instance) =>

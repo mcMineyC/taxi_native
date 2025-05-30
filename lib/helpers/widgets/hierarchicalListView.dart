@@ -29,7 +29,6 @@ class HierarchicalListView extends StatelessWidget {
             padding: EdgeInsets.zero,
           );
   }
-  
 
   // Recursive function to build the hierarchical list view with indentation
   Widget _buildHLVArtist(HLVArtist artist, int level, BuildContext context) {
@@ -66,7 +65,7 @@ class HierarchicalListView extends StatelessWidget {
             : ExpansionTile(
                 title: Text(artist.name),
                 //tilePadding: EdgeInsets.zero,
-                children: artist.albums
+                children: artist.albums.values
                     .map((album) =>
                         _buildHLVAlbum(album, artist, level + 1, context))
                     .toList(),
@@ -133,7 +132,7 @@ class HierarchicalListView extends StatelessWidget {
                 ),
                 collapsedShape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8))),
-                children: album.songs
+                children: album.songs.values
                     .map((song) =>
                         _buildHLVSong(song, album, artist, level + 1, context))
                     .toList(),
@@ -196,18 +195,16 @@ List<HLVArtist> changeHLVSong(HLVSong song, HLVAlbum album, HLVArtist artist,
   List<HLVArtist> list = listt;
   int artistIndex = list.indexOf(artist);
   HLVArtist foundArtist = list[artistIndex];
-  int albumIndex = foundArtist.albums.indexOf(album);
-  HLVAlbum foundAlbum = foundArtist.albums[albumIndex];
-  int songIndex = foundAlbum.songs.indexOf(song);
+  HLVAlbum foundAlbum = foundArtist.albums[album.name]!;
   if (newSong != null)
-    foundAlbum.songs[songIndex] = newSong;
+    foundAlbum.songs[song.name] = newSong;
   else
-    foundAlbum.songs.removeAt(songIndex);
+    foundAlbum.songs.remove(song.name);
 
   if (foundAlbum.songs.isEmpty)
-    foundArtist.albums.removeAt(albumIndex);
+    foundArtist.albums.remove(album.name);
   else
-    foundArtist.albums[albumIndex] = foundAlbum;
+    foundArtist.albums[album.name] = foundAlbum;
 
   if (foundArtist.albums.isEmpty)
     list.removeAt(artistIndex);
@@ -222,19 +219,36 @@ List<HLVArtist> changeHLVAlbum(HLVAlbum album, HLVArtist artist,
   List<HLVArtist> list = listt;
   int artistIndex = list.indexOf(artist);
   HLVArtist foundArtist = list[artistIndex];
-  int albumIndex = foundArtist.albums.indexOf(album);
-  if (newAlbum != null)
-    foundArtist.albums[albumIndex] = newAlbum;
+  HLVAlbum foundAlbum = foundArtist.albums[album.name]!;
+
+  if (newAlbum == null)
+    foundArtist.albums.remove(album.name);
   else
-    list.removeAt(artistIndex);
+    foundArtist.albums[album.name] = newAlbum;
 
   if (foundArtist.albums.isEmpty)
     list.removeAt(artistIndex);
   else
     list[artistIndex] = foundArtist;
-
+  //printHLVContent(list);
   return list;
 }
+// List<HLVArtist> list = listt;
+// int artistIndex = list.indexOf(artist);
+// HLVArtist foundArtist = list[artistIndex];
+// int albumIndex = foundArtist.albums.indexOf(album);
+// if (newAlbum != null)
+//   foundArtist.albums[albumIndex] = newAlbum;
+// else
+//   list.removeAt(artistIndex);
+
+// if (foundArtist.albums.isEmpty)
+//   list.removeAt(artistIndex);
+// else
+//   list[artistIndex] = foundArtist;
+
+//   return listt;
+// }
 
 List<HLVArtist> changeHLVArtist(
     HLVArtist artist, HLVArtist? newArtist, List<HLVArtist> listt) {
@@ -337,7 +351,8 @@ class _HLVSongEditDialogState extends State<HLVSongEditDialog> {
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
                 child: Row(children: [
                   Expanded(
-                    child: TextField( // NOTE: change this to a dropdown
+                    child: TextField(
+                      // NOTE: change this to a dropdown
                       onChanged: (value) {
                         setState(() => song = song.copyWith(audioUrl: value));
                       },
@@ -355,8 +370,8 @@ class _HLVSongEditDialogState extends State<HLVSongEditDialog> {
                   SpacerWidget(width: 8),
                   FilledButton(
                     onPressed: specialUrlToPlain(song.audioUrl) != null
-                        ? () =>
-                            launchUrl(Uri.parse(specialUrlToPlain(song.audioUrl)!))
+                        ? () => launchUrl(
+                            Uri.parse(specialUrlToPlain(song.audioUrl)!))
                         : null,
                     child: Row(
                       children: [
@@ -655,11 +670,15 @@ class _HLVArtistEditDialogState extends ConsumerState<HLVArtistEditDialog> {
                     child: Text("Find"),
                     onPressed: () async {
                       setState(() => findState = "loading");
-                      ref.read(getArtistImageUrlFromNameProvider(nameController.text).future).then((url) => setState(() {
-                        findState = "data";
-                        artist = artist.copyWith(imageUrl: url);
-                        imageUrlController.text = url;
-                      }));
+                      ref
+                          .read(getArtistImageUrlFromNameProvider(
+                                  nameController.text)
+                              .future)
+                          .then((url) => setState(() {
+                                findState = "data";
+                                artist = artist.copyWith(imageUrl: url);
+                                imageUrlController.text = url;
+                              }));
                     },
                   )
                   //SpacerWidget(width: 8),
@@ -688,16 +707,18 @@ class _HLVArtistEditDialogState extends ConsumerState<HLVArtistEditDialog> {
             Container(
               margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),
               constraints: BoxConstraints(maxHeight: 512, maxWidth: 512),
-              child: findState == "data" ? FadeInImage.memoryNetwork(
-                placeholder: kTransparentImage,
-                image: artist.imageUrl,
-                imageErrorBuilder: (context, error, stackTrace) =>
-                    Row(children: [
-                  Icon(Icons.error, color: Colors.red[500]),
-                  SpacerWidget(width: 8),
-                  Text("Failed to load image")
-                ]),
-              ) : CircularProgressIndicator(),
+              child: findState == "data"
+                  ? FadeInImage.memoryNetwork(
+                      placeholder: kTransparentImage,
+                      image: artist.imageUrl,
+                      imageErrorBuilder: (context, error, stackTrace) =>
+                          Row(children: [
+                        Icon(Icons.error, color: Colors.red[500]),
+                        SpacerWidget(width: 8),
+                        Text("Failed to load image")
+                      ]),
+                    )
+                  : CircularProgressIndicator(),
             ),
             // Container(
             //   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 24),

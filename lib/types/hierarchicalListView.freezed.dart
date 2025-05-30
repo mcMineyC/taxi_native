@@ -23,7 +23,7 @@ mixin _$HLVArtist {
   String get name => throw _privateConstructorUsedError;
   List<String> get visibleTo => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
-  List<HLVAlbum> get albums => throw _privateConstructorUsedError;
+  Map<String, HLVAlbum> get albums => throw _privateConstructorUsedError;
 
   /// Serializes this HLVArtist to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -44,7 +44,7 @@ abstract class $HLVArtistCopyWith<$Res> {
       {String name,
       List<String> visibleTo,
       String imageUrl,
-      List<HLVAlbum> albums});
+      Map<String, HLVAlbum> albums});
 }
 
 /// @nodoc
@@ -83,7 +83,7 @@ class _$HLVArtistCopyWithImpl<$Res, $Val extends HLVArtist>
       albums: null == albums
           ? _value.albums
           : albums // ignore: cast_nullable_to_non_nullable
-              as List<HLVAlbum>,
+              as Map<String, HLVAlbum>,
     ) as $Val);
   }
 }
@@ -100,7 +100,7 @@ abstract class _$$HLVArtistImplCopyWith<$Res>
       {String name,
       List<String> visibleTo,
       String imageUrl,
-      List<HLVAlbum> albums});
+      Map<String, HLVAlbum> albums});
 }
 
 /// @nodoc
@@ -137,7 +137,7 @@ class __$$HLVArtistImplCopyWithImpl<$Res>
       albums: null == albums
           ? _value.albums
           : albums // ignore: cast_nullable_to_non_nullable
-              as List<HLVAlbum>,
+              as Map<String, HLVAlbum>,
     ));
   }
 }
@@ -162,7 +162,7 @@ class _$HLVArtistImpl extends _HLVArtist {
   @override
   final String imageUrl;
   @override
-  final List<HLVAlbum> albums;
+  final Map<String, HLVAlbum> albums;
 
   @override
   String toString() {
@@ -211,7 +211,7 @@ abstract class _HLVArtist extends HLVArtist {
       {required final String name,
       required final List<String> visibleTo,
       required final String imageUrl,
-      required final List<HLVAlbum> albums}) = _$HLVArtistImpl;
+      required final Map<String, HLVAlbum> albums}) = _$HLVArtistImpl;
   _HLVArtist._() : super._();
 
   factory _HLVArtist.fromJson(Map<String, dynamic> json) =
@@ -224,7 +224,7 @@ abstract class _HLVArtist extends HLVArtist {
   @override
   String get imageUrl;
   @override
-  List<HLVAlbum> get albums;
+  Map<String, HLVAlbum> get albums;
 
   /// Create a copy of HLVArtist
   /// with the given fields replaced by the non-null parameter values.
@@ -245,7 +245,7 @@ mixin _$HLVAlbum {
   List<String> get visibleTo => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
   String get artistImageUrl => throw _privateConstructorUsedError;
-  List<HLVSong> get songs => throw _privateConstructorUsedError;
+  Map<String, HLVSong> get songs => throw _privateConstructorUsedError;
 
   /// Serializes this HLVAlbum to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -268,7 +268,7 @@ abstract class $HLVAlbumCopyWith<$Res> {
       List<String> visibleTo,
       String imageUrl,
       String artistImageUrl,
-      List<HLVSong> songs});
+      Map<String, HLVSong> songs});
 }
 
 /// @nodoc
@@ -317,7 +317,7 @@ class _$HLVAlbumCopyWithImpl<$Res, $Val extends HLVAlbum>
       songs: null == songs
           ? _value.songs
           : songs // ignore: cast_nullable_to_non_nullable
-              as List<HLVSong>,
+              as Map<String, HLVSong>,
     ) as $Val);
   }
 }
@@ -336,7 +336,7 @@ abstract class _$$HLVAlbumImplCopyWith<$Res>
       List<String> visibleTo,
       String imageUrl,
       String artistImageUrl,
-      List<HLVSong> songs});
+      Map<String, HLVSong> songs});
 }
 
 /// @nodoc
@@ -383,7 +383,7 @@ class __$$HLVAlbumImplCopyWithImpl<$Res>
       songs: null == songs
           ? _value.songs
           : songs // ignore: cast_nullable_to_non_nullable
-              as List<HLVSong>,
+              as Map<String, HLVSong>,
     ));
   }
 }
@@ -414,7 +414,7 @@ class _$HLVAlbumImpl extends _HLVAlbum {
   @override
   final String artistImageUrl;
   @override
-  final List<HLVSong> songs;
+  final Map<String, HLVSong> songs;
 
   @override
   String toString() {
@@ -471,7 +471,7 @@ abstract class _HLVAlbum extends HLVAlbum {
       required final List<String> visibleTo,
       required final String imageUrl,
       required final String artistImageUrl,
-      required final List<HLVSong> songs}) = _$HLVAlbumImpl;
+      required final Map<String, HLVSong> songs}) = _$HLVAlbumImpl;
   _HLVAlbum._() : super._();
 
   factory _HLVAlbum.fromJson(Map<String, dynamic> json) =
@@ -488,7 +488,7 @@ abstract class _HLVAlbum extends HLVAlbum {
   @override
   String get artistImageUrl;
   @override
-  List<HLVSong> get songs;
+  Map<String, HLVSong> get songs;
 
   /// Create a copy of HLVAlbum
   /// with the given fields replaced by the non-null parameter values.

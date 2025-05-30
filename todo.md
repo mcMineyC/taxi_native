@@ -10,6 +10,8 @@ Bugs
 - album song order (suspect trackNumber)
 - artists randomly don't show up
   - Based on if user has DIRECTLY added a song
+- terminate websocket connection when server url is updated
+
 
 - Visual bugs
   - make debug switch do something

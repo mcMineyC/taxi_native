@@ -7,11 +7,15 @@ Bugs
 - Fix fake-albums
   - mislabeled singles
   - improper visibleTo application
-- Show all (not just inLibrary) for artist details page
 - album song order (suspect trackNumber)
-- artists randomly don't show up?
-- make debug switch do something
-  - show quick-test buttons
+- artists randomly don't show up
+  - Based on if user has DIRECTLY added a song
+
+- Visual bugs
+  - make debug switch do something
+    - show quick-test buttons
+  - Setting the artist name by beaming results in transition that looks weird
+  - make loading listview (only cards rn and it looks weird when ViewType is list)
 
 TODO:
 - edit settings to align with new M3X (ModernListItem style)

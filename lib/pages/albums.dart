@@ -31,13 +31,13 @@ class AlbumsPage extends ConsumerWidget {
 }
 
 class AlbumsByArtistPage extends ConsumerWidget {
-  final bool private;
   final String artistId;
-  AlbumsByArtistPage({required this.private, required this.artistId});
+  AlbumsByArtistPage({required this.artistId});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<Album>> albums = ref.watch(findAlbumsByArtistProvider(artistId, ignore: private));
-    handleError(ref, fetchAlbumsProvider(ignore: private), Beamer.of(context));
+    FindAlbumsByArtistProvider prov = findAlbumsByArtistProvider(artistId, personal: false);
+    final AsyncValue<List<Album>> albums = ref.watch(prov);
+    handleError(ref, prov, Beamer.of(context));
     return albums.when(
       data: (data) {
         var cardList = data.map((e) => GenericItem.fromAlbum(e)).toList();

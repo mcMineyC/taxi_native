@@ -267,7 +267,7 @@ class MobileSettingsPageState extends ConsumerState<MobileSettingsPage> {
                             ));
                     if (result == true) {
                       ref.read(playerProvider.notifier).stop();
-                      logout(ref);
+                      invalidateProviders(ref);
                       //await themeChanger.reset(); // changing the color is a bit too drastic
                       //await prefProvider.reset(); // do I really need to do this?
                       await prefProvider.logout();

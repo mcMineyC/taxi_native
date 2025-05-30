@@ -1143,7 +1143,7 @@ class _FindSongsByArtistProviderElement
 }
 
 String _$findAlbumsByArtistHash() =>
-    r'140b4a7e0848615851583244ff6a33ae1f859110';
+    r'dc95fe3d7446bec3d4ff9e5c7716a98440d17a22';
 
 /// See also [findAlbumsByArtist].
 @ProviderFor(findAlbumsByArtist)
@@ -1157,11 +1157,11 @@ class FindAlbumsByArtistFamily extends Family<AsyncValue<List<Album>>> {
   /// See also [findAlbumsByArtist].
   FindAlbumsByArtistProvider call(
     String id, {
-    bool ignore = false,
+    bool personal = false,
   }) {
     return FindAlbumsByArtistProvider(
       id,
-      ignore: ignore,
+      personal: personal,
     );
   }
 
@@ -1171,7 +1171,7 @@ class FindAlbumsByArtistFamily extends Family<AsyncValue<List<Album>>> {
   ) {
     return call(
       provider.id,
-      ignore: provider.ignore,
+      personal: provider.personal,
     );
   }
 
@@ -1196,12 +1196,12 @@ class FindAlbumsByArtistProvider
   /// See also [findAlbumsByArtist].
   FindAlbumsByArtistProvider(
     String id, {
-    bool ignore = false,
+    bool personal = false,
   }) : this._internal(
           (ref) => findAlbumsByArtist(
             ref as FindAlbumsByArtistRef,
             id,
-            ignore: ignore,
+            personal: personal,
           ),
           from: findAlbumsByArtistProvider,
           name: r'findAlbumsByArtistProvider',
@@ -1213,7 +1213,7 @@ class FindAlbumsByArtistProvider
           allTransitiveDependencies:
               FindAlbumsByArtistFamily._allTransitiveDependencies,
           id: id,
-          ignore: ignore,
+          personal: personal,
         );
 
   FindAlbumsByArtistProvider._internal(
@@ -1224,11 +1224,11 @@ class FindAlbumsByArtistProvider
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.id,
-    required this.ignore,
+    required this.personal,
   }) : super.internal();
 
   final String id;
-  final bool ignore;
+  final bool personal;
 
   @override
   Override overrideWith(
@@ -1244,7 +1244,7 @@ class FindAlbumsByArtistProvider
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         id: id,
-        ignore: ignore,
+        personal: personal,
       ),
     );
   }
@@ -1258,14 +1258,14 @@ class FindAlbumsByArtistProvider
   bool operator ==(Object other) {
     return other is FindAlbumsByArtistProvider &&
         other.id == id &&
-        other.ignore == ignore;
+        other.personal == personal;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, id.hashCode);
-    hash = _SystemHash.combine(hash, ignore.hashCode);
+    hash = _SystemHash.combine(hash, personal.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -1277,8 +1277,8 @@ mixin FindAlbumsByArtistRef on AutoDisposeFutureProviderRef<List<Album>> {
   /// The parameter `id` of this provider.
   String get id;
 
-  /// The parameter `ignore` of this provider.
-  bool get ignore;
+  /// The parameter `personal` of this provider.
+  bool get personal;
 }
 
 class _FindAlbumsByArtistProviderElement
@@ -1289,7 +1289,7 @@ class _FindAlbumsByArtistProviderElement
   @override
   String get id => (origin as FindAlbumsByArtistProvider).id;
   @override
-  bool get ignore => (origin as FindAlbumsByArtistProvider).ignore;
+  bool get personal => (origin as FindAlbumsByArtistProvider).personal;
 }
 
 String _$findNoSinglesByArtistHash() =>

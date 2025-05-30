@@ -205,7 +205,7 @@ class _AppState extends ConsumerState<App> {
                 key: ValueKey("albums-by-artist-$artistId"),
                 title:  "Albums by ${state.uri.queryParameters["name"] ?? "Artist"}",
                 // popToNamed: '/home',
-                child: HomePage(homeJunk: AlbumsByArtistPage(artistId: artistId, private: !artistId.contains("bible"))),
+                child: HomePage(homeJunk: AlbumsByArtistPage(artistId: artistId)),
               );
             case "singles":
               return BeamPage(

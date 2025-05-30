@@ -215,11 +215,11 @@ Future<List<Song>> findSongsByArtist(FindSongsByArtistRef ref, String id,
 
 @riverpod
 Future<List<Album>> findAlbumsByArtist(FindAlbumsByArtistRef ref, String id,
-    {bool ignore = false}) async {
+    {bool personal = false}) async {
   final _sp = await SharedPreferences.getInstance();
   var response = await http.post(
       Uri.parse(
-          "${_p.backendUrl}/info/albums/by/artist/$id${ignore ? "?mine=true" : ""}"),
+          "${_p.backendUrl}/info/albums/by/artist/$id${personal ? "?mine=true" : ""}"),
       headers: Map<String, String>.from({'Content-Type': 'application/json'}),
       body: jsonEncode(
           <String, String>{'authtoken': _sp.getString("token") ?? ""}));

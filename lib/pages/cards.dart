@@ -96,8 +96,8 @@ class ItemListView extends ConsumerWidget {
                     color: Theme.of(context).colorScheme.onSurface,
                   )
                 ),
-                subtitle: Text(
-                  working.texts.length > 1 ? working.texts[1] : working.texts[0],
+                subtitle: working.texts.length > 1 ? Text(
+                  working.texts[1],
                   // working["text"].split("\n").last,
                   overflow: TextOverflow.fade,
                   maxLines: 2,
@@ -105,7 +105,7 @@ class ItemListView extends ConsumerWidget {
                     fontWeight: FontWeight.w500,
                     color: Theme.of(context).colorScheme.onSurface,
                   )
-                ),
+                ) : null,
 
                 // subtitle: Row(
                 //   children: [

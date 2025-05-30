@@ -16,8 +16,8 @@ class ArtistsPage extends ConsumerWidget {
   ArtistsPage({required this.private, required this.type});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AsyncValue<List<Artist>> artists = ref.watch(fetchArtistsProvider(ignore: private));
-    handleError(ref, fetchArtistsProvider(ignore: private), Beamer.of(context));
+    final AsyncValue<List<Artist>> artists = ref.watch(fetchArtistsProvider(ignore: false));
+    handleError(ref, fetchArtistsProvider(ignore: false), Beamer.of(context));
     return artists.when(
       data: (data) {
         var cardList = data.map((e) => GenericItem.fromArtist(e))

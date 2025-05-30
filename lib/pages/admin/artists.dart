@@ -222,7 +222,7 @@ class _ArtistPane2State extends ConsumerState<ArtistsPane2> {
   }
 
   void _refreshChanges() {
-    refreshChanges(ref);
+    refreshLibrary(ref);
     setState(() => mutated = false);
   }
 

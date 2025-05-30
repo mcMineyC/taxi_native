@@ -183,11 +183,11 @@ class ArtistPage extends ConsumerWidget {
                         ),
                         Expanded(child: Container()),
                         TextButton(
+                          child: Text("See all"),
                           onPressed: () {
                             Beamer.of(context)
                               .beamToNamed("/artist/${id}/albums?name=${artist.displayName}");
                           },
-                          child: Text("See all")
                         ),
                       ],
                     )
@@ -230,11 +230,11 @@ class ArtistPage extends ConsumerWidget {
                         ),
                         Expanded(child: Container()),
                         TextButton(
+                          child: Text("See all"),
                           onPressed: () {
                             Beamer.of(context)
                               .beamToNamed("/artist/${id}/singles?name=${artist.displayName}");
                           },
-                          child: Text("See all")
                         ),
                       ],
                     )

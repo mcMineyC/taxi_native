@@ -176,6 +176,7 @@ class DesktopSettingsPageState extends ConsumerState<DesktopSettingsPage> {
             FilledButton(
               child: const Text("Save"),
               onPressed: () async {
+                invalidateProviders(ref);
                 Beamer.of(context).beamToNamed("/login");
               },
             ),
@@ -270,7 +271,7 @@ class DesktopSettingsPageState extends ConsumerState<DesktopSettingsPage> {
                             ));
                     if (result == true) {
                       ref.read(playerProvider.notifier).stop();
-                      logout(ref);
+                      invalidateProviders(ref);
                       //await themeChanger.reset(); // changing the color is a bit too drastic
                       //await prefProvider.reset(); // do I really need to do this?
                       await prefProvider.logout();

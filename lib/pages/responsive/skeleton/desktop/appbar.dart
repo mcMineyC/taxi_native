@@ -88,7 +88,7 @@ class DesktopAppBar extends ConsumerWidget {
               child: IconButton(
                 icon: const Icon(Icons.refresh_rounded),
                 onPressed: () {
-                  refreshChanges(ref);
+                  refreshLibrary(ref);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Refreshed")));
                 }
               ),

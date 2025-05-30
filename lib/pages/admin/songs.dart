@@ -263,7 +263,7 @@ class _SongPane2State extends ConsumerState<SongsPane2> {
   }
 
   void _refreshChanges() {
-    refreshChanges(ref);
+    refreshLibrary(ref);
     setState(() => mutated = false);
   }
 

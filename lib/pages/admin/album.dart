@@ -197,7 +197,7 @@ class _AlbumPane2State extends ConsumerState<AlbumsPane2> {
   }
 
   void _refreshChanges() {
-    refreshChanges(ref);
+    refreshLibrary(ref);
     setState(() => mutated = false);
   }
 

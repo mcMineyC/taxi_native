@@ -3,12 +3,11 @@ Bugs
 - search doesn't work for anything but songs
   - check ts_mod.js
 - cancel doesn't do anything in the loading state
-- fix server url box overflow in settings
 - make debug switch do something
   - show quick-test buttons
 
-TODO before announcing:
-- remove debug buttons and prints
+TODO:
+- edit settings to align with new M3X (ModernListItem style)
 
 Longterm goals:
 - migrate to using slivers for most things to implement edge-to-edge

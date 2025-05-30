@@ -423,10 +423,10 @@ class _AdderPageState extends ConsumerState {
               ),
             ),
           ),
-          TextButton(
-            child: Text("Example"),
-            onPressed: () {queryController.text = "https://open.spotify.com/playlist/1szfdkjp18T3lMhS0xABrJ?si=0e8820b5c9f84e40";setState((){selectedSearchType=SearchType.url;nextable=true;query=queryController.text;});},
-          ),
+          // TextButton( // debug quick testing
+          //   child: Text("Example"),
+          //   onPressed: () {queryController.text = "https://open.spotify.com/playlist/1szfdkjp18T3lMhS0xABrJ?si=0e8820b5c9f84e40";setState((){selectedSearchType=SearchType.url;nextable=true;query=queryController.text;});},
+          // ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 10),
             child: DropdownMenu<SearchType>(
@@ -530,9 +530,9 @@ class _AdderPageState extends ConsumerState {
   }
 
   Widget findResultsPlaylistPage(BuildContext context, FoundPlaylist playlist) {
-    return Column(
-      children: [
-        Container(
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -585,10 +585,10 @@ class _AdderPageState extends ConsumerState {
                   ])
                 ]),
                 Expanded(child: Container()),
-                TextButton(
-                  child: Text("Print"),
-                  onPressed: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${playlist.visibleTo} --- ${playlist.songs.fold([], (a, b) => [...a, ...b.visibleTo]).toSet().toList()}"))),
-                ),
+                // TextButton( // for testing 
+                //   child: Text("Print"),
+                //   onPressed: () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${playlist.visibleTo} --- ${playlist.songs.fold([], (a, b) => [...a, ...b.visibleTo]).toSet().toList()}"))),
+                // ),
                 TextButton(
                   child: Text("Edit..."),
                   onPressed: () async {
@@ -656,50 +656,45 @@ class _AdderPageState extends ConsumerState {
             ],
           ),
         ),
-        Expanded(
-          child: ListView(
-            children: playlist.songs
-              .asMap().entries.map((entry) {
-                int index = entry.key;
-                FoundPlaylistSong song = entry.value;
-                  return ListTile(
-                    title: Text(song.title),
-                    subtitle: Text(song.artist),
-                    trailing: PopupMenuButton<void Function()>(
-                      itemBuilder: (context) {
-                        return [
-                          // PopupMenuItem(
-                          //   value: () {
-                          //     print("Edit playlist song ${song.title}");
-                          //   },
-                          //   child: Row(children: [
-                          //     Icon(Icons.edit),
-                          //     SpacerWidget(width: 4),
-                          //     Text("Edit")
-                          //   ]),
-                          // ),
-                          PopupMenuItem(
-                            value: () {
-                              print("Delete playlist song ${song.title}");
-                            },
-                            child: Row(children: [
-                              Icon(Icons.delete),
-                              SpacerWidget(width: 4),
-                              Text("Delete")
-                            ]),
-                          ),
-                        ];
+        SliverList.builder(
+          itemCount: playlist.songs.length,
+          itemBuilder: (context, index) {
+            FoundPlaylistSong song = playlist.songs[index];
+            return ListTile(
+              title: Text(song.title),
+              subtitle: Text(song.artist),
+              trailing: PopupMenuButton<void Function()>(
+                itemBuilder: (context) {
+                  return [
+                    // PopupMenuItem(
+                    //   value: () {
+                    //     print("Edit playlist song ${song.title}");
+                    //   },
+                    //   child: Row(children: [
+                    //     Icon(Icons.edit),
+                    //     SpacerWidget(width: 4),
+                    //     Text("Edit")
+                    //   ]),
+                    // ),
+                    PopupMenuItem(
+                      value: () {
+                        print("Delete playlist song ${song.title}");
                       },
-                      onSelected: (_) {
-                        setState(() => playlist.songs.removeAt(index));
-                      },
+                      child: Row(children: [
+                        Icon(Icons.delete),
+                        SpacerWidget(width: 4),
+                        Text("Delete")
+                      ]),
                     ),
-                  );
-              }
-            )
-            .toList(),
-          ),
-        ),
+                  ];
+                },
+                onSelected: (_) {
+                  setState(() => playlist.songs.removeAt(index));
+                },
+              ),
+            );
+        }
+      )
       ],
     );
   }

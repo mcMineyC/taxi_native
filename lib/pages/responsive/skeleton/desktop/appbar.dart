@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:beamer/beamer.dart';
+import 'package:taxi_native/helpers/constants.dart';
 
 import '../../../../providers/services/search.dart';
 import '../../../../helpers/utilities.dart';
@@ -71,6 +72,17 @@ class DesktopAppBar extends ConsumerWidget {
                 )
               ),
             ),
+            // Container(  // for debugging size
+            //   margin: const EdgeInsets.symmetric(horizontal: 4),
+            //   child: IconButton(
+            //     icon: const Icon(Icons.air_rounded),
+            //     onPressed: () {
+            //       int width = MediaQuery.of(context).size.width.toInt();
+            //       ScreenBreakpoint sb = ScreenBreakpoint.determine(width);
+            //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${width}: ${sb.toString().split(".").last}")));
+            //     }
+            //   ),
+            // ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 4),
               child: IconButton(

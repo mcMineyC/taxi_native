@@ -9,9 +9,6 @@ Bugs
 
 TODO before announcing:
 - remove debug buttons and prints
-- fix library options
-  - move segmented button out if possible (size) on mobile
-  - add view type to desktop
 
 Longterm goals:
 - migrate to using slivers for most things to implement edge-to-edge

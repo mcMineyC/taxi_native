@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 enum ScreenBreakpoint{
-  small(width: 352),
+  small(width: 458),
   medium(width: 580),
   large(width: 840),
   huge(width: 840),

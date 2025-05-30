@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:beamer/beamer.dart';
 
+import "../../../../helpers/constants.dart";
 import '../../../../helpers/utilities.dart';
 import '../../../../providers/services/search.dart';
 
@@ -71,6 +72,17 @@ class MobileAppBar extends ConsumerWidget {
               ) :
               Container(),
             ),
+            // Container( // for debug
+            //   margin: const EdgeInsets.symmetric(horizontal: 4),
+            //   child: IconButton(
+            //     icon: const Icon(Icons.air),
+            //     onPressed: () {
+            //       int width = MediaQuery.of(context).size.width.toInt();
+            //       ScreenBreakpoint sb = ScreenBreakpoint.determine(width);
+            //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${width}: ${sb.toString().split(".").last}")));
+            //     }
+            //   ),
+            // ),
             Container(
               // margin: const EdgeInsets.symmetric(horizontal: 4),
               child: IconButton(

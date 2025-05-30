@@ -69,21 +69,54 @@ class _LibraryPageState extends State<LibraryPage> {
 
   @override
   Widget build(BuildContext context) {
-    ScreenBreakpoint bp = ScreenBreakpoint.determine(MediaQuery.of(context).size.width.toInt());
+    int width = MediaQuery.of(context).size.width.toInt();
+    ScreenBreakpoint bp = ScreenBreakpoint.determine(width);
+    // print("${width}: ${bp}");
+    bool showPersonalToggle = width >= 630;
+    bool showViewTypeSelector = (width < 630 && width >= 594) || width >= 690;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: width < 500 ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: <Widget>[
-        if (bp <= ScreenBreakpoint.medium) PillOptions(
-          selectedTab: currentTab,
-          myLibrary: private,
-          viewType: viewType,
-          callback: this.callback,
+        if (width < 500) Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          child: PillOptions(
+            showTab: true,
+            showPersonalToggle: true,
+            showViewType: true,
+            selectedTab: currentTab,
+            myLibrary: private,
+            viewType: viewType,
+            callback: this.callback,
+          ),
         ),
-        if (bp > ScreenBreakpoint.medium) StandardOptions(
-          currentTab: currentTab,
-          private: private,
-          callback: this.callback,
+        if(width >= 500) Row(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SegmentedTypeButton(
+                  currentTab: currentTab,
+                  callback: callback,
+                ),
+              ),
+            ),
+            if(showPersonalToggle) ...PersonalToggle(callback: callback, myLibrary: private),
+            if(showViewTypeSelector) ...ViewTypeSelector(callback: callback, viewType: viewType, context: context, iconSize: 12),
+            if(width >= 490 && width < 690) PillOptions(
+              showTab: false,
+              showViewType: !showViewTypeSelector,
+              showPersonalToggle: !showPersonalToggle,
+              selectedTab: currentTab,
+              myLibrary: private,
+              viewType: viewType,
+              callback: this.callback,
+            ),
+            SpacerWidget(width: 12),
+          ],
         ),
+        if (bp >= ScreenBreakpoint.medium) ...[
+        ],
+        
         Expanded(
           child: switch(currentTab) {
             TabList.songs => SongsPage(private: private, type: viewType),

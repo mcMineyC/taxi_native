@@ -219,9 +219,6 @@ List<HLVArtist> changeHLVAlbum(HLVAlbum album, HLVArtist artist,
   List<HLVArtist> list = listt;
   int artistIndex = list.indexOf(artist);
   HLVArtist foundArtist = list[artistIndex];
-  HLVAlbum foundAlbum = foundArtist.albums[album.name]!;
-  HLVAlbum? existingAlbum = foundArtist.albums[newAlbum?.name ?? ""];
-
   if (newAlbum == null)
     foundArtist.albums.remove(album.name);
   else
@@ -249,10 +246,50 @@ List<HLVArtist> changeHLVArtist(
     HLVArtist artist, HLVArtist? newArtist, List<HLVArtist> listt) {
   List<HLVArtist> list = listt;
   int artistIndex = list.indexOf(artist);
-  if (newArtist != null)
-    list[artistIndex] = newArtist;
-  else
+  
+  if (newArtist == null) {
     list.removeAt(artistIndex);
+    return list;
+  }
+  
+  // Check if an artist with the new name already exists
+  HLVArtist? existingArtist;
+  int existingIndex = -1;
+  for (int i = 0; i < list.length; i++) {
+    if (list[i].name == newArtist.name && i != artistIndex) {
+      existingArtist = list[i];
+      existingIndex = i;
+      break;
+    }
+  }
+  
+  if (existingArtist != null) {
+    // Merge: update existing artist with albums from current artist
+    Map<String, HLVAlbum> mergedAlbums = Map.from(existingArtist.albums);
+    
+    // For each album in the current artist
+    artist.albums.forEach((albumName, album) {
+      mergedAlbums.update(
+        albumName,
+        (HLVAlbum existingAlbum) {
+          // Merge songs from both albums
+          Map<String, HLVSong> mergedSongs = Map.from(existingAlbum.songs);
+          mergedSongs.addAll(album.songs);
+          return existingAlbum.copyWith(songs: mergedSongs);
+        },
+        ifAbsent: () => album,
+      );
+    });
+    
+    // Update the existing artist with merged albums
+    list[existingIndex] = existingArtist.copyWith(albums: mergedAlbums);
+    // Remove the original artist
+    list.removeAt(artistIndex);
+  } else {
+    // Normal rename/update
+    list[artistIndex] = newArtist;
+  }
+  
   return list;
 }
 

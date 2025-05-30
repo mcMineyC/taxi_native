@@ -38,6 +38,49 @@ class MediaCard extends ConsumerWidget {
       required this.addedBy,
       required this.inLibrary});
 
+  static void itemClickBehaviour({required String thingType, required String thingId, required BuildContext context, required WidgetRef ref}){
+    switch (thingType) {
+      case "song":
+        if (PlatformUtils.isWeb) {
+          showWebError(context);
+          return;
+        }
+        print("Setting song");
+        ref.read(playerProvider.notifier).setSong(thingId);
+        break;
+      case "album":
+        // if (PlatformUtils.isWeb) {
+        //   showWebError(context);
+        //   return;
+        // }
+        print("Setting album");
+        // ref.read(playerProvider.notifier).setAlbum(thingId);
+        Beamer.of(context).beamToNamed("/album/$thingId");
+        break;
+      case "artist":
+        // if (PlatformUtils.isWeb) {
+        //   showWebError(context);
+        //   return;
+        // }
+        print("Setting artist");
+        // ref.read(playerProvider.notifier).setArtist(thingId);
+        Beamer.of(context).beamToNamed("/artist/$thingId");
+        // Beamer.of(context).update(: BeamState.fromUriString('/artist/$thingId'));
+        break;
+      case "playlist":
+        print("Setting playlist");
+        // ref.read(playerProvider.notifier).setPlaylist(thingId);
+        Beamer.of(context).beamToNamed("/playlist/$thingId");
+        break;
+      case "placeholder":
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                "Hmm, nothing here. The real question is why do you just go around randomly clicking loading things? ><")));
+      default:
+        debugPrint("No implementation for $thingType");
+    }
+  }
+
   static List<ContextMenuButtonConfig> buildMenuButtons(
       BuildContext context, WidgetRef ref, String thingType, String thingId, String addedBy, bool inLibrary) {
     List<ContextMenuButtonConfig> buttons = [];
@@ -201,46 +244,7 @@ class MediaCard extends ConsumerWidget {
                     onTap: () {
                       debugPrint(
                           "Pressed card with id: $thingId and type: $thingType");
-                      switch (thingType) {
-                        case "song":
-                          if (PlatformUtils.isWeb) {
-                            showWebError(context);
-                            return;
-                          }
-                          print("Setting song");
-                          ref.read(playerProvider.notifier).setSong(thingId);
-                          break;
-                        case "album":
-                          // if (PlatformUtils.isWeb) {
-                          //   showWebError(context);
-                          //   return;
-                          // }
-                          print("Setting album");
-                          // ref.read(playerProvider.notifier).setAlbum(thingId);
-                          Beamer.of(context).beamToNamed("/album/$thingId");
-                          break;
-                        case "artist":
-                          // if (PlatformUtils.isWeb) {
-                          //   showWebError(context);
-                          //   return;
-                          // }
-                          print("Setting artist");
-                          // ref.read(playerProvider.notifier).setArtist(thingId);
-                          Beamer.of(context).beamToNamed("/artist/$thingId");
-                          // Beamer.of(context).update(: BeamState.fromUriString('/artist/$thingId'));
-                          break;
-                        case "playlist":
-                          print("Setting playlist");
-                          // ref.read(playerProvider.notifier).setPlaylist(thingId);
-                          Beamer.of(context).beamToNamed("/playlist/$thingId");
-                          break;
-                        case "placeholder":
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                  "Hmm, nothing here. The real question is why do you just go around randomly clicking loading things? ><")));
-                        default:
-                          debugPrint("No implementation for $thingType");
-                      }
+                      itemClickBehaviour(thingType: thingType, thingId: thingId, context: context, ref: ref);
                     },
                     // onSecondaryTap: () {
                     //   print("Secondary tapped");

@@ -5,7 +5,8 @@ import 'cards.dart';
 import '../providers/data/preferences_provider.dart';
 import '../providers/error_watcher.dart';
 import '../providers/data/fetched_data_provider.dart'; 
-import '../types/song.dart';
+import '../types/song.dart'; 
+import '../types/generic.dart';
 import "responsive/library/common.dart";
 import 'package:beamer/beamer.dart';
 
@@ -19,15 +20,8 @@ class SongsPage extends ConsumerWidget {
     handleError(ref, fetchSongsProvider(ignore: private), Beamer.of(context));
     return songs.when(
       data: (data) {
-        List<Map<String, dynamic>> cardList = data.map((e) => {
-          "text": "${e.displayName}\n${e.albumDisplayName} - ${e.artistDisplayName}",
-          "image": e.imageUrl,
-          "id": e.id,
-          "type": "song",
-          "addedBy": e.addedBy,
-          "inLibrary": e.isInLibrary,
-        }).toList();
-        return type == ViewType.grid ? CardView(cardList: cardList) : ItemListView(list: cardList);
+        List<GenericItem> cardList = data.map((e) => GenericItem.fromSong(e)).toList();
+        return type == ViewType.grid ? CardView(list: cardList) : ItemListView(list: cardList);
       },
       loading: () => LoadingCardView(),
       error: (error, stack) => LoadingCardView(),
@@ -46,15 +40,8 @@ class SongsByArtistPage extends ConsumerWidget {
     handleError(ref, findSongsByArtistProvider(artistId, ignore: private), Beamer.of(context));
     return songs.when(
       data: (data) {
-        List<Map<String, dynamic>> cardList = data.map((e) => {
-          "text": "${e.displayName}\n${e.albumDisplayName} - ${e.artistDisplayName}",
-          "image": e.imageUrl,
-          "id": e.id,
-          "type": "song",
-          "addedBy": e.addedBy,
-          "inLibrary": e.isInLibrary,
-        }).toList();
-        return type == ViewType.grid ? CardView(cardList: cardList) : ItemListView(list: cardList);
+        List<GenericItem> cardList = data.map((e) => GenericItem.fromSong(e)).toList();
+        return type == ViewType.grid ? CardView(list: cardList) : ItemListView(list: cardList);
       },
       loading: () => LoadingCardView(),
       error: (error, stack) => LoadingCardView(),

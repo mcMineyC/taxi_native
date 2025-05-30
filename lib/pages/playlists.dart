@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:beamer/beamer.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:taxi_native/types/generic.dart';
 
 import '../providers/data/playlist_provider.dart'; 
 import '../providers/error_watcher.dart';
@@ -19,15 +20,8 @@ class PlaylistsPage extends ConsumerWidget {
     handleError(ref, fetchPlaylistsProvider(ignore: private), Beamer.of(context));
     return songs.when(
       data: (data) {
-        List<Map<String, dynamic>> cardList = data.map((e) => {
-          "text": "${e.displayName}\n${e.owner}\n${e.description}",
-          "image": "nada",
-          "id": e.id,
-          "type": "playlist",
-          "addedBy": e.owner,
-          "inLibrary": e.isInLibrary,
-        }).toList();
-        return type == ViewType.grid ? CardView(cardList: cardList) : ItemListView(list: cardList);
+        List<GenericItem> cardList = data.map((e) => GenericItem.fromPlaylist(e)).toList();
+        return type == ViewType.grid ? CardView(list: cardList) : ItemListView(list: cardList);
       },
       loading: () => LoadingCardView(),
       error: (error, stack) => LoadingCardView(),

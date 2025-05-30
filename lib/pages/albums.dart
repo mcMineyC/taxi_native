@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:beamer/beamer.dart';
 import 'package:taxi_native/pages/responsive/library/common.dart';
+import 'package:taxi_native/types/generic.dart';
 
 import 'cards.dart';
 import '../providers/data/fetched_data_provider.dart'; 
@@ -20,15 +21,8 @@ class AlbumsPage extends ConsumerWidget {
     handleError(ref, fetchAlbumsProvider(ignore: private), Beamer.of(context));
     return albums.when(
       data: (data) {
-        var cardList = data.map((e) => {
-          "text": "${e.displayName}\n${e.artistDisplayName}",
-          "image": e.imageUrl,
-          "id": e.id,
-          "type": "album",
-          "addedBy": e.addedBy,
-          "inLibrary": e.isInLibrary,
-        }).toList();
-        return type == ViewType.grid ? CardView(cardList: cardList) : ItemListView(list: cardList);
+        var cardList = data.map((e) => GenericItem.fromAlbum(e)).toList();
+        return type == ViewType.grid ? CardView(list: cardList) : ItemListView(list: cardList);
       },
       loading: () => LoadingCardView(),
       error: (error, stack) => LoadingCardView(),
@@ -46,15 +40,8 @@ class AlbumsByArtistPage extends ConsumerWidget {
     handleError(ref, fetchAlbumsProvider(ignore: private), Beamer.of(context));
     return albums.when(
       data: (data) {
-        var cardList = data.map((e) => {
-          "text": e.displayName,
-          "image": e.imageUrl,
-          "id": e.id,
-          "type": "album",
-          "addedBy": e.addedBy,
-          "inLibrary": e.isInLibrary,
-        }).toList();
-        return CardView(cardList: cardList);
+        var cardList = data.map((e) => GenericItem.fromAlbum(e)).toList();
+        return CardView(list: cardList);
       },
       loading: () => LoadingCardView(),
       error: (error, stack) => LoadingCardView(),
@@ -72,15 +59,8 @@ class SinglesByArtistPage extends ConsumerWidget {
     handleError(ref, fetchAlbumsProvider(ignore: private), Beamer.of(context));
     return songs.when(
       data: (data) {
-        var cardList = data.map((e) => {
-          "text": e.displayName,
-          "image": e.imageUrl,
-          "id": e.id,
-          "type": "song",
-          "addedBy": e.addedBy,
-          "inLibrary": e.isInLibrary,
-        }).toList();
-        return CardView(cardList: cardList);
+        var cardList = data.map((e) => GenericItem.fromSong(e)).toList();
+        return CardView(list: cardList);
       },
       loading: () => LoadingCardView(),
       error: (error, stack) => LoadingCardView(),

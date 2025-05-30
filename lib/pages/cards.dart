@@ -2,14 +2,15 @@ import 'package:beamer/beamer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:taxi_native/types/generic.dart';
 import '../helpers/widgets/helper_widgets.dart';
 import "package:context_menus/context_menus.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
 class CardView extends StatelessWidget {
-  final List cardList;
+  final List<GenericItem> list;
 
-  const CardView({super.key, required this.cardList});
+  const CardView({super.key, required this.list});
   @override
   Widget build(BuildContext context) {
     double count = (MediaQuery.of(context).size.width / (MediaCard.width+32));
@@ -19,14 +20,14 @@ class CardView extends StatelessWidget {
         mainAxisSpacing: 0,
         crossAxisSpacing: 0,
         childAspectRatio: MediaCard.width / (MediaCard.height+6),
-        children: cardList.map(
+        children: list.map(
           (card) => MediaCard(
-            text: card["text"].split("\n")[0],
-            image: card["image"],
-            thingId: card["id"],
-            thingType: card["type"],
-            addedBy: card["addedBy"] ?? "no data",
-            inLibrary: card["inLibrary"]
+            text: card.texts[0],
+            image: card.imageUrl,
+            thingId: card.thingId,
+            thingType: card.thingType,
+            addedBy: card.addedBy ?? "no data",
+            inLibrary: card.isInLibrary,
           ),
         ).toList(),
     );
@@ -34,7 +35,7 @@ class CardView extends StatelessWidget {
 }
 
 class ItemListView extends ConsumerWidget {
-  final List<Map<String, dynamic>> list;
+  final List<GenericItem> list;
 
   const ItemListView({super.key, required this.list});
   @override
@@ -43,18 +44,18 @@ class ItemListView extends ConsumerWidget {
       itemCount: list.length,
         scrollDirection: Axis.vertical,
         itemBuilder: (context, index) {
-          List<String> textPieces = list[index]["text"]!.split("\n"); 
+          GenericItem working = list[index];
           return ContextMenuRegion(
             contextMenu: GenericContextMenu(
               buttonConfigs: MediaCard.buildMenuButtons(context, ref, 
-                list[index]["type"],
-                list[index]["id"],
-                list[index]["addedBy"] ?? "no data",
-                list[index]["inLibrary"]
+                working.thingType,
+                working.thingId,
+                working.addedBy ?? "no data",
+                working.isInLibrary,
               ),
             ),
             child: ListTile(
-              onTap: () => Beamer.of(context).beamToNamed("/${list[index]["type"]}/${list[index]["id"]}"),
+              onTap: () => MediaCard.itemClickBehaviour(thingType: working.thingType, thingId: working.thingId, context: context, ref: ref),
               enableFeedback: true,
               // dense: true,
               // minVerticalPadding: 2,
@@ -63,10 +64,10 @@ class ItemListView extends ConsumerWidget {
               contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 12),
               leading: Container(
                 constraints: BoxConstraints(maxWidth: 56, maxHeight: 56),
-                child: list[index]["type"] == "playlist" ?
-                  PlaylistImage(playlistId: list[index]["id"]) :
+                child: working.thingType == "playlist" ?
+                  PlaylistImage(playlistId: working.thingId) :
                   CachedNetworkImage(
-                    imageUrl: list[index]["image"],
+                    imageUrl: working.imageUrl,
                     imageBuilder: (context, imageProvider) =>
                       Container(
                         decoration: BoxDecoration(
@@ -88,7 +89,7 @@ class ItemListView extends ConsumerWidget {
                   )
                 ),
                 title: Text(
-                  textPieces[0],
+                  working.texts[0],
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     fontWeight: FontWeight.w600,
@@ -96,8 +97,8 @@ class ItemListView extends ConsumerWidget {
                   )
                 ),
                 subtitle: Text(
-                  textPieces.length > 1 ? textPieces[1] : textPieces[0],
-                  // list[index]["text"].split("\n").last,
+                  working.texts.length > 1 ? working.texts[1] : working.texts[0],
+                  // working["text"].split("\n").last,
                   overflow: TextOverflow.fade,
                   maxLines: 2,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -110,14 +111,14 @@ class ItemListView extends ConsumerWidget {
                 //   children: [
                 //     Text(
                 //       textPieces.length > 1 ? textPieces[1] : textPieces[0],
-                //       // list[index]["text"].split("\n").last,
+                //       // working["text"].split("\n").last,
                 //       overflow: TextOverflow.ellipsis,
                 //       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 //         fontWeight: FontWeight.w600,
                 //         color: Theme.of(context).colorScheme.onSurface,
                 //       )
                 //     ),
-                //     if(list[index]["type"] == "playlist") ...[
+                //     if(working["type"] == "playlist") ...[
                 //       SpacerWidget(width: 6),
                 //       Icon(Icons.circle, size: 8),
                 //       SpacerWidget(width: 6),
@@ -137,10 +138,10 @@ class ItemListView extends ConsumerWidget {
                   onPressed: () => context.contextMenuOverlay.show(
                     GenericContextMenu(
                       buttonConfigs: MediaCard.buildMenuButtons(context, ref, 
-                        list[index]["type"],
-                        list[index]["id"],
-                        list[index]["addedBy"] ?? "no data",
-                        list[index]["inLibrary"]
+                        working.thingType,
+                        working.thingId,
+                        working.addedBy ?? "no data",
+                        working.isInLibrary,
                       )
                     )
                   ),
@@ -166,13 +167,6 @@ class ItemListView extends ConsumerWidget {
 Skeletonizer LoadingCardView(){
   return Skeletonizer(
           enabled: true,
-          child: CardView(cardList: [for (int i = 0; i < 32; i++) {
-            "text": "meh who cares",
-            "id": "idklol",
-            "type": "placeholder",
-            "image": "https://placehold.co/512x512.png",
-            "addedBy": "a banana",
-            "inLibrary": true
-          }]),
+          child: CardView(list: [for (int i = 0; i < 32; i++) GenericItem.placeholder()]),
         );
 }

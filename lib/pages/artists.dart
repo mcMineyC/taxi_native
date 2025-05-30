@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:beamer/beamer.dart';
 import 'package:taxi_native/pages/responsive/library/common.dart';
+import 'package:taxi_native/types/generic.dart';
 
 import 'cards.dart';
 import '../providers/data/fetched_data_provider.dart'; 
@@ -19,15 +20,9 @@ class ArtistsPage extends ConsumerWidget {
     handleError(ref, fetchArtistsProvider(ignore: private), Beamer.of(context));
     return artists.when(
       data: (data) {
-        var cardList = data.map((e) => {
-          "text": e.displayName,
-          "image": e.imageUrl,
-          "id": e.id,
-          "type": "artist",
-          "addedBy": e.addedBy,
-          "inLibrary": e.isInLibrary,
-        }).toList();
-        return type == ViewType.grid ? CardView(cardList: cardList) : ItemListView(list: cardList);
+        var cardList = data.map((e) => GenericItem.fromArtist(e))
+        .toList();
+        return type == ViewType.grid ? CardView(list: cardList) : ItemListView(list: cardList);
       },
       loading: () => LoadingCardView(),
       error: (error, stack) => LoadingCardView(),

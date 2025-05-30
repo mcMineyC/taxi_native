@@ -321,7 +321,7 @@ class _AddPlaylistProviderElement extends AutoDisposeFutureProviderElement<bool>
   Playlist get playlist => (origin as AddPlaylistProvider).playlist;
 }
 
-String _$addIdToPlaylistHash() => r'5cab17b36fa65cd3b81aa4721072ebd1c158bdbb';
+String _$addIdToPlaylistHash() => r'0e2d2d9f9f038776600cfd356163e3b4fc0f2449';
 
 /// See also [addIdToPlaylist].
 @ProviderFor(addIdToPlaylist)
@@ -468,7 +468,7 @@ class _AddIdToPlaylistProviderElement
   String get id => (origin as AddIdToPlaylistProvider).id;
 }
 
-String _$addIdsToPlaylistHash() => r'e08564f6e2c9a28f036b2fb3526cdf2f2362307b';
+String _$addIdsToPlaylistHash() => r'8526dcfabf4bb421d861aacc6dfaa66e5cb44adb';
 
 /// See also [addIdsToPlaylist].
 @ProviderFor(addIdsToPlaylist)
@@ -616,7 +616,7 @@ class _AddIdsToPlaylistProviderElement
 }
 
 String _$deleteIndexFromPlaylistHash() =>
-    r'0458b5ab981b65981477e1808da6564c86703b17';
+    r'100caeb54e0c5235bf6edafa5ac9b6af4ad6b419';
 
 /// See also [deleteIndexFromPlaylist].
 @ProviderFor(deleteIndexFromPlaylist)

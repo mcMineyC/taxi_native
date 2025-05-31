@@ -8,8 +8,36 @@ permissions:
   contents: write
 
 jobs:
+  pre-check:
+    runs-on: ubuntu-22.04
+    outputs:
+      should_build: ${{ steps.tag_check.outputs.should_build }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract version from constants.dart
+        id: version
+        run: |
+          VERSION=$(grep -o 'kVersionString = "[^"]*"' lib/helpers/constants.dart | sed 's/kVersionString = "\(.*\)"/\1/')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Found version: $VERSION"
+      - name: Check if tag exists
+        id: tag_check
+        run: |
+          if git rev-parse "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "Tag v${{ steps.version.outputs.version }} already exists"
+            echo "should_build=false" >> $GITHUB_OUTPUT
+            echo "::warning::Skipping build because tag v${{ steps.version.outputs.version }} already exists"
+            echo "::warning::To create a new release, update the version in lib/helpers/constants.dart"
+          else
+            echo "Tag v${{ steps.version.outputs.version }} does not exist"
+            echo "should_build=true" >> $GITHUB_OUTPUT
+          fi
+
   build-android:
     runs-on: ubuntu-22.04
+    needs: pre-check
+    if: needs.pre-check.outputs.should_build == 'true'
     steps:
       - uses: actions/checkout@v4
       - name: Set up Flutter
@@ -27,8 +55,11 @@ jobs:
         with:
           name: taxi-android.apk
           path: taxi-android.apk
+
   build-linux:
     runs-on: ubuntu-22.04
+    needs: pre-check
+    if: needs.pre-check.outputs.should_build == 'true'
     steps:
       - uses: actions/checkout@v4
       - name: Set up Flutter
@@ -47,8 +78,11 @@ jobs:
         with:
           name: taxi-linux_x64.tar.gz
           path: taxi-linux_x64.tar.gz
+
   build-windows:
     runs-on: windows-latest
+    needs: pre-check
+    if: needs.pre-check.outputs.should_build == 'true'
     steps:
       - uses: actions/checkout@v4
       - name: Set up Flutter
@@ -69,8 +103,11 @@ jobs:
         with:
           name: taxi.exe
           path: Installers/taxi.exe
+
   build-macos:
     runs-on: macos-latest
+    needs: pre-check
+    if: needs.pre-check.outputs.should_build == 'true'
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
@@ -85,32 +122,16 @@ jobs:
         with:
           name: taxi-mac.tar.gz
           path: taxi-mac.tar.gz
+
   release:
     runs-on: ubuntu-22.04
-    # needs: [build-linux]
-    needs: [build-macos, build-linux, build-windows, build-android]
+    needs: [pre-check, build-macos, build-linux, build-windows, build-android]
+    if: needs.pre-check.outputs.should_build == 'true'
     steps:
       - uses: actions/checkout@v4
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d %I:%M')"
-      - name: Extract version from constants.dart
-        id: version
-        run: |
-          VERSION=$(grep -o 'kVersionString = "[^"]*"' lib/helpers/constants.dart | sed 's/kVersionString = "\(.*\)"/\1/')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Found version: $VERSION"
-      - name: Check if tag exists
-        id: tag_check
-        run: |
-          if git rev-parse "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
-            echo "Tag v${{ steps.version.outputs.version }} already exists"
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "Tag v${{ steps.version.outputs.version }} does not exist"
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: Set outputs
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
@@ -138,15 +159,9 @@ jobs:
         run: ls -R .
 
       - uses: ncipollo/release-action@v1
-        if: steps.tag_check.outputs.exists == 'false'
         with:
           artifacts: "taxi-android.apk,taxi-linux_x64.tar.gz,taxi-mac.tar.gz,taxi-windows.exe"
-          tag: v${{ steps.version.outputs.version }}
+          tag: v${{ needs.pre-check.outputs.version }}
           makeLatest: true
-          name: "Release v${{ steps.version.outputs.version }} - ${{ steps.date.outputs.date }}"
+          name: "Release v${{ needs.pre-check.outputs.version }} - ${{ steps.date.outputs.date }}"
           bodyFile: ".github/workflows/body.md"
-      - name: Skip release - tag exists
-        if: steps.tag_check.outputs.exists == 'true'
-        run: |
-          echo "::warning::Skipping release creation because tag v${{ steps.version.outputs.version }} already exists"
-          echo "To create a new release, update the version in lib/helpers/constants.dart"

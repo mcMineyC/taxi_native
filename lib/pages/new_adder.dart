@@ -423,10 +423,10 @@ class _AdderPageState extends ConsumerState {
               ),
             ),
           ),
-          TextButton( // debug quick testing
-            child: Text("Example"),
-            onPressed: () {queryController.text = "https://open.spotify.com/playlist/1szfdkjp18T3lMhS0xABrJ?si=0e8820b5c9f84e40";setState((){selectedSearchType=SearchType.url;nextable=true;query=queryController.text;});},
-          ),
+          // TextButton( // debug quick testing
+          //   child: Text("Example"),
+          //   onPressed: () {queryController.text = "https://open.spotify.com/playlist/1szfdkjp18T3lMhS0xABrJ?si=0e8820b5c9f84e40";setState((){selectedSearchType=SearchType.url;nextable=true;query=queryController.text;});},
+          // ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 10),
             child: DropdownMenu<SearchType>(

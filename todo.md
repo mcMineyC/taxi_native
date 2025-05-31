@@ -9,6 +9,7 @@ Bugs
 - album song order (suspect trackNumber)
 - terminate websocket connection when server url is updated or logout occurs
 
+- Remove any // debug quick
 
 - Visual bugs
   - make debug switch do something

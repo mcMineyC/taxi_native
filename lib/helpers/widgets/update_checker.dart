@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taxi_native/helpers/constants.dart';
+import 'package:taxi_native/helpers/utilities.dart';
 import 'package:taxi_native/helpers/widgets/helper_widgets.dart';
 import "package:taxi_native/providers/data/info_provider.dart";
 import 'package:url_launcher/url_launcher.dart';
@@ -13,8 +15,9 @@ class UpdateChecker extends ConsumerWidget{
     String currentVersion = kVersionString;
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Text("Current: ${currentVersion}"),
+        Text("Current: v${currentVersion}"),
         latestVersion.when(
           data: (data) => Text("Latest: ${data}"),
           loading: () => Text("Latest: Loading..."),
@@ -28,18 +31,51 @@ class UpdateChecker extends ConsumerWidget{
               icon: Icon(Icons.refresh_rounded)
             ),
             latestVersion.when(
-              data: (latest) => latest == currentVersion ? FilledButton.icon(
+              data: (latest) => hasNewVersion(latest) ? FilledButton.icon(
                 onPressed: () {
-                  launchUrlString(kRepoUrl + "/versions/latest");
+                  launchUrlString(kUpdatePageUrl);
                 },
-                icon: Icon(Icons.cloud_upload_outlined),
+                icon: Icon(Icons.cloud_upload_rounded),
                 label: Text("Update"),
-              ) : SpacerWidget(width: 32),
-              error: (_, __) => SpacerWidget(width: 32),
-              loading: () => SpacerWidget(width: 32),
+              ) : Row(
+                children: [
+                  Text("Up to date"),
+                  SpacerWidget(width: 4),
+                  Icon(Icons.check_circle_rounded, color: Colors.lightGreenAccent),
+                ],
+              ),
+              // ) : SpacerWidget(width: 118),
+              error: (_, __) => Container(),
+              loading: () => Container(),
             )
           ],
         )
+      ],
+    );
+  }
+}
+
+class UpdateDialog extends StatelessWidget {
+  String latestVersion;
+  UpdateDialog({required this.latestVersion});
+  @override
+  Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    return AlertDialog(
+      title: Text("Update available", style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w900)),
+      content: Text(
+        "Current version: v${kVersionString}\nLatest version: ${latestVersion}\nClick \"View\" to get taken to the download page\nYou can always find it again in settings",
+        style: theme.textTheme.bodyLarge,
+      ),
+      actions: [
+        TextButton(
+          child: Text("Dismiss"),
+          onPressed: () => SchedulerBinding.instance.addPostFrameCallback((_) => Navigator.of(context, rootNavigator: true).pop()),
+        ),
+        FilledButton.tonal(
+          child: Text("View"),
+          onPressed: () => launchUrlString(kUpdatePageUrl),
+        ),
       ],
     );
   }

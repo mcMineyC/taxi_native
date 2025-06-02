@@ -1,4 +1,6 @@
 // ignore_for_file: implicit_call_tearoffs
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,7 +10,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:context_menus/context_menus.dart';
 import 'package:provider/provider.dart' as prov;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:taxi_native/helpers/constants.dart';
 import 'package:taxi_native/helpers/utilities.dart';
+import 'package:taxi_native/helpers/widgets/update_checker.dart';
+import 'package:taxi_native/providers/data/info_provider.dart';
 import 'helpers/service_locator.dart';
 import 'providers/data/preferences_provider.dart';
 import "providers/services/audio_handler.dart";
@@ -47,8 +52,10 @@ void main() async {
   // print("Current commit: ${String.fromEnvironment("GIT_REV")}");
   print("Ensuring widget binding is initialized");
   WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences _sp = await SharedPreferences.getInstance();
   ServiceLocator()
-      .register<SharedPreferences>(await SharedPreferences.getInstance());
+      .register<SharedPreferences>(_sp);
+  await _sp.remove("updateDialogShown");
   print("Found shared preferences");
   print("Initing audio_service");
   audioHandler = await AudioService.init(
@@ -433,11 +440,14 @@ class _AppState extends ConsumerState<App> {
           textTheme: theme.textTheme,
           useMaterial3: true,
           sliderTheme: const SliderThemeData(year2023: false),
+          progressIndicatorTheme: const ProgressIndicatorThemeData(year2023: false),
         ),
         routerDelegate: routerDelegate,
         routeInformationParser: BeamerParser(),
         backButtonDispatcher: BeamerBackButtonDispatcher(
-            delegate: routerDelegate, alwaysBeamBack: true),
+          delegate: routerDelegate,
+          alwaysBeamBack: true
+        ),
       );
     });
   }

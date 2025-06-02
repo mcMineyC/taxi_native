@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart' as prov;
+import 'package:taxi_native/helpers/widgets/update_checker.dart';
 import '../../../../providers/theme_provider.dart';
 import '../../../../providers/data/preferences_provider.dart';
 import '../../../../providers/services/player.dart';
@@ -215,6 +216,10 @@ class DesktopSettingsPageState extends ConsumerState<DesktopSettingsPage> {
         [
           (
             "",
+            UpdateChecker()
+          ),
+          (
+            "",
             Row(
               children: <Widget>[
                 OutlinedButton(
@@ -282,10 +287,6 @@ class DesktopSettingsPageState extends ConsumerState<DesktopSettingsPage> {
               ],
             ),
           ),
-          (
-            "Version",
-            Text(kVersionString)
-          )
         ],
       ),
     ];

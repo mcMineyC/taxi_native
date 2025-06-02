@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:taxi_native/helpers/constants.dart';
 import '../providers/data/fetched_data_provider.dart';
 import '../providers/data/playlist_provider.dart';
 import '../providers/data/new_provider.dart';
@@ -78,11 +79,10 @@ void showErrorSnackBar({required BuildContext context, required String action, r
   );
 }
 
-
 int compareSemver(String va, String vb) { // if va bigger than vb returns true
   int returnVal = 0;
   Iterable<int> vaPieces = va[0] == "v" ? va.substring(1).split(".").map((e) => int.parse(e)) : va.split(".").map((e) => int.parse(e));
-  Iterable<int> vbPieces = va[0] == "v" ? vb.substring(1).split(".").map((e) => int.parse(e)) : vb.split(".").map((e) => int.parse(e));
+  Iterable<int> vbPieces = vb[0] == "v" ? vb.substring(1).split(".").map((e) => int.parse(e)) : vb.split(".").map((e) => int.parse(e));
   for(int i = 0; i < vaPieces.length; i++) {
     int val = vaPieces.elementAt(i);
     if(vbPieces.length > i){
@@ -95,4 +95,8 @@ int compareSemver(String va, String vb) { // if va bigger than vb returns true
     }
   }
   return 0;
+}
+
+bool hasNewVersion(String latestVersion) {
+  return compareSemver(kVersionString, latestVersion) == 1;
 }

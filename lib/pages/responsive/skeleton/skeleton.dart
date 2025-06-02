@@ -2,7 +2,12 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import "package:rxdart/rxdart.dart";
+import 'package:shared_preferences/shared_preferences.dart';
 import "package:taxi_native/helpers/constants.dart";
+import 'package:taxi_native/helpers/service_locator.dart';
+import 'package:taxi_native/helpers/utilities.dart';
+import 'package:taxi_native/helpers/widgets/update_checker.dart';
+import 'package:taxi_native/providers/data/info_provider.dart';
 
 import '../../../providers/services/player.dart';
 
@@ -17,10 +22,23 @@ class HomePage extends ConsumerWidget {
   HomePage({super.key, required this.homeJunk});
   final Widget homeJunk;
   final subject = BehaviorSubject<PlayerInfo>();
+  SharedPreferences _sp= ServiceLocator().get<SharedPreferences>();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.read(playerProvider.notifier).init();
+    if(!_sp.containsKey("updateDialogShown")){
+      ref.watch(latestVersionProvider).whenData((latest) async {
+        print("Fetched latest version: ${latest}");
+        if(hasNewVersion(latest)){
+          print("We are still on ${kVersionString}...\nShowing update dialog");
+          _sp.setBool("updateDialogShown", true);
+          WidgetsBinding.instance.addPostFrameCallback((_) => showDialog(context: context, builder: (_) => UpdateDialog(latestVersion: latest)));
+        }else
+          print("Up to date: ${kVersionString}");
+      }
+      );
+    }
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     // subject.throttleTime(const Duration(seconds: 1)).listen((value) {
     //   _persistPlayerInfo(value).then((_) {});

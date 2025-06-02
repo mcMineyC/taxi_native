@@ -46,3 +46,4 @@ extension on MediaQueryData{
 
 String kVersionString = "4.1.9";
 String kRepoUrl = "https://github.com/mcMineyC/taxi_native";
+String kUpdatePageUrl = kRepoUrl + "/releases/latest";

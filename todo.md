@@ -2,7 +2,8 @@ Bugs
 - search doesn't work for anything but songs
   - check ts_mod.js
 - cancel doesn't do anything in the loading state
-- durations for songs
+- durations for songs in player (carries over previous duration)
+  - except on android when it fixes on seek
 - Fix fake-albums
   - mislabeled singles
   - improper visibleTo application

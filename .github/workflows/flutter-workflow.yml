@@ -171,5 +171,5 @@ jobs:
           artifacts: "taxi-android.apk,taxi-linux_x64.tar.gz,taxi-mac.tar.gz,taxi-windows.exe"
           tag: v${{ needs.pre-check.outputs.version }}
           makeLatest: true
-          name: "Release v${{ needs.pre-check.outputs.version }} - ${{ steps.date.outputs.date }}"
+          name: "v${{ needs.pre-check.outputs.version }} - ${{ steps.date.outputs.date }}"
           bodyFile: ".github/workflows/body.md"

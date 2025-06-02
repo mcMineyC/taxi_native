@@ -21,6 +21,11 @@ TODO:
 - edit settings to align with new M3X (ModernListItem style)
 - Add time to all occurrences of an list tile song
 - Add sort toggles
+- Add duration
+  - to queue "current / total"
+  - to playlists "total"
+  - to individual songs
+    - fetch on server (since found songs may be changed in HLV)
 
 Longterm goals:
 - migrate to using slivers for most things to implement edge-to-edge

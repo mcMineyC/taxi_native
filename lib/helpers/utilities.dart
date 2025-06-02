@@ -77,3 +77,22 @@ void showErrorSnackBar({required BuildContext context, required String action, r
     )
   );
 }
+
+
+int compareSemver(String va, String vb) { // if va bigger than vb returns true
+  int returnVal = 0;
+  Iterable<int> vaPieces = va[0] == "v" ? va.substring(1).split(".").map((e) => int.parse(e)) : va.split(".").map((e) => int.parse(e));
+  Iterable<int> vbPieces = va[0] == "v" ? vb.substring(1).split(".").map((e) => int.parse(e)) : vb.split(".").map((e) => int.parse(e));
+  for(int i = 0; i < vaPieces.length; i++) {
+    int val = vaPieces.elementAt(i);
+    if(vbPieces.length > i){
+      int valB = vbPieces.elementAt(i);
+      if(valB > val){
+        return 1;
+      } else if (valB < val){
+        return -1;
+      }
+    }
+  }
+  return 0;
+}

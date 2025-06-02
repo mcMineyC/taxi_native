@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:beamer/beamer.dart';
 import 'dart:convert';
 //import 'package:collection/collection.dart';
@@ -11,7 +10,6 @@ import '../helpers/widgets/helper_widgets.dart';
 import '../types/searchresult.dart';
 import '../types/hierarchicalListView.dart';
 import '../providers/services/adder.dart';
-import '../providers/services/player.dart';
 import '../helpers/widgets/hierarchicalListView.dart';
 
 // NEW ADDER

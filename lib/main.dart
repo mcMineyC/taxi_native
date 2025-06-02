@@ -281,19 +281,19 @@ class _AppState extends ConsumerState<App> {
             key: const ValueKey('artists'),
             title: 'Artists',
             // popToNamed: '/home',
-            child: HomePage(homeJunk: ArtistsPage(personal: true, type: ViewType.grid)), // BUG Update this with the persisted state
+            child: HomePage(homeJunk: ArtistsPage(personal: false, type: ViewType.grid)), // BUG Update this with the persisted state
           ),
       '/albums': (context, state, data) => BeamPage(
             key: const ValueKey('albums'),
             title: 'Albums',
             // popToNamed: '/home',
-            child: HomePage(homeJunk: AlbumsPage(personal: true, type: ViewType.grid)),
+            child: HomePage(homeJunk: AlbumsPage(personal: false, type: ViewType.grid)),
           ),
       '/songs': (context, state, data) => BeamPage(
             key: const ValueKey('songs'),
             title: 'Songs',
             // popToNamed: '/home',
-            child: HomePage(homeJunk: SongsPage(personal: true, type: ViewType.grid)),
+            child: HomePage(homeJunk: SongsPage(personal: false, type: ViewType.grid)),
           ),
       '/queue': (context, state, data) => BeamPage(
             key: const ValueKey('queue'),
@@ -317,7 +317,7 @@ class _AppState extends ConsumerState<App> {
             key: const ValueKey('playlists'),
             title: 'Playlists',
             // popToNamed: '/home',
-            child: HomePage(homeJunk: PlaylistsPage(personal: true, type: ViewType.list)),
+            child: HomePage(homeJunk: PlaylistsPage(personal: false, type: ViewType.grid)),
           ),
       '/playlist/:playlistId': (context, state, data) {
         final playlistId = state.uri

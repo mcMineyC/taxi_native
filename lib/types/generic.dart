@@ -80,3 +80,4 @@ class GenericItem with _$GenericItem{
     isInLibrary: false,
   );
 }
+

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:taxi_native/helpers/utilities.dart';
 import '../../helpers/service_locator.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -106,3 +107,28 @@ Future<List<Song>> fetchFavorites(FetchFavoritesRef ref) async {
   return songs;
 }
 
+@riverpod
+Future<String> latestVersion(LatestVersionRef ref) async {
+  var response = await http.get(
+    Uri.parse("https://api.github.com/repos/mcmineyc/taxi_native/tags")
+  );
+  if(response.statusCode != 200){
+    return Future.error("Failed to get version information");
+  }
+  var desponse = jsonDecode(response.body);
+  RegExp version_exp = RegExp(r'^v([0-9]+.+)*');
+  List versions = desponse.map((v) => (v["name"] ?? "") as String).where((v) => version_exp.hasMatch(v)).where((v) => v != "").toList();
+  // List<String> versions = [];
+  // for(int i = 1; i <= 10; i++){
+  //   for(int ii = 1; ii <= 10; ii++){
+  //     for(int iii = 1; iii <= 10; iii++){
+  //       for(int iiii = 1; iiii <= 10; iiii++){
+  //         versions.add("v${i}.${ii}.${iii}.${iiii}");
+  //       }
+  //     }
+  //   }
+  // }
+  // versions.sort((_, __) => Random().nextBool() ? 1 : -1); // scramble for testing
+  versions.sort((a, b) => compareSemver(a, b));
+  return versions[0];
+}

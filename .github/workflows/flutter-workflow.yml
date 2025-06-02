@@ -23,24 +23,24 @@ jobs:
           git config --global user.email 'mcMineyC@users.noreply.github.com'
           git commit -am "Automated version update"
           git push
-      # - name: Extract version from constants.dart
-      #   id: version
-      #   run: |
-      #     VERSION=$(grep -o 'kVersionString = "[^"]*"' lib/helpers/constants.dart | sed 's/kVersionString = "\(.*\)"/\1/')
-      #     echo "version=$VERSION" >> $GITHUB_OUTPUT
-      #     echo "Found version: $VERSION"
-      # - name: Check if tag exists
-      #   id: tag_check
-      #   run: |
-      #     if git rev-parse "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
-      #       echo "Tag v${{ steps.version.outputs.version }} already exists"
-      #       echo "should_build=false" >> $GITHUB_OUTPUT
-      #       echo "::warning::Skipping build because tag v${{ steps.version.outputs.version }} already exists"
-      #       echo "::warning::To create a new release, update the version in lib/helpers/constants.dart"
-      #     else
-      #       echo "Tag v${{ steps.version.outputs.version }} does not exist"
-      #       echo "should_build=true" >> $GITHUB_OUTPUT
-      #     fi
+      - name: Extract version from constants.dart
+        id: version
+        run: |
+          VERSION=$(grep -o 'kVersionString = "[^"]*"' lib/helpers/constants.dart | sed 's/kVersionString = "\(.*\)"/\1/')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Found version: $VERSION"
+      - name: Check if tag exists
+        id: tag_check
+        run: |
+          if git rev-parse "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "Tag v${{ steps.version.outputs.version }} already exists"
+            echo "should_build=false" >> $GITHUB_OUTPUT
+            echo "::warning::Skipping build because tag v${{ steps.version.outputs.version }} already exists"
+            echo "::warning::To create a new release, update the version in lib/helpers/constants.dart"
+          else
+            echo "Tag v${{ steps.version.outputs.version }} does not exist"
+            echo "should_build=true" >> $GITHUB_OUTPUT
+          fi
 
   build-android:
     runs-on: ubuntu-22.04

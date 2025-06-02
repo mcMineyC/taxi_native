@@ -21,8 +21,8 @@ jobs:
         run: |
           git config --global user.name 'mcMineyC'
           git config --global user.email 'mcMineyC@users.noreply.github.com'
-          git commit -am "Automated version update"
-          git push
+          git commit -am "Automated version update" || true
+          git push || true
       - name: Extract version from constants.dart
         id: version
         run: |

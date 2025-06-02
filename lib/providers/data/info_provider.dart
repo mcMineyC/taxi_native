@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:taxi_native/helpers/utilities.dart';
@@ -109,11 +110,16 @@ Future<List<Song>> fetchFavorites(FetchFavoritesRef ref) async {
 
 @riverpod
 Future<String> latestVersion(LatestVersionRef ref) async {
+  
   var response = await http.get(
-    Uri.parse("https://api.github.com/repos/mcmineyc/taxi_native/tags")
+    Uri.parse("https://api.github.com/repos/mcmineyc/taxi_native/tags"),
+    headers: {
+      "Authorization": "Bearer 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",
+    },
   );
   if(response.statusCode != 200){
-    return Future.error("Failed to get version information");
+    print(response.body);
+    return Future.error("Failed to get version information. Status code: ${response.statusCode}");
   }
   var desponse = jsonDecode(response.body);
   RegExp version_exp = RegExp(r'^v([0-9]+.+)*');
@@ -130,5 +136,7 @@ Future<String> latestVersion(LatestVersionRef ref) async {
   // }
   // versions.sort((_, __) => Random().nextBool() ? 1 : -1); // scramble for testing
   versions.sort((a, b) => compareSemver(a, b));
+  // print("Hello from latestVersionPrvider");
   return versions[0];
+  // return "v" + Random().nextInt(10).toString();
 }

@@ -8,10 +8,16 @@ import "package:taxi_native/providers/data/info_provider.dart";
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class UpdateChecker extends ConsumerWidget{
+class UpdateChecker extends ConsumerStatefulWidget{
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _UpdateCheckerState();
+}
+
+class _UpdateCheckerState extends ConsumerState<UpdateChecker>{
+  @override
+  Widget build(BuildContext context) {
     AsyncValue<String> latestVersion = ref.watch(latestVersionProvider);
+    latestVersion.when(data: (_) => print("Data"), error: (_, __) => print("Error"), loading: () => print("loading"));
     String currentVersion = kVersionString;
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -21,13 +27,13 @@ class UpdateChecker extends ConsumerWidget{
         latestVersion.when(
           data: (data) => Text("Latest: ${data}"),
           loading: () => Text("Latest: Loading..."),
-          error: (_, __) => Text("Error"),
+          error: (e, __) => Text("$e"),
         ),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              onPressed: () => ref.refresh(latestVersionProvider),
+              onPressed: () => setState(() => ref.refresh(latestVersionProvider)),
               icon: Icon(Icons.refresh_rounded)
             ),
             latestVersion.when(

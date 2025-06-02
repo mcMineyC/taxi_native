@@ -210,7 +210,7 @@ final fetchFavoritesProvider = FutureProvider<List<Song>>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef FetchFavoritesRef = FutureProviderRef<List<Song>>;
-String _$latestVersionHash() => r'61dbfc9e103406cb4778615d516276f059ecebf0';
+String _$latestVersionHash() => r'd5b1e803ac9fcd94e258057a4dce7666bdaa9dac';
 
 /// See also [latestVersion].
 @ProviderFor(latestVersion)

@@ -103,7 +103,7 @@ jobs:
           # Run the PowerShell script to update the installer files
           pwsh ./Installers/update-installer-files.ps1 `
       - name: Compile .ISS to .EXE Installer
-        uses: Minionguyjpro/Inno-Setup-Action@v1.2.5
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.7
         with:
           path: Installers/innoSetupScript.iss
           options: /O+
